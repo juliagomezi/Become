@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "364384690021",
+    "project_id": "become-767d4",
+    "storage_bucket": "become-767d4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:364384690021:android:371677e04840e640f48b8c",
+        "android_client_info": {
+          "package_name": "com.pes.become"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "364384690021-vk16s0fu055l2v97te0fdu1l9aiic36r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pes.become",
+            "certificate_hash": "0c3ed6521ac63137e9de5bc5ac823c572b6ea4b6"
+          }
+        },
+        {
+          "client_id": "364384690021-odtbpoh7v7j7ac0305e3dsf048h8p9ck.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBnydv00xZhBvVN3mas-mwX2Bo1c2N1F6w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "364384690021-odtbpoh7v7j7ac0305e3dsf048h8p9ck.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
