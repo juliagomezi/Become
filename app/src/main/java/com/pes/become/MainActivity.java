@@ -87,8 +87,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String text = parent.getItemAtPosition(position).toString();
-        Toast.makeText(parent.getContext(), text, Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
@@ -105,9 +104,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         String act = activityName.getText().toString();
         String descr = activityDescr.getText().toString();
         String theme = spinnerTheme.getSelectedItem().toString();
-        String name = spinnerDay.getSelectedItem().toString();
+        String day = spinnerDay.getSelectedItem().toString();
 
-        //enviarlo al adaptador
+        if (act.isEmpty()) activityName.setError("This field cannot be null");
+        else {
+        //crear activitat
+
+        }
 
     }
 }

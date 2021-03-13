@@ -6,72 +6,108 @@
     android:orientation="vertical"
     android:padding="25dp"
     >
+
+    <TextView
+        android:id="@+id/newTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/sourcesanspro_regular"
+        android:text="New Activity"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
     <TextView
         android:id="@+id/activityName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Activity Name"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/sourcesanspro_light"
 
-        />
+        android:text="Activity Name"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/nameText"
-        android:layout_width="354dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:fontFamily="@font/sourcesanspro_light"
         android:inputType="textPersonName"
-        android:text="Name"
+        android:singleLine="true"
 
 
-        />
+        android:textColor="#000000" />
 
     <TextView
         android:id="@+id/description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Description"
         android:layout_marginTop="10dp"
-        />
+        android:fontFamily="@font/sourcesanspro_light"
+        android:text="Description"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/descriptionText"
-        android:layout_width="360dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:fontFamily="@font/sourcesanspro_light"
         android:inputType="textPersonName"
-        android:singleLine="false"
-        android:text="Name" />
+        android:singleLine="true"
+        android:textColor="#000000" />
 
     <Spinner
         android:id="@+id/themeSpinner"
-        android:layout_width="361dp"
+        android:layout_width="match_parent"
         android:layout_height="36dp"
-        android:layout_marginTop="10dp" />
+        android:layout_marginTop="10dp"
+        android:background="@drawable/spinner_background"
+
+
+        />
 
     <Spinner
         android:id="@+id/daySpinner"
-        android:layout_width="361dp"
+        android:layout_width="match_parent"
         android:layout_height="36dp"
-        android:layout_marginTop="10dp" />
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/sourcesanspro_light"
+        android:background="@drawable/spinner_background"
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="39dp"
+        android:layout_height="36dp"
         android:orientation="horizontal"
         android:layout_marginTop="10dp">
 
         <Spinner
             android:id="@+id/spinner"
-            android:layout_width="match_parent"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/spinner_background"
+            android:fontFamily="@font/sourcesanspro_light" />
+
+        <Space
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="2" />
 
         <Spinner
             android:id="@+id/spinner2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/spinner_background"
+            android:fontFamily="@font/sourcesanspro_light" />
     </LinearLayout>
 
     <LinearLayout
@@ -88,7 +124,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Cancel" />
+            android:text="Cancel"
+            />
 
         <Space
             android:layout_width="wrap_content"
