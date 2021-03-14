@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:fontFamily="@font/sourcesanspro_regular"
-        android:text="New Activity"
+        android:text="@string/new_activityLabel"
         android:textColor="#000000"
         android:textSize="24sp"
         android:textStyle="bold" />
@@ -25,7 +25,7 @@
         android:layout_marginTop="20dp"
         android:fontFamily="@font/sourcesanspro_light"
 
-        android:text="Activity Name"
+        android:text="@string/activity_nameLabel"
         android:textColor="#000000"
         android:textSize="14sp"
         android:textStyle="bold" />
@@ -38,9 +38,8 @@
         android:fontFamily="@font/sourcesanspro_light"
         android:inputType="textPersonName"
         android:singleLine="true"
-
-
-        android:textColor="#000000" />
+        android:textColor="#000000"
+        android:importantForAutofill="no" />
 
     <TextView
         android:id="@+id/description"
@@ -48,7 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:fontFamily="@font/sourcesanspro_light"
-        android:text="Description"
+        android:text="@string/descriptionLabel"
         android:textColor="#000000"
         android:textSize="14sp"
         android:textStyle="bold" />
@@ -61,7 +60,8 @@
         android:fontFamily="@font/sourcesanspro_light"
         android:inputType="textPersonName"
         android:singleLine="true"
-        android:textColor="#000000" />
+        android:textColor="#000000"
+        android:autofillHints="" />
 
     <Spinner
         android:id="@+id/themeSpinner"
@@ -88,26 +88,36 @@
         android:orientation="horizontal"
         android:layout_marginTop="10dp">
 
-        <Spinner
-            android:id="@+id/spinner"
+        <TextView
+            android:id="@+id/startTime"
             android:layout_width="150dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/spinner_background"
-            android:fontFamily="@font/sourcesanspro_light" />
+            android:fontFamily="@font/sourcesanspro_light"
+            android:gravity="center"
+            android:text="@string/start_at"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <Space
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="2" />
 
-        <Spinner
-            android:id="@+id/spinner2"
+        <TextView
+            android:id="@+id/endTime"
             android:layout_width="150dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/spinner_background"
-            android:fontFamily="@font/sourcesanspro_light" />
+            android:fontFamily="@font/sourcesanspro_light"
+            android:gravity="center"
+            android:text="@string/end_at"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <LinearLayout
@@ -124,7 +134,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Cancel"
+            android:text="@string/cancelButton"
             />
 
         <Space
@@ -137,7 +147,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Done" />
+            android:text="@string/doneButton" />
 
     </LinearLayout>
 

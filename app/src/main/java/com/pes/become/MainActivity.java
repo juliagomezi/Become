@@ -2,6 +2,9 @@ package com.pes.become;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.TimePickerDialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,19 +14,23 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
-    private Button addActivity;
+    private Button addActivity, doneButton, cancelButton;
     private BottomSheetDialog activitySheet;
-    private Spinner spinnerTheme;
-    private Spinner spinnerDay;
-    private Button doneButton;
-    private Button cancelButton;
-    private EditText activityName;
-    private EditText activityDescr;
+    private Spinner spinnerTheme, spinnerDay;
+    private EditText activityName, activityDescr;
+    private TextView startTime, endTime;
+    private int startHour, startMinute, endHour, endMinute;
 
 
 
@@ -46,6 +53,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 spinnerDay = sheetView.findViewById(R.id.daySpinner);
                 activityName = sheetView.findViewById(R.id.nameText);
                 activityDescr = sheetView.findViewById(R.id.descriptionText);
+                startTime = sheetView.findViewById(R.id.startTime);
+                endTime = sheetView.findViewById(R.id.endTime);
 
 
                 ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(MainActivity.this, R.array.themesValues, android.R.layout.simple_spinner_item);
@@ -70,6 +79,60 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     @Override
                     public void onClick(View v) {
                         activitySheet.dismiss();
+                    }
+                });
+
+                startTime.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        TimePickerDialog selectTime = new TimePickerDialog(
+                            MainActivity.this,
+                            android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                            new TimePickerDialog.OnTimeSetListener() {
+                                @Override
+                                public void onTimeSet(TimePicker view, int hour, int minute) {
+                                    startHour = hour;
+                                    startMinute = minute;
+                                    String time = startHour + ":" + startMinute;
+                                    SimpleDateFormat hformat = new SimpleDateFormat("HH:mm");
+                                    try {
+                                        Date date = hformat.parse(time);
+                                        startTime.setText(hformat.format(date));
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }, 12, 0, true);
+                        selectTime.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        selectTime.updateTime(startHour, startMinute);
+                        selectTime.show();
+                    }
+                });
+
+                endTime.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        TimePickerDialog selectTime = new TimePickerDialog(
+                                MainActivity.this,
+                                android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                                new TimePickerDialog.OnTimeSetListener() {
+                                    @Override
+                                    public void onTimeSet(TimePicker view, int hour, int minute) {
+                                        endHour = hour;
+                                        endMinute = minute;
+                                        String time = endHour + ":" + endMinute;
+                                        SimpleDateFormat hformat = new SimpleDateFormat("HH:mm");
+                                        try {
+                                            Date date = hformat.parse(time);
+                                            endTime.setText(hformat.format(date));
+                                        } catch (ParseException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }, 12, 0, true);
+                        selectTime.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        selectTime.updateTime(endHour, endMinute);
+                        selectTime.show();
                     }
                 });
 
@@ -101,14 +164,17 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     * Post: s'ha creat una nova activitat a la rutuina
     * */
     private void createActivity() {
-        String act = activityName.getText().toString();
+        String name = activityName.getText().toString();
         String descr = activityDescr.getText().toString();
         String theme = spinnerTheme.getSelectedItem().toString();
         String day = spinnerDay.getSelectedItem().toString();
 
-        if (act.isEmpty()) activityName.setError("This field cannot be null");
+        if (name.isEmpty()) activityName.setError("This field cannot be null");
         else {
-        //crear activitat
+        /*
+            crear activitat
+            adapter.createActivity(name ,descr, theme, day, startHour, startMinute, endHour, endMinute);
+         */
 
         }
 
