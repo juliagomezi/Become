@@ -1,6 +1,9 @@
 package com.pes.become;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.TimePickerDialog;
 import android.graphics.Color;
@@ -22,9 +25,18 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+
+    // llistat d'activiatats
+    private RecyclerView recyclerView;
+    private RecyclerAdapter recyclerAdapter;
+    private List<ActivityDummy> activitiesList;
+
+    // desplegable nova activitat
     private Button addActivity, doneButton, cancelButton;
     private BottomSheetDialog activitySheet;
     private Spinner spinnerTheme, spinnerDay;
@@ -32,20 +44,56 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private TextView startTime, endTime;
     private int startHour, startMinute, endHour, endMinute;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        addActivity= findViewById(R.id.addActivity);
 
+        initData();
+        initRecyclerView();
+
+        addActivity = findViewById(R.id.addActivity);
         addActivity.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 createActivitySheet();
             }
         });
+    }
+
+    /*
+     * Funció per inicialitzar l'elelemnt que mostra el llistat d'activitats
+     * Pre: ninguna (ha d'existir minim una activitat)??????????????????????
+     * Post: s'ha inicialitzar el recycler amb el seu adapter corresponent
+     * */
+    private void initRecyclerView() {
+        recyclerView = findViewById(R.id.activityList);
+        recyclerView.setLayoutManager((new LinearLayoutManager(this)));
+        recyclerAdapter = new RecyclerAdapter(activitiesList);
+        recyclerView.setAdapter(recyclerAdapter);
+    }
+
+    // Per provar, després ho borraré
+    private void initData() {
+        activitiesList = new ArrayList<>();
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Menjar", "Dilluns", "08:00", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Menjar", "Dilluns", "08:00", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Menjar", "Dilluns", "08:00", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Menjar", "Dilluns", "08:00", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Menjar", "Dilluns", "08:00", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Menjar", "Dilluns", "08:00", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Menjar", "Dilluns", "08:00", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Menjar", "Dilluns", "08:00", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Menjar", "Dilluns", "08:00", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Menjar", "Dilluns", "08:00", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Menjar", "Dilluns", "08:00", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Menjar", "Dilluns", "08:00", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Menjar", "Dilluns", "08:00", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Menjar", "Dilluns", "08:00", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Menjar", "Dilluns", "08:00", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Menjar", "Dilluns", "08:00", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Menjar", "Dilluns", "08:00", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Menjar", "Dilluns", "08:00", "08:15"));
     }
 
     /*
@@ -178,4 +226,5 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
 
     }
+
 }
