@@ -7,3 +7,4 @@ Marc Fernández
 Oriol Freixa  
 Júlia Gómez  
 Gerard Queralt  
+ 
