@@ -1,4 +1,4 @@
-package com.pes.become;
+package com.pes.become.backend.domain;
 
 /**
  * Enumeracio que conte tots els temes d'activitats disponibles a la nostra app

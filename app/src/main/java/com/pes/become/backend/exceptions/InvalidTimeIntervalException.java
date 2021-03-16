@@ -1,4 +1,4 @@
-package com.pes.become;
+package com.pes.become.backend.exceptions;
 
 /**
  * Excepcio que es llençara quan s'intenti crear un interval de temps amb una hora de fi igual o anterior a l'hora d'inici

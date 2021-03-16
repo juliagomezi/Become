@@ -1,4 +1,4 @@
-package com.pes.become;
+package com.pes.become.backend.domain;
 
 /**
  * Enum que conte els set dies de la setmana

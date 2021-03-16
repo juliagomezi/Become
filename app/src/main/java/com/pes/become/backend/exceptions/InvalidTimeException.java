@@ -1,4 +1,4 @@
-package com.pes.become;
+package com.pes.become.backend.exceptions;
 
 /**
  * Excepcio que es llençara quan s'intenti crear un Time amb valors incorrectes

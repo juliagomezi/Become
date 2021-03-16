@@ -1,4 +1,7 @@
-package com.pes.become;
+package com.pes.become.backend.domain;
+
+import com.pes.become.backend.exceptions.InvalidTimeException;
+import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
 
 /**
  * Classe que representa un interval de temps

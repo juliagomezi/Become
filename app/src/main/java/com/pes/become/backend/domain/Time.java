@@ -1,4 +1,6 @@
-package com.pes.become;
+package com.pes.become.backend.domain;
+
+import com.pes.become.backend.exceptions.InvalidTimeException;
 
 /**
  * Classe que representa temps com a hores i minuts
