@@ -1,4 +1,4 @@
-package com.pes.become;
+package com.pes.become.frontend;
 
 public class ActivityDummy {
     private String name;
