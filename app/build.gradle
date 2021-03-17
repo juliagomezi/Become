@@ -49,4 +49,5 @@ dependencies {
     //compile 'com.google.cloud:google-cloud-automl'
     implementation 'com.google.firebase:firebase-auth'
     implementation 'com.google.firebase:firebase-firestore'
+    implementation 'com.google.firebase:firebase-core'
 }

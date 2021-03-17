@@ -1,31 +1,55 @@
-/*
+
 package com.pes.become.backend.persistence;
 
 import java.util.HashMap;
 import java.util.Map;
-
+/*
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.Firestore;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+*/
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class ControllerRoutineDB {
-    GoogleCredentials credentials;
-    //FirebaseOptions options;
-    Firestore db;
+
+
+    FirebaseFirestore db;
 
     public ControllerRoutineDB(){
-         credentials = GoogleCredentials.getApplicationDefault();
-         //options = new FirebaseOptions.Builder().setCredentials(credentials).setProjectId("become-767d4").build();
-         //FirebaseApp.initializeApp(options);
-         db = FirestoreClient.getFirestore();
+        db = FirebaseFirestore.getInstance();
     }
 
-    public void createRoutine(){
-        Map<String,String> dataInput = new HashMap<String,String>();
-        dataInput.put("nom","RutinaPredefinida");
-        db.collection("routines").document("RutinaPredefinida").set(dataInput);
+    /**
+     * Pre: cert.
+     * Param: no hi ha cap rutina que tingui "routineName" com a nom.
+     * Post:
+     */
+    public void createRoutine(String routineName){
+        Map<String,String> dataInput = new HashMap<>();
+        dataInput.put("nom",routineName);
+        db.collection("routines").document(routineName).set(dataInput);
+    }
+
+    /**
+     * Pre: cert.
+     * Param: no hi ha cap rutina que tingui "routineName" com a nom.
+     * Post:
+     */
+    public void deleteRoutine(String routineName){
+        db.collection("routines").document(routineName).delete();
     }
 }
-*/
+
+
+
+
+
+
+
+
+
+
+
+
