@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     // desplegable nova activitat
     private Button addActivity, doneButton, cancelButton;
     private BottomSheetDialog activitySheet;
-    private Spinner spinnerTheme, spinnerDay;
+    private Spinner spinnerTheme, spinnerStartDay, spinnerEndDay;
     private EditText activityName, activityDescr;
     private TextView startTime, endTime;
     private int startHour, startMinute, endHour, endMinute;
@@ -108,7 +108,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         doneButton = sheetView.findViewById(R.id.doneButton);
         cancelButton = sheetView.findViewById(R.id.cancelButton);
         spinnerTheme = sheetView.findViewById(R.id.themeSpinner);
-        spinnerDay = sheetView.findViewById(R.id.daySpinner);
+        spinnerStartDay = sheetView.findViewById(R.id.dayStartSpinner);
+        spinnerEndDay = sheetView.findViewById(R.id.dayEndSpinner);
         activityName = sheetView.findViewById(R.id.nameText);
         activityDescr = sheetView.findViewById(R.id.descriptionText);
         startTime = sheetView.findViewById(R.id.startTime);
@@ -122,8 +123,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         adapter = ArrayAdapter.createFromResource(MainActivity.this, R.array.dayValues, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerDay.setAdapter(adapter);
-        spinnerDay.setOnItemSelectedListener(MainActivity.this);
+        spinnerStartDay.setAdapter(adapter);
+        spinnerStartDay.setOnItemSelectedListener(MainActivity.this);
+
+        adapter = ArrayAdapter.createFromResource(MainActivity.this, R.array.dayValues, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerEndDay.setAdapter(adapter);
+        spinnerEndDay.setOnItemSelectedListener(MainActivity.this);
 
 
         doneButton.setOnClickListener(new View.OnClickListener() {
@@ -214,13 +220,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         String name = activityName.getText().toString();
         String descr = activityDescr.getText().toString();
         String theme = spinnerTheme.getSelectedItem().toString();
-        String day = spinnerDay.getSelectedItem().toString();
+        String dayStart = spinnerStartDay.getSelectedItem().toString();
+        String dayEnd = spinnerEndDay.getSelectedItem().toString();
 
         if (name.isEmpty()) activityName.setError("This field cannot be null");
         else {
         /*
             crear activitat
-            adapter.createActivity(name ,descr, theme, day, startHour, startMinute, endHour, endMinute);
+            adapter.createActivity(name ,descr, theme, dayStart, startHour, startMinute, dayEnd, endHour, endMinute);
          */
 
         }
