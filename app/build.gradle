@@ -3,7 +3,8 @@ plugins {
     id 'com.android.application'
 
 }
-
+apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
@@ -29,8 +30,8 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 }
-apply plugin: 'com.android.application'
-apply plugin: 'com.google.gms.google-services'
+
+
 dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.2.0'
@@ -40,6 +41,12 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
+
+    //All related to cloud firestore
+    implementation platform('com.google.cloud:libraries-bom:19.0.0')
     implementation platform('com.google.firebase:firebase-bom:26.7.0')
     implementation 'com.google.firebase:firebase-analytics'
+    //compile 'com.google.cloud:google-cloud-automl'
+    implementation 'com.google.firebase:firebase-auth'
+    implementation 'com.google.firebase:firebase-firestore'
 }
