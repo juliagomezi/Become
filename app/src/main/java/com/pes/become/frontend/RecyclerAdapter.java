@@ -32,7 +32,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ActivityDummy activity = activitiesList.get(position);
         holder.startTimeDisplay.setText(activity.getStartTime());
-        //holder.endTimeDisplay.setText(activity.getEndTime());
+        holder.endTimeDisplay.setText(activity.getEndTime());
         holder.activityNameDisplay.setText(activity.getName());
         holder.activityDescriptionDisplay.setText(activity.getDescription());
     }
@@ -49,7 +49,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             startTimeDisplay = itemView.findViewById(R.id.startTimeDisplay);
-            //endTimeDisplay = itemView.findViewById(R.id.endTimeDisplay);
+            endTimeDisplay = itemView.findViewById(R.id.endTimeDisplay);
             activityNameDisplay = itemView.findViewById(R.id.activityNameDisplay);
             activityDescriptionDisplay = itemView.findViewById(R.id.activityDescriptionDisplay);
         }

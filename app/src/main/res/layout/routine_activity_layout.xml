@@ -28,26 +28,28 @@
             <TextView
                 android:id="@+id/startTimeDisplay"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
                 android:fontFamily="@font/sourcesanspro_light"
                 android:gravity="center"
                 android:text="@string/start"
                 android:textColor="#000000"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                android:layout_weight="1"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/endTimeDisplay"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/sourcesanspro_light"
+                android:layout_weight="1"
                 android:gravity="center"
+                android:layout_marginRight="10dp"
+                android:fontFamily="@font/sourcesanspro_light"
                 android:text="@string/end"
                 android:textColor="#000000"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                android:layout_weight="1"/>
+                android:textStyle="bold" />
 
             <Space
                 android:layout_width="match_parent"
