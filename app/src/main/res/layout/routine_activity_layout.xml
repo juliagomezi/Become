@@ -12,13 +12,49 @@
         android:orientation="horizontal"
         android:padding="8dp">
 
-        <TextView
-            android:id="@+id/startTimeDisplay"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="Start"
-            android:gravity="center"
-            android:padding="12dp" />
+            android:layout_marginEnd="5dp"
+            android:orientation="vertical"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="5dp">
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/startTimeDisplay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/sourcesanspro_light"
+                android:gravity="center"
+                android:text="@string/start"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/endTimeDisplay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/sourcesanspro_light"
+                android:gravity="center"
+                android:text="@string/end"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_weight="1"/>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+        </LinearLayout>
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -35,7 +71,7 @@
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
                     android:padding="16dp"
-                    android:text="Activity Name"
+                    android:text="@string/activity_name"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -56,7 +92,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:padding="16dp"
-                        android:text="Description"
+                        android:text="@string/activity_description"
                         android:textAppearance="@style/TextAppearance.AppCompat.Small"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"

@@ -8,6 +8,10 @@
     <string name="start_at">Start at:</string>
     <string name="end_at">End at:</string>
     <string name="select_time">Select time</string>
+    <string name="start">Start</string>
+    <string name="end">End</string>
+    <string name="activity_name">Activity Name</string>
+    <string name="activity_description">Activity description</string>
 
     <string-array name = "themesValues" >
         <item >Music</item>
