@@ -8,6 +8,7 @@ public class ActivityDummy {
     private String startTime;
     private String endTime;
 
+    private boolean expanded; // true => es veu la descripcio
 
     public ActivityDummy(String name, String description, String theme, String weekDay, String startTime, String endTime) {
         this.name = name;
@@ -16,6 +17,7 @@ public class ActivityDummy {
         this.weekDay = weekDay;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.expanded = false;
     }
 
     public String getName() {
@@ -65,5 +67,9 @@ public class ActivityDummy {
     public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
+
+    public boolean getExpanded() { return expanded; }
+
+    public void setExpanded(boolean expanded) { this.expanded = expanded; }
 
 }

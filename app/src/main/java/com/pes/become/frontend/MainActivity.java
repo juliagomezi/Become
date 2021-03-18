@@ -1,6 +1,7 @@
 package com.pes.become.frontend;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,10 +30,11 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    // llistat d'activiatats
+    // llistat d'activitats
     private RecyclerView recyclerView;
     private RecyclerAdapter recyclerAdapter;
     private List<ActivityDummy> activitiesList;
+    private CardView cardActivityDisplay;
 
     // desplegable nova activitat
     private Button addActivity, doneButton, cancelButton;
@@ -59,9 +61,32 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         });
     }
 
+    // Per provar, després ho borraré
+    private void initData() {
+        activitiesList = new ArrayList<>();
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "cooking", "Dilluns", "08:00", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "entertainment", "Dilluns", "08:00", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "music", "Dilluns", "08:00", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "other", "Dilluns", "08:00", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "sleeping", "Dilluns", "08:00", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "sport", "Dilluns", "08:00", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "studying", "Dilluns", "08:00", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "working", "Dilluns", "08:00", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "sleeping", "Dilluns", "08:00", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "sleeping", "Dilluns", "08:00", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "sleeping", "Dilluns", "08:00", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "sleeping", "Dilluns", "08:00", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "sleeping", "Dilluns", "08:00", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "sleeping", "Dilluns", "08:00", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "sleeping", "Dilluns", "08:00", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "sleeping", "Dilluns", "08:00", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "sleeping", "Dilluns", "08:00", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "sleeping", "Dilluns", "08:00", "08:15"));
+    }
+
     /*
      * Funció per inicialitzar l'elelemnt que mostra el llistat d'activitats
-     * Pre: ninguna (ha d'existir minim una activitat)??????????????????????
+     * Pre: ninguna (ha d'existir minim una activitat ??????????????????????)
      * Post: s'ha inicialitzar el recycler amb el seu adapter corresponent
      * */
     private void initRecyclerView() {
@@ -71,34 +96,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         recyclerView.setAdapter(recyclerAdapter);
     }
 
-    // Per provar, després ho borraré
-    private void initData() {
-        activitiesList = new ArrayList<>();
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Menjar", "Dilluns", "08:00", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Menjar", "Dilluns", "08:00", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Menjar", "Dilluns", "08:00", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Menjar", "Dilluns", "08:00", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Menjar", "Dilluns", "08:00", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Menjar", "Dilluns", "08:00", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Menjar", "Dilluns", "08:00", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Menjar", "Dilluns", "08:00", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Menjar", "Dilluns", "08:00", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Menjar", "Dilluns", "08:00", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Menjar", "Dilluns", "08:00", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Menjar", "Dilluns", "08:00", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Menjar", "Dilluns", "08:00", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Menjar", "Dilluns", "08:00", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Menjar", "Dilluns", "08:00", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Menjar", "Dilluns", "08:00", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Menjar", "Dilluns", "08:00", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Menjar", "Dilluns", "08:00", "08:15"));
-    }
-
     /*
-    * Funció per crear la pestanya de creació d'activitat
-    * Pre: ninguna
-    * Post: s'ha creat lapestanya de creació d'activitat
-    * */
+     * Funció per crear la pestanya de creació d'activitat
+     * Pre: ninguna
+     * Post: s'ha creat lapestanya de creació d'activitat
+     * */
     private void createActivitySheet() {
         activitySheet = new BottomSheetDialog(MainActivity.this,R.style.BottomSheetTheme);
         View sheetView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.activity_layout, findViewById(R.id.bottom_sheet));
@@ -112,7 +114,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         activityDescr = sheetView.findViewById(R.id.descriptionText);
         startTime = sheetView.findViewById(R.id.startTime);
         endTime = sheetView.findViewById(R.id.endTime);
-
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(MainActivity.this, R.array.themesValues, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
