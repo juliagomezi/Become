@@ -2,22 +2,17 @@ package com.pes.become.backend.persistence;
 
 
 /*
-
 public class ControllerPersistence {
     ControllerRoutineDB CR;
     ControllerActivityDB CA;
-
     public ControllerPersistence(){}
-
     public ControllerRoutineDB getCtrlRoutine(){
         return new ControllerRoutineDB();
     }
-
     public ControllerActivityDB getCtrlActivity(){
         return new ControllerActivityDB();
     }
 }
-
 */
 
 public class ControllerPersistence{

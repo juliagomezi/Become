@@ -50,17 +50,18 @@ public class ControllerActivityDB {
         QueryDocumentSnapshot docs;
         Query consulta = db.collection("routines").document(routineName).collection("activities")
                 .whereEqualTo("day", day);
-        Task<QuerySnapshot> resultat =consulta.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>(){
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            QuerySnapshot aux2 = task.getResult();
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d("ConsultaFirebase", document.getId() + " => " + document.getData());
-                            }
-                        } else {
-                            Log.d("ConsultaFirebase", task.getException().getMessage());
-                        }
-                    } });
+        Task<QuerySnapshot> resultat;
+        resultat = consulta.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>(){
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    QuerySnapshot aux2 = task.getResult();
+                    for (QueryDocumentSnapshot document : aux2) {
+                        Log.d("ConsultaFirebase", document.getId() + " => " + document.getData());
+                    }
+                } else {
+                    Log.d("ConsultaFirebase", task.getException().getMessage());
+                }
+            } });
     }
 }
