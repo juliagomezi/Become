@@ -24,7 +24,6 @@ public class ControllerPersistence{
 
     ControllerRoutineDB CR;
     ControllerActivityDB CA;
-
     /**
      * Pre: cert.
      * Post: si el controlador de rutina no estava creat ja, el crea.
@@ -54,4 +53,26 @@ public class ControllerPersistence{
         createCtrlRoutine();
         CR.createRoutine(routineName);
     }
+
+    /**
+     * Pre: activityName existeix a la base de dades
+     * Post: Es crea una nova activitat a la rutina
+     * @param routineName a
+     * @param activityName a
+     * @param actTheme a
+     * @param actDescription a
+     * @param actDay a
+     * @param beginTime a
+     * @param finishTime a
+     */
+    public void createActivity(String routineName, String activityName, String actTheme,String actDescription, String actDay, String beginTime, String finishTime)
+    {
+        createCtrlActivity();
+        CA.createActivity(routineName, activityName,actTheme,actDescription, actDay, beginTime, finishTime);
+    }
+    public void getActivitiesByDay(String routineName, String day) {
+        createCtrlActivity();
+        CA.getActivitiesByDay(routineName,day);
+    }
+
 }
