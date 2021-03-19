@@ -24,7 +24,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:fontFamily="@font/sourcesanspro_light"
-
         android:text="@string/activity_nameLabel"
         android:textColor="#000000"
         android:textSize="16sp"
@@ -35,7 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:fontFamily="@font/sourcesanspro_light"
+        android:fontFamily="@font/sourcesanspro_regular"
         android:inputType="textPersonName"
         android:singleLine="true"
         android:textColor="#000000"
@@ -57,19 +56,41 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:fontFamily="@font/sourcesanspro_light"
+        android:fontFamily="@font/sourcesanspro_regular"
         android:inputType="textPersonName"
         android:singleLine="true"
         android:textColor="#000000"
         />
 
-    <Spinner
-        android:id="@+id/themeSpinner"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="36dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/spinner_background"
-        />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/themeLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:fontFamily="@font/sourcesanspro_light"
+            android:text="@string/theme"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <Spinner
+            android:id="@+id/themeSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="60dp"
+            android:background="@drawable/spinner_background"
+            android:fontFamily="@font/sourcesanspro_light"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -102,7 +123,10 @@
                 android:layout_height="36dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/spinner_background"
-                android:fontFamily="@font/sourcesanspro_light" />
+                android:fontFamily="@font/sourcesanspro_light"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/startTime"
@@ -110,12 +134,12 @@
                 android:layout_height="36dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/spinner_background"
-                android:fontFamily="@font/sourcesanspro_light"
+                android:fontFamily="@font/sourcesanspro_regular"
                 android:gravity="center"
                 android:text="@string/select_time"
                 android:textColor="#000000"
                 android:textSize="16sp"
-                android:textStyle="bold" />
+                />
 
         </LinearLayout>
 
@@ -145,7 +169,10 @@
                 android:layout_height="36dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/spinner_background"
-                android:fontFamily="@font/sourcesanspro_light" />
+                android:fontFamily="@font/sourcesanspro_light"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/endTime"
@@ -153,12 +180,12 @@
                 android:layout_height="36dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/spinner_background"
-                android:fontFamily="@font/sourcesanspro_light"
+                android:fontFamily="@font/sourcesanspro_regular"
                 android:gravity="center"
                 android:text="@string/select_time"
                 android:textColor="#000000"
                 android:textSize="16sp"
-                android:textStyle="bold" />
+                 />
         </LinearLayout>
 
     </LinearLayout>

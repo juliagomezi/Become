@@ -12,6 +12,7 @@
     <string name="end">End</string>
     <string name="activity_name">Name</string>
     <string name="activity_description">Description</string>
+    <string name="theme">Theme:</string>
 
     <string-array name = "themesValues" >
         <item >Music</item>

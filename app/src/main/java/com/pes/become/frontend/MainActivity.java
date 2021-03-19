@@ -115,18 +115,32 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         startTime = sheetView.findViewById(R.id.startTime);
         endTime = sheetView.findViewById(R.id.endTime);
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(MainActivity.this, R.array.themesValues, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(MainActivity.this, R.array.themesValues, R.layout.spinner_selected_item);
+        adapter.setDropDownViewResource(R.layout.spinner_item_dropdown);
         spinnerTheme.setAdapter(adapter);
         spinnerTheme.setOnItemSelectedListener(MainActivity.this);
 
-        adapter = ArrayAdapter.createFromResource(MainActivity.this, R.array.dayValues, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter = ArrayAdapter.createFromResource(MainActivity.this, R.array.dayValues, R.layout.spinner_selected_item);
+        adapter.setDropDownViewResource(R.layout.spinner_item_dropdown);
         spinnerStartDay.setAdapter(adapter);
-        spinnerStartDay.setOnItemSelectedListener(MainActivity.this);
+        spinnerStartDay.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
-        adapter = ArrayAdapter.createFromResource(MainActivity.this, R.array.dayValues, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                spinnerEndDay.setSelection(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+
+        adapter = ArrayAdapter.createFromResource(MainActivity.this, R.array.dayValues, R.layout.spinner_selected_item);
+        adapter.setDropDownViewResource(R.layout.spinner_item_dropdown);
         spinnerEndDay.setAdapter(adapter);
         spinnerEndDay.setOnItemSelectedListener(MainActivity.this);
 

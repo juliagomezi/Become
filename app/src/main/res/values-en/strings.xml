@@ -34,4 +34,5 @@
         <item >Saturday</item>
         <item >Sunday</item>
     </string-array>
+    <string name="theme">Theme:</string>
 </resources>

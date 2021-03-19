@@ -34,4 +34,5 @@
         <item >Dissabte</item>
         <item >Diumenge</item>
     </string-array>
+    <string name="theme">Tema:</string>
 </resources>
