@@ -37,11 +37,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private CardView cardActivityDisplay;
 
     // desplegable nova activitat
-    private Button addActivity, doneButton, cancelButton;
+    private Button doneButton, cancelButton;
     private BottomSheetDialog activitySheet;
     private Spinner spinnerTheme, spinnerStartDay, spinnerEndDay;
     private EditText activityName, activityDescr;
-    private TextView startTime, endTime;
+    private TextView startTime, endTime, addActivity;
     private int startHour, startMinute, endHour, endMinute;
 
     @Override
