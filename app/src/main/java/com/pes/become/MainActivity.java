@@ -11,8 +11,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ControllerPersistence ctrler = new ControllerPersistence();
-        //ctrler.createActivity("RutinaDeProva","activitatProva", "esports", "descsr","dia","01:00","02:00");
-        ctrler.getActivitiesByDay("RutinaDeProva","dia");
+
+
     }
 }

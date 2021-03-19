@@ -1,24 +1,13 @@
 package com.pes.become.backend.persistence;
 
-
-/*
-public class ControllerPersistence {
-    ControllerRoutineDB CR;
-    ControllerActivityDB CA;
-    public ControllerPersistence(){}
-    public ControllerRoutineDB getCtrlRoutine(){
-        return new ControllerRoutineDB();
-    }
-    public ControllerActivityDB getCtrlActivity(){
-        return new ControllerActivityDB();
-    }
-}
-*/
+import com.pes.become.backend.exceptions.InvalidTimeException;
+import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 
 public class ControllerPersistence{
 
     ControllerRoutineDB CR;
     ControllerActivityDB CA;
+
     /**
      * Pre: cert.
      * Post: si el controlador de rutina no estava creat ja, el crea.
@@ -49,25 +38,33 @@ public class ControllerPersistence{
         CR.createRoutine(routineName);
     }
 
-    /**
-     * Pre: activityName existeix a la base de dades
-     * Post: Es crea una nova activitat a la rutina
-     * @param routineName a
-     * @param activityName a
-     * @param actTheme a
-     * @param actDescription a
-     * @param actDay a
-     * @param beginTime a
-     * @param finishTime a
+    /**Brief: funció que afegeix una nova activitat a una certa rutina de la base de dades.
+     * Pre: la rutina que té com a nom routineName ja existeix
+     * Pre: l'interval de temps  de l'activitat no se sol·lapa amb cap altra activitat de
+     * la mateixa rutina.
+     * @param routineName és el nom de la rutina on es vol afegir l'activitat.
+     * @param activityName és el nom de l'activitat que es vol afegir.
+     * @param actTheme és el tema de l'activitat.
+     * @param actDescription és la descripció de l'activitat.
+     * @param actDay és el dia on es vol posar l'actiivtat.
+     * @param beginTime és l'hora d'inici de l'activitat.
+     * @param finishTime és l'hora de finalització de l'activitat.
+     * Post: Es crea una nova activitat a la rutina.
      */
-    public void createActivity(String routineName, String activityName, String actTheme,String actDescription, String actDay, String beginTime, String finishTime)
-    {
+    public void createActivity(String routineName, String activityName, String actTheme,String actDescription,
+                               String actDay, String beginTime, String finishTime) throws OverlappingActivitiesException, InvalidTimeException {
         createCtrlActivity();
         CA.createActivity(routineName, activityName,actTheme,actDescription, actDay, beginTime, finishTime);
     }
+
+
+
+    /*
     public void getActivitiesByDay(String routineName, String day) {
         createCtrlActivity();
         CA.getActivitiesByDay(routineName,day);
     }
+
+     */
 
 }
