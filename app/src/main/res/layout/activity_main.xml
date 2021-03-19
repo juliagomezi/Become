@@ -7,25 +7,26 @@
     android:background="#F0F0F0"
     tools:context=".frontend.MainActivity">
 
-    <Button
+    <TextView
         android:id="@+id/addActivity"
         style="@style/Widget.AppCompat.Button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:background="@drawable/round_button"
-        android:text="+"
-        app:backgroundTint="#8E8282"
+        app:iconPadding="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.955"
+        app:layout_constraintHorizontal_bias="0.954"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.911" />
+        app:layout_constraintVertical_bias="0.976" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/activityList"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:animationCache="true"
+        android:background="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
