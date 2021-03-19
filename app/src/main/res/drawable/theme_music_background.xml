@@ -4,7 +4,7 @@
 
     <gradient
         android:startColor="#8AB9FF"
-        android:endColor="#C1DCFF"
+        android:endColor="#D5E6FF"
         android:angle="180"/>
 
     <corners

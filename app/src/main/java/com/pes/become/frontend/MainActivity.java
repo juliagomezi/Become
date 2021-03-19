@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     // Per provar, després ho borraré
     private void initData() {
         activitiesList = new ArrayList<>();
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "cooking", "Dilluns", "08:00", "08:15"));
+        activitiesList.add(new ActivityDummy("Have Breakfast", "nyamnyam", "cooking", "Dilluns", "08:00", "08:15"));
         activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "entertainment", "Dilluns", "08:00", "08:15"));
         activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "music", "Dilluns", "08:00", "08:15"));
         activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "other", "Dilluns", "08:00", "08:15"));
