@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Become</string>
     <string name="new_activityLabel">New Activity</string>
@@ -12,26 +13,4 @@
     <string name="end">End</string>
     <string name="activity_name">Name</string>
     <string name="activity_description">Description</string>
-
-    <string-array name = "themesValues" >
-        <item >Music</item>
-        <item >Sport</item>
-        <item >Sleeping</item>
-        <item >Studying</item>
-        <item >Cooking</item>
-        <item >Working</item>
-        <item >Entertainment</item>
-        <item >Other</item>
-    </string-array>
-
-    <string-array name = "dayValues" >
-        <item >Monday</item>
-        <item >Tuesday</item>
-        <item >Wednesday</item>
-        <item >Thursday</item>
-        <item >Friday</item>
-        <item >Saturday</item>
-        <item >Sunday</item>
-    </string-array>
-
 </resources>

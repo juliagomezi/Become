@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Become</string>
+    <string name="activity_nameLabel">Nom</string>
+    <string name="new_activityLabel">Nouvelle activité</string>
+    <string name="descriptionLabel">Description (optionnel)</string>
+    <string name="cancelButton">Annuler</string>
+    <string name="doneButton">Fait</string>
+    <string name="start_at">Début:</string>
+    <string name="end_at">Fin:</string>
+    <string name="select_time">Sélectionner l\'heure:</string>
+    <string name="start">Début</string>
+    <string name="end">Fin</string>
+    <string name="activity_name">Nom</string>
+    <string name="activity_description">Description</string>
+</resources>
