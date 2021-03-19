@@ -20,7 +20,7 @@ public class ControllerRoutineDB {
     public ControllerRoutineDB(){
         db = FirebaseFirestore.getInstance();
     }
-
+    //Cousultores
     /**
      * Pre: cert.
      * Param: no hi ha cap rutina que tingui "routineName" com a nom.
@@ -31,7 +31,7 @@ public class ControllerRoutineDB {
         dataInput.put("nom",routineName);
         db.collection("routines").document(routineName).set(dataInput);
     }
-
+    //Modificadores
     /**
      * Pre: cert.
      * Param: no hi ha cap rutina que tingui "routineName" com a nom.

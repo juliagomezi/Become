@@ -38,6 +38,8 @@ public class ControllerPersistence{
         CR.createRoutine(routineName);
     }
 
+
+    // Creadores Activity
     /**Brief: funció que afegeix una nova activitat a una certa rutina de la base de dades.
      * Pre: la rutina que té com a nom routineName ja existeix
      * Pre: l'interval de temps  de l'activitat no se sol·lapa amb cap altra activitat de
@@ -56,15 +58,9 @@ public class ControllerPersistence{
         createCtrlActivity();
         CA.createActivity(routineName, activityName,actTheme,actDescription, actDay, beginTime, finishTime);
     }
-
-
-
-    /*
-    public void getActivitiesByDay(String routineName, String day) {
+    //Consultores activity
+    public void getActivitiesByDay(String routineName, String day) throws InterruptedException {
         createCtrlActivity();
         CA.getActivitiesByDay(routineName,day);
     }
-
-     */
-
 }
