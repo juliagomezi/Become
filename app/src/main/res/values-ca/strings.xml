@@ -13,4 +13,25 @@
     <string name="end">Fi</string>
     <string name="activity_name">Nom</string>
     <string name="activity_description">Descripció</string>
+
+    <string-array name = "themesValues" >
+        <item >Música</item>
+        <item >Esport</item>
+        <item >Dormir</item>
+        <item >Estudi</item>
+        <item >Cuina</item>
+        <item >Feina</item>
+        <item >Entreteniment</item>
+        <item >Altres</item>
+    </string-array>
+
+    <string-array name = "dayValues" >
+        <item >Dilluns</item>
+        <item >Dimarts</item>
+        <item >Dimecres</item>
+        <item >Dijous</item>
+        <item >Divendres</item>
+        <item >Dissabte</item>
+        <item >Diumenge</item>
+    </string-array>
 </resources>
