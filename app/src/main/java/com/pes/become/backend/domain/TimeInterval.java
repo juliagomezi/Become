@@ -32,7 +32,7 @@ public class TimeInterval {
             this.startTime = startTime;
             this.endTime = endTime;
         }
-        else throw new InvalidTimeIntervalException("Error: el temps d'inici no es anterior al temps de fi");
+        else throw new InvalidTimeIntervalException();
     }
 
     /**

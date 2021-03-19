@@ -26,7 +26,7 @@ public class Time {
             this.hours = hours;
             this.minutes = minutes;
         }
-        else throw new InvalidTimeException("Error: invalid time values");
+        else throw new InvalidTimeException();
     }
 
     /**
