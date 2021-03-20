@@ -30,26 +30,29 @@ public class TimeTest {
     }
 
     @Test
-    public void firstBeforeSecondDifferentHours() throws InvalidTimeException {
+    public void comparatorDifferentHours() throws InvalidTimeException {
         Time t1 = new Time(17,0);
         Time t2 = new Time(18,0);
-        assertEquals(t1.firstBeforeSecond(t1,t2),true);
-        assertEquals(t1.firstBeforeSecond(t2,t1),false);
+        int res1 = t1.compareTo(t2);
+        int res2 = t2.compareTo(t1);
+        assertTrue(res1 < 0);
+        assertTrue(res2 > 0);
     }
 
     @Test
-    public void firstBeforeSecondSameHours() throws InvalidTimeException {
+    public void comparatorSameHours() throws InvalidTimeException {
         Time t1 = new Time(17,0);
         Time t2 = new Time(17,30);
-        assertEquals(t1.firstBeforeSecond(t1,t2),true);
-        assertEquals(t1.firstBeforeSecond(t2,t1),false);
+        int res1 = t1.compareTo(t2);
+        int res2 = t2.compareTo(t1);
+        assertTrue(res1 < 0);
+        assertTrue(res2 > 0);
     }
 
     @Test
-    public void firstBeforeSecondSameHoursAndMinutes() throws InvalidTimeException {
+    public void comparatorSameHoursAndMinutes() throws InvalidTimeException {
         Time t1 = new Time(17,0);
         Time t2 = new Time(17,0);
-        assertEquals(t1.firstBeforeSecond(t1,t2),false);
-        assertEquals(t1.firstBeforeSecond(t2,t1),false);
+        assertEquals(0, t1.compareTo(t2));
     }
 }
