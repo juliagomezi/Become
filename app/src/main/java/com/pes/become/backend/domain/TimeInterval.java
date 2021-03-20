@@ -28,7 +28,8 @@ public class TimeInterval {
     public TimeInterval(int iniH, int iniM, int endH, int endM) throws InvalidTimeException, InvalidTimeIntervalException {
         Time startTime = new Time(iniH, iniM);
         Time endTime = new Time(endH, endM);
-        if(Time.firstBeforeSecond(startTime, endTime)){
+        int compareTime = startTime.compareTo(endTime);
+        if(compareTime < 0){
             this.startTime = startTime;
             this.endTime = endTime;
         }
