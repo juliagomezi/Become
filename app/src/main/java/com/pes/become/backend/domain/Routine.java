@@ -1,5 +1,8 @@
 package com.pes.become.backend.domain;
 
+import com.pes.become.backend.exceptions.InvalidTimeException;
+import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
+
 import java.util.SortedMap;
 
 /**
@@ -47,6 +50,29 @@ public class Routine {
      */
     public Activity getActivity(ActivityKey activityKey){
         return activities.get(activityKey);
+    }
+
+    /**
+     *
+     * @param activityKey
+     * @param name
+     * @param description
+     * @param iniH
+     * @param iniM
+     * @param endH
+     * @param endM
+     * @param dayString
+     * @throws InvalidTimeIntervalException
+     * @throws InvalidTimeException
+     */
+    public void updateActivity(ActivityKey activityKey, String name, String description, int iniH, int iniM, int endH, int endM, String dayString) throws InvalidTimeIntervalException, InvalidTimeException {
+        Activity activity = getActivity(activityKey);
+        activity.setName(name);
+        activity.setDescription(description);
+        activity.setInterval(iniH, iniM, endH, endM);
+        activity.setDay(Day.valueOf(dayString));
+        deleteActivity(activityKey);
+        addActivity(activity);
     }
 
     /**
