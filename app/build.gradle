@@ -1,7 +1,7 @@
 
 plugins {
     id 'com.android.application'
-    id "org.sonarqube" version "3.1.1"
+
 }
 
 android {
@@ -42,12 +42,4 @@ dependencies {
 
     implementation platform('com.google.firebase:firebase-bom:26.7.0')
     implementation 'com.google.firebase:firebase-analytics'
-}
-
-sonarqube {
-  properties {
-    property "sonar.projectKey", "juliagomezi_Become"
-    property "sonar.organization", "juliagomezi"
-    property "sonar.host.url", "https://sonarcloud.io"
-  }
 }

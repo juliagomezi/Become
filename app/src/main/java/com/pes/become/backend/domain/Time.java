@@ -5,7 +5,7 @@ import com.pes.become.backend.exceptions.InvalidTimeException;
 /**
  * Classe que representa temps com a hores i minuts
  */
-public class Time {
+public class Time implements Comparable<Time>{
     /**
      * Hores del temps
      */
@@ -46,16 +46,17 @@ public class Time {
     }
 
     /**
-     * Funcio que comprova que un temps es anterior a un altre
-     * @param t1 primer temps
-     * @param t2 segon temps
-     * @return true si t1 es anterior a t2, false si no
+     * Funcio que compara un temps amb un altre
+     * @param t2 temps amb que comparem
+     * @return -1 si t2 es posterior, 0 si es igual, 1 si es anterior
      */
-    public static boolean firstBeforeSecond(Time t1, Time t2){
-        if(t1.getHours() < t2.getHours())
-            return true;
-        if(t1.getHours() == t2.getHours())
-            return t1.getMinutes() < t2.getMinutes();
-        return false;
+    @Override
+    public int compareTo(Time t2) {
+        if(this.getHours() < t2.getHours())
+            return -1;
+        if(this.getHours() == t2.getHours()) {
+            return Integer.compare(this.getMinutes(), t2.getMinutes());
+        }
+        return 1;
     }
 }
