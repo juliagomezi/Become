@@ -152,4 +152,11 @@ public class Activity {
     public void setDay(Day day) {
         this.day = day;
     }
+
+    public void update(String name, String description, int iniH, int iniM, int endH, int endM, String dayString) throws InvalidTimeIntervalException, InvalidTimeException {
+        setName(name);
+        setDescription(description);
+        setInterval(iniH, iniM, endH, endM);
+        setDay(Day.valueOf(dayString));
+    }
 }
