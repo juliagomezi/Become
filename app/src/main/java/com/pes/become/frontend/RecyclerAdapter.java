@@ -8,6 +8,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -78,7 +79,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         CardView cardActivityDisplay;
         TextView startTimeDisplay, endTimeDisplay, activityNameDisplay, activityDescriptionDisplay;
         ConstraintLayout expandableLayout;
-        Button editButton, deleteButton;
+        ImageButton editButton, deleteButton;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

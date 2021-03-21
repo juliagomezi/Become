@@ -89,7 +89,7 @@
                     tools:layout_editor_absoluteX="49dp"
                     tools:layout_editor_absoluteY="0dp" />
 
-                <Button
+                <!-- <Button
                     android:id="@+id/editButton"
                     style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="40dp"
@@ -99,13 +99,13 @@
                     app:iconTint="#000000"
                     app:layout_constraintBottom_toBottomOf="@+id/activityNameDisplay"
                     app:layout_constraintEnd_toStartOf="@+id/deleteButton"
-                    app:layout_constraintTop_toTopOf="@+id/activityNameDisplay" />
+                    app:layout_constraintTop_toTopOf="@+id/activityNameDisplay" /> -->
 
-                <Button
+                <!-- <Button
                     android:id="@+id/deleteButton"
                     style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="40dp"
-                    android:layout_height="0dp"
+                    android:layout_height="40dp"
                     app:backgroundTint="#2B2B2B"
                     app:icon="@drawable/delete_icon"
                     app:iconTint="#000000"
@@ -114,7 +114,41 @@
                     app:layout_constraintHorizontal_bias="0.948"
                     app:layout_constraintStart_toStartOf="@+id/activityNameDisplay"
                     app:layout_constraintTop_toTopOf="@+id/activityNameDisplay"
-                    app:layout_constraintVertical_bias="1.0" />
+                    app:layout_constraintVertical_bias="1.0" /> -->
+
+                <ImageButton
+                    android:id="@+id/editButton"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:background="#00FFFFFF"
+                    android:tint="#00FFFFFF"
+                    app:iconTint="#000000"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    app:layout_constraintTop_toTopOf="@+id/activityNameDisplay"
+                    app:layout_constraintBottom_toBottomOf="@+id/activityNameDisplay"
+                    app:layout_constraintEnd_toStartOf="@+id/deleteButton"
+                    app:srcCompat="@drawable/edit_icon_svg"
+                    tools:ignore="VectorDrawableCompat" />
+
+                <ImageButton
+                    android:id="@+id/deleteButton"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:background="#00FFFFFF"
+                    android:tint="#00FFFFFF"
+                    app:iconTint="#000000"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    app:layout_constraintTop_toTopOf="@+id/activityNameDisplay"
+                    app:layout_constraintBottom_toBottomOf="@+id/activityNameDisplay"
+                    app:layout_constraintStart_toStartOf="@+id/activityNameDisplay"
+                    app:layout_constraintEnd_toEndOf="@+id/activityNameDisplay"
+                    app:layout_constraintHorizontal_bias="0.95"
+                    app:srcCompat="@drawable/delete_icon_svg"
+                    tools:ignore="VectorDrawableCompat" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/expandableLayout"
