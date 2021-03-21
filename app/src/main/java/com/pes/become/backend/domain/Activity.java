@@ -153,6 +153,18 @@ public class Activity {
         this.day = day;
     }
 
+    /**
+     * Metode per actualitzar els parametres d'una activitat
+     * @param name nou nom de l'activitat
+     * @param description nova descripcio de l'activitat
+     * @param iniH nova hora d'inici de l'activitat
+     * @param iniM nous minuts d'inici de l'activitat
+     * @param endH nova hora de fi de l'activitat
+     * @param endM nous minuts de fi de l'activitat
+     * @param dayString nou dia de l'activitat
+     * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
+     * @throws InvalidTimeException es llença si les hores o minuts no tenen format valid
+     */
     public void update(String name, String description, int iniH, int iniM, int endH, int endM, String dayString) throws InvalidTimeIntervalException, InvalidTimeException {
         setName(name);
         setDescription(description);

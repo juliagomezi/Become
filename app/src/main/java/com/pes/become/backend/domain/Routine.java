@@ -53,7 +53,7 @@ public class Routine {
     }
 
     /**
-     * Metode per actualitzar els parametres d'una activitat
+     * Metode per actualitzar els parametres d'una activitat de la rutina
      * @param activityKey clau de l'activitat a modificar
      * @param name nou nom de l'activitat
      * @param description nova descripcio de l'activitat
