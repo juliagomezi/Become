@@ -71,10 +71,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+
                 <TextView
                     android:id="@+id/activityNameDisplay"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:background="?attr/selectableItemBackground"
                     android:fontFamily="@font/sourcesanspro_semibold"
                     android:paddingLeft="25dp"
@@ -85,15 +86,42 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textColor="#373737"
                     android:textSize="20sp"
+                    tools:layout_editor_absoluteX="49dp"
+                    tools:layout_editor_absoluteY="0dp" />
+
+                <Button
+                    android:id="@+id/editButton"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="40dp"
+                    android:layout_height="0dp"
+                    app:backgroundTint="#2B2B2B"
+                    app:icon="@drawable/edit_icon"
+                    app:iconTint="#000000"
+                    app:layout_constraintBottom_toBottomOf="@+id/activityNameDisplay"
+                    app:layout_constraintEnd_toStartOf="@+id/deleteButton"
+                    app:layout_constraintTop_toTopOf="@+id/activityNameDisplay" />
+
+                <Button
+                    android:id="@+id/deleteButton"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="40dp"
+                    android:layout_height="0dp"
+                    app:backgroundTint="#2B2B2B"
+                    app:icon="@drawable/delete_icon"
+                    app:iconTint="#000000"
+                    app:layout_constraintBottom_toBottomOf="@+id/activityNameDisplay"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintHorizontal_bias="0.948"
+                    app:layout_constraintStart_toStartOf="@+id/activityNameDisplay"
+                    app:layout_constraintTop_toTopOf="@+id/activityNameDisplay"
+                    app:layout_constraintVertical_bias="1.0" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/expandableLayout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:visibility="visible"
+
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
@@ -103,19 +131,19 @@
                         android:id="@+id/activityDescriptionDisplay"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/sourcesanspro_regular"
                         android:paddingLeft="25dp"
                         android:paddingTop="16dp"
                         android:paddingRight="25dp"
                         android:paddingBottom="18dp"
                         android:text="@string/activity_description"
                         android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                        android:textColor="#373737"
+                        android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:fontFamily="@font/sourcesanspro_regular"
-                        android:textColor="#373737"
-                        android:textSize="16sp" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

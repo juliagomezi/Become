@@ -30,6 +30,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
+    private static MainActivity instance;
+
     // llistat d'activitats
     private RecyclerView recyclerView;
     private RecyclerAdapter recyclerAdapter;
@@ -37,17 +39,21 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private CardView cardActivityDisplay;
 
     // desplegable nova activitat
+    private ArrayAdapter<CharSequence> adapterTheme;
+    private ArrayAdapter<CharSequence> adapterStartDay;
+    private ArrayAdapter<CharSequence> adapterEndDay;
     private Button doneButton, cancelButton;
     private BottomSheetDialog activitySheet;
     private Spinner spinnerTheme, spinnerStartDay, spinnerEndDay;
     private EditText activityName, activityDescr;
-    private TextView startTime, endTime, addActivity;
+    private TextView startTime, endTime, addActivity, sheetLabel;
     private int startHour, startMinute, endHour, endMinute;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        this.instance = this;
 
         initData();
         initRecyclerView();
@@ -56,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         addActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createActivitySheet();
+                createActivitySheet(false);
             }
         });
     }
@@ -64,44 +70,44 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     // Per provar, després ho borraré
     private void initData() {
         activitiesList = new ArrayList<>();
-        activitiesList.add(new ActivityDummy("Have Breakfast", "nyamnyam", "cooking", "Dilluns", "08:00", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "entertainment", "Dilluns", "08:00", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "music", "Dilluns", "08:00", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "other", "Dilluns", "08:00", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "sleeping", "Dilluns", "08:00", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "sport", "Dilluns", "08:00", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "studying", "Dilluns", "08:00", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "working", "Dilluns", "08:00", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "sleeping", "Dilluns", "08:00", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "sleeping", "Dilluns", "08:00", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "sleeping", "Dilluns", "08:00", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "sleeping", "Dilluns", "08:00", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "sleeping", "Dilluns", "08:00", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "sleeping", "Dilluns", "08:00", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "sleeping", "Dilluns", "08:00", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "sleeping", "Dilluns", "08:00", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "sleeping", "Dilluns", "08:00", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "sleeping", "Dilluns", "08:00", "08:15"));
+        activitiesList.add(new ActivityDummy("Have Breakfast", "nyamnyam", "Cooking", "Monday", "08:00", "Monday", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Entertainment", "Monday", "08:00","Monday",  "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Music", "Monday", "08:00", "Monday", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Other", "Monday", "08:00", "Monday", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Sleeping", "Monday", "08:00", "Monday", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Sport", "Monday", "08:00", "Monday", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Studying", "Monday", "08:00", "Monday", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Working", "Monday", "08:00", "Monday", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Sleeping", "Monday", "08:00", "Monday", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Sleeping", "Monday", "08:00", "Monday", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Sleeping", "Monday", "08:00", "Monday", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Sleeping", "Monday", "08:00", "Monday", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Sleeping", "Monday", "08:00", "Monday", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Sleeping", "Monday", "08:00", "Monday", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Sleeping", "Monday", "08:00", "Monday",  "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Sleeping", "Monday", "08:00", "Monday", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Sleeping", "Monday", "08:00", "Monday", "08:15"));
+        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Sleeping", "Monday", "08:00", "Monday", "08:15"));
     }
 
-    /*
-     * Funció per inicialitzar l'elelemnt que mostra el llistat d'activitats
+    /**
+     * Funció per inicialitzar l'element que mostra el llistat d'activitats
      * Pre: ninguna (ha d'existir minim una activitat ??????????????????????)
      * Post: s'ha inicialitzar el recycler amb el seu adapter corresponent
      * */
     private void initRecyclerView() {
         recyclerView = findViewById(R.id.activityList);
         recyclerView.setLayoutManager((new LinearLayoutManager(this)));
-        recyclerAdapter = new RecyclerAdapter(activitiesList);
+        recyclerAdapter = new RecyclerAdapter(activitiesList, this);
         recyclerView.setAdapter(recyclerAdapter);
     }
 
-    /*
+    /**
      * Funció per crear la pestanya de creació d'activitat
      * Pre: ninguna
-     * Post: s'ha creat lapestanya de creació d'activitat
+     * Post: s'ha creat la pestanya de creació d'activitat
      * */
-    private void createActivitySheet() {
+    public void createActivitySheet(boolean modify) {
         activitySheet = new BottomSheetDialog(MainActivity.this,R.style.BottomSheetTheme);
         View sheetView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.activity_layout, findViewById(R.id.bottom_sheet));
 
@@ -114,17 +120,17 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         activityDescr = sheetView.findViewById(R.id.descriptionText);
         startTime = sheetView.findViewById(R.id.startTime);
         endTime = sheetView.findViewById(R.id.endTime);
+        sheetLabel = sheetView.findViewById(R.id.newTitle);
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(MainActivity.this, R.array.themesValues, R.layout.spinner_selected_item);
-        adapter.setDropDownViewResource(R.layout.spinner_item_dropdown);
-        spinnerTheme.setAdapter(adapter);
+        adapterTheme = ArrayAdapter.createFromResource(MainActivity.this, R.array.themesValues, R.layout.spinner_selected_item);
+        adapterTheme.setDropDownViewResource(R.layout.spinner_item_dropdown);
+        spinnerTheme.setAdapter(adapterTheme);
         spinnerTheme.setOnItemSelectedListener(MainActivity.this);
 
-        adapter = ArrayAdapter.createFromResource(MainActivity.this, R.array.dayValues, R.layout.spinner_selected_item);
-        adapter.setDropDownViewResource(R.layout.spinner_item_dropdown);
-        spinnerStartDay.setAdapter(adapter);
+        adapterStartDay = ArrayAdapter.createFromResource(MainActivity.this, R.array.dayValues, R.layout.spinner_selected_item);
+        adapterStartDay.setDropDownViewResource(R.layout.spinner_item_dropdown);
+        spinnerStartDay.setAdapter(adapterStartDay);
         spinnerStartDay.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -137,18 +143,17 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         });
 
-
-
-        adapter = ArrayAdapter.createFromResource(MainActivity.this, R.array.dayValues, R.layout.spinner_selected_item);
-        adapter.setDropDownViewResource(R.layout.spinner_item_dropdown);
-        spinnerEndDay.setAdapter(adapter);
+        adapterEndDay = ArrayAdapter.createFromResource(MainActivity.this, R.array.dayValues, R.layout.spinner_selected_item);
+        adapterEndDay.setDropDownViewResource(R.layout.spinner_item_dropdown);
+        spinnerEndDay.setAdapter(adapterEndDay);
         spinnerEndDay.setOnItemSelectedListener(MainActivity.this);
 
 
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createActivity();
+                if (modify) modifyActivity();
+                else createActivity();
             }
         });
 
@@ -213,18 +218,51 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         });
 
-
         activitySheet.setContentView(sheetView);
         activitySheet.show();
     }
 
+    /**
+     * Funció per posar els valors a la pestanya de creació d'activitat
+     * Pre: ninguna
+     * Post: s'han posat els valors a la pestanya de creació d'activitat
+     * */
+    public void fillActivitySheet(String name, String description, String theme, String startDay, String startTime, String endDay, String endTime) {
+        this.sheetLabel.setText("Modify activity");
+        this.activityName.setText(name);
+        this.activityDescr.setText(description);
+        this.spinnerTheme.setSelection(findPositionInAdapter(adapterTheme, theme));
+        this.spinnerStartDay.setSelection(findPositionInAdapter(adapterStartDay, startDay));
+        this.startTime.setText(startTime);
+        this.spinnerEndDay.setSelection(findPositionInAdapter(adapterEndDay, endDay));
+        this.endTime.setText(endTime);
+    }
+
+    /**
+     * Funció per buscar la posicio del string dins de l'adapter
+     * Pre: ninguna
+     * Post: retorna la posició del string dins l'adapter
+     * */
+    private int findPositionInAdapter(ArrayAdapter<CharSequence> adapter, String element) {
+        for (int i = 0; i < adapter.getCount(); ++i) {
+            if (adapter.getItem(i).toString().equals(element)) return i;
+        }
+        return 0;
+    }
+
+    /**
+     * Funció necessària pel correcte funcionament dels spinners
+     * */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) { }
 
+    /**
+     * Funció necessària pel correcte funcionament dels spinners
+     * */
     @Override
     public void onNothingSelected(AdapterView<?> parent) { }
 
-    /*
+    /**
     * Funció per crear una nova activitat i afegir-la a la rutina que està sent editada
     * Pre: ninguna
     * Post: s'ha creat una nova activitat a la rutina
@@ -245,6 +283,24 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         }
 
+    }
+
+    /**
+     * Funció per modificar una activitat existent i afegir-la a la rutina que està sent editada
+     * Pre: ninguna
+     * Post: s'ha modificat l'activitat a la rutina
+     * */
+    private void modifyActivity() {
+
+    }
+
+    /**
+     * Funció obtenir la isntpancia de la MainActivity actual
+     * Pre: ninguna
+     * Post: retorna la MainActivity
+     * */
+    public static MainActivity getInstance() {
+        return instance;
     }
 
 }

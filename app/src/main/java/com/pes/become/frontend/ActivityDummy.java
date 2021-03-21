@@ -4,20 +4,26 @@ public class ActivityDummy {
     private String name;
     private String description;
     private String theme;
-    private String weekDay;
+    private String startDay;
     private String startTime;
+    private String endDay;
     private String endTime;
 
     private boolean expanded; // true => es veu la descripcio
 
-    public ActivityDummy(String name, String description, String theme, String weekDay, String startTime, String endTime) {
+    public ActivityDummy(String name, String description, String theme, String startDay, String startTime, String endDay, String endTime) {
         this.name = name;
         this.description = description;
         this.theme = theme;
-        this.weekDay = weekDay;
+        this.startDay = startDay;
         this.startTime = startTime;
+        this.endDay = endDay;
         this.endTime = endTime;
         this.expanded = false;
+    }
+
+    private String getEndDay(String endDay) {
+        return endDay;
     }
 
     public String getName() {
@@ -32,13 +38,15 @@ public class ActivityDummy {
         return this.theme;
     }
 
-    public String getWeekDay() {
-        return this.weekDay;
+    public String getStartDay() {
+        return this.startDay;
     }
 
     public String getStartTime() {
         return this.startTime;
     }
+
+    public String getEndDay() { return endDay; }
 
     public String getEndTime() {
         return this.endTime;
@@ -56,13 +64,15 @@ public class ActivityDummy {
         this.theme = theme;
     }
 
-    public void setWeekDay(String weekDay) {
-        this.weekDay = weekDay;
+    public void setStartDay(String startDay) {
+        this.startDay = startDay;
     }
 
     public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
+
+    public void setEndDay(String endDay) { this.endDay = endDay; }
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
@@ -71,5 +81,6 @@ public class ActivityDummy {
     public boolean getExpanded() { return expanded; }
 
     public void setExpanded(boolean expanded) { this.expanded = expanded; }
+
 
 }
