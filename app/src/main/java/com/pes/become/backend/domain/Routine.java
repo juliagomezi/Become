@@ -53,7 +53,7 @@ public class Routine {
     }
 
     /**
-     * Metode per actualitzar els parametres d'una activitat
+     * Metode per actualitzar els parametres d'una activitat de la rutina
      * @param activityKey clau de l'activitat a modificar
      * @param name nou nom de l'activitat
      * @param description nova descripcio de l'activitat
@@ -67,10 +67,7 @@ public class Routine {
      */
     public void updateActivity(ActivityKey activityKey, String name, String description, int iniH, int iniM, int endH, int endM, String dayString) throws InvalidTimeIntervalException, InvalidTimeException {
         Activity activity = getActivity(activityKey);
-        activity.setName(name);
-        activity.setDescription(description);
-        activity.setInterval(iniH, iniM, endH, endM);
-        activity.setDay(Day.valueOf(dayString));
+        activity.update(name, description, iniH, iniM, endH, endM, dayString);
         deleteActivity(activityKey);
         addActivity(activity);
     }
