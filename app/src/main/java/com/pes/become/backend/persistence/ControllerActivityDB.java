@@ -103,7 +103,7 @@ public class ControllerActivityDB {
                     try {
                         Time tBeginOld = new Time(hourBeginOld,minuteBeginOld);
                         Time tFinishOld = new Time(hourFinishOld,minuteFinishOld);
-                        if (!Time.firstBeforeSecond(tBeginOld,tFinishNew) || !Time.firstBeforeSecond(tBeginNew,tFinishOld)){
+                        if ((tFinishNew.compareTo(tBeginOld)<=0) || tFinishOld.compareTo(tBeginNew)<=0){
                             throw new OverlappingActivitiesException();
                         }
                     }
