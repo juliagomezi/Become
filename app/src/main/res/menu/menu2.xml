@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/communityView"
+        android:title="Community"
+        android:icon="@mipmap/ic_launcher" />
+
+    <item
+        android:id="@+id/homeView"
+        android:title="Home"
+        android:icon="@mipmap/ic_launcher" />
+
+
+    <item
+        android:id="@+id/profileView"
+        android:title="Profile"
+        android:icon="@mipmap/ic_launcher" />
+</menu>

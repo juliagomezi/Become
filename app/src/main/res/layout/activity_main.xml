@@ -7,29 +7,26 @@
     android:background="#F0F0F0"
     tools:context=".frontend.MainActivity">
 
-    <TextView
-        android:id="@+id/addActivity"
-        style="@style/Widget.AppCompat.Button"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:background="@drawable/round_button"
-        app:iconPadding="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.954"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.976" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/activityList"
-        android:layout_width="0dp"
+    <FrameLayout
+        android:id="@+id/fragment_layout"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:animationCache="true"
-        android:background="#FFFFFF"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </FrameLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="411dp"
+        android:layout_height="70dp"
+        android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:menu="@menu/menu2" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

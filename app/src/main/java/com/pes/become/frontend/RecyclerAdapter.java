@@ -4,12 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,7 +12,6 @@ import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.pes.become.R;
 
 import java.util.List;
@@ -63,8 +57,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         holder.editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MainActivity.getInstance().createActivitySheet(true);
-                MainActivity.getInstance().fillActivitySheet(activity.getName(), activity.getDescription(), activity.getTheme(), activity.getStartDay(), activity.getStartTime(), activity.getEndDay(), activity.getEndTime());
+                edit_routine.getInstance().createActivitySheet(true);
+                edit_routine.getInstance().fillActivitySheet(activity.getName(), activity.getDescription(), activity.getTheme(), activity.getStartDay(), activity.getStartTime(), activity.getEndDay(), activity.getEndTime());
             }
         });
     }
