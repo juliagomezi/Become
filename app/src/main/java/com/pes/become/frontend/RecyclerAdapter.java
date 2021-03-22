@@ -1,6 +1,5 @@
 package com.pes.become.frontend;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +20,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     // llistat d'activitats
     private List<ActivityDummy> activitiesList;
 
-    public RecyclerAdapter(List<ActivityDummy> activitiesList, Context context) {
+    public RecyclerAdapter(List<ActivityDummy> activitiesList) {
         this.activitiesList = activitiesList;
     }
 
@@ -29,7 +28,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View view = layoutInflater.inflate(R.layout.routine_activity_layout, parent, false);
+        View view = layoutInflater.inflate(R.layout.routine_edit_element, parent, false);
         return new ViewHolder(view);
     }
 
@@ -57,8 +56,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         holder.editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                edit_routine.getInstance().createActivitySheet(true);
-                edit_routine.getInstance().fillActivitySheet(activity.getName(), activity.getDescription(), activity.getTheme(), activity.getStartDay(), activity.getStartTime(), activity.getEndDay(), activity.getEndTime());
+                RoutineEdit.getInstance().createActivitySheet(true);
+                RoutineEdit.getInstance().fillActivitySheet(activity.getName(), activity.getDescription(), activity.getTheme(), activity.getStartDay(), activity.getStartTime(), activity.getEndDay(), activity.getEndTime());
             }
         });
     }
@@ -98,4 +97,5 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             });
         }
     }
+
 }

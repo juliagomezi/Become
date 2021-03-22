@@ -31,10 +31,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class edit_routine extends Fragment implements AdapterView.OnItemSelectedListener{
+public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedListener{
 
-    private static edit_routine instance;
-    private View    view;
+    private static RoutineEdit instance;
+    private View view;
     private Context global;
 
     // llistat d'activitats
@@ -54,7 +54,7 @@ public class edit_routine extends Fragment implements AdapterView.OnItemSelected
     private TextView startTime, endTime, addActivity, sheetLabel;
     private int startHour, startMinute, endHour, endMinute;
 
-    public edit_routine() {
+    public RoutineEdit() {
         // Required empty public constructor
     }
 
@@ -83,13 +83,13 @@ public class edit_routine extends Fragment implements AdapterView.OnItemSelected
 
     /**
      * Funció per inicialitzar l'element que mostra el llistat d'activitats
-     * Pre: ninguna (ha d'existir minim una activitat ??????????????????????)
+     * Pre: ninguna
      * Post: s'ha inicialitzar el recycler amb el seu adapter corresponent
      * */
     private void initRecyclerView() {
         recyclerView = view.findViewById(R.id.activityList);
         recyclerView.setLayoutManager((new LinearLayoutManager(global)));
-        recyclerAdapter = new RecyclerAdapter(activitiesList, global);
+        recyclerAdapter = new RecyclerAdapter(activitiesList);
         recyclerView.setAdapter(recyclerAdapter);
     }
 
@@ -100,7 +100,7 @@ public class edit_routine extends Fragment implements AdapterView.OnItemSelected
      * */
     public void createActivitySheet(boolean modify) {
         activitySheet = new BottomSheetDialog(global,R.style.BottomSheetTheme);
-        View sheetView = LayoutInflater.from(getContext()).inflate(R.layout.activity_layout, view.findViewById(R.id.bottom_sheet));
+        View sheetView = LayoutInflater.from(getContext()).inflate(R.layout.activity_edit, view.findViewById(R.id.bottom_sheet));
 
         doneButton = sheetView.findViewById(R.id.doneButton);
         cancelButton = sheetView.findViewById(R.id.cancelButton);
@@ -284,18 +284,18 @@ public class edit_routine extends Fragment implements AdapterView.OnItemSelected
     }
 
     /**
-     * Funció obtenir la isntpancia de la MainActivity actual
+     * Funció obtenir la isntància de la MainActivity actual
      * Pre: ninguna
      * Post: retorna la MainActivity
      * */
-    public static edit_routine getInstance() {
+    public static RoutineEdit getInstance() {
         return instance;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_edit_routine, container, false);
+        view = inflater.inflate(R.layout.routine_edit, container, false);
         super.onCreate(savedInstanceState);
         this.instance = this;
         global = this.getActivity();
