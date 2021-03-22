@@ -3,11 +3,16 @@ package com.pes.become.backend.adapters;
 import com.pes.become.backend.domain.Activity;
 import com.pes.become.backend.domain.ActivityKey;
 import com.pes.become.backend.domain.Day;
+import com.pes.become.backend.domain.InfoActivity;
+import com.pes.become.backend.domain.TimeInterval;
 import com.pes.become.backend.exceptions.InvalidDayIntervalException;
 import com.pes.become.backend.exceptions.InvalidTimeException;
 import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
 import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 import com.pes.become.backend.persistence.ControllerPersistence;
+
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 /**
  * Classe que gestiona la comunicacio entre la capa de presentacio i la capa de domini, i la creacio dels adaptadors de cada classe de domini
@@ -118,18 +123,25 @@ public class DomainAdapterFactory {
     }
 
     //WIP
-    public void updateActivty(ActivityKey activityKey, String name, String description, int iniH, int iniM, int endH, int endM, String iniDayString, String endDayString) throws InvalidDayIntervalException {
-        getInstanceActivityAdapter();
+    public void updateActivty(String routineName, ActivityKey activityKey, String name, String description, int iniH, int iniM, int endH, int endM, String iniDayString, String endDayString) throws InvalidDayIntervalException {
         getInstanceRoutineAdapter();
         Day iniDay = Day.valueOf(iniDayString);
         Day endDay = Day.valueOf(endDayString);
         int comparison = iniDay.compareTo(endDay); //negatiu si iniDay<endDay; 0 si iguals; positiu si iniDay>endDay
         if(comparison < 0){ //activitat en dies diferents
-
+            routineAdapter.updateActivity(routineName, activityKey, name, description, iniH, iniM, 23, 59, iniDay);
+            routineAdapter.updateActivity(routineName, activityKey, name, description, 0, 0, endH, endM, iniDay);
         }
         else if(comparison == 0){
-
+            routineAdapter.updateActivity(routineName, activityKey, name, description, iniH, iniM, endH, endM, iniDay);
         }
         else throw new InvalidDayIntervalException("Error: el dia de fi és anterior al dia d'inici");
+    }
+
+    //WIP
+    public SortedMap<TimeInterval, InfoActivity> getActivitiesInDay(String routineName, String dayString) throws InterruptedException {
+        SortedMap<TimeInterval, InfoActivity> result = new TreeMap<>();
+        controllerPersistence.getActivitiesByDay(routineName, dayString);
+        return result;
     }
 }

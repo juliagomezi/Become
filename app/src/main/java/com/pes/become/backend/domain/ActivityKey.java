@@ -1,14 +1,33 @@
 package com.pes.become.backend.domain;
 
 /**
- * Struc amb els atributs que formen la clau primaria d'una activitat
+ * Tupla amb els atributs que formen la clau primaria d'una activitat
  */
 public class ActivityKey implements Comparable<ActivityKey> {
+    /**
+     * Nom de l'activitat
+     */
     public String name;
+    /**
+     * Nom de la rutina a la que pertany l'activitat
+     */
     public String routineName;
+    /**
+     * Dia de l'activitat
+     */
     public Day day;
+    /**
+     * Interval de temps de l'activitat
+     */
     public TimeInterval timeInterval;
 
+    /**
+     * Creadora de la tupla
+     * @param name nom de l'activitat
+     * @param routineName nom de la rutina a la que pertany l'activitat
+     * @param day dia de l'activitat
+     * @param timeInterval interval de temps de l'activitat
+     */
     public ActivityKey(String name, String routineName, Day day, TimeInterval timeInterval){
         this.name = name;
         this.routineName = routineName;
