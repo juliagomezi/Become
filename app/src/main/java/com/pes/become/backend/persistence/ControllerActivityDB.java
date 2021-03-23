@@ -4,7 +4,9 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.pes.become.backend.domain.Time;
 
@@ -143,11 +145,11 @@ public class ControllerActivityDB {
      * Post: si l'activitat no se sol·lapa amb cap altre, es crea.
      */
     public void createActivity(String routineName, String activityName, String actTheme,String actDescription, String actDay,
-                               String beginTime, String finishTime) throws OverlappingActivitiesException, InvalidTimeException {
+                               String beginTime, String finishTime)  {
 
         CollectionReference refToActivities = db.collection("routines").document(routineName).collection("activities");
 
-        checkOverlappingActivities(actDay, beginTime, finishTime,refToActivities);
+        //checkOverlappingActivities(actDay, beginTime, finishTime,refToActivities);
 
         Map<String,Object> dataInput = new HashMap<>();
         dataInput.put("name",activityName);
@@ -160,7 +162,119 @@ public class ControllerActivityDB {
     }
 
 
+    /**
+     * Pre: La rutina de nom "routineName" ja existeix.
+     * Pre: L'activitat que es vol esborrar ja existeix i
+     * està identificada pels paràmetres següents.
+     * @param routineName és el nom de la rutina ja existent.
+     * @param activityName és el nom de l'activitat que es vol esborrar.
+     * @param actDay és el dia de  l'activitat que es vol borrar.
+     * @param beginTime és l'hora d'inici de l'activitat.
+     * @param finishTime és l'hora d'acabament de l'activitat
+     * Post: S'esborra l'activitat indicada.
+     */
 
+    public void deleteActivity(String routineName, String activityName,String actDay, String beginTime, String finishTime){
+
+        CollectionReference collRefToActivities;
+        collRefToActivities = db.collection("routines").document(routineName).collection("activities");
+
+
+
+        Query consulta = collRefToActivities.whereEqualTo("name",activityName)
+                .whereEqualTo("day",actDay).whereEqualTo("beginTime",beginTime).whereEqualTo("finishTime",finishTime);
+
+
+        consulta.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for (DocumentSnapshot document : queryDocumentSnapshots){
+                    DocumentReference docRefToActivity = document.getReference();
+                    docRefToActivity.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d("SUCCESS", "Tasca esborrada amb exit");
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+
+    /**
+     * Pre: La rutina de nom "routineName" ja existeix.
+     * Pre: L'activitat que es vol modificar ja existeix.
+     * @param routineName és el nom de la rutina ja existent.
+     * @param activityName és el nom de l'activitat que es vol modificar.
+     * @param actDay és el dia de  l'activitat que es vol modificar.
+     * @param beginTime és l'hora d'inici de l'activitat.
+     * @param finishTime és l'hora d'acabament de l'activitat.
+     * @param newDescription és la nova descripció que es vol afegir a l'activitat.
+     * Post: Es modifica la descripció de l'activitat indicada.
+     */
+    public void modifyActivityDescription(String routineName, String activityName, String actDay,
+                                String beginTime, String finishTime, String newDescription){
+
+        CollectionReference collRefToActivities = db.collection("routines").document(routineName).collection("activities");
+
+
+        Query consulta = collRefToActivities.whereEqualTo("name",activityName).whereEqualTo("day",actDay).whereEqualTo("beginTime",beginTime).whereEqualTo("finishTime",finishTime);
+
+        consulta.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for (DocumentSnapshot document : queryDocumentSnapshots){
+                    DocumentReference docRef = document.getReference();
+                    docRef.update("description",newDescription);
+                    Log.d("SUCCESS", "Descripcio modificada amb exit");
+                }
+            }
+        });
+
+
+
+    }
+
+
+
+
+    /**
+     * Pre: La rutina de nom "routineName" ja existeix.
+     * Pre: L'activitat que es vol modificar ja existeix.
+     * @param routineName és el nom de la rutina ja existent.
+     * @param activityName és el nom de l'activitat que es vol modificar.
+     * @param actDay és el dia de  l'activitat que es vol modificar.
+     * @param beginTime és l'hora d'inici de l'activitat.
+     * @param finishTime és l'hora d'acabament de l'activitat.
+     * @param
+     * Post: S'esborra l'activitat indicada.
+     */
+
+    /*
+    public void modifyActivityTime(String routineName, String activityName, String actDay,
+                                          String beginTime, String finishTime) throws OverlappingActivitiesException, InvalidTimeException {
+
+        CollectionReference collRefToActivities = db.collection("routines").document(routineName).collection("activities");
+
+
+
+        Query consulta = collRefToActivities.whereEqualTo("name",activityName).whereEqualTo("day",actDay).whereEqualTo("beginTime",beginTime).whereEqualTo("finishTime",finishTime);
+
+        consulta.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for (DocumentSnapshot document : queryDocumentSnapshots){
+                    DocumentReference docRef = document.getReference();
+
+                    docRef.update("description",newDescription);
+                    Log.d("SUCCESS", "Temps modificat amb exit");
+                }
+            }
+        });
+
+    }
+    */
 
 
 

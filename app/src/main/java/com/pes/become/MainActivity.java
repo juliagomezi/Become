@@ -17,6 +17,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ControllerPersistence CP = new ControllerPersistence();
+        CP.createNewRoutine("RUTINAAAAAAAA");
 
         /*try {
             c.getActivitiesByDay("RutinaDeProva", "dia");

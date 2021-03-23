@@ -56,13 +56,29 @@ public class ControllerPersistence{
      * @param finishTime és l'hora de finalització de l'activitat.
      * Post: Es crea una nova activitat a la rutina.
      */
-    public void createActivity(String routineName, String activityName, String actTheme,String actDescription,
-                               String actDay, String beginTime, String finishTime) throws OverlappingActivitiesException, InvalidTimeException {
+    public void createActivity(String routineName, String activityName, String actTheme,String actDescription, String actDay,
+                               String beginTime, String finishTime)  {
         createCtrlActivity();
         CA.createActivity(routineName, activityName,actTheme,actDescription, actDay, beginTime, finishTime);
     }
+
+    public void deleteActivity(String routineName, String activityName,String actDay, String beginTime, String finishTime) {
+        createCtrlActivity();
+        CA.deleteActivity( routineName, activityName,actDay, beginTime, finishTime);
+    }
+
+    public void modifyActivityDescription(String routineName, String activityName, String actDay,
+                                          String beginTime, String finishTime, String newDescription){
+        createCtrlActivity();
+        CA.modifyActivityDescription( routineName, activityName, actDay, beginTime, finishTime, newDescription);
+    }
+
+
+
+
+
     //Consultores activity
-    public void getActivitiesByDay(String routineName, String day) throws InterruptedException, NoSuchMethodException {
+    public void getActivitiesByDay(String routineName, String day,Method method, Object object) throws InterruptedException, NoSuchMethodException {
         createCtrlActivity();
 
         Class[] parameterTypes = new Class[1];
