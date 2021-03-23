@@ -28,7 +28,7 @@ public class ControllerRoutineDB {
      */
     public void createRoutine(String routineName){
         Map<String,String> dataInput = new HashMap<>();
-        dataInput.put("nom",routineName);
+        dataInput.put("name",routineName);
         db.collection("routines").document(routineName).set(dataInput);
     }
     //Modificadores

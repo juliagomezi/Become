@@ -50,44 +50,20 @@ public class ControllerActivityDB {
 
 
     //Consultores
-    public void getActivitiesByDay(String routineName, String day, Method method, Object object) throws InterruptedException {
-        QueryDocumentSnapshot docs;
-        Query consulta = db.collection("routines").document(routineName).collection("activities").whereEqualTo("day", day);
-        Task<QuerySnapshot> resultat;
-        consulta.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>(){
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    QuerySnapshot aux2 = task.getResult();
-                    for (QueryDocumentSnapshot document : aux2) {
-                        Log.d("ConsultaFirebase", document.getId() + " => " + document.getData());
-                        String activitiesResult=document.getId() + " => " + document.getData();
-                        Object params[] = new Object[1];
-                        params[0] = activitiesResult;
-                        try {
-                            method.invoke(object,params);
-                        } catch (IllegalAccessException e) {
-                            e.printStackTrace();
-                        } catch (InvocationTargetException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                } else {
-                    Log.d("ConsultaFirebase", task.getException().getMessage());
-                }
-            } });
-    }
 
-     /**
+
+    /**
      * Brief: es comprova que l'activitat que es vol afegir no se sol·lapi amb altres.
      * Pre: Cert.
-      * @param routineName és la rutina on es vol col·locar la activitat
+     * @param routineName és la rutina on es vol col·locar la activitat
      * @param actDay és el dia on es vol col·locar l'activitat.
      * @param beginTime és l'hora d'inici de l'activitat a revisar.
      * @param finishTime és l'hora d'acabament de l'activitat a revisar.
      * Post: si alguna activitat se sol·lapa amb l'activitat que es vol afegir, salta una excepció.
      */
-    private void checkOverlappingActivities(String routineName, String actDay, String beginTime,String finishTime, DocumentReference docRef, Method method, Object object) throws OverlappingActivitiesException, InvalidTimeException {
+    private void checkOverlappingActivities(String routineName, String actDay, String beginTime,
+                                            String finishTime, DocumentReference docRef,
+                                            Method method, Object object) throws OverlappingActivitiesException, InvalidTimeException {
 
         //Passar els string de temps a objectes de la classe Time.
         int hourBeginNew = Integer.parseInt(beginTime.substring(0,2));
@@ -144,6 +120,37 @@ public class ControllerActivityDB {
 
         });
     }
+
+
+    public void getActivitiesByDay(String routineName, String day, Method method, Object object) throws InterruptedException {
+        QueryDocumentSnapshot docs;
+        Query consulta = db.collection("routines").document(routineName).collection("activities").whereEqualTo("day", day);
+        Task<QuerySnapshot> resultat;
+        consulta.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>(){
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    QuerySnapshot aux2 = task.getResult();
+                    for (QueryDocumentSnapshot document : aux2) {
+                        Log.d("ConsultaFirebase", document.getId() + " => " + document.getData());
+                        String activitiesResult=document.getId() + " => " + document.getData();
+                        Object params[] = new Object[1];
+                        params[0] = activitiesResult;
+                        try {
+                            method.invoke(object,params);
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
+                        } catch (InvocationTargetException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                } else {
+                    Log.d("ConsultaFirebase", task.getException().getMessage());
+                }
+            } });
+    }
+
+
 
 
 

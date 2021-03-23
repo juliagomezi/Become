@@ -9,7 +9,7 @@ import com.pes.become.backend.exceptions.InvalidTimeException;
 import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 import com.pes.become.backend.persistence.ControllerPersistence;
 import com.pes.become.backend.persistence.ControllerRoutineDB;
-import com.pes.become.backend.persistence.PostgreSQLExample;
+
 
 public class MainActivity extends AppCompatActivity {
 
