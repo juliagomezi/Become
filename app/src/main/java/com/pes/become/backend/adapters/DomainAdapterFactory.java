@@ -11,6 +11,7 @@ import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
 import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 import com.pes.become.backend.persistence.ControllerPersistence;
 
+import java.lang.reflect.Method;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -129,19 +130,18 @@ public class DomainAdapterFactory {
         Day endDay = Day.valueOf(endDayString);
         int comparison = iniDay.compareTo(endDay); //negatiu si iniDay<endDay; 0 si iguals; positiu si iniDay>endDay
         if(comparison < 0){ //activitat en dies diferents
-            routineAdapter.updateActivity(routineName, activityKey, name, description, iniH, iniM, 23, 59, iniDay);
-            routineAdapter.updateActivity(routineName, activityKey, name, description, 0, 0, endH, endM, iniDay);
+            //routineAdapter.updateActivity(routineName, activityKey, name, description, iniH, iniM, 23, 59, iniDay);
+            //routineAdapter.updateActivity(routineName, activityKey, name, description, 0, 0, endH, endM, iniDay);
         }
         else if(comparison == 0){
-            routineAdapter.updateActivity(routineName, activityKey, name, description, iniH, iniM, endH, endM, iniDay);
+            //routineAdapter.updateActivity(routineName, activityKey, name, description, iniH, iniM, endH, endM, iniDay);
         }
         else throw new InvalidDayIntervalException("Error: el dia de fi és anterior al dia d'inici");
     }
 
     //WIP
-    public SortedMap<TimeInterval, InfoActivity> getActivitiesInDay(String routineName, String dayString) throws InterruptedException {
-        SortedMap<TimeInterval, InfoActivity> result = new TreeMap<>();
-        controllerPersistence.getActivitiesByDay(routineName, dayString);
-        return result;
+    public void getActivitiesByDay(String routineName, String dayString, Method method, Object object) throws InterruptedException, NoSuchMethodException {
+        //SortedMap<TimeInterval, InfoActivity> result = new TreeMap<>();
+        controllerPersistence.getActivitiesByDay(routineName, dayString, method, object);
     }
 }

@@ -59,6 +59,8 @@ public class TimeInterval implements Comparable<TimeInterval>{
      */
     @Override
     public int compareTo(TimeInterval tI2) {
-        return this.getEndTime().compareTo(tI2.getStartTime());
+        int comparison = this.getEndTime().compareTo(tI2.getStartTime());
+        if(comparison == 0) return -1;
+        return comparison;
     }
 }
