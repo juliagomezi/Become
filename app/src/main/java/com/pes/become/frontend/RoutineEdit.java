@@ -29,6 +29,7 @@ import com.pes.become.backend.adapters.ActivityAdapter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
     // llistat d'activitats
     private RecyclerView recyclerView;
     private RecyclerAdapter recyclerAdapter;
-    private List<ActivityDummy> activitiesList;
+    private ArrayList<ArrayList<String>> activitiesList;
     private CardView cardActivityDisplay;
 
     // desplegable nova activitat
@@ -60,6 +61,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         // Required empty public constructor
     }
 
+    /*
     // Per provar, després ho borraré
     private void initData() {
         activitiesList = new ArrayList<>();
@@ -82,6 +84,8 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Sleeping", "Monday", "08:00", "Monday", "08:15"));
         activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Sleeping", "Monday", "08:00", "Monday", "08:15"));
     }
+
+     */
 
     /**
      * Funció per inicialitzar l'element que mostra el llistat d'activitats
@@ -294,6 +298,36 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         return instance;
     }
 
+    public void getActivities() {
+        /*
+        int today = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+        String day = "";
+        switch (today) {
+            case Calendar.MONDAY:
+                day = "Monday";
+                break;
+            case Calendar.TUESDAY:
+                day = "Tuesday";
+                break;
+            case Calendar.WEDNESDAY:
+                day = "Wednesday";
+                break;
+            case Calendar.THURSDAY:
+                day = "Thursday";
+                break;
+            case Calendar.FRIDAY:
+                day = "Friday";
+                break;
+            case Calendar.SATURDAY:
+                day = "Saturday";
+                break;
+            case Calendar.SUNDAY:
+                day = "Sunday";
+                break;
+        }*/
+        activitiesList = AA.getActivitiesByDay("Monday");
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -301,7 +335,8 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         super.onCreate(savedInstanceState);
         this.instance = this;
         global = this.getActivity();
-        initData();
+        //initData();
+        getActivities();
         initRecyclerView();
 
         addActivity = view.findViewById(R.id.addActivity);

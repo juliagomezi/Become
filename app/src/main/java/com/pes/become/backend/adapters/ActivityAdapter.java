@@ -19,24 +19,31 @@ public class ActivityAdapter {
      */
     private static ActivityAdapter instance;
 
-    private Routine routine = new Routine("rutina xaxi");
+    private static Routine routine;
 
     /**
      * Metode per obtenir la instancia de la classe
      * @return instancia
      */
-    public static ActivityAdapter getInstance(){
+    public static ActivityAdapter getInstance() throws InvalidTimeIntervalException, InvalidTimeException {
         if(instance == null){
             instance = new ActivityAdapter();
+            routine = new Routine("rutina xaxi");
+            routine.addActivity(new Activity("test", "this is a test", Theme.Cooking, 8, 0, 9, 0, Day.Monday));
+            routine.addActivity(new Activity("test", "this is a test", Theme.Music, 10, 30, 11, 0, Day.Monday));
+            routine.addActivity(new Activity("test", "this is a test", Theme.Studying, 12, 0, 14, 0, Day.Monday));
+            routine.addActivity(new Activity("test", "this is a test", Theme.Sport, 17, 0, 18, 0, Day.Monday));
+            routine.addActivity(new Activity("test2", "this is a test2", Theme.Entertainment, 18, 0, 19, 0, Day.Monday));
         }
         return instance;
     }
+
 
     /**
      * Metode per consultar les activitats d'un dia
      * @param day nom del dia
      */
-    public ArrayList<ArrayList<String>> getActivities(String day) {
+    public ArrayList<ArrayList<String>> getActivitiesByDay(String day) {
         ArrayList<Activity> acts = routine.getActivitiesByDay(day);
         ArrayList<ArrayList<String>> res = new ArrayList<ArrayList<String>>();
         for(Activity act : acts) {
