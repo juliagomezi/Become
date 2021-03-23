@@ -25,15 +25,19 @@ public class ActivityAdapter {
      * Metode per obtenir la instancia de la classe
      * @return instancia
      */
-    public static ActivityAdapter getInstance() throws InvalidTimeIntervalException, InvalidTimeException {
-        if(instance == null){
+    public static ActivityAdapter getInstance() {
+        if(instance == null) {
             instance = new ActivityAdapter();
             routine = new Routine("rutina xaxi");
-            routine.addActivity(new Activity("test", "this is a test", Theme.Cooking, 8, 0, 9, 0, Day.Monday));
-            routine.addActivity(new Activity("test", "this is a test", Theme.Music, 10, 30, 11, 0, Day.Monday));
-            routine.addActivity(new Activity("test", "this is a test", Theme.Studying, 12, 0, 14, 0, Day.Monday));
-            routine.addActivity(new Activity("test", "this is a test", Theme.Sport, 17, 0, 18, 0, Day.Monday));
-            routine.addActivity(new Activity("test2", "this is a test2", Theme.Entertainment, 18, 0, 19, 0, Day.Monday));
+            try {
+                routine.addActivity(new Activity("test", "this is a test", Theme.Cooking, 8, 0, 9, 0, Day.Monday));
+                routine.addActivity(new Activity("test", "this is a test", Theme.Music, 10, 30, 11, 0, Day.Monday));
+                routine.addActivity(new Activity("test", "this is a test", Theme.Studying, 12, 0, 14, 0, Day.Monday));
+                routine.addActivity(new Activity("test", "this is a test", Theme.Sport, 17, 0, 18, 0, Day.Monday));
+                routine.addActivity(new Activity("test2", "this is a test2", Theme.Entertainment, 18, 0, 19, 0, Day.Monday));
+            } catch (Exception e) {
+                e.getMessage();
+            }
         }
         return instance;
     }
