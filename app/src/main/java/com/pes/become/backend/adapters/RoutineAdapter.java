@@ -1,6 +1,8 @@
 package com.pes.become.backend.adapters;
 
+import com.pes.become.backend.domain.Activity;
 import com.pes.become.backend.domain.Day;
+import com.pes.become.backend.domain.Routine;
 import com.pes.become.backend.exceptions.InvalidTimeException;
 import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
 
@@ -48,7 +50,7 @@ public class RoutineAdapter {
     /**
      * Metode per actualitzar els parametres d'una activitat d'una rutina
      * @param routineName nom de la rutina que conte l'activitat
-     * @param activityKey clau de l'activitat a modificar
+     * @param id clau de l'activitat a modificar
      * @param name nou nom de l'activitat
      * @param description nova descripcio de l'activitat
      * @param iniH nova hora d'inici de l'activitat
@@ -59,7 +61,7 @@ public class RoutineAdapter {
      * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
      * @throws InvalidTimeException es llença si les hores o minuts no tenen format valid
      */
-    public void updateActivity(String routineName, ActivityKey activityKey, String name, String description, int iniH, int iniM, int endH, int endM, Day day){
+    public void updateActivity(String routineName, String id, String name, String description, int iniH, int iniM, int endH, int endM, Day day){
         //metode per obtenir rutina de DB
         //routine.updateActivity(activityKey, name, description, iniH, iniM, endH, endM, day)
     }
