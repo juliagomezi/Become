@@ -63,6 +63,7 @@ public class Activity {
      */
     public Activity(String name, String description, Theme theme, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException, InvalidTimeException {
         this.name = name;
+        this.description = description;
         this.theme = theme;
         this.interval = new TimeInterval(iniH, iniM, endH, endM);
         this.day = day;
