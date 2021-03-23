@@ -3,6 +3,10 @@ package com.pes.become.backend.domain;
 import com.pes.become.backend.exceptions.InvalidTimeException;
 import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -23,7 +27,7 @@ public class Routine {
     /**
      * Mapa amb totes les activitats ordenades temporalment. La clau es la id de l'activitat, i el valor l'activitat
      */
-    private SortedMap<String, Activity> activities;
+    private ArrayList<Activity> activities;
 
     /**
      * Creadora de la rutina
@@ -32,7 +36,7 @@ public class Routine {
     public Routine(String name){
         this.id = "1";
         this.name = name;
-        this.activities = new TreeMap<String, Activity>();
+        this.activities = new ArrayList<Activity>();
     }
 
     /**
@@ -48,22 +52,22 @@ public class Routine {
      * @param activity activitat a afegir
      */
     public void addActivity(Activity activity) {
-        activities.put(activity.getId(), activity);
+        activities.add(activity);
     }
 
     /**
      * Getter d'una instancia d'activitat
-     * @param id clau de l'activitat que volem
-     * @return instancia de l'activitat identificada per la clau
+     * @return les activitats
      */
-    public Activity getActivity(String id){
-        for (Map.Entry<String, Activity> entry : activities.entrySet()) {
-            String currentId = entry.getKey();
-            if (currentId.equals(id)) {
-                return entry.getValue();
+    public ArrayList<Activity> getActivitiesByDay(String day){
+        ArrayList<Activity> res = new ArrayList<Activity>();
+        for(Activity act : activities) {
+            if(act.getDay().equals(Day.valueOf(day))) {
+                res.add(act);
             }
         }
-        return null;
+        Collections.sort(res);
+        return res;
     }
 
     /**
@@ -80,10 +84,12 @@ public class Routine {
      * @throws InvalidTimeException es llença si les hores o minuts no tenen format valid
      */
     public void updateActivity(String id, String name, String description, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException, InvalidTimeException {
-        for (Map.Entry<String, Activity> entry : activities.entrySet()) {
-            String currentId = entry.getKey();
+        for (Activity act : activities) {
+            String currentId = act.getId();
             if (currentId.equals(id)) {
-                entry.getValue().update(name, description, iniH, iniM, endH, endM, day);
+                act.update(name, description, iniH, iniM, endH, endM, day);
+                Collections.sort(activities);
+                break;
             }
         }
     }
@@ -93,6 +99,13 @@ public class Routine {
      * @param id clau que identifica la activitat a eliminar
      */
     public void deleteActivity(String id) {
-        activities.remove(id);
+        for (Activity act : activities) {
+            String currentId = act.getId();
+            if (currentId.equals(id)) {
+                activities.remove(act);
+                Collections.sort(activities);
+                break;
+            }
+        }
     }
 }

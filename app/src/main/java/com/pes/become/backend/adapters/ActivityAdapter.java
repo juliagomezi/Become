@@ -7,6 +7,8 @@ import com.pes.become.backend.domain.Theme;
 import com.pes.become.backend.exceptions.InvalidTimeException;
 import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
 
+import java.util.ArrayList;
+
 /**
  * Classe encarregada de gestionar l'acces a la classe Routine
  */
@@ -31,6 +33,28 @@ public class ActivityAdapter {
     }
 
     /**
+     * Metode per consultar les activitats d'un dia
+     * @param day nom del dia
+     */
+    public ArrayList<ArrayList<String>> getActivities(String day) {
+        ArrayList<Activity> acts = routine.getActivitiesByDay(day);
+        ArrayList<ArrayList<String>> res = new ArrayList<ArrayList<String>>();
+        for(Activity act : acts) {
+            ArrayList<String> resaux = new ArrayList<String>();
+            resaux.add(act.getId());
+            resaux.add(act.getName());
+            resaux.add(act.getDescription());
+            resaux.add(act.getTheme().toString());
+            resaux.add(act.getStartDay().toString());
+            resaux.add(act.getInterval().getStartTime().toString());
+            resaux.add(act.getEndDay().toString());
+            resaux.add(act.getInterval().getEndTime().toString());
+            res.add(resaux);
+        }
+        return res;
+    }
+
+    /**
      * Metode per crear una activitat
      * @param name nom de l'activitat
      * @param description descripcio de l'activitat
@@ -39,12 +63,13 @@ public class ActivityAdapter {
      * @param iniM minut d'inici de l'activitat
      * @param endH hora de fi de l'activitat
      * @param endM minut de fi de l'activitat
-     * @param day dia de l'activitat
+     * @param startDay dia d'inici de l'activitat
+     * @param endDay dia de fi de l'activitat
      * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
      * @throws InvalidTimeException es llença si les hores o minuts no tenen format valid
      */
-    public void createActivity(String name, String description, String theme, int iniH, int iniM, int endH, int endM, String day) throws InvalidTimeIntervalException, InvalidTimeException {
-        routine.addActivity(new Activity(name, description, Theme.valueOf(theme), iniH, iniM, endH, endM, Day.valueOf(day)));
+    public void createActivity(String name, String description, String theme, int iniH, int iniM, int endH, int endM, String startDay, String endDay) throws InvalidTimeIntervalException, InvalidTimeException {
+        routine.addActivity(new Activity(name, description, Theme.valueOf(theme), iniH, iniM, endH, endM, Day.valueOf(startDay),Day.valueOf(endDay)));
     }
 
     /**

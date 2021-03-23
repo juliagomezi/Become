@@ -24,6 +24,7 @@ import android.widget.TimePicker;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.pes.become.R;
+import com.pes.become.backend.adapters.ActivityAdapter;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -33,6 +34,7 @@ import java.util.List;
 
 public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedListener{
 
+    private ActivityAdapter AA = ActivityAdapter.getInstance();
     private static RoutineEdit instance;
     private View view;
     private Context global;
