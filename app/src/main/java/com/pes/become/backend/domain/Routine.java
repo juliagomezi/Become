@@ -3,6 +3,7 @@ package com.pes.become.backend.domain;
 import com.pes.become.backend.exceptions.InvalidTimeException;
 import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
 
+import java.util.Map;
 import java.util.SortedMap;
 
 /**
@@ -49,7 +50,16 @@ public class Routine {
      * @return instancia de l'activitat identificada per la clau
      */
     public Activity getActivity(ActivityKey activityKey){
-        return activities.get(activityKey);
+        for(Map.Entry<ActivityKey, Activity> entry : activities.entrySet()){
+            ActivityKey curKey = entry.getKey();
+            if(curKey.name.equals(activityKey.name)
+               && curKey.routineName.equals(activityKey.routineName)
+               && curKey.day.equals(activityKey.day)
+               && curKey.timeInterval.compareTo(activityKey.timeInterval)==0){
+                return entry.getValue();
+            }
+        }
+        return null;
     }
 
     /**
