@@ -1,17 +1,11 @@
 package com.pes.become;
 
-import com.pes.become.backend.domain.Activity;
-import com.pes.become.backend.domain.ActivityKey;
 import com.pes.become.backend.domain.Day;
-import com.pes.become.backend.domain.Routine;
-import com.pes.become.backend.domain.Theme;
 import com.pes.become.backend.domain.TimeInterval;
 import com.pes.become.backend.exceptions.InvalidTimeException;
 import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
 
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 public class RoutineTest {
 

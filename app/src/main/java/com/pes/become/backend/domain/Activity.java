@@ -3,10 +3,17 @@ package com.pes.become.backend.domain;
 import com.pes.become.backend.exceptions.InvalidTimeException;
 import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
 
+import java.util.Random;
+import java.util.UUID;
+
 /**
  * Classe que defineix les activitats que composen una rutina
  */
 public class Activity {
+    /**
+     * Id de l'activitat
+     */
+    private String id;
     /**
      * Nom de l'activitat
      */
@@ -29,26 +36,6 @@ public class Activity {
     private Day day;
 
     /**
-     * Creadora de l'activitat sense descripcio
-     * @param name nom de l'activitat
-     * @param theme tema de l'activitat
-     * @param iniH hora d'inici de l'activitat
-     * @param iniM minut d'inici de l'activitat
-     * @param endH hora de fi de l'activitat
-     * @param endM minut de fi de l'activitat
-     * @param day dia de l'activitat
-     * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
-     * @throws InvalidTimeException es llença si les hores o minuts no tenen format valid
-     */
-    public Activity(String name, Theme theme, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException, InvalidTimeException {
-        this.name = name;
-        this.description = "";
-        this.theme = theme;
-        this.interval = new TimeInterval(iniH, iniM, endH, endM);
-        this.day = day;
-    }
-
-    /**
      * Creadora de l'activitat amb descripcio
      * @param name nom de l'activitat
      * @param description descripcio de l'activitat
@@ -62,10 +49,20 @@ public class Activity {
      * @throws InvalidTimeException es llença si les hores o minuts no tenen format valid
      */
     public Activity(String name, String description, Theme theme, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException, InvalidTimeException {
+        this.id = UUID.randomUUID().toString();
         this.name = name;
+        this.description = description;
         this.theme = theme;
         this.interval = new TimeInterval(iniH, iniM, endH, endM);
         this.day = day;
+    }
+
+    /**
+     * Getter del id
+     * @return id de l'activitat
+     */
+    public String getId() {
+        return id;
     }
 
     /**
@@ -171,4 +168,7 @@ public class Activity {
         setInterval(iniH, iniM, endH, endM);
         setDay(day);
     }
+
+
+
 }

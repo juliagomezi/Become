@@ -1,10 +1,6 @@
 package com.pes.become.backend.adapters;
 
-import com.pes.become.backend.domain.Activity;
-import com.pes.become.backend.domain.ActivityKey;
 import com.pes.become.backend.domain.Day;
-import com.pes.become.backend.domain.InfoActivity;
-import com.pes.become.backend.domain.TimeInterval;
 import com.pes.become.backend.exceptions.InvalidDayIntervalException;
 import com.pes.become.backend.exceptions.InvalidTimeException;
 import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
@@ -12,8 +8,6 @@ import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 import com.pes.become.backend.persistence.ControllerPersistence;
 
 import java.lang.reflect.Method;
-import java.util.SortedMap;
-import java.util.TreeMap;
 
 /**
  * Classe que gestiona la comunicacio entre la capa de presentacio i la capa de domini, i la creacio dels adaptadors de cada classe de domini
@@ -93,6 +87,7 @@ public class DomainAdapterFactory {
      * @throws InvalidTimeException es llença si les hores o minuts no tenen format valid
      * @throws OverlappingActivitiesException es llença si existeix una activitat a la mateixa rutina que se solapa temporalment amb la creada
      */
+    /*
     public void createActivity(String routineName, String name, String description, String theme, int iniH, int iniM, int endH, int endM, String iniDayString, String endDayString) throws InvalidTimeIntervalException, InvalidDayIntervalException, InvalidTimeException, OverlappingActivitiesException {
         getInstanceActivityAdapter();
         getInstanceRoutineAdapter();
@@ -144,4 +139,5 @@ public class DomainAdapterFactory {
         //SortedMap<TimeInterval, InfoActivity> result = new TreeMap<>();
         controllerPersistence.getActivitiesByDay(routineName, dayString, method, object);
     }
+    */
 }

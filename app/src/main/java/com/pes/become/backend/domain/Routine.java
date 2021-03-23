@@ -5,26 +5,34 @@ import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
 
 import java.util.Map;
 import java.util.SortedMap;
+import java.util.TreeMap;
+import java.util.UUID;
 
 /**
  * Classe que defineix una rutina
  */
 public class Routine {
     /**
+     * Id de la rutina
+     */
+    private String id;
+    /**
      * Nom de la rutina
      */
     private String name;
     /**
-     * Mapa amb totes les activitats ordenades temporalment. La clau es la clau primaria d'activitat, i el valor l'activitat
+     * Mapa amb totes les activitats ordenades temporalment. La clau es la id de l'activitat, i el valor l'activitat
      */
-    private SortedMap<ActivityKey, Activity> activities;
+    private SortedMap<String, Activity> activities;
 
     /**
      * Creadora de la rutina
      * @param name nom de la rutina
      */
     public Routine(String name){
+        this.id = "1";
         this.name = name;
+        this.activities = new TreeMap<String, Activity>();
     }
 
     /**
@@ -39,23 +47,19 @@ public class Routine {
      * Metode que afegeix una activitat a la rutina
      * @param activity activitat a afegir
      */
-    public void addActivity(Activity activity){
-        ActivityKey activityKey = new ActivityKey(activity.getName(), this.name, activity.getDay(), activity.getInterval());
-        activities.put(activityKey, activity);
+    public void addActivity(Activity activity) {
+        activities.put(activity.getId(), activity);
     }
 
     /**
      * Getter d'una instancia d'activitat
-     * @param activityKey clau de l'activitat que volem
+     * @param id clau de l'activitat que volem
      * @return instancia de l'activitat identificada per la clau
      */
-    public Activity getActivity(ActivityKey activityKey){
-        for(Map.Entry<ActivityKey, Activity> entry : activities.entrySet()){
-            ActivityKey curKey = entry.getKey();
-            if(curKey.name.equals(activityKey.name)
-               && curKey.routineName.equals(activityKey.routineName)
-               && curKey.day.equals(activityKey.day)
-               && curKey.timeInterval.compareTo(activityKey.timeInterval)==0){
+    public Activity getActivity(String id){
+        for (Map.Entry<String, Activity> entry : activities.entrySet()) {
+            String currentId = entry.getKey();
+            if (currentId.equals(id)) {
                 return entry.getValue();
             }
         }
@@ -64,7 +68,7 @@ public class Routine {
 
     /**
      * Metode per actualitzar els parametres d'una activitat de la rutina
-     * @param activityKey clau de l'activitat a modificar
+     * @param id clau de l'activitat a modificar
      * @param name nou nom de l'activitat
      * @param description nova descripcio de l'activitat
      * @param iniH nova hora d'inici de l'activitat
@@ -75,18 +79,20 @@ public class Routine {
      * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
      * @throws InvalidTimeException es llença si les hores o minuts no tenen format valid
      */
-    public void updateActivity(ActivityKey activityKey, String name, String description, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException, InvalidTimeException {
-        Activity activity = getActivity(activityKey);
-        activity.update(name, description, iniH, iniM, endH, endM, day);
-        deleteActivity(activityKey);
-        addActivity(activity);
+    public void updateActivity(String id, String name, String description, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException, InvalidTimeException {
+        for (Map.Entry<String, Activity> entry : activities.entrySet()) {
+            String currentId = entry.getKey();
+            if (currentId.equals(id)) {
+                entry.getValue().update(name, description, iniH, iniM, endH, endM, day);
+            }
+        }
     }
 
     /**
      * Metode per eliminar una activitat
-     * @param activityKey clau que identifica la activitat a eliminar
+     * @param id clau que identifica la activitat a eliminar
      */
-    public void deleteActivity(ActivityKey activityKey){
-        activities.remove(activityKey);
+    public void deleteActivity(String id) {
+        activities.remove(id);
     }
 }

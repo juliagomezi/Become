@@ -1,9 +1,6 @@
 package com.pes.become.backend.adapters;
 
-import com.pes.become.backend.domain.Activity;
-import com.pes.become.backend.domain.ActivityKey;
 import com.pes.become.backend.domain.Day;
-import com.pes.become.backend.domain.Routine;
 import com.pes.become.backend.exceptions.InvalidTimeException;
 import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
 
