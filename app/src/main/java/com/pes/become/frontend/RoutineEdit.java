@@ -35,7 +35,7 @@ import java.util.List;
 
 public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedListener{
 
-    private ActivityAdapter AA = ActivityAdapter.getInstance();
+    private ActivityAdapter AA = ActivityAdapter.getInstance(); // cal utilitzar la factoria
     private static RoutineEdit instance;
     private View view;
     private Context global;

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.pes.become">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.pes.become">
 
     <application
         android:allowBackup="true"
@@ -12,7 +11,6 @@
         <activity android:name=".frontend.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

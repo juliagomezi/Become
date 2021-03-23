@@ -53,8 +53,8 @@ public class DomainAdapterFactory {
     /**
      * Metode per obtenir l'adaptador de Activitat
      */
-    private static void getInstanceActivityAdapter(){
-        if(activityAdapter == null){
+    private static void getInstanceActivityAdapter() {
+        if(activityAdapter == null) {
             activityAdapter = ActivityAdapter.getInstance();
         }
     }

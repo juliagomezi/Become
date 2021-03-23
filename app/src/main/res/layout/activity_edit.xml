@@ -14,7 +14,7 @@
         android:layout_marginTop="10dp"
         android:fontFamily="@font/sourcesanspro_regular"
         android:text="@string/new_activityLabel"
-        android:textColor="#000000"
+        android:textColor="@color/black"
         android:textSize="24sp"
         android:textStyle="bold" />
 
@@ -25,7 +25,7 @@
         android:layout_marginTop="20dp"
         android:fontFamily="@font/sourcesanspro_light"
         android:text="@string/activity_nameLabel"
-        android:textColor="#000000"
+        android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="bold" />
 
@@ -37,7 +37,7 @@
         android:fontFamily="@font/sourcesanspro_regular"
         android:inputType="textPersonName"
         android:singleLine="true"
-        android:textColor="#000000"
+        android:textColor="@color/black"
         android:autofillHints="" />
 
     <TextView
@@ -47,7 +47,7 @@
         android:layout_marginTop="10dp"
         android:fontFamily="@font/sourcesanspro_light"
         android:text="@string/descriptionLabel"
-        android:textColor="#000000"
+        android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="bold" />
 
@@ -59,7 +59,7 @@
         android:fontFamily="@font/sourcesanspro_regular"
         android:inputType="textPersonName"
         android:singleLine="true"
-        android:textColor="#000000"
+        android:textColor="@color/black"
         />
 
     <LinearLayout
@@ -75,7 +75,7 @@
             android:gravity="center"
             android:fontFamily="@font/sourcesanspro_light"
             android:text="@string/theme"
-            android:textColor="#000000"
+            android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -87,7 +87,7 @@
             android:layout_marginLeft="60dp"
             android:background="@drawable/spinner_background"
             android:fontFamily="@font/sourcesanspro_light"
-            android:textColor="#000000"
+            android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold" />
     </LinearLayout>
@@ -113,7 +113,7 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/sourcesanspro_light"
                 android:text="@string/start_at"
-                android:textColor="#000000"
+                android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -124,7 +124,7 @@
                 android:layout_marginTop="10dp"
                 android:background="@drawable/spinner_background"
                 android:fontFamily="@font/sourcesanspro_light"
-                android:textColor="#000000"
+                android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold"/>
 
@@ -137,7 +137,7 @@
                 android:fontFamily="@font/sourcesanspro_regular"
                 android:gravity="center"
                 android:text="@string/select_time"
-                android:textColor="#000000"
+                android:textColor="@color/black"
                 android:textSize="16sp"
                 />
 
@@ -159,7 +159,7 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/sourcesanspro_light"
                 android:text="@string/end_at"
-                android:textColor="#000000"
+                android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -170,7 +170,7 @@
                 android:layout_marginTop="10dp"
                 android:background="@drawable/spinner_background"
                 android:fontFamily="@font/sourcesanspro_light"
-                android:textColor="#000000"
+                android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold"/>
 
@@ -183,7 +183,7 @@
                 android:fontFamily="@font/sourcesanspro_regular"
                 android:gravity="center"
                 android:text="@string/select_time"
-                android:textColor="#000000"
+                android:textColor="@color/black"
                 android:textSize="16sp"
                  />
         </LinearLayout>
