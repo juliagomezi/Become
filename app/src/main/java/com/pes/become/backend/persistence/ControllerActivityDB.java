@@ -1,4 +1,5 @@
 package com.pes.become.backend.persistence;
+import android.database.ContentObservable;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -80,14 +81,13 @@ public class ControllerActivityDB {
      /**
      * Brief: es comprova que l'activitat que es vol afegir no se sol·lapi amb altres.
      * Pre: Cert.
+      * @param routineName és la rutina on es vol col·locar la activitat
      * @param actDay és el dia on es vol col·locar l'activitat.
      * @param beginTime és l'hora d'inici de l'activitat a revisar.
      * @param finishTime és l'hora d'acabament de l'activitat a revisar.
-     * @param refToActivities conté la referència al conjunt d'activitats al que es vol revisar les hores
      * Post: si alguna activitat se sol·lapa amb l'activitat que es vol afegir, salta una excepció.
      */
-    private void checkOverlappingActivities(String actDay, String beginTime,String finishTime,
-                                            CollectionReference refToActivities) throws OverlappingActivitiesException, InvalidTimeException {
+    private void checkOverlappingActivities(String routineName, String actDay, String beginTime,String finishTime, DocumentReference docRef, Method method, Object object) throws OverlappingActivitiesException, InvalidTimeException {
 
         //Passar els string de temps a objectes de la classe Time.
         int hourBeginNew = Integer.parseInt(beginTime.substring(0,2));
@@ -97,13 +97,11 @@ public class ControllerActivityDB {
 
         Time tBeginNew = new Time(hourBeginNew,minuteBeginNew);
         Time tFinishNew = new Time(hourFinishNew,minuteFinishNew);
-
-        Query query = refToActivities.whereEqualTo("day", actDay);
+        Query query = db.collection("routines").document(routineName).collection("activities").whereEqualTo("day", actDay);
         query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-
-
+                boolean exception = false;
                 for (DocumentSnapshot document : queryDocumentSnapshots){
                     //Càlcul dels temps d'inici i final de l'activitat que es vol evaluar.
                     String auxBegin = document.get("beginTime").toString();
@@ -117,14 +115,33 @@ public class ControllerActivityDB {
                         Time tBeginOld = new Time(hourBeginOld,minuteBeginOld);
                         Time tFinishOld = new Time(hourFinishOld,minuteFinishOld);
                         if ((tFinishNew.compareTo(tBeginOld)<=0) || tFinishOld.compareTo(tBeginNew)<=0){
+                            exception = true;
                             throw new OverlappingActivitiesException();
                         }
+
                     }
                     catch (InvalidTimeException | OverlappingActivitiesException e) {
+                        exception = true;
+                        e.printStackTrace();
+                    }
+                }
+                if(!exception) {
+                    try {
+                        //String newActDay, String newFinishTime, String newBeginTime, DocumentReference docRef
+                        Object params[] = new Object[4];
+                        params[0] = actDay;
+                        params[1] = finishTime;
+                        params[2] = beginTime;
+                        params[3] = docRef;
+                        method.invoke(object, params);
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    } catch (InvocationTargetException e) {
                         e.printStackTrace();
                     }
                 }
             }
+
         });
     }
 
@@ -247,37 +264,56 @@ public class ControllerActivityDB {
      * @param actDay és el dia de  l'activitat que es vol modificar.
      * @param beginTime és l'hora d'inici de l'activitat.
      * @param finishTime és l'hora d'acabament de l'activitat.
-     * @param
+     * @param newActDay és el nou dia
+     * @param newBeginTime és el nou temps d'inici
+     * @param newFinishTime és el nou temps final
      * Post: S'esborra l'activitat indicada.
      */
 
-    /*
+
     public void modifyActivityTime(String routineName, String activityName, String actDay,
-                                          String beginTime, String finishTime) throws OverlappingActivitiesException, InvalidTimeException {
+                                          String beginTime, String finishTime, String newActDay, String newBeginTime, String newFinishTime) {
 
         CollectionReference collRefToActivities = db.collection("routines").document(routineName).collection("activities");
-
-
 
         Query consulta = collRefToActivities.whereEqualTo("name",activityName).whereEqualTo("day",actDay).whereEqualTo("beginTime",beginTime).whereEqualTo("finishTime",finishTime);
 
         consulta.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
                 for (DocumentSnapshot document : queryDocumentSnapshots){
                     DocumentReference docRef = document.getReference();
+                    try {
+                        Class[] parameterTypes = new Class[4];
+                        parameterTypes[0] = String.class;
+                        parameterTypes[1] = String.class;
+                        parameterTypes[2] = String.class;
+                        parameterTypes[3] = DocumentReference.class;
+                        Method method1 = ControllerActivityDB.class.getMethod("modifyActivityTimeAux", parameterTypes);
+                        //checkOverlappingActivities(routineName, newActDay, newBeginTime,newFinishTime,docRef,method1,new ControllerActivityDB());
+                        modifyActivityTimeAux(newActDay,newFinishTime, newBeginTime, docRef); //Quan es descomenti la linia de sobre cal comentar aixo i descomentar els catch de sota
+                    }/* catch (OverlappingActivitiesException e) {
+                        e.printStackTrace();
+                    } catch (InvalidTimeException e) {
+                        e.printStackTrace();
+                    }*/ catch (NoSuchMethodException e) {
+                        e.printStackTrace();
+                    }
 
-                    docRef.update("description",newDescription);
-                    Log.d("SUCCESS", "Temps modificat amb exit");
+
                 }
+
             }
         });
 
     }
-    */
-
-
-
-
+    public void modifyActivityTimeAux(String newActDay, String newFinishTime, String newBeginTime, DocumentReference docRef)
+    {
+        docRef.update("day", newActDay);
+        docRef.update("finishTime", newFinishTime);
+        docRef.update("beginTime", newBeginTime);
+        Log.d("SUCCESS", "Temps modificat amb exit");
+    }
 
 }

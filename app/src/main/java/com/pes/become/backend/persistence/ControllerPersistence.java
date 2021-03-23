@@ -72,7 +72,12 @@ public class ControllerPersistence{
         createCtrlActivity();
         CA.modifyActivityDescription( routineName, activityName, actDay, beginTime, finishTime, newDescription);
     }
-
+    public void modifyActivityTime(String routineName, String activityName, String actDay,
+                                   String beginTime, String finishTime, String newActDay, String newBeginTime, String newFinishTime)
+    {
+        createCtrlActivity();
+        CA.modifyActivityTime(routineName, activityName, actDay, beginTime, finishTime, newActDay, newBeginTime, newFinishTime);
+    }
 
 
 
@@ -84,10 +89,19 @@ public class ControllerPersistence{
         Class[] parameterTypes = new Class[1];
         parameterTypes[0] = String.class;
         Method method1 = ControllerPersistence.class.getMethod("dothingsWithActivity", parameterTypes);
-        CA.getActivitiesByDay(routineName,day,method1,this);
+        CA.getActivitiesByDay(routineName,day,method,object);
+    }
+    //TUTORIAL
+    public void tutorial(String routineName, String day) throws InterruptedException, NoSuchMethodException {
+
+        Class[] parameterTypes = new Class[1];
+        parameterTypes[0] = String.class;
+        Method method1 = ControllerPersistence.class.getMethod("dothingsWithActivity", parameterTypes);
+        this.getActivitiesByDay(routineName,day,method1,this);
     }
     public void dothingsWithActivity(String message)
     {
         Log.d("DoThingsWithActivity", message);
     }
+    //FI TUTORIAL
 }
