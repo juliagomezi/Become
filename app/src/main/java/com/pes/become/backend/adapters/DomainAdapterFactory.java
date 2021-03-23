@@ -67,7 +67,7 @@ public class DomainAdapterFactory {
     public void createRoutine(String name){
         getInstanceRoutineAdapter();
         routineAdapter.createRoutine(name);
-        controllerPersistence.createNewRoutine(name);
+        //controllerPersistence.createNewRoutine(name);
     }
 
     /**

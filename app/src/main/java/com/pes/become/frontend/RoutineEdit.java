@@ -87,17 +87,6 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
 
      */
 
-    /**
-     * Funció per inicialitzar l'element que mostra el llistat d'activitats
-     * Pre: ninguna
-     * Post: s'ha inicialitzar el recycler amb el seu adapter corresponent
-     * */
-    private void initRecyclerView() {
-        recyclerView = view.findViewById(R.id.activityList);
-        recyclerView.setLayoutManager((new LinearLayoutManager(global)));
-        recyclerAdapter = new RecyclerAdapter(activitiesList);
-        recyclerView.setAdapter(recyclerAdapter);
-    }
 
     /**
      * Funció per crear la pestanya de creació d'activitat
@@ -222,14 +211,14 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
      * Pre: ninguna
      * Post: s'han posat els valors a la pestanya de creació d'activitat
      * */
-    public void fillActivitySheet(String name, String description, String theme, String startDay, String startTime, String endDay, String endTime) {
+    public void fillActivitySheet(String name, String description, String theme, String startDay, String startTime, String endTime) {
         this.sheetLabel.setText("Modify activity");
         this.activityName.setText(name);
         this.activityDescr.setText(description);
         this.spinnerTheme.setSelection(findPositionInAdapter(adapterTheme, theme));
         this.spinnerStartDay.setSelection(findPositionInAdapter(adapterStartDay, startDay));
         this.startTime.setText(startTime);
-        this.spinnerEndDay.setSelection(findPositionInAdapter(adapterEndDay, endDay));
+        //this.spinnerEndDay.setSelection(findPositionInAdapter(adapterEndDay, endDay));
         this.endTime.setText(endTime);
     }
 
@@ -298,6 +287,11 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         return instance;
     }
 
+    /**
+     * Funció per obtenir les activitats de dia de la rutina
+     * Pre: ninguna
+     * Post: s'obtenen les activitats del dia de la rutina
+     * */
     public void getActivities() {
         /*
         int today = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
@@ -328,14 +322,25 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         activitiesList = AA.getActivitiesByDay("Monday");
     }
 
+    /**
+     * Funció per inicialitzar l'element que mostra el llistat d'activitats
+     * Pre: ninguna
+     * Post: s'ha inicialitzar el recycler amb el seu adapter corresponent
+     * */
+    private void initRecyclerView() {
+        recyclerView = view.findViewById(R.id.activityList);
+        recyclerView.setLayoutManager((new LinearLayoutManager(global)));
+        recyclerAdapter = new RecyclerAdapter(activitiesList);
+        recyclerView.setAdapter(recyclerAdapter);
+    }
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.routine_edit, container, false);
         super.onCreate(savedInstanceState);
         this.instance = this;
         global = this.getActivity();
-        //initData();
+
         getActivities();
         initRecyclerView();
 

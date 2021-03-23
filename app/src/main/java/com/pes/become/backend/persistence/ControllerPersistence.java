@@ -68,7 +68,8 @@ public class ControllerPersistence{
         Class[] parameterTypes = new Class[1];
         parameterTypes[0] = String.class;
         Method method1 = ControllerPersistence.class.getMethod("dothingsWithActivity", parameterTypes);
-        controllerActivity.getActivitiesByDay(routineName, routineDay);
+        //controllerActivity.getActivitiesByDay(routineName, routineDay);
+        return null;
     }
 
     public void dothingsWithActivity(String message) {

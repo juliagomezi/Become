@@ -42,23 +42,26 @@ public class ActivityAdapter {
         return instance;
     }
 
-
     /**
      * Metode per consultar les activitats d'un dia
      * @param day nom del dia
      */
     public ArrayList<ArrayList<String>> getActivitiesByDay(String day) {
-        ArrayList<Activity> acts = routine.getActivitiesByDay(day);
+        ArrayList<Activity> activities = routine.getActivitiesByDay(day);
         ArrayList<ArrayList<String>> res = new ArrayList<ArrayList<String>>();
-        for(Activity act : acts) {
+        for(Activity activity : activities) {
             ArrayList<String> resaux = new ArrayList<String>();
-            resaux.add(act.getId());
-            resaux.add(act.getName());
-            resaux.add(act.getDescription());
-            resaux.add(act.getTheme().toString());
-            resaux.add(act.getDay().toString());
-            resaux.add(act.getInterval().getStartTime().toString());
-            resaux.add(act.getInterval().getEndTime().toString());
+            resaux.add(activity.getId());
+            resaux.add(activity.getName());
+            resaux.add(activity.getDescription());
+            resaux.add(activity.getTheme().toString());
+            resaux.add(activity.getDay().toString());
+            Integer startHour = activity.getInterval().getStartTime().getHours();
+            Integer startMinute = activity.getInterval().getStartTime().getMinutes();
+            resaux.add(String.format("%02d", startHour) + ":" + String.format("%02d", startMinute));
+            Integer endHour = activity.getInterval().getEndTime().getHours();
+            Integer endMinute = activity.getInterval().getEndTime().getMinutes();
+            resaux.add(String.format("%02d", endHour) + ":" + String.format("%02d", endMinute));
             res.add(resaux);
         }
         return res;

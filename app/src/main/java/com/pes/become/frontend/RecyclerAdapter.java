@@ -13,15 +13,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.pes.become.R;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
     // llistat d'activitats
-    private List<ActivityDummy> activitiesList;
+    private ArrayList<ArrayList<String>> activitiesList;
+    private Boolean[] isExpanded;
 
-    public RecyclerAdapter(List<ActivityDummy> activitiesList) {
+    public RecyclerAdapter(ArrayList<ArrayList<String>> activitiesList) {
         this.activitiesList = activitiesList;
+        isExpanded = new Boolean[activitiesList.size()];
+        Arrays.fill(isExpanded, Boolean.FALSE);
     }
 
     @NonNull
@@ -34,16 +39,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ActivityDummy activity = activitiesList.get(position);
-        holder.startTimeDisplay.setText(activity.getStartTime());
-        holder.endTimeDisplay.setText(activity.getEndTime());
-        holder.activityNameDisplay.setText(activity.getName());
-        holder.activityDescriptionDisplay.setText(activity.getDescription());
+        holder.activityNameDisplay.setText(activitiesList.get(position).get(1));
+        holder.activityDescriptionDisplay.setText(activitiesList.get(position).get(2));
+        holder.startTimeDisplay.setText(activitiesList.get(position).get(5));
+        holder.endTimeDisplay.setText(activitiesList.get(position).get(6));
 
-        boolean isExpanded = activity.getExpanded();
-        holder.expandableLayout.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+        holder.expandableLayout.setVisibility(isExpanded[position] ? View.VISIBLE : View.GONE);
 
-        String theme = activity.getTheme();
+        String theme = activitiesList.get(position).get(3);
         if (theme.equals("Cooking")) holder.cardActivityDisplay.setBackgroundResource(R.drawable.theme_cooking_background);
         else if (theme.equals("Entertainment")) holder.cardActivityDisplay.setBackgroundResource(R.drawable.theme_entertainment_background);
         else if (theme.equals("Music")) holder.cardActivityDisplay.setBackgroundResource(R.drawable.theme_music_background);
@@ -57,7 +60,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             @Override
             public void onClick(View view) {
                 RoutineEdit.getInstance().createActivitySheet(true);
-                RoutineEdit.getInstance().fillActivitySheet(activity.getName(), activity.getDescription(), activity.getTheme(), activity.getStartDay(), activity.getStartTime(), activity.getEndDay(), activity.getEndTime());
+                RoutineEdit.getInstance().fillActivitySheet(activitiesList.get(position).get(1), activitiesList.get(position).get(2), activitiesList.get(position).get(3), activitiesList.get(position).get(4), activitiesList.get(position).get(5), activitiesList.get(position).get(6));
             }
         });
     }
@@ -90,8 +93,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             activityNameDisplay.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ActivityDummy activity = activitiesList.get(getAdapterPosition());
-                    activity.setExpanded(!activity.getExpanded());
+                    isExpanded[getAdapterPosition()] = !isExpanded[getAdapterPosition()];
                     notifyItemChanged(getAdapterPosition());
                 }
             });
