@@ -53,6 +53,7 @@ public class Routine {
      */
     public void addActivity(Activity activity) {
         activities.add(activity);
+        Collections.sort(activities);
     }
 
     /**

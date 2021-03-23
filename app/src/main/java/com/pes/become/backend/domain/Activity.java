@@ -31,13 +31,9 @@ public class Activity implements Comparable<Activity>{
      */
     private TimeInterval interval;
     /**
-     * Dia que comença l'activitat
+     * Dia de l'activitat
      */
-    private Day startDay;
-    /**
-     * Dia que acaba l'activitat
-     */
-    private Day endDay;
+    private Day day;
 
     /**
      * Creadora de l'activitat amb descripcio
@@ -48,19 +44,17 @@ public class Activity implements Comparable<Activity>{
      * @param iniM minut d'inici de l'activitat
      * @param endH hora de fi de l'activitat
      * @param endM minut de fi de l'activitat
-     * @param startDay dia d'inici de l'activitat
-     * @param endDay dia de fi de l'activitat
+     * @param day dia de l'activitat
      * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
      * @throws InvalidTimeException es llença si les hores o minuts no tenen format valid
      */
-    public Activity(String name, String description, Theme theme, int iniH, int iniM, int endH, int endM, Day startDay, Day endDay) throws InvalidTimeIntervalException, InvalidTimeException {
+    public Activity(String name, String description, Theme theme, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException, InvalidTimeException {
         this.id = UUID.randomUUID().toString();
         this.name = name;
         this.description = description;
         this.theme = theme;
         this.interval = new TimeInterval(iniH, iniM, endH, endM);
-        this.startDay = startDay;
-        this.endDay = endDay;
+        this.day = day;
     }
 
     /**
@@ -141,35 +135,19 @@ public class Activity implements Comparable<Activity>{
     }
 
     /**
-     * Getter del dia d'inici
-     * @return dia d'inici de l'activitat
+     * Getter del dia
+     * @return dia de l'activitat
      */
-    public Day getStartDay() {
-        return startDay;
+    public Day getDay() {
+        return day;
     }
 
     /**
-     * Setter del dia d'inici
-     * @param day nou dia d'inici de l'activitat
+     * Setter del dia
+     * @param day nou dia de l'activitat
      */
-    public void setStartDay(Day day) {
-        this.startDay = day;
-    }
-
-    /**
-     * Getter del dia de fi
-     * @return dia de fi de l'activitat
-     */
-    public Day getEndDay() {
-        return endDay;
-    }
-
-    /**
-     * Setter del dia de fi
-     * @param day nou dia de fi de l'activitat
-     */
-    public void setEndDay(Day day) {
-        this.endDay = day;
+    public void setDay(Day day) {
+        this.day = day;
     }
 
     /**
@@ -180,23 +158,21 @@ public class Activity implements Comparable<Activity>{
      * @param iniM nous minuts d'inici de l'activitat
      * @param endH nova hora de fi de l'activitat
      * @param endM nous minuts de fi de l'activitat
-     * @param startDay nou dia d'inici de l'activitat
-     * @param endDay nou dia de fi de l'activitat
+     * @param day nou dia de l'activitat
      * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
      * @throws InvalidTimeException es llença si les hores o minuts no tenen format valid
      */
-    public void update(String name, String description, int iniH, int iniM, int endH, int endM, Day startDay, Day endDay) throws InvalidTimeIntervalException, InvalidTimeException {
+    public void update(String name, String description, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException, InvalidTimeException {
         setName(name);
         setDescription(description);
         setInterval(iniH, iniM, endH, endM);
-        setStartDay(startDay);
-        setEndDay(endDay);
+        setDay(day);
     }
 
     /**
      * Funcio que compara una activitat amb una altra
      * @param a2 activitat amb que comparem
-     * @return -1 si l'activitat original es realitza abans de l'activitat passada per paràmetre, 1 si és a l'inrevés
+     * @return -1 l'activitat original es anterior a la de a2, 0 si son iguals i 1 si es posterior
      */
     @Override
     public int compareTo(Activity a2) {

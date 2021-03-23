@@ -45,9 +45,8 @@ public class ActivityAdapter {
             resaux.add(act.getName());
             resaux.add(act.getDescription());
             resaux.add(act.getTheme().toString());
-            resaux.add(act.getStartDay().toString());
+            resaux.add(act.getDay().toString());
             resaux.add(act.getInterval().getStartTime().toString());
-            resaux.add(act.getEndDay().toString());
             resaux.add(act.getInterval().getEndTime().toString());
             res.add(resaux);
         }
@@ -63,13 +62,12 @@ public class ActivityAdapter {
      * @param iniM minut d'inici de l'activitat
      * @param endH hora de fi de l'activitat
      * @param endM minut de fi de l'activitat
-     * @param startDay dia d'inici de l'activitat
-     * @param endDay dia de fi de l'activitat
+     * @param day dia d'inici de l'activitat
      * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
      * @throws InvalidTimeException es llença si les hores o minuts no tenen format valid
      */
-    public void createActivity(String name, String description, String theme, int iniH, int iniM, int endH, int endM, String startDay, String endDay) throws InvalidTimeIntervalException, InvalidTimeException {
-        routine.addActivity(new Activity(name, description, Theme.valueOf(theme), iniH, iniM, endH, endM, Day.valueOf(startDay),Day.valueOf(endDay)));
+    public void createActivity(String name, String description, String theme, int iniH, int iniM, int endH, int endM, String day) throws InvalidTimeIntervalException, InvalidTimeException {
+        routine.addActivity(new Activity(name, description, Theme.valueOf(theme), iniH, iniM, endH, endM, Day.valueOf(day)));
     }
 
     /**
