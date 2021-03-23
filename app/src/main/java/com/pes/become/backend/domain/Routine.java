@@ -61,13 +61,13 @@ public class Routine {
      * @param iniM nous minuts d'inici de l'activitat
      * @param endH nova hora de fi de l'activitat
      * @param endM nous minuts de fi de l'activitat
-     * @param dayString nou dia de l'activitat
+     * @param day nou dia de l'activitat
      * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
      * @throws InvalidTimeException es llença si les hores o minuts no tenen format valid
      */
-    public void updateActivity(ActivityKey activityKey, String name, String description, int iniH, int iniM, int endH, int endM, String dayString) throws InvalidTimeIntervalException, InvalidTimeException {
+    public void updateActivity(ActivityKey activityKey, String name, String description, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException, InvalidTimeException {
         Activity activity = getActivity(activityKey);
-        activity.update(name, description, iniH, iniM, endH, endM, dayString);
+        activity.update(name, description, iniH, iniM, endH, endM, day);
         deleteActivity(activityKey);
         addActivity(activity);
     }

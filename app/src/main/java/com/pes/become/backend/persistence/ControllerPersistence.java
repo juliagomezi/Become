@@ -1,7 +1,10 @@
 package com.pes.become.backend.persistence;
 
+import android.util.Log;
+
 import com.pes.become.backend.exceptions.InvalidTimeException;
 import com.pes.become.backend.exceptions.OverlappingActivitiesException;
+import java.lang.reflect.Method;
 
 public class ControllerPersistence{
 
@@ -59,8 +62,16 @@ public class ControllerPersistence{
         CA.createActivity(routineName, activityName,actTheme,actDescription, actDay, beginTime, finishTime);
     }
     //Consultores activity
-    public void getActivitiesByDay(String routineName, String day) throws InterruptedException {
+    public void getActivitiesByDay(String routineName, String day) throws InterruptedException, NoSuchMethodException {
         createCtrlActivity();
-        CA.getActivitiesByDay(routineName,day);
+
+        Class[] parameterTypes = new Class[1];
+        parameterTypes[0] = String.class;
+        Method method1 = ControllerPersistence.class.getMethod("dothingsWithActivity", parameterTypes);
+        CA.getActivitiesByDay(routineName,day,method1,this);
+    }
+    public void dothingsWithActivity(String message)
+    {
+        Log.d("DoThingsWithActivity", message);
     }
 }

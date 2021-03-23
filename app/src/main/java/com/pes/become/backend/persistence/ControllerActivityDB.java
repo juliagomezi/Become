@@ -27,10 +27,12 @@ import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 
 //import org.w3c.dom.Document;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.lang.reflect.Method;
 
 public class ControllerActivityDB {
 
@@ -45,7 +47,7 @@ public class ControllerActivityDB {
 
 
     //Consultores
-    public void getActivitiesByDay(String routineName, String day) throws InterruptedException {
+    public void getActivitiesByDay(String routineName, String day, Method method, Object object) throws InterruptedException {
         QueryDocumentSnapshot docs;
         Query consulta = db.collection("routines").document(routineName).collection("activities").whereEqualTo("day", day);
         Task<QuerySnapshot> resultat;
@@ -57,6 +59,15 @@ public class ControllerActivityDB {
                     for (QueryDocumentSnapshot document : aux2) {
                         Log.d("ConsultaFirebase", document.getId() + " => " + document.getData());
                         String activitiesResult=document.getId() + " => " + document.getData();
+                        Object params[] = new Object[1];
+                        params[0] = activitiesResult;
+                        try {
+                            method.invoke(object,params);
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
+                        } catch (InvocationTargetException e) {
+                            e.printStackTrace();
+                        }
                     }
                 } else {
                     Log.d("ConsultaFirebase", task.getException().getMessage());
@@ -103,7 +114,7 @@ public class ControllerActivityDB {
                     try {
                         Time tBeginOld = new Time(hourBeginOld,minuteBeginOld);
                         Time tFinishOld = new Time(hourFinishOld,minuteFinishOld);
-                        if (tBeginOld.compareTo(tFinishNew) >= 0 || tBeginNew.compareTo(tFinishOld) >= 0){
+                        if ((tFinishNew.compareTo(tBeginOld)<=0) || tFinishOld.compareTo(tBeginNew)<=0){
                             throw new OverlappingActivitiesException();
                         }
                     }
