@@ -46,7 +46,13 @@ public class ControllerActivityDB {
     }
 
 
-    //Consultores
+    /**Brief: funció que obté les activitats d'una certa rutina d'un dia concret de la base de dades.
+     * Pre: la rutina que té com a nom routineName ja existeix
+     * Pre: el dia és vàlid
+     * @param routineName és el nom de la rutina que es vol consultar.
+     * @param routineDay és el dia que es vol consultar.
+     * Post: Retorna un String[][] amb la informació de totes les activitats de la rutina en el dia.
+     */
     public void getActivitiesByDay(String routineName, String day, Method method, Object object) throws InterruptedException {
         QueryDocumentSnapshot docs;
         Query consulta = db.collection("routines").document(routineName).collection("activities").whereEqualTo("day", day);
