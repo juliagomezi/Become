@@ -27,7 +27,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapterFactory;
 import com.pes.become.backend.exceptions.InvalidDayIntervalException;
-import com.pes.become.backend.exceptions.InvalidTimeException;
 import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
 import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 
@@ -273,8 +272,6 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
                     Toast.makeText(getContext(), "Error: Start day cannot be subsequent to end day", Toast.LENGTH_SHORT);
                 } catch (OverlappingActivitiesException e) {
                     Toast.makeText(getContext(), "Error: Activities cannot be overlaped", Toast.LENGTH_SHORT);
-                } catch (InvalidTimeException e) {
-                    e.printStackTrace();
                 }
             }
 
@@ -299,15 +296,15 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         String finishHour = finishTime[0];
         String finishMinute = finishTime[1];
 
+        /*
         try {
             DAF.updateActivity(name, descr, theme, initialHour, initialMinute, finishHour, finishMinute, dayStart, dayEnd);
         } catch (InvalidTimeIntervalException e) {
             Toast.makeText(getContext(), "Error: Start time cannot be subsequent to end time", Toast.LENGTH_SHORT);
         } catch (InvalidDayIntervalException e) {
             Toast.makeText(getContext(), "Error: Start day cannot be subsequent to end day", Toast.LENGTH_SHORT);
-        } catch (InvalidTimeException e) {
-            e.printStackTrace();
         }
+        */
 
     }
 

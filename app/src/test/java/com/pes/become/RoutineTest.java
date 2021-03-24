@@ -4,8 +4,6 @@ import com.pes.become.backend.domain.Activity;
 import com.pes.become.backend.domain.Day;
 import com.pes.become.backend.domain.Routine;
 import com.pes.become.backend.domain.Theme;
-import com.pes.become.backend.domain.TimeInterval;
-import com.pes.become.backend.exceptions.InvalidTimeException;
 import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
 
 import org.junit.Test;
@@ -15,7 +13,7 @@ import static org.junit.Assert.*;
 public class RoutineTest {
 
     @Test
-    public void addActivity() throws InvalidTimeIntervalException, InvalidTimeException {
+    public void addActivity() throws InvalidTimeIntervalException {
         Routine r = new Routine("test");
         Activity a1 = new Activity("testActivity", "testDescription", Theme.Sport,17,0,18,0, Day.Monday);
         r.addActivity(a1);
@@ -23,12 +21,11 @@ public class RoutineTest {
     }
 
     @Test
-    public void updateActivity() throws InvalidTimeIntervalException, InvalidTimeException {
+    public void updateActivity() throws InvalidTimeIntervalException {
         Routine r = new Routine("test");
         Activity a1 = new Activity("testActivity", "testDescription", Theme.Sport,17,0,18,0, Day.Monday);
         r.addActivity(a1);
         r.updateActivity("testActivityUpdated", "testDescriptionUpdated", 17, 0,18,0,11,0,12,0, Day.Tuesday);
-        Activity a2 = new Activity("testActivityUpdated", "testDescriptionUpdated",Theme.Sport,11,0,12,0, Day.Tuesday);
         assertEquals("testActivityUpdated",r.getActivitiesByDay("Tuesday").get(0).getName());
         assertEquals("testDescriptionUpdated",r.getActivitiesByDay("Tuesday").get(0).getDescription());
         assertEquals(11,r.getActivitiesByDay("Tuesday").get(0).getInterval().getStartTime().getHours());
@@ -36,7 +33,7 @@ public class RoutineTest {
     }
 
     @Test
-    public void sortActivities() throws InvalidTimeIntervalException, InvalidTimeException {
+    public void sortActivities() throws InvalidTimeIntervalException {
         Routine r = new Routine("test");
         Activity a1 = new Activity("testActivity", "testDescription", Theme.Sport,17,0,18,0, Day.Monday);
         r.addActivity(a1);
