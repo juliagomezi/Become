@@ -258,10 +258,10 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
 
         if (name.isEmpty()) activityName.setError("This field cannot be null");
         else {
-        /*
-            crear activitat
-            adapter.createActivity(name ,descr, theme, dayStart, startHour, startMinute, dayEnd, endHour, endMinute);
-         */
+
+            //crear activitat
+            //DAF.createActivity(name ,descr, theme, startHour, startMinute, endHour, endMinute, dayStart, dayEnd);
+
 
         }
 
@@ -318,6 +318,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
                 break;
         }*/
         //activitiesList = DAF.getActivitiesByDay("Monday");
+        activitiesList = new ArrayList<>(); //temporal
     }
 
     /**
