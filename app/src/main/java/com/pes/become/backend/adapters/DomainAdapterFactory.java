@@ -145,6 +145,6 @@ public class DomainAdapterFactory {
         routineAdapter.deleteActivity(Integer.parseInt(iniH), Integer.parseInt(iniM), Integer.parseInt(endH), Integer.parseInt(endM));
         String beginTime = iniH + ":" + endM;
         String endTime = endH + ":" + endM;
-        controllerPersistence.deleteActivity("RutinaDeProva", beginTime, endTime);
+        //controllerPersistence.deleteActivity("RutinaDeProva", beginTime, endTime);
     }
 }
