@@ -58,6 +58,10 @@ public class RoutineAdapter {
 
     /**
      * Metode per actualitzar els parametres d'una activitat d'una rutina
+     * @param oldIniH
+     * @param oldIniM
+     * @param oldEndH
+     * @param oldEndM
      * @param name nou nom de l'activitat
      * @param description nova descripcio de l'activitat
      * @param theme nou tema de l'activitat
@@ -68,8 +72,8 @@ public class RoutineAdapter {
      * @param day nou dia de l'activitat
      * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
      */
-    public void updateActivity(String name, String description, Theme theme, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException {
-        routine.updateActivity(name, description, theme, iniH, iniM, endH, endM, day);
+    public void updateActivity(int oldIniH, int oldIniM, int oldEndH, int oldEndM, String name, String description, Theme theme, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException {
+        routine.updateActivity(oldIniH, oldIniM, oldEndH, oldEndM, name, description, theme, iniH, iniM, endH, endM, day);
     }
 
     /**

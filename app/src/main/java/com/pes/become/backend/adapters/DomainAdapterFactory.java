@@ -89,6 +89,10 @@ public class DomainAdapterFactory {
 
     /**
      * Metode per actualitzar els parametres d'una activitat d'una rutina
+     * @param oldIniH
+     * @param oldIniM
+     * @param oldEndH
+     * @param oldEndM
      * @param name nou nom de l'activitat
      * @param description nova descripcio de l'activitat
      * @param theme nou tema de l'activitat
@@ -101,17 +105,17 @@ public class DomainAdapterFactory {
      * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
      * @throws InvalidDayIntervalException es llença si el dia d'inici es posterior al dia de fi
      */
-    public void updateActivity(String name, String description, String theme, String iniH, String iniM, String endH, String endM, String iniDayString, String endDayString) throws InvalidDayIntervalException, InvalidTimeIntervalException {
+    public void updateActivity(String oldIniH, String oldIniM, String oldEndH, String oldEndM, String name, String description, String theme, String iniH, String iniM, String endH, String endM, String iniDayString, String endDayString) throws InvalidDayIntervalException, InvalidTimeIntervalException {
         Day iniDay = Day.valueOf(iniDayString);
         Day endDay = Day.valueOf(endDayString);
         int comparison = iniDay.compareTo(endDay); //negatiu si iniDay<endDay; 0 si iguals; positiu si iniDay>endDay
         if(comparison < 0){ //activitat en dies diferents
-            routineAdapter.updateActivity(name, description, Theme.valueOf(theme), Integer.parseInt(iniH), Integer.parseInt(iniM), 23, 59, iniDay);
-            routineAdapter.updateActivity(name, description, Theme.valueOf(theme), 0, 0, Integer.parseInt(endH), Integer.parseInt(endM), iniDay);
+            routineAdapter.updateActivity(Integer.parseInt(oldIniH), Integer.parseInt(oldIniM), Integer.parseInt(oldEndH), Integer.parseInt(oldEndM), name, description, Theme.valueOf(theme), Integer.parseInt(iniH), Integer.parseInt(iniM), 23, 59, iniDay);
+            routineAdapter.addActivity(name, description, Theme.valueOf(theme), 0, 0, Integer.parseInt(endH), Integer.parseInt(endM), iniDay);
             //2 crides a la DB
         }
         else if(comparison == 0) {
-            routineAdapter.updateActivity(name, description, Theme.valueOf(theme), Integer.parseInt(iniH), Integer.parseInt(iniM), Integer.parseInt(endH), Integer.parseInt(endM), iniDay);
+            routineAdapter.updateActivity(Integer.parseInt(oldIniH), Integer.parseInt(oldIniM), Integer.parseInt(oldEndH), Integer.parseInt(oldEndM),name, description, Theme.valueOf(theme), Integer.parseInt(iniH), Integer.parseInt(iniM), Integer.parseInt(endH), Integer.parseInt(endM), iniDay);
             //crida a la DB
         }
         else throw new InvalidDayIntervalException("Error: el dia de fi és anterior al dia d'inici");
