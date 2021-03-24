@@ -27,10 +27,6 @@ public class DomainAdapterFactory {
      * Unica instancia de l'adaptador de la classe Rutina
      */
     private static RoutineAdapter routineAdapter = RoutineAdapter.getInstance();
-    /**
-     * Unica instancia de l'adaptador de la classe Activitat
-     */
-    private static ActivityAdapter activityAdapter = ActivityAdapter.getInstance();
 
     /**
      * Metode per obtenir la instancia de la classe
