@@ -141,6 +141,7 @@ public class Activity implements Comparable<Activity>{
      * Metode per actualitzar els parametres d'una activitat
      * @param name nou nom de l'activitat
      * @param description nova descripcio de l'activitat
+     * @param theme nou tema de l'activitat
      * @param iniH nova hora d'inici de l'activitat
      * @param iniM nous minuts d'inici de l'activitat
      * @param endH nova hora de fi de l'activitat
@@ -149,9 +150,10 @@ public class Activity implements Comparable<Activity>{
      * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
      * @throws InvalidTimeException es llença si les hores o minuts no tenen format valid
      */
-    public void update(String name, String description, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException, InvalidTimeException {
+    public void update(String name, String description, Theme theme, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException, InvalidTimeException {
         setName(name);
         setDescription(description);
+        setTheme(theme);
         setInterval(iniH, iniM, endH, endM);
         setDay(day);
     }

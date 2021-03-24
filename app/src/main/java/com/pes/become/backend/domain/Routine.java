@@ -52,7 +52,7 @@ public class Routine {
     }
 
     /**
-     * Getter d'una instancia d'activitat
+     * Getter de totes les activitats d'un dia
      * @return les activitats
      */
     public ArrayList<Activity> getActivitiesByDay(String day){
@@ -70,6 +70,7 @@ public class Routine {
      * Metode per actualitzar els parametres d'una activitat de la rutina
      * @param name nou nom de l'activitat
      * @param description nova descripcio de l'activitat
+     * @param theme
      * @param iniH nova hora d'inici de l'activitat
      * @param iniM nous minuts d'inici de l'activitat
      * @param endH nova hora de fi de l'activitat
@@ -78,12 +79,12 @@ public class Routine {
      * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
      * @throws InvalidTimeException es llença si les hores o minuts no tenen format valid
      */
-    public void updateActivity(String name, String description, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException, InvalidTimeException {
+    public void updateActivity(String name, String description, Theme theme, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException, InvalidTimeException {
         TimeInterval t = new TimeInterval(iniH, iniM, endH, endM);
         for (Activity act : activities) {
             TimeInterval taux = act.getInterval();
             if (taux.compareTo(t) == 0) {
-                act.update(name, description, iniH, iniM, endH, endM, day);
+                act.update(name, description, theme, iniH, iniM, endH, endM, day);
                 Collections.sort(activities);
                 break;
             }
@@ -91,11 +92,11 @@ public class Routine {
     }
 
     /**
-     * Metode per eliminar una activitat
-     * @param iniH nova hora d'inici de l'activitat
-     * @param iniM nous minuts d'inici de l'activitat
-     * @param endH nova hora de fi de l'activitat
-     * @param endM nous minuts de fi de l'activitat
+     * Metode per eliminar una activitat de la rutina
+     * @param iniH hora d'inici de l'activitat
+     * @param iniM minuts d'inici de l'activitat
+     * @param endH hora de fi de l'activitat
+     * @param endM minuts de fi de l'activitat
      * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
      * @throws InvalidTimeException es llença si les hores o minuts no tenen format valid
      */
