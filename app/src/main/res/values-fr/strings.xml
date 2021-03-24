@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Become</string>
+    <string name="activity_nameLabel">Nom</string>
+    <string name="new_activityLabel">Nouvelle activité</string>
+    <string name="descriptionLabel">Description (optionnel)</string>
+    <string name="cancelButton">Annuler</string>
+    <string name="doneButton">Fait</string>
+    <string name="start_at">Début:</string>
+    <string name="end_at">Fin:</string>
+    <string name="select_time">Sélectionner l\'heure:</string>
+    <string name="start">Début</string>
+    <string name="end">Fin</string>
+    <string name="activity_name">Nom</string>
+    <string name="activity_description">Description</string>
+
+    <string-array name = "themesValues" >
+        <item >Musique</item>
+        <item >Sport</item>
+        <item >Dormir</item>
+        <item >Étudier</item>
+        <item >Cuisine</item>
+        <item >Travail</item>
+        <item >Divertissement</item>
+        <item >Autre</item>
+    </string-array>
+
+    <string-array name = "dayValues" >
+        <item >Lundi</item>
+        <item >Mardi</item>
+        <item >Mercredi</item>
+        <item >Jeudi</item>
+        <item >Vendredi</item>
+        <item >Samedi</item>
+        <item >Dimanche</item>
+    </string-array>
+    <string name="theme">Sujet:</string>
+</resources>

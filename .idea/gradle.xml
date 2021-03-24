@@ -13,8 +13,6 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/mysql-connector-java-8.0.23" />
-            <option value="$PROJECT_DIR$/postgresql-42.2.19" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

@@ -1,22 +1,38 @@
 <resources>
     <string name="app_name">Become</string>
+    <string name="new_activityLabel">New Activity</string>
+    <string name="descriptionLabel">Description (optional)</string>
+    <string name="activity_nameLabel">Name</string>
+    <string name="cancelButton">Cancel</string>
+    <string name="doneButton">Done</string>
+    <string name="start_at">Start at:</string>
+    <string name="end_at">End at:</string>
+    <string name="select_time">Select time</string>
+    <string name="start">Start</string>
+    <string name="end">End</string>
+    <string name="activity_name">Name</string>
+    <string name="activity_description">Description</string>
+    <string name="theme">Theme:</string>
 
-    <string-array name = "themesValues" >
-        <item >Music</item>
-        <item >Sport</item>
-        <item >Sleeping</item>
-        <item >Studying</item>
-        <item >Eating</item>
+    <string-array name="themesValues">
+        <item>Music</item>
+        <item>Sport</item>
+        <item>Sleeping</item>
+        <item>Studying</item>
+        <item>Cooking</item>
+        <item>Working</item>
+        <item>Entertainment</item>
+        <item>Other</item>
     </string-array>
 
-    <string-array name = "dayValues" >
-        <item >Monday</item>
-        <item >Tuesday</item>
-        <item >Wednesday</item>
-        <item >Thursday</item>
-        <item >Friday</item>
-        <item >Saturday</item>
-        <item >Sunday</item>
+    <string-array name="dayValues">
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
     </string-array>
 
 </resources>

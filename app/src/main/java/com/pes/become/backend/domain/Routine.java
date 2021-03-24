@@ -3,8 +3,14 @@ package com.pes.become.backend.domain;
 import com.pes.become.backend.exceptions.InvalidTimeException;
 import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.SortedMap;
+import java.util.TreeMap;
+import java.util.UUID;
 
 /**
  * Classe que defineix una rutina
@@ -15,9 +21,9 @@ public class Routine {
      */
     private String name;
     /**
-     * Mapa amb totes les activitats ordenades temporalment. La clau es la clau primaria d'activitat, i el valor l'activitat
+     * Mapa amb totes les activitats ordenades temporalment. La clau es la id de l'activitat, i el valor l'activitat
      */
-    private SortedMap<ActivityKey, Activity> activities;
+    private ArrayList<Activity> activities;
 
     /**
      * Creadora de la rutina
@@ -25,6 +31,7 @@ public class Routine {
      */
     public Routine(String name){
         this.name = name;
+        this.activities = new ArrayList<Activity>();
     }
 
     /**
@@ -39,32 +46,28 @@ public class Routine {
      * Metode que afegeix una activitat a la rutina
      * @param activity activitat a afegir
      */
-    public void addActivity(Activity activity){
-        ActivityKey activityKey = new ActivityKey(activity.getName(), this.name, activity.getDay(), activity.getInterval());
-        activities.put(activityKey, activity);
+    public void addActivity(Activity activity) {
+        activities.add(activity);
+        Collections.sort(activities);
     }
 
     /**
      * Getter d'una instancia d'activitat
-     * @param activityKey clau de l'activitat que volem
-     * @return instancia de l'activitat identificada per la clau
+     * @return les activitats
      */
-    public Activity getActivity(ActivityKey activityKey){
-        for(Map.Entry<ActivityKey, Activity> entry : activities.entrySet()){
-            ActivityKey curKey = entry.getKey();
-            if(curKey.name.equals(activityKey.name)
-               && curKey.routineName.equals(activityKey.routineName)
-               && curKey.day.equals(activityKey.day)
-               && curKey.timeInterval.compareTo(activityKey.timeInterval)==0){
-                return entry.getValue();
+    public ArrayList<Activity> getActivitiesByDay(String day){
+        ArrayList<Activity> res = new ArrayList<Activity>();
+        for(Activity act : activities) {
+            if(act.getDay().equals(Day.valueOf(day))) {
+                res.add(act);
             }
         }
-        return null;
+        Collections.sort(res);
+        return res;
     }
 
     /**
      * Metode per actualitzar els parametres d'una activitat de la rutina
-     * @param activityKey clau de l'activitat a modificar
      * @param name nou nom de l'activitat
      * @param description nova descripcio de l'activitat
      * @param iniH nova hora d'inici de l'activitat
@@ -75,18 +78,36 @@ public class Routine {
      * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
      * @throws InvalidTimeException es llença si les hores o minuts no tenen format valid
      */
-    public void updateActivity(ActivityKey activityKey, String name, String description, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException, InvalidTimeException {
-        Activity activity = getActivity(activityKey);
-        activity.update(name, description, iniH, iniM, endH, endM, day);
-        deleteActivity(activityKey);
-        addActivity(activity);
+    public void updateActivity(String name, String description, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException, InvalidTimeException {
+        TimeInterval t = new TimeInterval(iniH, iniM, endH, endM);
+        for (Activity act : activities) {
+            TimeInterval taux = act.getInterval();
+            if (taux.compareTo(t) == 0) {
+                act.update(name, description, iniH, iniM, endH, endM, day);
+                Collections.sort(activities);
+                break;
+            }
+        }
     }
 
     /**
      * Metode per eliminar una activitat
-     * @param activityKey clau que identifica la activitat a eliminar
+     * @param iniH nova hora d'inici de l'activitat
+     * @param iniM nous minuts d'inici de l'activitat
+     * @param endH nova hora de fi de l'activitat
+     * @param endM nous minuts de fi de l'activitat
+     * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
+     * @throws InvalidTimeException es llença si les hores o minuts no tenen format valid
      */
-    public void deleteActivity(ActivityKey activityKey){
-        activities.remove(activityKey);
+    public void deleteActivity(int iniH, int iniM, int endH, int endM) throws InvalidTimeIntervalException, InvalidTimeException {
+        TimeInterval t = new TimeInterval(iniH, iniM, endH, endM);
+        for (Activity act : activities) {
+            TimeInterval taux = act.getInterval();
+            if (taux.compareTo(t) == 0) {
+                activities.remove(act);
+                Collections.sort(activities);
+                break;
+            }
+        }
     }
 }
