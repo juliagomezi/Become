@@ -70,8 +70,8 @@ public class RoutineAdapter {
      * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
      * @throws InvalidTimeException es llença si les hores o minuts no tenen format valid
      */
-    public void updateActivity(String name, String description, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException, InvalidTimeException {
-        routine.updateActivity(name, description, iniH, iniM, endH, endM, day);
+    public void updateActivity(String name, String description, int iniHOld, int iniMOld, int endHOld, int endMOld, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException, InvalidTimeException {
+        routine.updateActivity(name, description, iniHOld, iniMOld, endHOld, endMOld, iniH, iniM, endH, endM, day);
     }
 
     /**

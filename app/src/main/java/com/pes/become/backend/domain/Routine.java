@@ -47,6 +47,7 @@ public class Routine {
      * @param activity activitat a afegir
      */
     public void addActivity(Activity activity) {
+        //comprovar solapaments!!!
         activities.add(activity);
         Collections.sort(activities);
     }
@@ -78,11 +79,11 @@ public class Routine {
      * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
      * @throws InvalidTimeException es llença si les hores o minuts no tenen format valid
      */
-    public void updateActivity(String name, String description, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException, InvalidTimeException {
-        TimeInterval t = new TimeInterval(iniH, iniM, endH, endM);
+    public void updateActivity(String name, String description, int iniHOld, int iniMOld, int endHOld, int endMOld, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException, InvalidTimeException {
+        TimeInterval t = new TimeInterval(iniHOld, iniMOld, endHOld, endMOld);
         for (Activity act : activities) {
             TimeInterval taux = act.getInterval();
-            if (taux.compareTo(t) == 0) {
+            if (taux.getStartTime().compareTo(t.getStartTime()) == 0 && taux.getEndTime().compareTo(t.getEndTime()) == 0) {
                 act.update(name, description, iniH, iniM, endH, endM, day);
                 Collections.sort(activities);
                 break;

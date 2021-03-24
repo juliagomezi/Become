@@ -103,17 +103,17 @@ public class DomainAdapterFactory {
      * @param endDayString
      * @throws InvalidDayIntervalException
      */
-    public void updateActivity(String name, String description, String iniH, String iniM, String endH, String endM, String iniDayString, String endDayString) throws InvalidDayIntervalException, InvalidTimeIntervalException, InvalidTimeException {
+    public void updateActivity(String name, String description, String iniHOld, String iniMOld, String endHOld, String endMOld, String iniH, String iniM, String endH, String endM, String iniDayString, String endDayString) throws InvalidDayIntervalException, InvalidTimeIntervalException, InvalidTimeException {
         Day iniDay = Day.valueOf(iniDayString);
         Day endDay = Day.valueOf(endDayString);
         int comparison = iniDay.compareTo(endDay); //negatiu si iniDay<endDay; 0 si iguals; positiu si iniDay>endDay
         if(comparison < 0){ //activitat en dies diferents
-            routineAdapter.updateActivity(name, description, Integer.parseInt(iniH), Integer.parseInt(iniM), 23, 59, iniDay);
-            routineAdapter.updateActivity(name, description, 0, 0, Integer.parseInt(endH), Integer.parseInt(endM), iniDay);
+            routineAdapter.updateActivity(name, description, Integer.parseInt(iniHOld), Integer.parseInt(iniMOld), Integer.parseInt(endHOld), Integer.parseInt(endMOld), Integer.parseInt(iniH), Integer.parseInt(iniM), 23, 59, iniDay);
+            routineAdapter.updateActivity(name, description, Integer.parseInt(iniHOld), Integer.parseInt(iniMOld), Integer.parseInt(endHOld), Integer.parseInt(endMOld),0, 0, Integer.parseInt(endH), Integer.parseInt(endM), iniDay);
             //2 crides a la DB
         }
         else if(comparison == 0) {
-            routineAdapter.updateActivity(name, description, Integer.parseInt(iniH), Integer.parseInt(iniM), Integer.parseInt(endH), Integer.parseInt(endM), iniDay);
+            routineAdapter.updateActivity(name, description, Integer.parseInt(iniHOld), Integer.parseInt(iniMOld), Integer.parseInt(endHOld), Integer.parseInt(endMOld),Integer.parseInt(iniH), Integer.parseInt(iniM), Integer.parseInt(endH), Integer.parseInt(endM), iniDay);
             //crida a la DB
         }
         else throw new InvalidDayIntervalException("Error: el dia de fi és anterior al dia d'inici");

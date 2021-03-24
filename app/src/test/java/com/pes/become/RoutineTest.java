@@ -1,35 +1,55 @@
 package com.pes.become;
 
+import com.pes.become.backend.domain.Activity;
 import com.pes.become.backend.domain.Day;
+import com.pes.become.backend.domain.Routine;
+import com.pes.become.backend.domain.Theme;
 import com.pes.become.backend.domain.TimeInterval;
 import com.pes.become.backend.exceptions.InvalidTimeException;
 import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
 
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 public class RoutineTest {
 
-    /*
     @Test
     public void addActivity() throws InvalidTimeIntervalException, InvalidTimeException {
         Routine r = new Routine("test");
-        Activity a = new Activity("testActivity",new Theme("Sport"),17,0,18,0, Day.Monday);
-        ActivityKey ak = new ActivityKey("testActivity", "test", Day.Monday, new TimeInterval(17,0,18,0));
-        r.addActivity(a);
-        Activity res = r.getActivity(ak);
-        assertEquals(a,res);
+        Activity a1 = new Activity("testActivity", "testDescription", Theme.Sport,17,0,18,0, Day.Monday);
+        r.addActivity(a1);
+        assertEquals(a1,r.getActivitiesByDay("Monday").get(0));
     }
 
     @Test
     public void updateActivity() throws InvalidTimeIntervalException, InvalidTimeException {
         Routine r = new Routine("test");
-        Activity old = new Activity("testActivity",new Theme("Sport"),17,0,18,0, Day.Monday);
-        Activity updated = new Activity("testActivityUpdated","sampleDescription", new Theme("Entertainment"),18,30,19,30, Day.Tuesday);
-        ActivityKey ak = new ActivityKey("testActivity", "test", Day.Monday, new TimeInterval(17,0,18,0));
-        r.addActivity(old);
-        r.updateActivity(ak,"testActivityUpdated","sampleDescription",18,30,19,30, "Tuesday");
-        Activity res = r.getActivity(ak);
-        assertEquals(res,updated);
+        Activity a1 = new Activity("testActivity", "testDescription", Theme.Sport,17,0,18,0, Day.Monday);
+        r.addActivity(a1);
+        r.updateActivity("testActivityUpdated", "testDescriptionUpdated", 17, 0,18,0,11,0,12,0, Day.Tuesday);
+        Activity a2 = new Activity("testActivityUpdated", "testDescriptionUpdated",Theme.Sport,11,0,12,0, Day.Tuesday);
+        assertEquals("testActivityUpdated",r.getActivitiesByDay("Tuesday").get(0).getName());
+        assertEquals("testDescriptionUpdated",r.getActivitiesByDay("Tuesday").get(0).getDescription());
+        assertEquals(11,r.getActivitiesByDay("Tuesday").get(0).getInterval().getStartTime().getHours());
+        assertEquals(12,r.getActivitiesByDay("Tuesday").get(0).getInterval().getEndTime().getHours());
     }
-    */
+
+    @Test
+    public void sortActivities() throws InvalidTimeIntervalException, InvalidTimeException {
+        Routine r = new Routine("test");
+        Activity a1 = new Activity("testActivity", "testDescription", Theme.Sport,17,0,18,0, Day.Monday);
+        r.addActivity(a1);
+        Activity a2 = new Activity("testActivity", "testDescription", Theme.Sport,15,0,16,0, Day.Monday);
+        r.addActivity(a2);
+        Activity a3 = new Activity("testActivity", "testDescription", Theme.Sport,18,0,19,30, Day.Monday);
+        r.addActivity(a3);
+        Activity a4 = new Activity("testActivity", "testDescription", Theme.Sport,19,30,20,0, Day.Monday);
+        r.addActivity(a4);
+        assertEquals(a2,r.getActivitiesByDay("Monday").get(0));
+        assertEquals(a1,r.getActivitiesByDay("Monday").get(1));
+        assertEquals(a3,r.getActivitiesByDay("Monday").get(2));
+        assertEquals(a4,r.getActivitiesByDay("Monday").get(3));
+    }
+
 }
