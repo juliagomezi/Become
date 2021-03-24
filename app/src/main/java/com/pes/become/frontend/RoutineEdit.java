@@ -317,7 +317,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
                 day = "Sunday";
                 break;
         }*/
-        activitiesList = DAF.getActivitiesByDay("Monday");
+        //activitiesList = DAF.getActivitiesByDay("Monday");
     }
 
     /**
