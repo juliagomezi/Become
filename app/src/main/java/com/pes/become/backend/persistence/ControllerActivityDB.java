@@ -186,22 +186,19 @@ public class ControllerActivityDB {
      * Pre: L'activitat que es vol esborrar ja existeix i
      * està identificada pels paràmetres següents.
      * @param routineName és el nom de la rutina ja existent.
-     * @param activityName és el nom de l'activitat que es vol esborrar.
-     * @param actDay és el dia de  l'activitat que es vol borrar.
      * @param beginTime és l'hora d'inici de l'activitat.
      * @param finishTime és l'hora d'acabament de l'activitat
      * Post: S'esborra l'activitat indicada.
      */
 
-    public void deleteActivity(String routineName, String activityName,String actDay, String beginTime, String finishTime){
+    public void deleteActivity(String routineName, String beginTime, String finishTime){
 
         CollectionReference collRefToActivities;
         collRefToActivities = db.collection("routines").document(routineName).collection("activities");
 
 
 
-        Query consulta = collRefToActivities.whereEqualTo("name",activityName)
-                .whereEqualTo("day",actDay).whereEqualTo("beginTime",beginTime).whereEqualTo("finishTime",finishTime);
+        Query consulta = collRefToActivities.whereEqualTo("beginTime",beginTime).whereEqualTo("finishTime",finishTime);
 
 
         consulta.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -232,19 +229,28 @@ public class ControllerActivityDB {
      * @param newDescription és la nova descripció que es vol afegir a l'activitat.
      * Post: Es modifica la descripció de l'activitat indicada.
      */
-    public void modifyActivityDescription(String routineName, String activityName, String actDay,
-                                String beginTime, String finishTime, String newDescription){
+    public void updateActivity(String name, String newDescription, String theme,String oldBeginTime, String oldFinishTime,
+                               String newBeginTime, String newFinishTime ,String iniDayString, String endDayString){
+
+
 
         CollectionReference collRefToActivities = db.collection("routines").document(routineName).collection("activities");
 
 
-        Query consulta = collRefToActivities.whereEqualTo("name",activityName).whereEqualTo("day",actDay).whereEqualTo("beginTime",beginTime).whereEqualTo("finishTime",finishTime);
+        Query consulta = collRefToActivities.whereEqualTo("beginTime",oldBeginTime).whereEqualTo("finishTime",oldFinishTime);
 
         consulta.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for (DocumentSnapshot document : queryDocumentSnapshots){
                     DocumentReference docRef = document.getReference();
+                    docRef.update("name",);
+                    docRef.update("description",);
+                    docRef.update("theme",);
+                    docRef.update("day",);
+                    docRef.update("beginTime",);
+                    docRef.update("finishTime",);
+
                     docRef.update("description",newDescription);
                     Log.d("SUCCESS", "Descripcio modificada amb exit");
                 }
