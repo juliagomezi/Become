@@ -11,10 +11,10 @@ public class Theme {
 
     /**
      * Creadora de la classe
-     * @param name ThemeType que definira el tema
+     * @param name String que definira el tema
      */
-    public Theme(ThemeType name) {
-        this.name = name;
+    public Theme(String name) {
+        this.name = ThemeType.valueOf(name);
     }
 
     /**

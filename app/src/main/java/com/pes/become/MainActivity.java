@@ -1,8 +1,16 @@
 package com.pes.become;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
+
+import android.service.controls.Control;
+import android.util.Log;
+
+import com.pes.become.backend.exceptions.InvalidTimeException;
+import com.pes.become.backend.exceptions.OverlappingActivitiesException;
+import com.pes.become.backend.persistence.ControllerPersistence;
+import com.pes.become.backend.persistence.ControllerRoutineDB;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,10 +35,31 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ControllerPersistence CP = new ControllerPersistence();
+        CP.createNewRoutine("RUTINAAAAAAAA");
+
+        /*try {
+            c.getActivitiesByDay("RutinaDeProva", "dia");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }*/
+
+        /* Crear activitat prova
+        try {
+            c.createActivity("RutinaDeProva", "activitat2", "esports", "descr", "dia", "08:00", "09:00");
+        } catch (OverlappingActivitiesException e) {
+            e.printStackTrace();
+        } catch (InvalidTimeException e) {
+            e.printStackTrace();
+        }
+        */
+
         addActivity= findViewById(R.id.addActivity);
 
         addActivity.setOnClickListener(new View.OnClickListener() {

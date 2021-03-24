@@ -6,7 +6,7 @@ import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
 /**
  * Classe que representa un interval de temps
  */
-public class TimeInterval {
+public class TimeInterval implements Comparable<TimeInterval>{
     /**
      * Temps d'inici de l'interval
      */
@@ -28,7 +28,8 @@ public class TimeInterval {
     public TimeInterval(int iniH, int iniM, int endH, int endM) throws InvalidTimeException, InvalidTimeIntervalException {
         Time startTime = new Time(iniH, iniM);
         Time endTime = new Time(endH, endM);
-        if(Time.firstBeforeSecond(startTime, endTime)){
+        int compareTime = startTime.compareTo(endTime);
+        if(compareTime < 0){
             this.startTime = startTime;
             this.endTime = endTime;
         }
@@ -49,5 +50,17 @@ public class TimeInterval {
      */
     public Time getEndTime() {
         return endTime;
+    }
+
+    /**
+     * Funcio que compara un interval de temps amb un altre
+     * @param tI2 interval de temps amb que comparem
+     * @return -1 si el temps de fi de l'interval original es mes petit que el del tI2, 0 si son iguals i 1 si es mes gran
+     */
+    @Override
+    public int compareTo(TimeInterval tI2) {
+        if(this.getStartTime().compareTo(tI2.getStartTime()) == 0 && this.getEndTime().compareTo(tI2.getEndTime()) == 0)
+            return 0;
+        return this.getStartTime().compareTo(tI2.getStartTime());
     }
 }

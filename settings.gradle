@@ -1,2 +1,4 @@
+include ':mysql-connector-java-8.0.23'
+include ':postgresql-42.2.19'
 include ':app'
 rootProject.name = "Become"

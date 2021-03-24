@@ -63,6 +63,7 @@ public class Activity {
      */
     public Activity(String name, String description, Theme theme, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException, InvalidTimeException {
         this.name = name;
+        this.description = description;
         this.theme = theme;
         this.interval = new TimeInterval(iniH, iniM, endH, endM);
         this.day = day;
@@ -151,5 +152,24 @@ public class Activity {
      */
     public void setDay(Day day) {
         this.day = day;
+    }
+
+    /**
+     * Metode per actualitzar els parametres d'una activitat
+     * @param name nou nom de l'activitat
+     * @param description nova descripcio de l'activitat
+     * @param iniH nova hora d'inici de l'activitat
+     * @param iniM nous minuts d'inici de l'activitat
+     * @param endH nova hora de fi de l'activitat
+     * @param endM nous minuts de fi de l'activitat
+     * @param day nou dia de l'activitat
+     * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
+     * @throws InvalidTimeException es llença si les hores o minuts no tenen format valid
+     */
+    public void update(String name, String description, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException, InvalidTimeException {
+        setName(name);
+        setDescription(description);
+        setInterval(iniH, iniM, endH, endM);
+        setDay(day);
     }
 }
