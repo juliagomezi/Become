@@ -1,11 +1,9 @@
 package com.pes.become.backend.persistence;
-import android.database.ContentObservable;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -25,7 +23,6 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 //import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.CollectionReference;
-import com.pes.become.backend.exceptions.InvalidTimeException;
 import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 
 //import org.w3c.dom.Document;
@@ -33,8 +30,6 @@ import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 import java.lang.reflect.Method;
 
 public class ControllerActivityDB {
@@ -63,7 +58,7 @@ public class ControllerActivityDB {
      */
     private void checkOverlappingActivities(String routineName, String actDay, String beginTime,
                                             String finishTime, DocumentReference docRef,
-                                            Method method, Object object) throws OverlappingActivitiesException, InvalidTimeException {
+                                            Method method, Object object) throws OverlappingActivitiesException {
 
         //Passar els string de temps a objectes de la classe Time.
         int hourBeginNew = Integer.parseInt(beginTime.substring(0,2));
@@ -96,7 +91,7 @@ public class ControllerActivityDB {
                         }
 
                     }
-                    catch (InvalidTimeException | OverlappingActivitiesException e) {
+                    catch (OverlappingActivitiesException e) {
                         exception = true;
                         e.printStackTrace();
                     }

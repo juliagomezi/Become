@@ -4,7 +4,6 @@ import com.pes.become.backend.domain.Activity;
 import com.pes.become.backend.domain.Day;
 import com.pes.become.backend.domain.Routine;
 import com.pes.become.backend.domain.Theme;
-import com.pes.become.backend.exceptions.InvalidTimeException;
 import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
 
 import java.util.ArrayList;
@@ -52,9 +51,8 @@ public class RoutineAdapter {
      * @param endM minuts de fi de l'activitat
      * @param day dia de l'activitat
      * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
-     * @throws InvalidTimeException es llença si el dia de fi es anterior al dia d'inici
      */
-    public void addActivity(String name, String description, Theme theme, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException, InvalidTimeException {
+    public void addActivity(String name, String description, Theme theme, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException {
         routine.addActivity(new Activity(name, description, theme, iniH, iniM, endH, endM, day));
     }
 
@@ -69,9 +67,8 @@ public class RoutineAdapter {
      * @param endM nous minuts de fi de l'activitat
      * @param day nou dia de l'activitat
      * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
-     * @throws InvalidTimeException es llença si les hores o minuts no tenen format valid
      */
-    public void updateActivity(String name, String description, Theme theme, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException, InvalidTimeException {
+    public void updateActivity(String name, String description, Theme theme, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException {
         routine.updateActivity(name, description, theme, iniH, iniM, endH, endM, day);
     }
 
@@ -106,9 +103,8 @@ public class RoutineAdapter {
      * @param endH hora de fi de l'activitat
      * @param endM minuts de fi de l'activitat
      * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
-     * @throws InvalidTimeException es llença si les hores o minuts no tenen format valid
      */
-    public void deleteActivity(int iniH, int iniM, int endH, int endM) throws InvalidTimeIntervalException, InvalidTimeException {
+    public void deleteActivity(int iniH, int iniM, int endH, int endM) throws InvalidTimeIntervalException {
         routine.deleteActivity(iniH, iniM, endH, endM);
     }
 }

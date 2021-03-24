@@ -1,7 +1,5 @@
 package com.pes.become.backend.domain;
 
-import com.pes.become.backend.exceptions.InvalidTimeException;
-
 /**
  * Classe que representa temps com a hores i minuts
  */
@@ -19,14 +17,10 @@ public class Time implements Comparable<Time>{
      * Creadora de la classe
      * @param hours hores
      * @param minutes minuts
-     * @throws InvalidTimeException es llença si les hores o minuts no tenen format valid
      */
-    public Time(int hours, int minutes) throws InvalidTimeException {
-        if(0<=hours && hours<24 && 0<=minutes && minutes<60){
-            this.hours = hours;
-            this.minutes = minutes;
-        }
-        else throw new InvalidTimeException();
+    public Time(int hours, int minutes) {
+        this.hours = hours;
+        this.minutes = minutes;
     }
 
     /**

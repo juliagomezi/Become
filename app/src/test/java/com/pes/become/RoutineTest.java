@@ -1,12 +1,5 @@
 package com.pes.become;
 
-import com.pes.become.backend.domain.Day;
-import com.pes.become.backend.domain.TimeInterval;
-import com.pes.become.backend.exceptions.InvalidTimeException;
-import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
-
-import org.junit.Test;
-
 public class RoutineTest {
 
     /*

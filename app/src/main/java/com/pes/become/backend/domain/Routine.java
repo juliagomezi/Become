@@ -1,16 +1,9 @@
 package com.pes.become.backend.domain;
 
-import com.pes.become.backend.exceptions.InvalidTimeException;
 import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
-import java.util.UUID;
 
 /**
  * Classe que defineix una rutina
@@ -77,9 +70,8 @@ public class Routine {
      * @param endM nous minuts de fi de l'activitat
      * @param day nou dia de l'activitat
      * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
-     * @throws InvalidTimeException es llença si les hores o minuts no tenen format valid
      */
-    public void updateActivity(String name, String description, Theme theme, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException, InvalidTimeException {
+    public void updateActivity(String name, String description, Theme theme, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException {
         TimeInterval t = new TimeInterval(iniH, iniM, endH, endM);
         for (Activity act : activities) {
             TimeInterval taux = act.getInterval();
@@ -98,9 +90,8 @@ public class Routine {
      * @param endH hora de fi de l'activitat
      * @param endM minuts de fi de l'activitat
      * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
-     * @throws InvalidTimeException es llença si les hores o minuts no tenen format valid
      */
-    public void deleteActivity(int iniH, int iniM, int endH, int endM) throws InvalidTimeIntervalException, InvalidTimeException {
+    public void deleteActivity(int iniH, int iniM, int endH, int endM) throws InvalidTimeIntervalException {
         TimeInterval t = new TimeInterval(iniH, iniM, endH, endM);
         for (Activity act : activities) {
             TimeInterval taux = act.getInterval();

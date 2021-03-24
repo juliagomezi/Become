@@ -1,6 +1,5 @@
 package com.pes.become.backend.domain;
 
-import com.pes.become.backend.exceptions.InvalidTimeException;
 import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
 
 /**
@@ -23,9 +22,8 @@ public class TimeInterval implements Comparable<TimeInterval>{
      * @param endH hora de fi de l'interval
      * @param endM minut de fi de l'interval
      * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
-     * @throws InvalidTimeException es llença si les hores o minuts no tenen format valid
      */
-    public TimeInterval(int iniH, int iniM, int endH, int endM) throws InvalidTimeException, InvalidTimeIntervalException {
+    public TimeInterval(int iniH, int iniM, int endH, int endM) throws InvalidTimeIntervalException {
         Time startTime = new Time(iniH, iniM);
         Time endTime = new Time(endH, endM);
         int compareTime = startTime.compareTo(endTime);

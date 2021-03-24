@@ -3,7 +3,6 @@ package com.pes.become.backend.adapters;
 import com.pes.become.backend.domain.Day;
 import com.pes.become.backend.domain.Theme;
 import com.pes.become.backend.exceptions.InvalidDayIntervalException;
-import com.pes.become.backend.exceptions.InvalidTimeException;
 import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
 import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 import com.pes.become.backend.persistence.ControllerPersistence;
@@ -61,10 +60,9 @@ public class DomainAdapterFactory {
      * @param endDayString dia de fi de l'activitat
      * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
      * @throws InvalidDayIntervalException es llença si el dia de fi es anterior al dia d'inici
-     * @throws InvalidTimeException es llença si les hores o minuts no tenen format valid
      * @throws OverlappingActivitiesException es llença si existeix una activitat a la mateixa rutina que se solapa temporalment amb la creada
      */
-    public void createActivity(String name, String description, String theme, String iniH, String iniM, String endH, String endM, String iniDayString, String endDayString) throws InvalidTimeIntervalException, InvalidDayIntervalException, InvalidTimeException, OverlappingActivitiesException {
+    public void createActivity(String name, String description, String theme, String iniH, String iniM, String endH, String endM, String iniDayString, String endDayString) throws InvalidTimeIntervalException, InvalidDayIntervalException, OverlappingActivitiesException {
         Day iniDay = Day.valueOf(iniDayString);
         Day endDay = Day.valueOf(endDayString);
         int comparison = iniDay.compareTo(endDay); //negatiu si iniDay<endDay; 0 si iguals; positiu si iniDay>endDay
@@ -101,10 +99,9 @@ public class DomainAdapterFactory {
      * @param iniDayString nou dia d'inici de l'activitat
      * @param endDayString nou dia de fi de l'activitat
      * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
-     * @throws InvalidTimeException es llença si les hores o minuts no tenen format valid
      * @throws InvalidDayIntervalException es llença si el dia d'inici es posterior al dia de fi
      */
-    public void updateActivity(String name, String description, String theme, String iniH, String iniM, String endH, String endM, String iniDayString, String endDayString) throws InvalidDayIntervalException, InvalidTimeIntervalException, InvalidTimeException {
+    public void updateActivity(String name, String description, String theme, String iniH, String iniM, String endH, String endM, String iniDayString, String endDayString) throws InvalidDayIntervalException, InvalidTimeIntervalException {
         Day iniDay = Day.valueOf(iniDayString);
         Day endDay = Day.valueOf(endDayString);
         int comparison = iniDay.compareTo(endDay); //negatiu si iniDay<endDay; 0 si iguals; positiu si iniDay>endDay
@@ -139,9 +136,8 @@ public class DomainAdapterFactory {
      * @param endH hora de fi de l'activitat
      * @param endM minuts de fi de l'activitat
      * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
-     * @throws InvalidTimeException es llença si les hores o minuts no tenen format valid
      */
-    public void deleteActivity(String iniH, String iniM, String endH, String endM) throws InvalidTimeIntervalException, InvalidTimeException {
+    public void deleteActivity(String iniH, String iniM, String endH, String endM) throws InvalidTimeIntervalException {
         routineAdapter.deleteActivity(Integer.parseInt(iniH), Integer.parseInt(iniM), Integer.parseInt(endH), Integer.parseInt(endM));
         String beginTime = iniH + ":" + endM;
         String endTime = endH + ":" + endM;

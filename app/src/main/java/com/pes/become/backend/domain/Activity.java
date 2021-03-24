@@ -1,10 +1,6 @@
 package com.pes.become.backend.domain;
 
-import com.pes.become.backend.exceptions.InvalidTimeException;
 import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
-
-import java.util.Random;
-import java.util.UUID;
 
 /**
  * Classe que defineix les activitats que composen una rutina
@@ -42,9 +38,8 @@ public class Activity implements Comparable<Activity>{
      * @param endM minut de fi de l'activitat
      * @param day dia de l'activitat
      * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
-     * @throws InvalidTimeException es llença si les hores o minuts no tenen format valid
      */
-    public Activity(String name, String description, Theme theme, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException, InvalidTimeException {
+    public Activity(String name, String description, Theme theme, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException {
         this.name = name;
         this.description = description;
         this.theme = theme;
@@ -115,9 +110,8 @@ public class Activity implements Comparable<Activity>{
      * @param endH nova hora de fi de l'activitat
      * @param endM nou minut de fi de l'activitat
      * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
-     * @throws InvalidTimeException es llença si les hores o minuts no tenen format valid
      */
-    public void setInterval(int iniH, int iniM, int endH, int endM) throws InvalidTimeIntervalException, InvalidTimeException {
+    public void setInterval(int iniH, int iniM, int endH, int endM) throws InvalidTimeIntervalException {
         this.interval = new TimeInterval(iniH, iniM, endH, endM);
     }
 
@@ -148,9 +142,8 @@ public class Activity implements Comparable<Activity>{
      * @param endM nous minuts de fi de l'activitat
      * @param day nou dia de l'activitat
      * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
-     * @throws InvalidTimeException es llença si les hores o minuts no tenen format valid
      */
-    public void update(String name, String description, Theme theme, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException, InvalidTimeException {
+    public void update(String name, String description, Theme theme, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException {
         setName(name);
         setDescription(description);
         setTheme(theme);

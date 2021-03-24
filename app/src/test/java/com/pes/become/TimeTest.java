@@ -1,7 +1,6 @@
 package com.pes.become;
 
 import com.pes.become.backend.domain.Time;
-import com.pes.become.backend.exceptions.InvalidTimeException;
 
 import org.junit.Test;
 
@@ -9,6 +8,7 @@ import static org.junit.Assert.*;
 
 public class TimeTest {
 
+    /*
     @Test(expected= InvalidTimeException.class)
     public void hoursSmallerThan0ThrowsException() throws InvalidTimeException {
         Time t = new Time(-1,0);
@@ -28,9 +28,11 @@ public class TimeTest {
     public void minutesBiggerOrEqualThan60ThrowsException() throws InvalidTimeException {
         Time t = new Time(0,60);
     }
+     */
+
 
     @Test
-    public void comparatorDifferentHours() throws InvalidTimeException {
+    public void comparatorDifferentHours() {
         Time t1 = new Time(17,0);
         Time t2 = new Time(18,0);
         int res1 = t1.compareTo(t2);
@@ -40,7 +42,7 @@ public class TimeTest {
     }
 
     @Test
-    public void comparatorSameHours() throws InvalidTimeException {
+    public void comparatorSameHours() {
         Time t1 = new Time(17,0);
         Time t2 = new Time(17,30);
         int res1 = t1.compareTo(t2);
@@ -50,7 +52,7 @@ public class TimeTest {
     }
 
     @Test
-    public void comparatorSameHoursAndMinutes() throws InvalidTimeException {
+    public void comparatorSameHoursAndMinutes() {
         Time t1 = new Time(17,0);
         Time t2 = new Time(17,0);
         assertEquals(0, t1.compareTo(t2));

@@ -2,8 +2,6 @@ package com.pes.become.backend.persistence;
 
 import android.util.Log;
 
-import com.pes.become.backend.exceptions.InvalidTimeException;
-import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 import java.lang.reflect.Method;
 
 public class ControllerPersistence{
