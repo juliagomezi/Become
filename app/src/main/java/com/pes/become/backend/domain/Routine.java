@@ -17,10 +17,6 @@ import java.util.UUID;
  */
 public class Routine {
     /**
-     * Id de la rutina
-     */
-    private String id;
-    /**
      * Nom de la rutina
      */
     private String name;
@@ -34,7 +30,6 @@ public class Routine {
      * @param name nom de la rutina
      */
     public Routine(String name){
-        this.id = "1";
         this.name = name;
         this.activities = new ArrayList<Activity>();
     }
@@ -73,7 +68,6 @@ public class Routine {
 
     /**
      * Metode per actualitzar els parametres d'una activitat de la rutina
-     * @param id clau de l'activitat a modificar
      * @param name nou nom de l'activitat
      * @param description nova descripcio de l'activitat
      * @param iniH nova hora d'inici de l'activitat
@@ -84,10 +78,11 @@ public class Routine {
      * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
      * @throws InvalidTimeException es llença si les hores o minuts no tenen format valid
      */
-    public void updateActivity(String id, String name, String description, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException, InvalidTimeException {
+    public void updateActivity(String name, String description, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException, InvalidTimeException {
+        TimeInterval t = new TimeInterval(iniH, iniM, endH, endM);
         for (Activity act : activities) {
-            String currentId = act.getId();
-            if (currentId.equals(id)) {
+            TimeInterval taux = act.getInterval();
+            if (taux.compareTo(t) == 0) {
                 act.update(name, description, iniH, iniM, endH, endM, day);
                 Collections.sort(activities);
                 break;
@@ -97,12 +92,18 @@ public class Routine {
 
     /**
      * Metode per eliminar una activitat
-     * @param id clau que identifica la activitat a eliminar
+     * @param iniH nova hora d'inici de l'activitat
+     * @param iniM nous minuts d'inici de l'activitat
+     * @param endH nova hora de fi de l'activitat
+     * @param endM nous minuts de fi de l'activitat
+     * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
+     * @throws InvalidTimeException es llença si les hores o minuts no tenen format valid
      */
-    public void deleteActivity(String id) {
+    public void deleteActivity(int iniH, int iniM, int endH, int endM) throws InvalidTimeIntervalException, InvalidTimeException {
+        TimeInterval t = new TimeInterval(iniH, iniM, endH, endM);
         for (Activity act : activities) {
-            String currentId = act.getId();
-            if (currentId.equals(id)) {
+            TimeInterval taux = act.getInterval();
+            if (taux.compareTo(t) == 0) {
                 activities.remove(act);
                 Collections.sort(activities);
                 break;

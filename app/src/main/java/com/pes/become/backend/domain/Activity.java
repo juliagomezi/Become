@@ -11,10 +11,6 @@ import java.util.UUID;
  */
 public class Activity implements Comparable<Activity>{
     /**
-     * Id de l'activitat
-     */
-    private String id;
-    /**
      * Nom de l'activitat
      */
     private String name;
@@ -49,20 +45,11 @@ public class Activity implements Comparable<Activity>{
      * @throws InvalidTimeException es llença si les hores o minuts no tenen format valid
      */
     public Activity(String name, String description, Theme theme, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException, InvalidTimeException {
-        this.id = UUID.randomUUID().toString();
         this.name = name;
         this.description = description;
         this.theme = theme;
         this.interval = new TimeInterval(iniH, iniM, endH, endM);
         this.day = day;
-    }
-
-    /**
-     * Getter del id
-     * @return id de l'activitat
-     */
-    public String getId() {
-        return id;
     }
 
     /**
