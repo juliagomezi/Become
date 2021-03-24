@@ -1,16 +1,9 @@
 package com.pes.become.backend.domain;
 
-import com.pes.become.backend.exceptions.InvalidTimeException;
 import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
-import java.util.UUID;
 
 /**
  * Classe que defineix una rutina
@@ -47,13 +40,12 @@ public class Routine {
      * @param activity activitat a afegir
      */
     public void addActivity(Activity activity) {
-        //comprovar solapaments!!!
         activities.add(activity);
         Collections.sort(activities);
     }
 
     /**
-     * Getter d'una instancia d'activitat
+     * Getter de totes les activitats d'un dia
      * @return les activitats
      */
     public ArrayList<Activity> getActivitiesByDay(String day){
@@ -69,22 +61,26 @@ public class Routine {
 
     /**
      * Metode per actualitzar els parametres d'una activitat de la rutina
+     * @param oldIniH
+     * @param oldIniM
+     * @param oldEndH
+     * @param oldEndM
      * @param name nou nom de l'activitat
      * @param description nova descripcio de l'activitat
+     * @param theme nou tema de l'activitat
      * @param iniH nova hora d'inici de l'activitat
      * @param iniM nous minuts d'inici de l'activitat
      * @param endH nova hora de fi de l'activitat
      * @param endM nous minuts de fi de l'activitat
      * @param day nou dia de l'activitat
      * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
-     * @throws InvalidTimeException es llença si les hores o minuts no tenen format valid
      */
-    public void updateActivity(String name, String description, int iniHOld, int iniMOld, int endHOld, int endMOld, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException, InvalidTimeException {
-        TimeInterval t = new TimeInterval(iniHOld, iniMOld, endHOld, endMOld);
+    public void updateActivity(int oldIniH, int oldIniM, int oldEndH, int oldEndM, String name, String description, Theme theme, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException {
+        TimeInterval t = new TimeInterval(oldIniH, oldIniM, oldEndH, oldEndM);
         for (Activity act : activities) {
             TimeInterval taux = act.getInterval();
-            if (taux.getStartTime().compareTo(t.getStartTime()) == 0 && taux.getEndTime().compareTo(t.getEndTime()) == 0) {
-                act.update(name, description, iniH, iniM, endH, endM, day);
+            if (taux.compareTo(t) == 0) {
+                act.update(name, description, theme, iniH, iniM, endH, endM, day);
                 Collections.sort(activities);
                 break;
             }
@@ -92,15 +88,14 @@ public class Routine {
     }
 
     /**
-     * Metode per eliminar una activitat
-     * @param iniH nova hora d'inici de l'activitat
-     * @param iniM nous minuts d'inici de l'activitat
-     * @param endH nova hora de fi de l'activitat
-     * @param endM nous minuts de fi de l'activitat
+     * Metode per eliminar una activitat de la rutina
+     * @param iniH hora d'inici de l'activitat
+     * @param iniM minuts d'inici de l'activitat
+     * @param endH hora de fi de l'activitat
+     * @param endM minuts de fi de l'activitat
      * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
-     * @throws InvalidTimeException es llença si les hores o minuts no tenen format valid
      */
-    public void deleteActivity(int iniH, int iniM, int endH, int endM) throws InvalidTimeIntervalException, InvalidTimeException {
+    public void deleteActivity(int iniH, int iniM, int endH, int endM) throws InvalidTimeIntervalException {
         TimeInterval t = new TimeInterval(iniH, iniM, endH, endM);
         for (Activity act : activities) {
             TimeInterval taux = act.getInterval();

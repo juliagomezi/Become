@@ -4,7 +4,6 @@ import com.pes.become.backend.domain.Activity;
 import com.pes.become.backend.domain.Day;
 import com.pes.become.backend.domain.Routine;
 import com.pes.become.backend.domain.Theme;
-import com.pes.become.backend.exceptions.InvalidTimeException;
 import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
 
 import java.util.ArrayList;
@@ -43,35 +42,38 @@ public class RoutineAdapter {
 
     /**
      * Metode per a afegir una activitat a una rutina
-     * @param name nou nom de l'activitat
-     * @param description nova descripcio de l'activitat
+     * @param name nom de l'activitat
+     * @param description descripcio de l'activitat
      * @param theme tema de l'activitat
-     * @param iniH nova hora d'inici de l'activitat
-     * @param iniM nous minuts d'inici de l'activitat
-     * @param endH nova hora de fi de l'activitat
-     * @param endM nous minuts de fi de l'activitat
-     * @param day nou dia de l'activitat
+     * @param iniH hora d'inici de l'activitat
+     * @param iniM minuts d'inici de l'activitat
+     * @param endH hora de fi de l'activitat
+     * @param endM minuts de fi de l'activitat
+     * @param day dia de l'activitat
      * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
-     * @throws InvalidTimeException es llença si el dia de fi es anterior al dia d'inici
      */
-    public void addActivity(String name, String description, Theme theme, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException, InvalidTimeException {
+    public void addActivity(String name, String description, Theme theme, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException {
         routine.addActivity(new Activity(name, description, theme, iniH, iniM, endH, endM, day));
     }
 
     /**
      * Metode per actualitzar els parametres d'una activitat d'una rutina
+     * @param oldIniH
+     * @param oldIniM
+     * @param oldEndH
+     * @param oldEndM
      * @param name nou nom de l'activitat
      * @param description nova descripcio de l'activitat
+     * @param theme nou tema de l'activitat
      * @param iniH nova hora d'inici de l'activitat
      * @param iniM nous minuts d'inici de l'activitat
      * @param endH nova hora de fi de l'activitat
      * @param endM nous minuts de fi de l'activitat
      * @param day nou dia de l'activitat
      * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
-     * @throws InvalidTimeException es llença si les hores o minuts no tenen format valid
      */
-    public void updateActivity(String name, String description, int iniHOld, int iniMOld, int endHOld, int endMOld, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException, InvalidTimeException {
-        routine.updateActivity(name, description, iniHOld, iniMOld, endHOld, endMOld, iniH, iniM, endH, endM, day);
+    public void updateActivity(int oldIniH, int oldIniM, int oldEndH, int oldEndM, String name, String description, Theme theme, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException {
+        routine.updateActivity(oldIniH, oldIniM, oldEndH, oldEndM, name, description, theme, iniH, iniM, endH, endM, day);
     }
 
     /**
@@ -96,5 +98,17 @@ public class RoutineAdapter {
             res.add(resaux);
         }
         return res;
+    }
+
+    /**
+     * Metode per eliminar una activitat de la rutina
+     * @param iniH hora d'inici de l'activitat
+     * @param iniM minuts d'inici de l'activitat
+     * @param endH hora de fi de l'activitat
+     * @param endM minuts de fi de l'activitat
+     * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
+     */
+    public void deleteActivity(int iniH, int iniM, int endH, int endM) throws InvalidTimeIntervalException {
+        routine.deleteActivity(iniH, iniM, endH, endM);
     }
 }

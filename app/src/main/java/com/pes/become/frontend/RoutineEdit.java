@@ -21,10 +21,15 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapterFactory;
+import com.pes.become.backend.exceptions.InvalidDayIntervalException;
+import com.pes.become.backend.exceptions.InvalidTimeException;
+import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
+import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -205,9 +210,9 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
     }
 
     /**
-     * Funció per posar els valors a la pestanya de creació d'activitat
+     * Funció per posar els valors a la pestanya de modificació d'activitat
      * Pre: ninguna
-     * Post: s'han posat els valors a la pestanya de creació d'activitat
+     * Post: s'han posat els valors a la pestanya de modificació d'activitat
      * */
     public void fillActivitySheet(String name, String description, String theme, String startDay, String startTime, String endTime) {
         this.sheetLabel.setText("Modify activity");
@@ -250,20 +255,29 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
      * Post: s'ha creat una nova activitat a la rutina
      * */
     private void createActivity() {
-        String name = activityName.getText().toString();
-        String descr = activityDescr.getText().toString();
-        String theme = spinnerTheme.getSelectedItem().toString();
-        String dayStart = spinnerStartDay.getSelectedItem().toString();
-        String dayEnd = spinnerEndDay.getSelectedItem().toString();
 
-        if (name.isEmpty()) activityName.setError("This field cannot be null");
-        else {
+            String name = activityName.getText().toString();
+            String descr = activityDescr.getText().toString();
+            String theme = spinnerTheme.getSelectedItem().toString();
+            String dayStart = spinnerStartDay.getSelectedItem().toString();
+            String dayEnd = spinnerEndDay.getSelectedItem().toString();
 
-            //crear activitat
-            //DAF.createActivity(name ,descr, theme, startHour, startMinute, endHour, endMinute, dayStart, dayEnd);
+            if (name.isEmpty()) activityName.setError("This field cannot be null");
+            else {
+                try {
+                    DAF.createActivity(name, descr, theme, String.valueOf(startMinute), String.valueOf(startMinute), String.valueOf(endHour), String.valueOf(endMinute), dayStart, dayEnd);
 
+                } catch (InvalidTimeIntervalException e) {
+                    Toast.makeText(getContext(), "Error: Start time cannot be subsequent to end time", Toast.LENGTH_SHORT);
+                } catch (InvalidDayIntervalException e) {
+                    Toast.makeText(getContext(), "Error: Start day cannot be subsequent to end day", Toast.LENGTH_SHORT);
+                } catch (OverlappingActivitiesException e) {
+                    Toast.makeText(getContext(), "Error: Activities cannot be overlaped", Toast.LENGTH_SHORT);
+                } catch (InvalidTimeException e) {
+                    e.printStackTrace();
+                }
+            }
 
-        }
 
     }
 
@@ -273,6 +287,27 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
      * Post: s'ha modificat l'activitat a la rutina
      * */
     private void modifyActivity() {
+        String name = activityName.getText().toString();
+        String descr = activityDescr.getText().toString();
+        String theme = spinnerTheme.getSelectedItem().toString();
+        String dayStart = spinnerStartDay.getSelectedItem().toString();
+        String dayEnd = spinnerEndDay.getSelectedItem().toString();
+        String[] iniTime = startTime.getText().toString().split(":");
+        String[] finishTime = endTime.getText().toString().split(":");
+        String initialHour = iniTime[0];
+        String initialMinute= iniTime[1];
+        String finishHour = finishTime[0];
+        String finishMinute = finishTime[1];
+
+        try {
+            DAF.updateActivity(name, descr, theme, initialHour, initialMinute, finishHour, finishMinute, dayStart, dayEnd);
+        } catch (InvalidTimeIntervalException e) {
+            Toast.makeText(getContext(), "Error: Start time cannot be subsequent to end time", Toast.LENGTH_SHORT);
+        } catch (InvalidDayIntervalException e) {
+            Toast.makeText(getContext(), "Error: Start day cannot be subsequent to end day", Toast.LENGTH_SHORT);
+        } catch (InvalidTimeException e) {
+            e.printStackTrace();
+        }
 
     }
 

@@ -1,7 +1,6 @@
 package com.pes.become;
 
 import com.pes.become.backend.domain.TimeInterval;
-import com.pes.become.backend.exceptions.InvalidTimeException;
 import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
 
 import org.junit.Test;
@@ -11,7 +10,7 @@ import static org.junit.Assert.*;
 public class TimeIntervalTest {
 
     @Test
-    public void comparatorDifferentIntervals() throws InvalidTimeIntervalException, InvalidTimeException {
+    public void comparatorDifferentIntervals() throws InvalidTimeIntervalException {
         TimeInterval t1 = new TimeInterval(17,0,18,0);
         TimeInterval t2 = new TimeInterval(19,0,20,0);
         assertTrue(t1.compareTo(t2) < 0);
@@ -19,7 +18,7 @@ public class TimeIntervalTest {
     }
 
     @Test
-    public void comparatorAdjacentIntervals() throws InvalidTimeIntervalException, InvalidTimeException {
+    public void comparatorAdjacentIntervals() throws InvalidTimeIntervalException {
         TimeInterval t1 = new TimeInterval(17,0,18,0);
         TimeInterval t2 = new TimeInterval(18,0,19,0);
         assertEquals(0, t1.compareTo(t2));
