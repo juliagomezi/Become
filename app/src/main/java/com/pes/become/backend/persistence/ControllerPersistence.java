@@ -3,6 +3,8 @@ package com.pes.become.backend.persistence;
 import android.util.Log;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ControllerPersistence{
 
@@ -62,14 +64,10 @@ public class ControllerPersistence{
 
     public void deleteActivity(String routineName, String activityName,String actDay, String beginTime, String finishTime) {
         createCtrlActivity();
-        CA.deleteActivity( routineName, activityName,actDay, beginTime, finishTime);
+        CA.deleteActivity( routineName,  beginTime, finishTime);
     }
 
-    public void modifyActivityDescription(String routineName, String activityName, String actDay,
-                                          String beginTime, String finishTime, String newDescription){
-        createCtrlActivity();
-        CA.modifyActivityDescription( routineName, activityName, actDay, beginTime, finishTime, newDescription);
-    }
+
     public void modifyActivityTime(String routineName, String activityName, String actDay,
                                    String beginTime, String finishTime, String newActDay, String newBeginTime, String newFinishTime)
     {
@@ -84,22 +82,20 @@ public class ControllerPersistence{
     public void getActivitiesByDay(String routineName, String day,Method method, Object object) throws InterruptedException, NoSuchMethodException {
         createCtrlActivity();
 
-        Class[] parameterTypes = new Class[1];
-        parameterTypes[0] = String.class;
-        Method method1 = ControllerPersistence.class.getMethod("dothingsWithActivity", parameterTypes);
+
         CA.getActivitiesByDay(routineName,day,method,object);
     }
     //TUTORIAL
     public void tutorial(String routineName, String day) throws InterruptedException, NoSuchMethodException {
 
         Class[] parameterTypes = new Class[1];
-        parameterTypes[0] = String.class;
+        parameterTypes[0] = ArrayList.class;
         Method method1 = ControllerPersistence.class.getMethod("dothingsWithActivity", parameterTypes);
         this.getActivitiesByDay(routineName,day,method1,this);
     }
-    public void dothingsWithActivity(String message)
+    public void dothingsWithActivity(ArrayList<String> message)
     {
-        Log.d("DoThingsWithActivity", message);
+        for(String a: message) Log.d("DoThingsWithActivity", a);
     }
     //FI TUTORIAL
 }

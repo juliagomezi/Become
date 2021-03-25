@@ -29,7 +29,9 @@ import com.pes.become.backend.adapters.DomainAdapterFactory;
 import com.pes.become.backend.exceptions.InvalidDayIntervalException;
 import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
 import com.pes.become.backend.exceptions.OverlappingActivitiesException;
+import com.pes.become.backend.persistence.ControllerPersistence;
 
+import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -349,10 +351,21 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
                 day = "Sunday";
                 break;
         }*/
-        //activitiesList = DAF.getActivitiesByDay("Monday");
-        activitiesList = new ArrayList<>(); //temporal
-    }
 
+        activitiesList = new ArrayList<>(); //temporal
+        Class[] parameterTypes = new Class[1];
+        parameterTypes[0] = ArrayList.class;
+        try {
+            Method method1 = RoutineEdit.class.getMethod("getActivitiesCallback", parameterTypes);
+            DAF.getActivitiesByDay("Monday", method1, this);
+        } catch (NoSuchMethodException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+    public void getActivitiesCallback(ArrayList<String> message)
+    {
+        //Convertir missatge a activities list
+    }
     /**
      * Funció per inicialitzar l'element que mostra el llistat d'activitats
      * Pre: ninguna

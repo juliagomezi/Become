@@ -27,8 +27,11 @@ import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 
 //import org.w3c.dom.Document;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.lang.reflect.Method;
 
@@ -126,18 +129,19 @@ public class ControllerActivityDB {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     QuerySnapshot aux2 = task.getResult();
+                    ArrayList<String> activitiesResult = new ArrayList<>();
                     for (QueryDocumentSnapshot document : aux2) {
                         Log.d("ConsultaFirebase", document.getId() + " => " + document.getData());
-                        String activitiesResult=document.getId() + " => " + document.getData();
-                        Object params[] = new Object[1];
-                        params[0] = activitiesResult;
-                        try {
-                            method.invoke(object,params);
-                        } catch (IllegalAccessException e) {
-                            e.printStackTrace();
-                        } catch (InvocationTargetException e) {
-                            e.printStackTrace();
-                        }
+                        activitiesResult.add(""+document.getData());
+                    }
+                    Object params[] = new Object[1];
+                    params[0] = activitiesResult;
+                    try {
+                        method.invoke(object,params);
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    } catch (InvocationTargetException e) {
+                        e.printStackTrace();
                     }
                 } else {
                     Log.d("ConsultaFirebase", task.getException().getMessage());
@@ -222,36 +226,33 @@ public class ControllerActivityDB {
      * Pre: La rutina de nom "routineName" ja existeix.
      * Pre: L'activitat que es vol modificar ja existeix.
      * @param routineName és el nom de la rutina ja existent.
-     * @param activityName és el nom de l'activitat que es vol modificar.
-     * @param actDay és el dia de  l'activitat que es vol modificar.
-     * @param beginTime és l'hora d'inici de l'activitat.
-     * @param finishTime és l'hora d'acabament de l'activitat.
-     * @param newDescription és la nova descripció que es vol afegir a l'activitat.
+     * @param actName és el nom de l'activitat que es vol modificar.
+     * @param day és el dia de  l'activitat que es vol modificar.
+     * @param iniT és l'hora d'inici de l'activitat.
+     * @param endT és l'hora d'acabament de l'activitat.
+     * @param description és la nova descripció que es vol afegir a l'activitat.
      * Post: Es modifica la descripció de l'activitat indicada.
      */
-    public void updateActivity(String name, String newDescription, String theme,String oldBeginTime, String oldFinishTime,
-                               String newBeginTime, String newFinishTime ,String iniDayString, String endDayString){
-
+    public void updateActivity(String routineName, String actName, String description, String theme, String oldIniTime,  String oldEndTime, String iniT, String endT, String day){
 
 
         CollectionReference collRefToActivities = db.collection("routines").document(routineName).collection("activities");
 
 
-        Query consulta = collRefToActivities.whereEqualTo("beginTime",oldBeginTime).whereEqualTo("finishTime",oldFinishTime);
+        Query consulta = collRefToActivities.whereEqualTo("beginTime",oldIniTime).whereEqualTo("finishTime",oldEndTime);
 
         consulta.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for (DocumentSnapshot document : queryDocumentSnapshots){
                     DocumentReference docRef = document.getReference();
-                    docRef.update("name",);
-                    docRef.update("description",);
-                    docRef.update("theme",);
-                    docRef.update("day",);
-                    docRef.update("beginTime",);
-                    docRef.update("finishTime",);
+                    docRef.update("name", actName);
+                    docRef.update("description", description);
+                    docRef.update("theme", theme);
+                    docRef.update("day", day);
+                    docRef.update("beginTime",iniT);
+                    docRef.update("finishTime", endT);
 
-                    docRef.update("description",newDescription);
                     Log.d("SUCCESS", "Descripcio modificada amb exit");
                 }
             }
