@@ -61,12 +61,13 @@ public class Routine {
 
     /**
      * Metode per actualitzar els parametres d'una activitat de la rutina
+     * @param name nou nom de l'activitat
+     * @param description nova descripcio de l'activitat
+     * @param theme
      * @param oldIniH
      * @param oldIniM
      * @param oldEndH
      * @param oldEndM
-     * @param name nou nom de l'activitat
-     * @param description nova descripcio de l'activitat
      * @param iniH nova hora d'inici de l'activitat
      * @param iniM nous minuts d'inici de l'activitat
      * @param endH nova hora de fi de l'activitat
@@ -74,12 +75,12 @@ public class Routine {
      * @param day nou dia de l'activitat
      * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
      */
-    public void updateActivity(String name, String description, int oldIniH, int oldIniM, int oldEndH, int oldEndM, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException {
+    public void updateActivity(String name, String description, Theme theme, int oldIniH, int oldIniM, int oldEndH, int oldEndM, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException {
         TimeInterval t = new TimeInterval(oldIniH, oldIniM, oldEndH, oldEndM);
         for (Activity act : activities) {
             TimeInterval taux = act.getInterval();
             if (taux.compareTo(t) == 0) {
-                act.update(name, description, iniH, iniM, endH, endM, day);
+                act.update(name, description, theme, iniH, iniM, endH, endM, day);
                 Collections.sort(activities);
                 break;
             }

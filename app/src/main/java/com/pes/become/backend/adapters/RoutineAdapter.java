@@ -18,7 +18,7 @@ public class RoutineAdapter {
      */
     private static RoutineAdapter instance;
 
-    private Routine routine = new Routine("test"); //sample routine
+    private Routine routine = new Routine("RutinaDeProva"); //sample routine
 
     /**
      * Metode per obtenir la instancia de la classe
@@ -58,12 +58,13 @@ public class RoutineAdapter {
 
     /**
      * Metode per actualitzar els parametres d'una activitat d'una rutina
+     * @param name nou nom de l'activitat
+     * @param description nova descripcio de l'activitat
+     * @param theme
      * @param oldIniH
      * @param oldIniM
      * @param oldEndH
      * @param oldEndM
-     * @param name nou nom de l'activitat
-     * @param description nova descripcio de l'activitat
      * @param iniH nova hora d'inici de l'activitat
      * @param iniM nous minuts d'inici de l'activitat
      * @param endH nova hora de fi de l'activitat
@@ -71,8 +72,8 @@ public class RoutineAdapter {
      * @param day nou dia de l'activitat
      * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
      */
-    public void updateActivity(String name, String description, int oldIniH, int oldIniM, int oldEndH, int oldEndM,  int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException {
-        routine.updateActivity(name, description, oldIniH, oldIniM, oldEndH, oldEndM, iniH, iniM, endH, endM, day);
+    public void updateActivity(String name, String description, Theme theme, int oldIniH, int oldIniM, int oldEndH, int oldEndM, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException {
+        routine.updateActivity(name, description, theme, oldIniH, oldIniM, oldEndH, oldEndM, iniH, iniM, endH, endM, day);
     }
 
     /**

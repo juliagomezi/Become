@@ -109,14 +109,24 @@ public class DomainAdapterFactory {
         Day iniDay = Day.valueOf(iniDayString);
         Day endDay = Day.valueOf(endDayString);
         int comparison = iniDay.compareTo(endDay); //negatiu si iniDay<endDay; 0 si iguals; positiu si iniDay>endDay
+        String oldBeginTime = oldIniH + ":" + oldIniM;
+        String oldEndTime = oldEndH + ":" + oldEndM;
         if(comparison < 0){ //activitat en dies diferents
-            routineAdapter.updateActivity(name, description, Integer.parseInt(oldIniH), Integer.parseInt(oldIniM), Integer.parseInt(oldEndH), Integer.parseInt(oldEndM), Integer.parseInt(iniH), Integer.parseInt(iniM), 23, 59, iniDay);
+            routineAdapter.updateActivity(name, description, Theme.valueOf(theme), Integer.parseInt(oldIniH), Integer.parseInt(oldIniM), Integer.parseInt(oldEndH), Integer.parseInt(oldEndM), Integer.parseInt(iniH), Integer.parseInt(iniM), 23, 59, iniDay);
+            String beginTime = iniH + ":" + iniM;
+            String endTime = "23:59";
+            controllerPersistence.updateActivity("RutinaDeProva", name, description, theme, oldBeginTime, oldEndTime, beginTime, endTime, iniDayString);
+
             routineAdapter.addActivity(name, description, Theme.valueOf(theme), 0, 0, Integer.parseInt(endH), Integer.parseInt(endM), iniDay);
-            //2 crides a la DB
+            beginTime = "00:00";
+            endTime = endH + ":" + endM;
+            controllerPersistence.createActivity("RutinaDeProva", name, theme, description, endDayString, beginTime, endTime);
         }
         else if(comparison == 0) {
-            routineAdapter.updateActivity(name, description, Integer.parseInt(oldIniH), Integer.parseInt(oldIniM), Integer.parseInt(oldEndH), Integer.parseInt(oldEndM), Integer.parseInt(iniH), Integer.parseInt(iniM), Integer.parseInt(endH), Integer.parseInt(endM), iniDay);
-            //crida a la DB
+            routineAdapter.updateActivity(name, description, Theme.valueOf(theme), Integer.parseInt(oldIniH), Integer.parseInt(oldIniM), Integer.parseInt(oldEndH), Integer.parseInt(oldEndM), Integer.parseInt(iniH), Integer.parseInt(iniM), Integer.parseInt(endH), Integer.parseInt(endM), iniDay);
+            String beginTime = iniH + ":" + iniM;
+            String endTime = endH + ":" + endM;
+            controllerPersistence.updateActivity("RutinaDeProva", name, description, theme, oldBeginTime, oldEndTime, beginTime, endTime, iniDayString);
         }
         else throw new InvalidDayIntervalException("Error: el dia de fi és anterior al dia d'inici");
     }
@@ -145,6 +155,6 @@ public class DomainAdapterFactory {
         routineAdapter.deleteActivity(Integer.parseInt(iniH), Integer.parseInt(iniM), Integer.parseInt(endH), Integer.parseInt(endM));
         String beginTime = iniH + ":" + endM;
         String endTime = endH + ":" + endM;
-        //controllerPersistence.deleteActivity("RutinaDeProva", beginTime, endTime);
+        controllerPersistence.deleteActivity("RutinaDeProva", beginTime, endTime);
     }
 }

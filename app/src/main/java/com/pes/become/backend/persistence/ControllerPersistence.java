@@ -62,19 +62,15 @@ public class ControllerPersistence{
         CA.createActivity(routineName, activityName,actTheme,actDescription, actDay, beginTime, finishTime);
     }
 
-    public void deleteActivity(String routineName, String activityName,String actDay, String beginTime, String finishTime) {
+    public void deleteActivity(String routineName, String beginTime, String finishTime) {
         createCtrlActivity();
         CA.deleteActivity( routineName,  beginTime, finishTime);
     }
 
-
-    public void modifyActivityTime(String routineName, String activityName, String actDay,
-                                   String beginTime, String finishTime, String newActDay, String newBeginTime, String newFinishTime)
-    {
+    public void updateActivity(String routineName, String actName, String description, String theme, String oldIniTime,  String oldEndTime, String iniT, String endT, String day){
         createCtrlActivity();
-        CA.modifyActivityTime(routineName, activityName, actDay, beginTime, finishTime, newActDay, newBeginTime, newFinishTime);
+        CA.updateActivity(routineName, actName, description, theme, oldIniTime, oldEndTime, iniT, endT, day);
     }
-
 
 
 
