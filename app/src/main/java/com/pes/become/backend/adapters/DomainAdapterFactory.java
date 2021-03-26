@@ -129,7 +129,6 @@ public class DomainAdapterFactory {
             controllerPersistence.createActivity("RutinaDeProva", name, Theme.values()[Integer.parseInt(theme)].toString(), description, endDay.toString(), beginTime, endTime);
         }
         else if(comparison == 0) {
-            Log.d("SAVING", "DATABASE SAVING UPDATE");
             routineAdapter.updateActivity(name, description, Theme.values()[Integer.parseInt(theme)], Integer.parseInt(oldIniH), Integer.parseInt(oldIniM), Integer.parseInt(oldEndH), Integer.parseInt(oldEndM), Integer.parseInt(iniH), Integer.parseInt(iniM), Integer.parseInt(endH), Integer.parseInt(endM), iniDay);
             String beginTime = iniH + ":" + iniM;
             String endTime = endH + ":" + endM;
