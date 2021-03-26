@@ -80,7 +80,7 @@ public class DomainAdapterFactory {
         }
         else if(comparison == 0) {
             routineAdapter.addActivity(name, description, Theme.valueOf(theme), Integer.parseInt(iniH), Integer.parseInt(iniM), Integer.parseInt(endH), Integer.parseInt(endM), iniDay);
-            String beginTime = iniH + ":" + endM;
+            String beginTime = iniH + ":" + iniM;
             String endTime = endH + ":" + endM;
             controllerPersistence.createActivity("RutinaDeProva", name, theme, description, iniDayString, beginTime, endTime);
         }

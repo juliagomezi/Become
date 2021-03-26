@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,12 +35,15 @@ import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 
 public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedListener{
 
     private final DomainAdapterFactory DAF = DomainAdapterFactory.getInstance();
     private static RoutineEdit instance;
+
     private View view;
     private Context global;
 
@@ -59,6 +63,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
     private EditText activityName, activityDescr;
     private TextView startTime, endTime, addActivity, sheetLabel;
     private int startHour, startMinute, endHour, endMinute;
+    private String oldIniTime, oldEndTime;
 
     public RoutineEdit() {
         // Required empty public constructor
@@ -140,8 +145,11 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (modify) modifyActivity();
+                if (modify) {
+                    modifyActivity();
+                }
                 else createActivity();
+                activitySheet.dismiss();
             }
         });
 
@@ -223,6 +231,8 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         this.startTime.setText(startTime);
         //this.spinnerEndDay.setSelection(findPositionInAdapter(adapterEndDay, endDay));
         this.endTime.setText(endTime);
+        oldIniTime = startTime;
+        oldEndTime = endTime;
     }
 
     /**
@@ -265,8 +275,8 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
             if (name.isEmpty()) activityName.setError("This field cannot be null");
             else {
                 try {
-                    DAF.createActivity(name, descr, theme, String.valueOf(startMinute), String.valueOf(startMinute), String.valueOf(endHour), String.valueOf(endMinute), dayStart, dayEnd);
-
+                    DAF.createActivity(name, descr, theme, String.format("%02d", startHour), String.format("%02d", startMinute), String.format("%02d", endHour), String.format("%02d",endMinute), dayStart, dayEnd);
+                    Toast.makeText(getContext(), "Activity created", Toast.LENGTH_SHORT).show();
                 } catch (InvalidTimeIntervalException e) {
                     Toast.makeText(getContext(), "Error: Start time cannot be subsequent to end time", Toast.LENGTH_SHORT).show();
                     startTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
@@ -307,15 +317,21 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         String finishHour = finishTime[0];
         String finishMinute = finishTime[1];
 
-        /*
+        String[] oldiniTime = oldIniTime.split(":");
+        String[] oldfinishTime = oldEndTime.split(":");
+        String oldinitialHour = iniTime[0];
+        String oldinitialMinute= iniTime[1];
+        String oldfinishHour = finishTime[0];
+        String oldfinishMinute = finishTime[1];
+
         try {
-            DAF.updateActivity(name, descr, theme, initialHour, initialMinute, finishHour, finishMinute, dayStart, dayEnd);
+            DAF.updateActivity(name, descr, theme, oldinitialHour, oldinitialMinute, oldfinishHour, oldfinishMinute, initialHour, initialMinute,
+                                finishHour, finishMinute, dayStart, dayEnd);
         } catch (InvalidTimeIntervalException e) {
             Toast.makeText(getContext(), "Error: Start time cannot be subsequent to end time", Toast.LENGTH_SHORT);
         } catch (InvalidDayIntervalException e) {
             Toast.makeText(getContext(), "Error: Start day cannot be subsequent to end day", Toast.LENGTH_SHORT);
         }
-        */
 
     }
 
@@ -379,7 +395,18 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
      * */
     public void getActivitiesCallback(ArrayList<ArrayList<String>> activitiesListCallback) {
         //Convertir missatge a activities list
-        activitiesList = activitiesListCallback;
+        activitiesList = new ArrayList<>(activitiesListCallback.size());
+
+        for (int i=0; i<activitiesListCallback.size(); ++i) {
+            ArrayList<String> activity = new ArrayList<>(activitiesListCallback.get(0).size());
+            for (int j = 0; j < activitiesListCallback.get(0).size(); ++j) {
+                activity.add(activitiesListCallback.get(i).get(j));
+            }
+            activitiesList.add(activity);
+        }
+
+        initRecyclerView();
+
     }
 
     /**
@@ -402,7 +429,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         global = this.getActivity();
 
         getActivities();
-        initRecyclerView();
+        //
 
         addActivity = view.findViewById(R.id.addActivity);
         addActivity.setOnClickListener(new View.OnClickListener() {

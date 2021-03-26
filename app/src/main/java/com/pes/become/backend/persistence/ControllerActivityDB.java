@@ -157,10 +157,6 @@ public class ControllerActivityDB {
 
 
 
-
-
-
-
     //Modificadores
     /**
      * Pre: La rutina de nom "routineName" ja existeix.
@@ -206,10 +202,7 @@ public class ControllerActivityDB {
         CollectionReference collRefToActivities;
         collRefToActivities = db.collection("routines").document(routineName).collection("activities");
 
-
-
         Query consulta = collRefToActivities.whereEqualTo("beginTime",beginTime).whereEqualTo("finishTime",finishTime);
-
 
         consulta.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
