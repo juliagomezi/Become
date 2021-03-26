@@ -25,8 +25,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         getSupportFragmentManager().beginTransaction()
                .replace(R.id.fragment_layout, new RoutineEdit()).commit(); //aquí es posa el fragment que vols que es vegi quan s'encén l'aplicació
-
-
     }
 
     //Listener navigation view

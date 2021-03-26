@@ -371,10 +371,17 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
             e.printStackTrace();
         }
     }
-    public void getActivitiesCallback(ArrayList<String> message)
-    {
+
+    /**
+     * Funció per inicialitzar l'element que mostra el llistat d'activitats
+     * Pre: ninguna
+     * Post: s'ha inicialitzar el recycler amb el seu adapter corresponent
+     * */
+    public void getActivitiesCallback(ArrayList<ArrayList<String>> activitiesListCallback) {
         //Convertir missatge a activities list
+        activitiesList = activitiesListCallback;
     }
+
     /**
      * Funció per inicialitzar l'element que mostra el llistat d'activitats
      * Pre: ninguna

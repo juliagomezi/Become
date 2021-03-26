@@ -72,15 +72,12 @@ public class ControllerPersistence{
         CA.updateActivity(routineName, actName, description, theme, oldIniTime, oldEndTime, iniT, endT, day);
     }
 
-
-
     //Consultores activity
     public void getActivitiesByDay(String routineName, String day,Method method, Object object) throws InterruptedException, NoSuchMethodException {
         createCtrlActivity();
-
-
         CA.getActivitiesByDay(routineName,day,method,object);
     }
+
     //TUTORIAL
     public void tutorial(String routineName, String day) throws InterruptedException, NoSuchMethodException {
 
@@ -89,6 +86,7 @@ public class ControllerPersistence{
         Method method1 = ControllerPersistence.class.getMethod("dothingsWithActivity", parameterTypes);
         this.getActivitiesByDay(routineName,day,method1,this);
     }
+
     public void dothingsWithActivity(ArrayList<String> message)
     {
         for(String a: message) Log.d("DoThingsWithActivity", a);

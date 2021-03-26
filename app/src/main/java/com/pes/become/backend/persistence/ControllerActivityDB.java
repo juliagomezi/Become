@@ -120,24 +120,29 @@ public class ControllerActivityDB {
     }
 
 
-    public void getActivitiesByDay(String routineName, String day, Method method, Object object) throws InterruptedException {
-        QueryDocumentSnapshot docs;
+    public void getActivitiesByDay(String routineName, String day, Method method, Object object) {
         Query consulta = db.collection("routines").document(routineName).collection("activities").whereEqualTo("day", day);
-        Task<QuerySnapshot> resultat;
         consulta.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>(){
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     QuerySnapshot aux2 = task.getResult();
-                    ArrayList<String> activitiesResult = new ArrayList<>();
+                    ArrayList<ArrayList<String>> activitiesResult = new ArrayList<>();
                     for (QueryDocumentSnapshot document : aux2) {
                         Log.d("ConsultaFirebase", document.getId() + " => " + document.getData());
-                        activitiesResult.add(""+document.getData());
+                        ArrayList<String> activity = new ArrayList<>();
+                        activity.add(document.get("name").toString());
+                        activity.add(document.get("description").toString());
+                        activity.add(document.get("theme").toString());
+                        activity.add(document.get("day").toString());
+                        activity.add(document.get("beginTime").toString());
+                        activity.add(document.get("finishTime").toString());
+                        activitiesResult.add(activity);
                     }
                     Object params[] = new Object[1];
                     params[0] = activitiesResult;
                     try {
-                        method.invoke(object,params);
+                        method.invoke(object, params);
                     } catch (IllegalAccessException e) {
                         e.printStackTrace();
                     } catch (InvocationTargetException e) {
@@ -146,7 +151,8 @@ public class ControllerActivityDB {
                 } else {
                     Log.d("ConsultaFirebase", task.getException().getMessage());
                 }
-            } });
+            }
+        });
     }
 
 

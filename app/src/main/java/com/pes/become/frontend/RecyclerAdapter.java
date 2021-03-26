@@ -38,14 +38,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.activityNameDisplay.setText(activitiesList.get(position).get(1));
-        holder.activityDescriptionDisplay.setText(activitiesList.get(position).get(2));
-        holder.startTimeDisplay.setText(activitiesList.get(position).get(5));
-        holder.endTimeDisplay.setText(activitiesList.get(position).get(6));
+        holder.activityNameDisplay.setText(activitiesList.get(position).get(0));
+        holder.activityDescriptionDisplay.setText(activitiesList.get(position).get(1));
+        holder.startTimeDisplay.setText(activitiesList.get(position).get(4));
+        holder.endTimeDisplay.setText(activitiesList.get(position).get(5));
 
         holder.expandableLayout.setVisibility(isExpanded[position] ? View.VISIBLE : View.GONE);
 
-        String theme = activitiesList.get(position).get(3);
+        String theme = activitiesList.get(position).get(2);
         switch (theme) {
             case "Cooking":
                 holder.cardActivityDisplay.setBackgroundResource(R.drawable.theme_cooking_background);
@@ -77,7 +77,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             @Override
             public void onClick(View view) {
                 RoutineEdit.getInstance().createActivitySheet(true);
-                RoutineEdit.getInstance().fillActivitySheet(activitiesList.get(position).get(1), activitiesList.get(position).get(2), activitiesList.get(position).get(3), activitiesList.get(position).get(4), activitiesList.get(position).get(5), activitiesList.get(position).get(6));
+                RoutineEdit.getInstance().fillActivitySheet(activitiesList.get(position).get(0), activitiesList.get(position).get(1), activitiesList.get(position).get(2), activitiesList.get(position).get(3), activitiesList.get(position).get(4), activitiesList.get(position).get(5));
             }
         });
     }
