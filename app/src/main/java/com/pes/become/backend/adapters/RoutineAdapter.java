@@ -87,4 +87,8 @@ public class RoutineAdapter {
     public void deleteActivity(int iniH, int iniM, int endH, int endM) throws InvalidTimeIntervalException {
         routine.deleteActivity(iniH, iniM, endH, endM);
     }
+
+    public ArrayList<Activity> getActivities(Day day) {
+        return routine.getActivitiesByDay(day);
+    }
 }

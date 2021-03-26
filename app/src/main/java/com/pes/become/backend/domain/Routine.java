@@ -12,11 +12,11 @@ public class Routine {
     /**
      * Nom de la rutina
      */
-    private final String name;
+    private String name;
     /**
-     * Mapa amb totes les activitats ordenades temporalment. La clau es la id de l'activitat, i el valor l'activitat
+     * Mapa amb totes les activitats ordenades temporalment
      */
-    private final ArrayList<Activity> activities;
+    private ArrayList<Activity> activities;
 
     /**
      * Creadora de la rutina
@@ -46,12 +46,13 @@ public class Routine {
 
     /**
      * Getter de totes les activitats d'un dia
-     * @return les activitats
+     * @param day dia a consultar
+     * @return les activitats de la rutina al dia indicat
      */
-    public ArrayList<Activity> getActivitiesByDay(String day){
+    public ArrayList<Activity> getActivitiesByDay(Day day){
         ArrayList<Activity> res = new ArrayList<>();
         for(Activity act : activities) {
-            if(act.getDay().equals(Day.valueOf(day))) {
+            if(act.getDay().equals(day)) {
                 res.add(act);
             }
         }

@@ -1,13 +1,18 @@
 package com.pes.become.backend.adapters;
 
+import android.util.Log;
+
+import com.pes.become.backend.domain.Activity;
 import com.pes.become.backend.domain.Day;
 import com.pes.become.backend.domain.Theme;
 import com.pes.become.backend.exceptions.InvalidDayIntervalException;
 import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
 import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 import com.pes.become.backend.persistence.ControllerPersistence;
+import com.pes.become.frontend.RoutineEdit;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 
 /**
  * Classe que gestiona la comunicacio entre la capa de presentacio i la capa de domini, i la creacio dels adaptadors de cada classe de domini
@@ -25,6 +30,8 @@ public class DomainAdapterFactory {
      * Unica instancia de l'adaptador de la classe Rutina
      */
     private static final RoutineAdapter routineAdapter = RoutineAdapter.getInstance();
+
+    private static RoutineEdit routineEdit;
 
     /**
      * Metode per obtenir la instancia de la classe
@@ -60,9 +67,8 @@ public class DomainAdapterFactory {
      * @param endDayString dia de fi de l'activitat
      * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
      * @throws InvalidDayIntervalException es llença si el dia de fi es anterior al dia d'inici
-     * @throws OverlappingActivitiesException es llença si existeix una activitat a la mateixa rutina que se solapa temporalment amb la creada
      */
-    public void createActivity(String name, String description, String theme, String iniH, String iniM, String endH, String endM, String iniDayString, String endDayString) throws InvalidTimeIntervalException, InvalidDayIntervalException, OverlappingActivitiesException {
+    public void createActivity(String name, String description, String theme, String iniH, String iniM, String endH, String endM, String iniDayString, String endDayString) throws InvalidTimeIntervalException, InvalidDayIntervalException {
         Day iniDay = Day.valueOf(iniDayString);
         Day endDay = Day.valueOf(endDayString);
         int comparison = iniDay.compareTo(endDay); //negatiu si iniDay<endDay; 0 si iguals; positiu si iniDay>endDay
@@ -134,12 +140,36 @@ public class DomainAdapterFactory {
     /**
      * Metode per demanar les activitats d'un dia
      * @param dayString dia de les activitats
-     * @param method metode que s'invocara quan s'hagin obtingut les activitats
-     * @param object instancia on s'executara el metode
+     * @param re instància de RoutineEdit
      * @throws NoSuchMethodException
      */
-    public void getActivitiesByDay(String dayString, Method method, Object object) throws NoSuchMethodException {
-        controllerPersistence.getActivitiesByDay("RutinaDeProva", dayString, method, object);
+    public void getActivitiesFromDB(String dayString, RoutineEdit re) throws NoSuchMethodException {
+        routineEdit = re;
+        Class[] parameterTypes = new Class[1];
+        parameterTypes[0] = ArrayList.class;
+        Method method1 = DomainAdapterFactory.class.getMethod("setActivitiesFromDB", parameterTypes);
+        controllerPersistence.getActivitiesByDay("RutinaDeProva", dayString, method1, DomainAdapterFactory.getInstance());
+    }
+
+    /**
+     * Metode per rebre la resposta de la DB amb les activitats d'una rutina
+     * @param acts activitats de la rutina
+     * @throws InvalidTimeIntervalException
+     */
+    public void setActivitiesFromDB(ArrayList<ArrayList<String>> acts) throws InvalidTimeIntervalException {
+        Log.d("TAMANY",String.valueOf(acts.size()));
+        for(ArrayList<String> act : acts) {
+            String[] s = act.get(4).split(":");
+            String[] s2 = act.get(5).split(":");
+            int iniH = Integer.parseInt(s[0]);
+            int iniM = Integer.parseInt(s[1]);
+            int endH = Integer.parseInt(s2[0]);
+            int endM = Integer.parseInt(s2[1]);
+            routineAdapter.addActivity(act.get(0), act.get(1),Theme.valueOf(act.get(2)), iniH, iniM, endH, endM, Day.valueOf(act.get(3)));
+            Log.d("become", act.get(0)+ act.get(1)+Theme.valueOf(act.get(2))+iniH+iniM+ endH+endM+ Day.valueOf(act.get(3)));
+        }
+        routineAdapter.getActivities(Day.Monday);
+        routineEdit.getActivitiesCallback(acts);
     }
 
     /**

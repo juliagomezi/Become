@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -230,13 +231,6 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
                     Toast.makeText(getContext(), "Error: Start day cannot be subsequent to end day", Toast.LENGTH_SHORT).show();
                     spinnerStartDay.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
                     spinnerEndDay.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
-
-                } catch (OverlappingActivitiesException e) {
-                    Toast.makeText(getContext(), "Error: Activities cannot be overlaped", Toast.LENGTH_SHORT).show();
-                    startTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
-                    endTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
-                    spinnerStartDay.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
-                    spinnerEndDay.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
                 }
             }
 
@@ -322,20 +316,17 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         }*/
 
         activitiesList = new ArrayList<>(); //temporal
-        Class[] parameterTypes = new Class[1];
-        parameterTypes[0] = ArrayList.class;
         try {
-            Method method1 = RoutineEdit.class.getMethod("getActivitiesCallback", parameterTypes);
-            DAF.getActivitiesByDay("Monday", method1, this);
+            DAF.getActivitiesFromDB("Monday", this);
         } catch (NoSuchMethodException e) {
-            System.out.println("Mètode incorrecte");
+            Log.d("FATALERROR","Mètode incorrecte");
         }
     }
 
     /**
      * Funció per inicialitzar l'element que mostra el llistat d'activitats
      * Pre: ninguna
-     * Post: s'ha inicialitzar el recycler amb el seu adapter corresponent
+     * Post: s'ha inicialitzat el recycler amb el seu adapter corresponent
      * */
     public void getActivitiesCallback(ArrayList<ArrayList<String>> activitiesListCallback) {
         //Convertir missatge a activities list
@@ -345,12 +336,11 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
             ArrayList<String> activity = new ArrayList<>(activitiesListCallback.get(0).size());
             for (int j = 0; j < activitiesListCallback.get(0).size(); ++j) {
                 activity.add(activitiesListCallback.get(i).get(j));
+                Log.d("ACTIVITAT", activitiesListCallback.get(i).get(j));
             }
             activitiesList.add(activity);
         }
-
         initRecyclerView();
-
     }
 
     /**
