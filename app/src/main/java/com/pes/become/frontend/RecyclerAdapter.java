@@ -15,7 +15,6 @@ import com.pes.become.R;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
@@ -47,14 +46,32 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         holder.expandableLayout.setVisibility(isExpanded[position] ? View.VISIBLE : View.GONE);
 
         String theme = activitiesList.get(position).get(3);
-        if (theme.equals("Cooking")) holder.cardActivityDisplay.setBackgroundResource(R.drawable.theme_cooking_background);
-        else if (theme.equals("Entertainment")) holder.cardActivityDisplay.setBackgroundResource(R.drawable.theme_entertainment_background);
-        else if (theme.equals("Music")) holder.cardActivityDisplay.setBackgroundResource(R.drawable.theme_music_background);
-        else if (theme.equals("Sleeping")) holder.cardActivityDisplay.setBackgroundResource(R.drawable.theme_sleeping_bacground);
-        else if (theme.equals("Sport")) holder.cardActivityDisplay.setBackgroundResource(R.drawable.theme_sport_background);
-        else if (theme.equals("Studying")) holder.cardActivityDisplay.setBackgroundResource(R.drawable.theme_studying_background);
-        else if (theme.equals("Working")) holder.cardActivityDisplay.setBackgroundResource(R.drawable.theme_working_background);
-        else holder.cardActivityDisplay.setBackgroundResource(R.drawable.theme_other_background);
+        switch (theme) {
+            case "Cooking":
+                holder.cardActivityDisplay.setBackgroundResource(R.drawable.theme_cooking_background);
+                break;
+            case "Entertainment":
+                holder.cardActivityDisplay.setBackgroundResource(R.drawable.theme_entertainment_background);
+                break;
+            case "Music":
+                holder.cardActivityDisplay.setBackgroundResource(R.drawable.theme_music_background);
+                break;
+            case "Sleeping":
+                holder.cardActivityDisplay.setBackgroundResource(R.drawable.theme_sleeping_bacground);
+                break;
+            case "Sport":
+                holder.cardActivityDisplay.setBackgroundResource(R.drawable.theme_sport_background);
+                break;
+            case "Studying":
+                holder.cardActivityDisplay.setBackgroundResource(R.drawable.theme_studying_background);
+                break;
+            case "Working":
+                holder.cardActivityDisplay.setBackgroundResource(R.drawable.theme_working_background);
+                break;
+            default:
+                holder.cardActivityDisplay.setBackgroundResource(R.drawable.theme_other_background);
+                break;
+        }
 
         holder.editButton.setOnClickListener(new View.OnClickListener() {
             @Override

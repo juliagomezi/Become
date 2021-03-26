@@ -29,7 +29,6 @@ import com.pes.become.backend.adapters.DomainAdapterFactory;
 import com.pes.become.backend.exceptions.InvalidDayIntervalException;
 import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
 import com.pes.become.backend.exceptions.OverlappingActivitiesException;
-import com.pes.become.backend.persistence.ControllerPersistence;
 
 import java.lang.reflect.Method;
 import java.text.ParseException;
@@ -39,7 +38,7 @@ import java.util.Date;
 
 public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedListener{
 
-    private DomainAdapterFactory DAF = DomainAdapterFactory.getInstance();
+    private final DomainAdapterFactory DAF = DomainAdapterFactory.getInstance();
     private static RoutineEdit instance;
     private View view;
     private Context global;
@@ -269,11 +268,21 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
                     DAF.createActivity(name, descr, theme, String.valueOf(startMinute), String.valueOf(startMinute), String.valueOf(endHour), String.valueOf(endMinute), dayStart, dayEnd);
 
                 } catch (InvalidTimeIntervalException e) {
-                    Toast.makeText(getContext(), "Error: Start time cannot be subsequent to end time", Toast.LENGTH_SHORT);
+                    Toast.makeText(getContext(), "Error: Start time cannot be subsequent to end time", Toast.LENGTH_SHORT).show();
+                    startTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
+                    endTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
+
                 } catch (InvalidDayIntervalException e) {
-                    Toast.makeText(getContext(), "Error: Start day cannot be subsequent to end day", Toast.LENGTH_SHORT);
+                    Toast.makeText(getContext(), "Error: Start day cannot be subsequent to end day", Toast.LENGTH_SHORT).show();
+                    spinnerStartDay.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
+                    spinnerEndDay.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
+
                 } catch (OverlappingActivitiesException e) {
-                    Toast.makeText(getContext(), "Error: Activities cannot be overlaped", Toast.LENGTH_SHORT);
+                    Toast.makeText(getContext(), "Error: Activities cannot be overlaped", Toast.LENGTH_SHORT).show();
+                    startTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
+                    endTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
+                    spinnerStartDay.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
+                    spinnerEndDay.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
                 }
             }
 
@@ -382,7 +391,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.routine_edit, container, false);
         super.onCreate(savedInstanceState);
-        this.instance = this;
+        instance = this;
         global = this.getActivity();
 
         getActivities();

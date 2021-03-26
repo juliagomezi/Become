@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item><layer-list>
+        <item><shape>
+            <stroke android:width="2dp" android:color="#EF5C5C" />
+            <padding android:bottom="3dp" android:left="3dp" android:right="3dp" android:top="3dp" />
+            <corners
+                android:topLeftRadius="5dp"
+                android:topRightRadius="5dp"
+                android:bottomLeftRadius="5dp"
+                android:bottomRightRadius="5dp"/>
+        </shape></item>
+        <item ><bitmap android:gravity="right|center" android:src="@drawable/arrow_resize" />
+        </item>
+    </layer-list></item>
+
+</selector>
