@@ -21,7 +21,7 @@ public class TimeIntervalTest {
     public void comparatorAdjacentIntervals() throws InvalidTimeIntervalException {
         TimeInterval t1 = new TimeInterval(17,0,18,0);
         TimeInterval t2 = new TimeInterval(18,0,19,0);
-        assertEquals(0, t1.compareTo(t2));
+        assertEquals(-1, t1.compareTo(t2));
         assertTrue(t2.compareTo(t1) > 0);
     }
 

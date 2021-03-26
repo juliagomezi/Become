@@ -25,7 +25,7 @@ public class RoutineTest {
         Routine r = new Routine("test");
         Activity a1 = new Activity("testActivity", "testDescription", Theme.Sport,17,0,18,0, Day.Monday);
         r.addActivity(a1);
-        r.updateActivity("testActivityUpdated", "testDescriptionUpdated", theme, 17, 0,18,0,11,0,12,0, Day.Tuesday);
+        r.updateActivity("testActivityUpdated", "testDescriptionUpdated", Theme.Sport, 17, 0,18,0,11,0,12,0, Day.Tuesday);
         assertEquals("testActivityUpdated",r.getActivitiesByDay("Tuesday").get(0).getName());
         assertEquals("testDescriptionUpdated",r.getActivitiesByDay("Tuesday").get(0).getDescription());
         assertEquals(11,r.getActivitiesByDay("Tuesday").get(0).getInterval().getStartTime().getHours());
