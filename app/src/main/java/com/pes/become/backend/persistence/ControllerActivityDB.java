@@ -1,37 +1,21 @@
 package com.pes.become.backend.persistence;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.pes.become.backend.domain.Time;
 
-//import android.util.Log;
-
-//import androidx.annotation.NonNull;
-
-//import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-//import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-//import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-//import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.CollectionReference;
 import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 
-//import org.w3c.dom.Document;
-
-import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.lang.reflect.Method;
 
@@ -72,85 +56,77 @@ public class ControllerActivityDB {
         Time tBeginNew = new Time(hourBeginNew,minuteBeginNew);
         Time tFinishNew = new Time(hourFinishNew,minuteFinishNew);
         Query query = db.collection("routines").document(routineName).collection("activities").whereEqualTo("day", actDay);
-        query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                boolean exception = false;
-                for (DocumentSnapshot document : queryDocumentSnapshots){
-                    //Càlcul dels temps d'inici i final de l'activitat que es vol evaluar.
-                    String auxBegin = document.get("beginTime").toString();
-                    String auxFinish = document.get("finishTime").toString();
-                    int hourBeginOld = Integer.parseInt(auxBegin.substring(0,2));
-                    int minuteBeginOld = Integer.parseInt(auxBegin.substring(3));
-                    int hourFinishOld = Integer.parseInt(auxFinish.substring(0,2));
-                    int minuteFinishOld = Integer.parseInt(auxFinish.substring(3));
+        query.get().addOnSuccessListener(queryDocumentSnapshots -> {
+            boolean exception = false;
+            for (DocumentSnapshot document : queryDocumentSnapshots){
+                //Càlcul dels temps d'inici i final de l'activitat que es vol evaluar.
+                String auxBegin = document.get("beginTime").toString();
+                String auxFinish = document.get("finishTime").toString();
+                int hourBeginOld = Integer.parseInt(auxBegin.substring(0,2));
+                int minuteBeginOld = Integer.parseInt(auxBegin.substring(3));
+                int hourFinishOld = Integer.parseInt(auxFinish.substring(0,2));
+                int minuteFinishOld = Integer.parseInt(auxFinish.substring(3));
 
-                    try {
-                        Time tBeginOld = new Time(hourBeginOld,minuteBeginOld);
-                        Time tFinishOld = new Time(hourFinishOld,minuteFinishOld);
-                        if ((tFinishNew.compareTo(tBeginOld)<=0) || tFinishOld.compareTo(tBeginNew)<=0){
-                            exception = true;
-                            throw new OverlappingActivitiesException();
-                        }
+                try {
+                    Time tBeginOld = new Time(hourBeginOld,minuteBeginOld);
+                    Time tFinishOld = new Time(hourFinishOld,minuteFinishOld);
+                    if ((tFinishNew.compareTo(tBeginOld)<=0) || tFinishOld.compareTo(tBeginNew)<=0){
+                        throw new OverlappingActivitiesException();
+                    }
 
-                    }
-                    catch (OverlappingActivitiesException e) {
-                        exception = true;
-                        e.printStackTrace();
-                    }
                 }
-                if(!exception) {
-                    try {
-                        //String newActDay, String newFinishTime, String newBeginTime, DocumentReference docRef
-                        Object params[] = new Object[4];
-                        params[0] = actDay;
-                        params[1] = finishTime;
-                        params[2] = beginTime;
-                        params[3] = docRef;
-                        method.invoke(object, params);
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    } catch (InvocationTargetException e) {
-                        e.printStackTrace();
-                    }
+                catch (OverlappingActivitiesException e) {
+                    exception = true;
+                    e.printStackTrace();
                 }
             }
-
+            if(!exception) {
+                try {
+                    //String newActDay, String newFinishTime, String newBeginTime, DocumentReference docRef
+                    Object params[] = new Object[4];
+                    params[0] = actDay;
+                    params[1] = finishTime;
+                    params[2] = beginTime;
+                    params[3] = docRef;
+                    method.invoke(object, params);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+            }
         });
     }
 
 
     public void getActivitiesByDay(String routineName, String day, Method method, Object object) {
         Query consulta = db.collection("routines").document(routineName).collection("activities").whereEqualTo("day", day);
-        consulta.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>(){
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    QuerySnapshot aux2 = task.getResult();
-                    ArrayList<ArrayList<String>> activitiesResult = new ArrayList<>();
-                    for (QueryDocumentSnapshot document : aux2) {
-                        Log.d("ConsultaFirebase", document.getId() + " => " + document.getData());
-                        ArrayList<String> activity = new ArrayList<>();
-                        activity.add(document.get("name").toString());
-                        activity.add(document.get("description").toString());
-                        activity.add(document.get("theme").toString());
-                        activity.add(document.get("day").toString());
-                        activity.add(document.get("beginTime").toString());
-                        activity.add(document.get("finishTime").toString());
-                        activitiesResult.add(activity);
-                    }
-                    Object params[] = new Object[1];
-                    params[0] = activitiesResult;
-                    try {
-                        method.invoke(object, params);
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    } catch (InvocationTargetException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    Log.d("ConsultaFirebase", task.getException().getMessage());
+        consulta.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                QuerySnapshot aux2 = task.getResult();
+                ArrayList<ArrayList<String>> activitiesResult = new ArrayList<>();
+                for (QueryDocumentSnapshot document : aux2) {
+                    Log.d("ConsultaFirebase", document.getId() + " => " + document.getData());
+                    ArrayList<String> activity = new ArrayList<>();
+                    activity.add(document.get("name").toString());
+                    activity.add(document.get("description").toString());
+                    activity.add(document.get("theme").toString());
+                    activity.add(document.get("day").toString());
+                    activity.add(document.get("beginTime").toString());
+                    activity.add(document.get("finishTime").toString());
+                    activitiesResult.add(activity);
                 }
+                Object[] params = new Object[1];
+                params[0] = activitiesResult;
+                try {
+                    method.invoke(object, params);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                Log.d("ConsultaFirebase", task.getException().getMessage());
             }
         });
     }
@@ -204,18 +180,10 @@ public class ControllerActivityDB {
 
         Query consulta = collRefToActivities.whereEqualTo("beginTime",beginTime).whereEqualTo("finishTime",finishTime);
 
-        consulta.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for (DocumentSnapshot document : queryDocumentSnapshots){
-                    DocumentReference docRefToActivity = document.getReference();
-                    docRefToActivity.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Log.d("SUCCESS", "Tasca esborrada amb exit");
-                        }
-                    });
-                }
+        consulta.get().addOnSuccessListener(queryDocumentSnapshots -> {
+            for (DocumentSnapshot document : queryDocumentSnapshots){
+                DocumentReference docRefToActivity = document.getReference();
+                docRefToActivity.delete().addOnSuccessListener(aVoid -> Log.d("SUCCESS", "Tasca esborrada amb exit"));
             }
         });
     }
@@ -240,29 +208,23 @@ public class ControllerActivityDB {
 
         Query consulta = collRefToActivities.whereEqualTo("beginTime",oldIniTime).whereEqualTo("finishTime",oldEndTime);
 
-        consulta.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for (DocumentSnapshot document : queryDocumentSnapshots){
-                    DocumentReference docRef = document.getReference();
-                    docRef.update("name", actName);
-                    docRef.update("description", description);
-                    docRef.update("theme", theme);
-                    docRef.update("day", day);
-                    docRef.update("beginTime",iniT);
-                    docRef.update("finishTime", endT);
+        consulta.get().addOnSuccessListener(queryDocumentSnapshots -> {
+            for (DocumentSnapshot document : queryDocumentSnapshots){
+                DocumentReference docRef = document.getReference();
+                docRef.update("name", actName);
+                docRef.update("description", description);
+                docRef.update("theme", theme);
+                docRef.update("day", day);
+                docRef.update("beginTime",iniT);
+                docRef.update("finishTime", endT);
 
-                    Log.d("SUCCESS", "Descripcio modificada amb exit");
-                }
+                Log.d("SUCCESS", "Descripcio modificada amb exit");
             }
         });
 
 
 
     }
-
-
-
 
     /**
      * Pre: La rutina de nom "routineName" ja existeix.
@@ -286,33 +248,31 @@ public class ControllerActivityDB {
 
         Query consulta = collRefToActivities.whereEqualTo("name",activityName).whereEqualTo("day",actDay).whereEqualTo("beginTime",beginTime).whereEqualTo("finishTime",finishTime);
 
-        consulta.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+        consulta.get().addOnSuccessListener(queryDocumentSnapshots -> {
 
-                for (DocumentSnapshot document : queryDocumentSnapshots){
-                    DocumentReference docRef = document.getReference();
-                    try {
-                        Class[] parameterTypes = new Class[4];
-                        parameterTypes[0] = String.class;
-                        parameterTypes[1] = String.class;
-                        parameterTypes[2] = String.class;
-                        parameterTypes[3] = DocumentReference.class;
-                        Method method1 = ControllerActivityDB.class.getMethod("modifyActivityTimeAux", parameterTypes);
-                        //checkOverlappingActivities(routineName, newActDay, newBeginTime,newFinishTime,docRef,method1,new ControllerActivityDB());
-                        modifyActivityTimeAux(newActDay,newFinishTime, newBeginTime, docRef); //Quan es descomenti la linia de sobre cal comentar aixo i descomentar els catch de sota
-                    }/* catch (OverlappingActivitiesException e) {
-                        e.printStackTrace();
-                    } catch (InvalidTimeException e) {
-                        e.printStackTrace();
-                    }*/ catch (NoSuchMethodException e) {
-                        e.printStackTrace();
-                    }
-
-
+            for (DocumentSnapshot document : queryDocumentSnapshots){
+                DocumentReference docRef = document.getReference();
+                try {
+                    Class[] parameterTypes;
+                    parameterTypes = new Class[4];
+                    parameterTypes[0] = String.class;
+                    parameterTypes[1] = String.class;
+                    parameterTypes[2] = String.class;
+                    parameterTypes[3] = DocumentReference.class;
+                    Method method1 = ControllerActivityDB.class.getMethod("modifyActivityTimeAux", parameterTypes);
+                    //checkOverlappingActivities(routineName, newActDay, newBeginTime,newFinishTime,docRef,method1,new ControllerActivityDB());
+                    modifyActivityTimeAux(newActDay,newFinishTime, newBeginTime, docRef); //Quan es descomenti la linia de sobre cal comentar aixo i descomentar els catch de sota
+                }/* catch (OverlappingActivitiesException e) {
+                    e.printStackTrace();
+                } catch (InvalidTimeException e) {
+                    e.printStackTrace();
+                }*/ catch (NoSuchMethodException e) {
+                    e.printStackTrace();
                 }
 
+
             }
+
         });
 
     }

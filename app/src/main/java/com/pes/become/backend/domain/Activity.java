@@ -135,7 +135,7 @@ public class Activity implements Comparable<Activity>{
      * Metode per actualitzar els parametres d'una activitat
      * @param name nou nom de l'activitat
      * @param description nova descripcio de l'activitat
-     * @param theme
+     * @param theme tema de la nova activitat
      * @param iniH nova hora d'inici de l'activitat
      * @param iniM nous minuts d'inici de l'activitat
      * @param endH nova hora de fi de l'activitat

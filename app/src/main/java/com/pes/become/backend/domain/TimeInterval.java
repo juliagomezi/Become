@@ -9,11 +9,11 @@ public class TimeInterval implements Comparable<TimeInterval>{
     /**
      * Temps d'inici de l'interval
      */
-    private Time startTime;
+    private final Time startTime;
     /**
      * Temps de fi de l'interval, sempre posterior al temps d'inici
      */
-    private Time endTime;
+    private final Time endTime;
 
     /**
      * Creadora de la classe

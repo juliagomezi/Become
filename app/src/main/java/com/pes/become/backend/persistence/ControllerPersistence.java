@@ -1,10 +1,7 @@
 package com.pes.become.backend.persistence;
 
-import android.util.Log;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ControllerPersistence{
 
@@ -73,11 +70,12 @@ public class ControllerPersistence{
     }
 
     //Consultores activity
-    public void getActivitiesByDay(String routineName, String day,Method method, Object object) throws InterruptedException, NoSuchMethodException {
+    public void getActivitiesByDay(String routineName, String day,Method method, Object object) {
         createCtrlActivity();
         CA.getActivitiesByDay(routineName,day,method,object);
     }
 
+    /*
     //TUTORIAL
     public void tutorial(String routineName, String day) throws InterruptedException, NoSuchMethodException {
 
@@ -91,5 +89,5 @@ public class ControllerPersistence{
     {
         for(String a: message) Log.d("DoThingsWithActivity", a);
     }
-    //FI TUTORIAL
+    //FI TUTORIAL*/
 }

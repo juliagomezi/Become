@@ -89,10 +89,10 @@ public class DomainAdapterFactory {
 
     /**
      * Metode per actualitzar els parametres d'una activitat d'una rutina
-     * @param oldIniH
-     * @param oldIniM
-     * @param oldEndH
-     * @param oldEndM
+     * @param oldIniH hora inicial desactualitzada
+     * @param oldIniM minuts inicials descatualitzats
+     * @param oldEndH hora final descatualitzada
+     * @param oldEndM minuts finals decastualitzats
      * @param name nou nom de l'activitat
      * @param description nova descripcio de l'activitat
      * @param theme nou tema de l'activitat
@@ -136,10 +136,9 @@ public class DomainAdapterFactory {
      * @param dayString dia de les activitats
      * @param method metode que s'invocara quan s'hagin obtingut les activitats
      * @param object instancia on s'executara el metode
-     * @throws InterruptedException
      * @throws NoSuchMethodException
      */
-    public void getActivitiesByDay(String dayString, Method method, Object object) throws InterruptedException, NoSuchMethodException {
+    public void getActivitiesByDay(String dayString, Method method, Object object) throws NoSuchMethodException {
         controllerPersistence.getActivitiesByDay("RutinaDeProva", dayString, method, object);
     }
 

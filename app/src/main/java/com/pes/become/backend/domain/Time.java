@@ -7,11 +7,11 @@ public class Time implements Comparable<Time>{
     /**
      * Hores del temps
      */
-    private int hours;
+    private final int hours;
     /**
      * Minuts del temps
      */
-    private int minutes;
+    private final int minutes;
 
     /**
      * Creadora de la classe

@@ -12,11 +12,11 @@ public class Routine {
     /**
      * Nom de la rutina
      */
-    private String name;
+    private final String name;
     /**
      * Mapa amb totes les activitats ordenades temporalment. La clau es la id de l'activitat, i el valor l'activitat
      */
-    private ArrayList<Activity> activities;
+    private final ArrayList<Activity> activities;
 
     /**
      * Creadora de la rutina
@@ -24,7 +24,7 @@ public class Routine {
      */
     public Routine(String name){
         this.name = name;
-        this.activities = new ArrayList<Activity>();
+        this.activities = new ArrayList<>();
     }
 
     /**
@@ -49,7 +49,7 @@ public class Routine {
      * @return les activitats
      */
     public ArrayList<Activity> getActivitiesByDay(String day){
-        ArrayList<Activity> res = new ArrayList<Activity>();
+        ArrayList<Activity> res = new ArrayList<>();
         for(Activity act : activities) {
             if(act.getDay().equals(Day.valueOf(day))) {
                 res.add(act);
@@ -63,11 +63,11 @@ public class Routine {
      * Metode per actualitzar els parametres d'una activitat de la rutina
      * @param name nou nom de l'activitat
      * @param description nova descripcio de l'activitat
-     * @param theme
-     * @param oldIniH
-     * @param oldIniM
-     * @param oldEndH
-     * @param oldEndM
+     * @param theme tema de l'activitat
+     * @param oldIniH hora inical desactualitzada
+     * @param oldIniM minuts inicals descatualitzats
+     * @param oldEndH hora final descatualitzada
+     * @param oldEndM minuts finals desactualitzats
      * @param iniH nova hora d'inici de l'activitat
      * @param iniM nous minuts d'inici de l'activitat
      * @param endH nova hora de fi de l'activitat

@@ -18,7 +18,7 @@ public class RoutineAdapter {
      */
     private static RoutineAdapter instance;
 
-    private Routine routine = new Routine("RutinaDeProva"); //sample routine
+    private final Routine routine = new Routine("RutinaDeProva"); //sample routine
 
     /**
      * Metode per obtenir la instancia de la classe
@@ -60,11 +60,11 @@ public class RoutineAdapter {
      * Metode per actualitzar els parametres d'una activitat d'una rutina
      * @param name nou nom de l'activitat
      * @param description nova descripcio de l'activitat
-     * @param theme
-     * @param oldIniH
-     * @param oldIniM
-     * @param oldEndH
-     * @param oldEndM
+     * @param theme tema la activitat actualitzat
+     * @param oldIniH hora inicial descatualitzada
+     * @param oldIniM minuts incials descatualitzats
+     * @param oldEndH hora final descatualitzada
+     * @param oldEndM minuts finals descatualitzats
      * @param iniH nova hora d'inici de l'activitat
      * @param iniM nous minuts d'inici de l'activitat
      * @param endH nova hora de fi de l'activitat
@@ -74,30 +74,6 @@ public class RoutineAdapter {
      */
     public void updateActivity(String name, String description, Theme theme, int oldIniH, int oldIniM, int oldEndH, int oldEndM, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException {
         routine.updateActivity(name, description, theme, oldIniH, oldIniM, oldEndH, oldEndM, iniH, iniM, endH, endM, day);
-    }
-
-    /**
-     * Metode per consultar les activitats d'un dia
-     * @param day nom del dia
-     */
-    public ArrayList<ArrayList<String>> getActivitiesByDay(String day) {
-        ArrayList<Activity> activities = routine.getActivitiesByDay(day);
-        ArrayList<ArrayList<String>> res = new ArrayList<ArrayList<String>>();
-        for(Activity activity : activities) {
-            ArrayList<String> resaux = new ArrayList<String>();
-            resaux.add(activity.getName());
-            resaux.add(activity.getDescription());
-            resaux.add(activity.getTheme().toString());
-            resaux.add(activity.getDay().toString());
-            Integer startHour = activity.getInterval().getStartTime().getHours();
-            Integer startMinute = activity.getInterval().getStartTime().getMinutes();
-            resaux.add(String.format("%02d", startHour) + ":" + String.format("%02d", startMinute));
-            Integer endHour = activity.getInterval().getEndTime().getHours();
-            Integer endMinute = activity.getInterval().getEndTime().getMinutes();
-            resaux.add(String.format("%02d", endHour) + ":" + String.format("%02d", endMinute));
-            res.add(resaux);
-        }
-        return res;
     }
 
     /**

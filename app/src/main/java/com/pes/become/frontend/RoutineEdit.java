@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,7 +19,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -329,7 +327,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         try {
             Method method1 = RoutineEdit.class.getMethod("getActivitiesCallback", parameterTypes);
             DAF.getActivitiesByDay("Monday", method1, this);
-        } catch (NoSuchMethodException | InterruptedException e) {
+        } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
     }
