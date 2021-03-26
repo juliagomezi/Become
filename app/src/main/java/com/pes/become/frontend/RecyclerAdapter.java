@@ -23,8 +23,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     // llistat d'activitats
     private final DomainAdapterFactory DAF = DomainAdapterFactory.getInstance();
     private static RecyclerAdapter instance;
-    private ArrayList<ArrayList<String>> activitiesList;
-    private Boolean[] isExpanded;
+    private final ArrayList<ArrayList<String>> activitiesList;
+    private final Boolean[] isExpanded;
 
     public RecyclerAdapter(ArrayList<ArrayList<String>> activitiesList) {
         this.activitiesList = activitiesList;
@@ -82,12 +82,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                 break;
         }
 
-        holder.editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                RoutineEdit.getInstance().createActivitySheet(true);
-                RoutineEdit.getInstance().fillActivitySheet(activitiesList.get(position).get(0), activitiesList.get(position).get(1), activitiesList.get(position).get(2), activitiesList.get(position).get(3), activitiesList.get(position).get(4), activitiesList.get(position).get(5));
-            }
+        holder.editButton.setOnClickListener(view -> {
+            RoutineEdit.getInstance().createActivitySheet(true);
+            RoutineEdit.getInstance().fillActivitySheet(activitiesList.get(position).get(0), activitiesList.get(position).get(1), activitiesList.get(position).get(2), activitiesList.get(position).get(3), activitiesList.get(position).get(4), activitiesList.get(position).get(5));
         });
 
         holder.deleteButton.setOnClickListener(view -> {
@@ -100,7 +97,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
             try{
                 DAF.deleteActivity(initialHour, initialMinute, finishHour, finishMinute);
-            }catch (InvalidTimeIntervalException e) {}
+            }catch (InvalidTimeIntervalException ignored) {}
         });
 
     }

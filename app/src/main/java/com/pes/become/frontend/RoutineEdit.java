@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,8 +34,6 @@ import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 
 public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedListener{
@@ -47,54 +44,23 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
     private View view;
     private Context global;
 
-    // llistat d'activitats
-    private RecyclerView recyclerView;
-    private RecyclerAdapter recyclerAdapter;
     private ArrayList<ArrayList<String>> activitiesList;
-    private CardView cardActivityDisplay;
 
     // desplegable nova activitat
     private ArrayAdapter<CharSequence> adapterTheme;
     private ArrayAdapter<CharSequence> adapterStartDay;
-    private ArrayAdapter<CharSequence> adapterEndDay;
-    private Button doneButton, cancelButton;
     private BottomSheetDialog activitySheet;
     private Spinner spinnerTheme, spinnerStartDay, spinnerEndDay;
     private EditText activityName, activityDescr;
-    private TextView startTime, endTime, addActivity, sheetLabel;
+    private TextView startTime;
+    private TextView endTime;
+    private TextView sheetLabel;
     private int startHour, startMinute, endHour, endMinute;
     private String oldIniTime, oldEndTime;
 
     public RoutineEdit() {
         // Required empty public constructor
     }
-
-    /*
-    // Per provar, després ho borraré
-    private void initData() {
-        activitiesList = new ArrayList<>();
-        activitiesList.add(new ActivityDummy("Have Breakfast", "nyamnyam", "Cooking", "Monday", "08:00", "Monday", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Entertainment", "Monday", "08:00","Monday",  "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Music", "Monday", "08:00", "Monday", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Other", "Monday", "08:00", "Monday", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Sleeping", "Monday", "08:00", "Monday", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Sport", "Monday", "08:00", "Monday", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Studying", "Monday", "08:00", "Monday", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Working", "Monday", "08:00", "Monday", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Sleeping", "Monday", "08:00", "Monday", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Sleeping", "Monday", "08:00", "Monday", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Sleeping", "Monday", "08:00", "Monday", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Sleeping", "Monday", "08:00", "Monday", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Sleeping", "Monday", "08:00", "Monday", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Sleeping", "Monday", "08:00", "Monday", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Sleeping", "Monday", "08:00", "Monday",  "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Sleeping", "Monday", "08:00", "Monday", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Sleeping", "Monday", "08:00", "Monday", "08:15"));
-        activitiesList.add(new ActivityDummy("Esmorzar", "nyamnyam", "Sleeping", "Monday", "08:00", "Monday", "08:15"));
-    }
-
-     */
-
 
     /**
      * Funció per crear la pestanya de creació d'activitat
@@ -105,8 +71,8 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         activitySheet = new BottomSheetDialog(global,R.style.BottomSheetTheme);
         View sheetView = LayoutInflater.from(getContext()).inflate(R.layout.activity_edit, view.findViewById(R.id.bottom_sheet));
 
-        doneButton = sheetView.findViewById(R.id.doneButton);
-        cancelButton = sheetView.findViewById(R.id.cancelButton);
+        Button doneButton = sheetView.findViewById(R.id.doneButton);
+        Button cancelButton = sheetView.findViewById(R.id.cancelButton);
         spinnerTheme = sheetView.findViewById(R.id.themeSpinner);
         spinnerStartDay = sheetView.findViewById(R.id.dayStartSpinner);
         spinnerEndDay = sheetView.findViewById(R.id.dayEndSpinner);
@@ -133,85 +99,65 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                //no es necessari reescriure el mètode
             }
         });
 
-        adapterEndDay = ArrayAdapter.createFromResource(global, R.array.dayValues, R.layout.spinner_selected_item);
+        ArrayAdapter<CharSequence> adapterEndDay = ArrayAdapter.createFromResource(global, R.array.dayValues, R.layout.spinner_selected_item);
         adapterEndDay.setDropDownViewResource(R.layout.spinner_item_dropdown);
         spinnerEndDay.setAdapter(adapterEndDay);
         spinnerEndDay.setOnItemSelectedListener((AdapterView.OnItemSelectedListener) global);
 
-        doneButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (modify) {
-                    modifyActivity();
-                }
-                else createActivity();
-                activitySheet.dismiss();
+        doneButton.setOnClickListener(v -> {
+            if (modify) {
+                modifyActivity();
             }
+            else createActivity();
+            activitySheet.dismiss();
         });
 
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                activitySheet.dismiss();
-            }
+        cancelButton.setOnClickListener(v -> activitySheet.dismiss());
+
+        startTime.setOnClickListener(v -> {
+            TimePickerDialog selectTime = new TimePickerDialog(
+                    global,
+                    android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                    (view, hour, minute) -> {
+                        startHour = hour;
+                        startMinute = minute;
+                        String time = startHour + ":" + startMinute;
+                        SimpleDateFormat hformat = new SimpleDateFormat("HH:mm");
+                        try {
+                            Date date = hformat.parse(time);
+                            startTime.setText(hformat.format(date));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    }, 12, 0, true);
+            selectTime.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            selectTime.updateTime(startHour, startMinute);
+            selectTime.show();
         });
 
-        startTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TimePickerDialog selectTime = new TimePickerDialog(
-                        global,
-                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-                        new TimePickerDialog.OnTimeSetListener() {
-                            @Override
-                            public void onTimeSet(TimePicker view, int hour, int minute) {
-                                startHour = hour;
-                                startMinute = minute;
-                                String time = startHour + ":" + startMinute;
-                                SimpleDateFormat hformat = new SimpleDateFormat("HH:mm");
-                                try {
-                                    Date date = hformat.parse(time);
-                                    startTime.setText(hformat.format(date));
-                                } catch (ParseException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }, 12, 0, true);
-                selectTime.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                selectTime.updateTime(startHour, startMinute);
-                selectTime.show();
-            }
-        });
-
-        endTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TimePickerDialog selectTime = new TimePickerDialog(
-                        global,
-                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-                        new TimePickerDialog.OnTimeSetListener() {
-                            @Override
-                            public void onTimeSet(TimePicker view, int hour, int minute) {
-                                endHour = hour;
-                                endMinute = minute;
-                                String time = endHour + ":" + endMinute;
-                                SimpleDateFormat hformat = new SimpleDateFormat("HH:mm");
-                                try {
-                                    Date date = hformat.parse(time);
-                                    endTime.setText(hformat.format(date));
-                                } catch (ParseException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }, 12, 0, true);
-                selectTime.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                selectTime.updateTime(endHour, endMinute);
-                selectTime.show();
-            }
+        endTime.setOnClickListener(v -> {
+            TimePickerDialog selectTime = new TimePickerDialog(
+                    global,
+                    android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                    (view, hour, minute) -> {
+                        endHour = hour;
+                        endMinute = minute;
+                        String time = endHour + ":" + endMinute;
+                        SimpleDateFormat hformat = new SimpleDateFormat("HH:mm");
+                        try {
+                            Date date = hformat.parse(time);
+                            endTime.setText(hformat.format(date));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    }, 12, 0, true);
+            selectTime.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            selectTime.updateTime(endHour, endMinute);
+            selectTime.show();
         });
         activitySheet.setContentView(sheetView);
         activitySheet.show();
@@ -328,9 +274,9 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
             DAF.updateActivity(name, descr, theme, oldinitialHour, oldinitialMinute, oldfinishHour, oldfinishMinute, initialHour, initialMinute,
                                 finishHour, finishMinute, dayStart, dayEnd);
         } catch (InvalidTimeIntervalException e) {
-            Toast.makeText(getContext(), "Error: Start time cannot be subsequent to end time", Toast.LENGTH_SHORT);
+            Toast.makeText(getContext(), "Error: Start time cannot be subsequent to end time", Toast.LENGTH_SHORT).show();
         } catch (InvalidDayIntervalException e) {
-            Toast.makeText(getContext(), "Error: Start day cannot be subsequent to end day", Toast.LENGTH_SHORT);
+            Toast.makeText(getContext(), "Error: Start day cannot be subsequent to end day", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -415,9 +361,10 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
      * Post: s'ha inicialitzar el recycler amb el seu adapter corresponent
      * */
     private void initRecyclerView() {
-        recyclerView = view.findViewById(R.id.activityList);
+        // llistat d'activitats
+        RecyclerView recyclerView = view.findViewById(R.id.activityList);
         recyclerView.setLayoutManager((new LinearLayoutManager(global)));
-        recyclerAdapter = new RecyclerAdapter(activitiesList);
+        RecyclerAdapter recyclerAdapter = new RecyclerAdapter(activitiesList);
         recyclerView.setAdapter(recyclerAdapter);
     }
 
@@ -431,13 +378,8 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         getActivities();
         //
 
-        addActivity = view.findViewById(R.id.addActivity);
-        addActivity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createActivitySheet(false);
-            }
-        });
+        TextView addActivity = view.findViewById(R.id.addActivity);
+        addActivity.setOnClickListener(v -> createActivitySheet(false));
 
         return view;
     }
