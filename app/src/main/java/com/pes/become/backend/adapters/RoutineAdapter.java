@@ -41,6 +41,30 @@ public class RoutineAdapter {
     }
 
     /**
+     * Metode per consultar les activitats d'un dia
+     * @param day nom del dia
+     */
+    public ArrayList<ArrayList<String>> getActivitiesByDay(String day) {
+        ArrayList<Activity> activities = routine.getActivitiesByDay(Day.valueOf(day));
+        ArrayList<ArrayList<String>> res = new ArrayList<ArrayList<String>>();
+        for(Activity activity : activities) {
+            ArrayList<String> resaux = new ArrayList<String>();
+            resaux.add(activity.getName());
+            resaux.add(activity.getDescription());
+            resaux.add(activity.getTheme().toString());
+            resaux.add(activity.getDay().toString());
+            Integer startHour = activity.getInterval().getStartTime().getHours();
+            Integer startMinute = activity.getInterval().getStartTime().getMinutes();
+            resaux.add(String.format("%02d", startHour) + ":" + String.format("%02d", startMinute));
+            Integer endHour = activity.getInterval().getEndTime().getHours();
+            Integer endMinute = activity.getInterval().getEndTime().getMinutes();
+            resaux.add(String.format("%02d", endHour) + ":" + String.format("%02d", endMinute));
+            res.add(resaux);
+        }
+        return res;
+    }
+
+    /**
      * Metode per a afegir una activitat a una rutina
      * @param name nom de l'activitat
      * @param description descripcio de l'activitat
@@ -86,9 +110,5 @@ public class RoutineAdapter {
      */
     public void deleteActivity(int iniH, int iniM, int endH, int endM) throws InvalidTimeIntervalException {
         routine.deleteActivity(iniH, iniM, endH, endM);
-    }
-
-    public ArrayList<Activity> getActivities(Day day) {
-        return routine.getActivitiesByDay(day);
     }
 }

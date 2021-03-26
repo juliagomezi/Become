@@ -112,27 +112,28 @@ public class DomainAdapterFactory {
      * @throws InvalidDayIntervalException es llença si el dia d'inici es posterior al dia de fi
      */
     public void updateActivity(String name, String description, String theme, String oldIniH, String oldIniM, String oldEndH, String oldEndM, String iniH, String iniM, String endH, String endM, String iniDayString, String endDayString) throws InvalidDayIntervalException, InvalidTimeIntervalException {
-        Day iniDay = Day.valueOf(iniDayString);
-        Day endDay = Day.valueOf(endDayString);
+        Day iniDay = Day.values()[Integer.parseInt(iniDayString)];
+        Day endDay = Day.values()[Integer.parseInt(endDayString)];
         int comparison = iniDay.compareTo(endDay); //negatiu si iniDay<endDay; 0 si iguals; positiu si iniDay>endDay
         String oldBeginTime = oldIniH + ":" + oldIniM;
         String oldEndTime = oldEndH + ":" + oldEndM;
         if(comparison < 0){ //activitat en dies diferents
-            routineAdapter.updateActivity(name, description, Theme.valueOf(theme), Integer.parseInt(oldIniH), Integer.parseInt(oldIniM), Integer.parseInt(oldEndH), Integer.parseInt(oldEndM), Integer.parseInt(iniH), Integer.parseInt(iniM), 23, 59, iniDay);
+            routineAdapter.updateActivity(name, description, Theme.values()[Integer.parseInt(theme)], Integer.parseInt(oldIniH), Integer.parseInt(oldIniM), Integer.parseInt(oldEndH), Integer.parseInt(oldEndM), Integer.parseInt(iniH), Integer.parseInt(iniM), 23, 59, iniDay);
             String beginTime = iniH + ":" + iniM;
             String endTime = "23:59";
-            controllerPersistence.updateActivity("RutinaDeProva", name, description, theme, oldBeginTime, oldEndTime, beginTime, endTime, iniDayString);
+            controllerPersistence.updateActivity("RutinaDeProva", name, description, Theme.values()[Integer.parseInt(theme)].toString(), oldBeginTime, oldEndTime, beginTime, endTime, iniDay.toString());
 
-            routineAdapter.addActivity(name, description, Theme.valueOf(theme), 0, 0, Integer.parseInt(endH), Integer.parseInt(endM), iniDay);
+            routineAdapter.addActivity(name, description, Theme.values()[Integer.parseInt(theme)], 0, 0, Integer.parseInt(endH), Integer.parseInt(endM), iniDay);
             beginTime = "00:00";
             endTime = endH + ":" + endM;
-            controllerPersistence.createActivity("RutinaDeProva", name, theme, description, endDayString, beginTime, endTime);
+            controllerPersistence.createActivity("RutinaDeProva", name, Theme.values()[Integer.parseInt(theme)].toString(), description, endDay.toString(), beginTime, endTime);
         }
         else if(comparison == 0) {
-            routineAdapter.updateActivity(name, description, Theme.valueOf(theme), Integer.parseInt(oldIniH), Integer.parseInt(oldIniM), Integer.parseInt(oldEndH), Integer.parseInt(oldEndM), Integer.parseInt(iniH), Integer.parseInt(iniM), Integer.parseInt(endH), Integer.parseInt(endM), iniDay);
+            Log.d("SAVING", "DATABASE SAVING UPDATE");
+            routineAdapter.updateActivity(name, description, Theme.values()[Integer.parseInt(theme)], Integer.parseInt(oldIniH), Integer.parseInt(oldIniM), Integer.parseInt(oldEndH), Integer.parseInt(oldEndM), Integer.parseInt(iniH), Integer.parseInt(iniM), Integer.parseInt(endH), Integer.parseInt(endM), iniDay);
             String beginTime = iniH + ":" + iniM;
             String endTime = endH + ":" + endM;
-            controllerPersistence.updateActivity("RutinaDeProva", name, description, theme, oldBeginTime, oldEndTime, beginTime, endTime, iniDayString);
+            controllerPersistence.updateActivity("RutinaDeProva", name, description, Theme.values()[Integer.parseInt(theme)].toString(), oldBeginTime, oldEndTime, beginTime, endTime, iniDay.toString());
         }
         else throw new InvalidDayIntervalException("Error: el dia de fi és anterior al dia d'inici");
     }
@@ -157,7 +158,6 @@ public class DomainAdapterFactory {
      * @throws InvalidTimeIntervalException
      */
     public void setActivitiesFromDB(ArrayList<ArrayList<String>> acts) throws InvalidTimeIntervalException {
-        Log.d("TAMANY",String.valueOf(acts.size()));
         for(ArrayList<String> act : acts) {
             String[] s = act.get(4).split(":");
             String[] s2 = act.get(5).split(":");
@@ -166,10 +166,8 @@ public class DomainAdapterFactory {
             int endH = Integer.parseInt(s2[0]);
             int endM = Integer.parseInt(s2[1]);
             routineAdapter.addActivity(act.get(0), act.get(1),Theme.valueOf(act.get(2)), iniH, iniM, endH, endM, Day.valueOf(act.get(3)));
-            Log.d("become", act.get(0)+ act.get(1)+Theme.valueOf(act.get(2))+iniH+iniM+ endH+endM+ Day.valueOf(act.get(3)));
         }
-        routineAdapter.getActivities(Day.Monday);
-        routineEdit.getActivitiesCallback(acts);
+        routineEdit.getActivitiesCallback(routineAdapter.getActivitiesByDay("Monday"));
     }
 
     /**
@@ -180,10 +178,11 @@ public class DomainAdapterFactory {
      * @param endM minuts de fi de l'activitat
      * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
      */
-    public void deleteActivity(String iniH, String iniM, String endH, String endM) throws InvalidTimeIntervalException {
+    public ArrayList<ArrayList<String>> deleteActivity(String iniH, String iniM, String endH, String endM) throws InvalidTimeIntervalException {
         routineAdapter.deleteActivity(Integer.parseInt(iniH), Integer.parseInt(iniM), Integer.parseInt(endH), Integer.parseInt(endM));
         String beginTime = iniH + ":" + endM;
         String endTime = endH + ":" + endM;
         controllerPersistence.deleteActivity("RutinaDeProva", beginTime, endTime);
+        return routineAdapter.getActivitiesByDay("Monday");
     }
 }

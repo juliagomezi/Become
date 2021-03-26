@@ -245,9 +245,9 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
     private void modifyActivity() {
         String name = activityName.getText().toString();
         String descr = activityDescr.getText().toString();
-        String theme = spinnerTheme.getSelectedItem().toString();
-        String dayStart = spinnerStartDay.getSelectedItem().toString();
-        String dayEnd = spinnerEndDay.getSelectedItem().toString();
+        String theme = String.valueOf(spinnerTheme.getSelectedItemPosition());
+        String dayStart = String.valueOf(spinnerStartDay.getSelectedItemPosition());
+        String dayEnd = String.valueOf(spinnerEndDay.getSelectedItemPosition());
         String[] iniTime = startTime.getText().toString().split(":");
         String[] finishTime = endTime.getText().toString().split(":");
         String initialHour = iniTime[0];
@@ -263,8 +263,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         String oldfinishMinute = finishTime[1];
 
         try {
-            DAF.updateActivity(name, descr, theme, oldinitialHour, oldinitialMinute, oldfinishHour, oldfinishMinute, initialHour, initialMinute,
-                                finishHour, finishMinute, dayStart, dayEnd);
+            DAF.updateActivity(name, descr, theme, oldinitialHour, oldinitialMinute, oldfinishHour, oldfinishMinute, initialHour, initialMinute, finishHour, finishMinute, dayStart, dayEnd);
         } catch (InvalidTimeIntervalException e) {
             Toast.makeText(getContext(), "Error: Start time cannot be subsequent to end time", Toast.LENGTH_SHORT).show();
         } catch (InvalidDayIntervalException e) {
@@ -319,7 +318,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         try {
             DAF.getActivitiesFromDB("Monday", this);
         } catch (NoSuchMethodException e) {
-            Log.d("FATALERROR","Mètode incorrecte");
+            Log.d("METHODEXCEPTION", e.getMessage());
         }
     }
 
@@ -330,15 +329,11 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
      * */
     public void getActivitiesCallback(ArrayList<ArrayList<String>> activitiesListCallback) {
         //Convertir missatge a activities list
+
         activitiesList = new ArrayList<>(activitiesListCallback.size());
 
-        for (int i=0; i<activitiesListCallback.size(); ++i) {
-            ArrayList<String> activity = new ArrayList<>(activitiesListCallback.get(0).size());
-            for (int j = 0; j < activitiesListCallback.get(0).size(); ++j) {
-                activity.add(activitiesListCallback.get(i).get(j));
-                Log.d("ACTIVITAT", activitiesListCallback.get(i).get(j));
-            }
-            activitiesList.add(activity);
+        for (ArrayList<String> act : activitiesListCallback) {
+            activitiesList.add(act);
         }
         initRecyclerView();
     }
