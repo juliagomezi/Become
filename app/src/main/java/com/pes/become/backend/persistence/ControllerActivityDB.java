@@ -45,7 +45,7 @@ public class ControllerActivityDB {
      */
     private void checkOverlappingActivities(String routineName, String actDay, String beginTime,
                                             String finishTime, DocumentReference docRef,
-                                            Method method, Object object) throws OverlappingActivitiesException {
+                                            Method method, Object object) {
 
         //Passar els string de temps a objectes de la classe Time.
         int hourBeginNew = Integer.parseInt(beginTime.substring(0,2));
@@ -77,22 +77,22 @@ public class ControllerActivityDB {
                 }
                 catch (OverlappingActivitiesException e) {
                     exception = true;
-                    e.printStackTrace();
+                    System.out.println("Activitats superposades");
                 }
             }
             if(!exception) {
                 try {
                     //String newActDay, String newFinishTime, String newBeginTime, DocumentReference docRef
-                    Object params[] = new Object[4];
+                    Object[] params = new Object[4];
                     params[0] = actDay;
                     params[1] = finishTime;
                     params[2] = beginTime;
                     params[3] = docRef;
                     method.invoke(object, params);
                 } catch (IllegalAccessException e) {
-                    e.printStackTrace();
+                    System.out.println("Acces invàlid");
                 } catch (InvocationTargetException e) {
-                    e.printStackTrace();
+                    System.out.println("Target no vàlid");
                 }
             }
         });
@@ -106,7 +106,6 @@ public class ControllerActivityDB {
                 QuerySnapshot aux2 = task.getResult();
                 ArrayList<ArrayList<String>> activitiesResult = new ArrayList<>();
                 for (QueryDocumentSnapshot document : aux2) {
-                    Log.d("ConsultaFirebase", document.getId() + " => " + document.getData());
                     ArrayList<String> activity = new ArrayList<>();
                     activity.add(document.get("name").toString());
                     activity.add(document.get("description").toString());
@@ -121,9 +120,9 @@ public class ControllerActivityDB {
                 try {
                     method.invoke(object, params);
                 } catch (IllegalAccessException e) {
-                    e.printStackTrace();
+                    System.out.println("Acces invàlid");
                 } catch (InvocationTargetException e) {
-                    e.printStackTrace();
+                    System.out.println("Target no vàlid");
                 }
             } else {
                 Log.d("ConsultaFirebase", task.getException().getMessage());
@@ -267,7 +266,7 @@ public class ControllerActivityDB {
                 } catch (InvalidTimeException e) {
                     e.printStackTrace();
                 }*/ catch (NoSuchMethodException e) {
-                    e.printStackTrace();
+                    System.out.println("Metode incorrecte");
                 }
 
 
