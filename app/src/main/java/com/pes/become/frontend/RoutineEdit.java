@@ -129,7 +129,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
                             Date date = hformat.parse(time);
                             startTime.setText(hformat.format(date));
                         } catch (ParseException e) {
-                            e.printStackTrace();
+                            System.out.println("Format de temps incorrecte");
                         }
                     }, 12, 0, true);
             selectTime.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -150,7 +150,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
                             Date date = hformat.parse(time);
                             endTime.setText(hformat.format(date));
                         } catch (ParseException e) {
-                            e.printStackTrace();
+                            System.out.println("Format de temps incorrecte");
                         }
                     }, 12, 0, true);
             selectTime.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -328,7 +328,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
             Method method1 = RoutineEdit.class.getMethod("getActivitiesCallback", parameterTypes);
             DAF.getActivitiesByDay("Monday", method1, this);
         } catch (NoSuchMethodException e) {
-            e.printStackTrace();
+            System.out.println("Mètode incorrecte");
         }
     }
 
