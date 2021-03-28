@@ -69,26 +69,26 @@ public class DomainAdapterFactory {
      * @throws InvalidDayIntervalException es llença si el dia de fi es anterior al dia d'inici
      */
     public void createActivity(String name, String description, String theme, String iniH, String iniM, String endH, String endM, String iniDayString, String endDayString) throws InvalidTimeIntervalException, InvalidDayIntervalException {
-        Day iniDay = Day.valueOf(iniDayString);
-        Day endDay = Day.valueOf(endDayString);
+        Day iniDay = Day.values()[Integer.parseInt(iniDayString)];
+        Day endDay = Day.values()[Integer.parseInt(endDayString)];
         int comparison = iniDay.compareTo(endDay); //negatiu si iniDay<endDay; 0 si iguals; positiu si iniDay>endDay
         if(comparison < 0){ //activitat en dies diferents
             //creacio activitat dia 1
-            routineAdapter.addActivity(name, description, Theme.valueOf(theme), Integer.parseInt(iniH), Integer.parseInt(iniM), 23, 59, iniDay);
+            routineAdapter.addActivity(name, description, Theme.values()[Integer.parseInt(theme)], Integer.parseInt(iniH), Integer.parseInt(iniM), 23, 59, iniDay);
             String beginTime = iniH + ":" + iniM;
             String endTime = "23:59";
-            controllerPersistence.createActivity("RutinaDeProva", name, theme, description, iniDayString, beginTime, endTime);
+            controllerPersistence.createActivity("RutinaDeProva", name, Theme.values()[Integer.parseInt(theme)].toString(), description, iniDay.toString(), beginTime, endTime);
             //creacio activitat dia 2
-            routineAdapter.addActivity(name, description, Theme.valueOf(theme), 0, 0, Integer.parseInt(endH), Integer.parseInt(endM), endDay);
+            routineAdapter.addActivity(name, description, Theme.values()[Integer.parseInt(theme)], 0, 0, Integer.parseInt(endH), Integer.parseInt(endM), endDay);
             beginTime = "00:00";
             endTime = endH + ":" + endM;
-            controllerPersistence.createActivity("RutinaDeProva", name, theme, description, iniDayString, beginTime, endTime);
+            controllerPersistence.createActivity("RutinaDeProva", name, Theme.values()[Integer.parseInt(theme)].toString(), description, iniDay.toString(), beginTime, endTime);
         }
         else if(comparison == 0) {
-            routineAdapter.addActivity(name, description, Theme.valueOf(theme), Integer.parseInt(iniH), Integer.parseInt(iniM), Integer.parseInt(endH), Integer.parseInt(endM), iniDay);
+            routineAdapter.addActivity(name, description, Theme.values()[Integer.parseInt(theme)], Integer.parseInt(iniH), Integer.parseInt(iniM), Integer.parseInt(endH), Integer.parseInt(endM), iniDay);
             String beginTime = iniH + ":" + iniM;
             String endTime = endH + ":" + endM;
-            controllerPersistence.createActivity("RutinaDeProva", name, theme, description, iniDayString, beginTime, endTime);
+            controllerPersistence.createActivity("RutinaDeProva", name, Theme.values()[Integer.parseInt(theme)].toString(), description, iniDay.toString(), beginTime, endTime);
         }
         else throw new InvalidDayIntervalException("Error: el dia de fi és anterior al dia d'inici");
     }
@@ -184,5 +184,29 @@ public class DomainAdapterFactory {
         String endTime = endH + ":" + endM;
         controllerPersistence.deleteActivity("RutinaDeProva", beginTime, endTime);
         routineAdapter.getActivitiesByDay("Monday");
+    }
+
+    /**
+     * Funcio per saber la posicio del tema al spinner
+     * @param element nom del tema
+     * @return posicio del tema al spinner
+     */
+    public int getPositionTheme(String element) {
+        for (int i =0; i<Theme.values().length; ++i) {
+            if (element.equals(Theme.values()[i].toString())) return i;
+        }
+        return 0;
+    }
+
+    /**
+     * Funcio per saber la posició del dia al spinner
+     * @param element nom del dia
+     * @return posició del dia al spinner
+     */
+    public int getPositionDay(String element) {
+        for (int i =0; i<Day.values().length; ++i) {
+            if (element.equals(Day.values()[i].toString())) return i;
+        }
+        return 0;
     }
 }

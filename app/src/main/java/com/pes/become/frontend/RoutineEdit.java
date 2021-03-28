@@ -169,8 +169,8 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         this.sheetLabel.setText(R.string.modifytext);
         this.activityName.setText(name);
         this.activityDescr.setText(description);
-        this.spinnerTheme.setSelection(findPositionInAdapter(adapterTheme, theme));
-        this.spinnerStartDay.setSelection(findPositionInAdapter(adapterStartDay, startDay));
+        this.spinnerTheme.setSelection(findPositionInAdapterTheme(theme));
+        this.spinnerStartDay.setSelection(findPositionInAdapterDay(startDay));
         this.startTime.setText(startTime);
         //this.spinnerEndDay.setSelection(findPositionInAdapter(adapterEndDay, endDay));
         this.endTime.setText(endTime);
@@ -179,16 +179,24 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
     }
 
     /**
-     * Funció per buscar la posicio del string dins de l'adapter
-     * Pre: ninguna
-     * Post: retorna la posició del string dins l'adapter
-     * */
-    private int findPositionInAdapter(ArrayAdapter<CharSequence> adapter, String element) {
-        for (int i = 0; i < adapter.getCount(); ++i) {
-            if (adapter.getItem(i).toString().equals(element)) return i;
-        }
-        return 0;
+     * Funcio per saber la posicio del tema al spinner
+     * @param element nom del tema
+     * @return posicio del tema al spinner
+     */
+    private int findPositionInAdapterTheme(String element) {
+       return DAF.getPositionTheme(element);
     }
+
+    /**
+     * Funcio per saber la posició del dia al spinner
+     * @param element nom del dia
+     * @return posició del dia al spinner
+     */
+    private int findPositionInAdapterDay(String element) {
+        return DAF.getPositionDay(element);
+    }
+
+
 
     /**
      * Funció necessària pel correcte funcionament dels spinners
@@ -211,9 +219,9 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
 
             String name = activityName.getText().toString();
             String descr = activityDescr.getText().toString();
-            String theme = spinnerTheme.getSelectedItem().toString();
-            String dayStart = spinnerStartDay.getSelectedItem().toString();
-            String dayEnd = spinnerEndDay.getSelectedItem().toString();
+            String theme = String.valueOf(spinnerTheme.getSelectedItemPosition());
+            String dayStart = String.valueOf(spinnerStartDay.getSelectedItemPosition());
+            String dayEnd = String.valueOf(spinnerEndDay.getSelectedItemPosition());
 
             if (name.isEmpty()) activityName.setError("This field cannot be null");
             else {
