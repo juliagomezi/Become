@@ -35,4 +35,5 @@
         <item >Sunday</item>
     </string-array>
     <string name="theme">Theme:</string>
+    <string name="modifytext">Modify activity</string>
 </resources>

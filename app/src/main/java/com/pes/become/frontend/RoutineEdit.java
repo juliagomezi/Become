@@ -27,9 +27,7 @@ import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapterFactory;
 import com.pes.become.backend.exceptions.InvalidDayIntervalException;
 import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
-import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 
-import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -168,7 +166,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
      * Post: s'han posat els valors a la pestanya de modificació d'activitat
      * */
     public void fillActivitySheet(String name, String description, String theme, String startDay, String startTime, String endTime) {
-        this.sheetLabel.setText("Modify activity");
+        this.sheetLabel.setText(R.string.modifytext);
         this.activityName.setText(name);
         this.activityDescr.setText(description);
         this.spinnerTheme.setSelection(findPositionInAdapter(adapterTheme, theme));
@@ -257,10 +255,10 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
 
         String[] oldiniTime = oldIniTime.split(":");
         String[] oldfinishTime = oldEndTime.split(":");
-        String oldinitialHour = iniTime[0];
-        String oldinitialMinute= iniTime[1];
-        String oldfinishHour = finishTime[0];
-        String oldfinishMinute = finishTime[1];
+        String oldinitialHour = oldiniTime[0];
+        String oldinitialMinute= oldiniTime[1];
+        String oldfinishHour = oldfinishTime[0];
+        String oldfinishMinute = oldfinishTime[1];
 
         try {
             DAF.updateActivity(name, descr, theme, oldinitialHour, oldinitialMinute, oldfinishHour, oldfinishMinute, initialHour, initialMinute, finishHour, finishMinute, dayStart, dayEnd);
@@ -332,9 +330,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
 
         activitiesList = new ArrayList<>(activitiesListCallback.size());
 
-        for (ArrayList<String> act : activitiesListCallback) {
-            activitiesList.add(act);
-        }
+        activitiesList.addAll(activitiesListCallback);
         initRecyclerView();
     }
 

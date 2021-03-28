@@ -36,6 +36,13 @@ public class Routine {
     }
 
     /**
+     * Métode per buidar les activitats d'una rutina
+     */
+    public void clearActivities() {
+        activities = new ArrayList<>();
+    }
+
+    /**
      * Metode que afegeix una activitat a la rutina
      * @param activity activitat a afegir
      */

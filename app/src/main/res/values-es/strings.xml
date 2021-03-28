@@ -35,4 +35,5 @@
         <item >Domingo</item>
     </string-array>
     <string name="theme">Tema:</string>
+    <string name="modifytext">Modificar actividad</string>
 </resources>

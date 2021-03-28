@@ -35,4 +35,5 @@
         <item >Diumenge</item>
     </string-array>
     <string name="theme">Tema:</string>
+    <string name="modifytext">Modificar activitat</string>
 </resources>

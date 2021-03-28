@@ -141,7 +141,7 @@ public class DomainAdapterFactory {
      * Metode per demanar les activitats d'un dia
      * @param dayString dia de les activitats
      * @param re instància de RoutineEdit
-     * @throws NoSuchMethodException
+     * @throws NoSuchMethodException el mètode no existeix
      */
     public void getActivitiesFromDB(String dayString, RoutineEdit re) throws NoSuchMethodException {
         routineEdit = re;
@@ -154,9 +154,10 @@ public class DomainAdapterFactory {
     /**
      * Metode per rebre la resposta de la DB amb les activitats d'una rutina
      * @param acts activitats de la rutina
-     * @throws InvalidTimeIntervalException
+     * @throws InvalidTimeIntervalException l'interval de temps es incorrecte
      */
     public void setActivitiesFromDB(ArrayList<ArrayList<String>> acts) throws InvalidTimeIntervalException {
+        routineAdapter.clearActivities();
         for(ArrayList<String> act : acts) {
             String[] s = act.get(4).split(":");
             String[] s2 = act.get(5).split(":");
@@ -177,11 +178,11 @@ public class DomainAdapterFactory {
      * @param endM minuts de fi de l'activitat
      * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
      */
-    public ArrayList<ArrayList<String>> deleteActivity(String iniH, String iniM, String endH, String endM) throws InvalidTimeIntervalException {
+    public void deleteActivity(String iniH, String iniM, String endH, String endM) throws InvalidTimeIntervalException {
         routineAdapter.deleteActivity(Integer.parseInt(iniH), Integer.parseInt(iniM), Integer.parseInt(endH), Integer.parseInt(endM));
         String beginTime = iniH + ":" + endM;
         String endTime = endH + ":" + endM;
         controllerPersistence.deleteActivity("RutinaDeProva", beginTime, endTime);
-        return routineAdapter.getActivitiesByDay("Monday");
+        routineAdapter.getActivitiesByDay("Monday");
     }
 }

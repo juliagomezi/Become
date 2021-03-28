@@ -46,9 +46,9 @@ public class RoutineAdapter {
      */
     public ArrayList<ArrayList<String>> getActivitiesByDay(String day) {
         ArrayList<Activity> activities = routine.getActivitiesByDay(Day.valueOf(day));
-        ArrayList<ArrayList<String>> res = new ArrayList<ArrayList<String>>();
+        ArrayList<ArrayList<String>> res = new ArrayList<>();
         for(Activity activity : activities) {
-            ArrayList<String> resaux = new ArrayList<String>();
+            ArrayList<String> resaux = new ArrayList<>();
             resaux.add(activity.getName());
             resaux.add(activity.getDescription());
             resaux.add(activity.getTheme().toString());
@@ -62,6 +62,13 @@ public class RoutineAdapter {
             res.add(resaux);
         }
         return res;
+    }
+
+    /**
+     * Métode per buidar les activitats d'una rutina
+     */
+    public void clearActivities() {
+        routine.clearActivities();
     }
 
     /**
