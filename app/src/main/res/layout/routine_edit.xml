@@ -4,12 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     tools:context=".frontend.RoutineEdit">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#F0F0F0"
+        android:background="@color/background"
         tools:context=".frontend.MainActivity">
 
         <TextView
@@ -31,7 +32,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:animationCache="true"
-            android:background="#FFFFFF"
+            android:background="@color/background"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
