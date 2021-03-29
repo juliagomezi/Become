@@ -4,6 +4,9 @@ import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 /**
  * Classe que defineix una rutina
@@ -16,7 +19,7 @@ public class Routine {
     /**
      * Mapa amb totes les activitats ordenades temporalment
      */
-    private ArrayList<Activity> activities;
+    private SortedMap<Day, ArrayList<Activity>> activities;
 
     /**
      * Creadora de la rutina
@@ -24,7 +27,7 @@ public class Routine {
      */
     public Routine(String name){
         this.name = name;
-        this.activities = new ArrayList<>();
+        clearActivities();
     }
 
     /**
@@ -39,7 +42,11 @@ public class Routine {
      * Métode per buidar les activitats d'una rutina
      */
     public void clearActivities() {
-        activities = new ArrayList<>();
+        activities = new TreeMap<>();
+        for(int i=0; i<7; ++i){
+            ArrayList<Activity> tmp = new ArrayList<>();
+            activities.put(Day.values()[i], tmp);
+        }
     }
 
     /**
@@ -47,8 +54,9 @@ public class Routine {
      * @param activity activitat a afegir
      */
     public void addActivity(Activity activity) {
-        activities.add(activity);
-        Collections.sort(activities);
+        ArrayList<Activity> actDay = getActivitiesByDay(activity.getDay());
+        actDay.add(activity);
+        Collections.sort(actDay);
     }
 
     /**
@@ -57,14 +65,7 @@ public class Routine {
      * @return les activitats de la rutina al dia indicat
      */
     public ArrayList<Activity> getActivitiesByDay(Day day){
-        ArrayList<Activity> res = new ArrayList<>();
-        for(Activity act : activities) {
-            if(act.getDay().equals(day)) {
-                res.add(act);
-            }
-        }
-        Collections.sort(res);
-        return res;
+        return activities.get(day);
     }
 
     /**
@@ -85,12 +86,15 @@ public class Routine {
      */
     public void updateActivity(String name, String description, Theme theme, int oldIniH, int oldIniM, int oldEndH, int oldEndM, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException {
         TimeInterval t = new TimeInterval(oldIniH, oldIniM, oldEndH, oldEndM);
-        for (Activity act : activities) {
-            TimeInterval taux = act.getInterval();
-            if (taux.compareTo(t) == 0) {
-                act.update(name, description, theme, iniH, iniM, endH, endM, day);
-                Collections.sort(activities);
-                break;
+        for(Map.Entry<Day, ArrayList<Activity>> actDay : activities.entrySet()) {
+            for (Activity act : actDay.getValue()) {
+                TimeInterval taux = act.getInterval();
+                if (taux.compareTo(t) == 0) {
+                    activities.get(act.getDay()).remove(act); //Eliminem del dia anterior
+                    act.update(name, description, theme, iniH, iniM, endH, endM, day);
+                    activities.get(day).add(act); //Posem al dia nou
+                    break;
+                }
             }
         }
     }
@@ -105,12 +109,14 @@ public class Routine {
      */
     public void deleteActivity(int iniH, int iniM, int endH, int endM) throws InvalidTimeIntervalException {
         TimeInterval t = new TimeInterval(iniH, iniM, endH, endM);
-        for (Activity act : activities) {
-            TimeInterval taux = act.getInterval();
-            if (taux.compareTo(t) == 0) {
-                activities.remove(act);
-                Collections.sort(activities);
-                break;
+        for(Map.Entry<Day, ArrayList<Activity>> actDay : activities.entrySet()) {
+            for (Activity act : actDay.getValue()) {
+                TimeInterval taux = act.getInterval();
+                if (taux.compareTo(t) == 0) {
+                    activities.remove(act);
+                    Collections.sort(actDay.getValue());
+                    break;
+                }
             }
         }
     }
