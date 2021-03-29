@@ -147,7 +147,6 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
                 updateActivity();
             }
             else createActivity();
-            activitySheet.dismiss();
         });
 
         cancelButton.setOnClickListener(v -> activitySheet.dismiss());
