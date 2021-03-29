@@ -32,18 +32,14 @@ public class Activity implements Comparable<Activity>{
      * @param name nom de l'activitat
      * @param description descripcio de l'activitat
      * @param theme tema de l'activitat
-     * @param iniH hora d'inici de l'activitat
-     * @param iniM minut d'inici de l'activitat
-     * @param endH hora de fi de l'activitat
-     * @param endM minut de fi de l'activitat
+     * @param ti interval de temps de l'activitat
      * @param day dia de l'activitat
-     * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
      */
-    public Activity(String name, String description, Theme theme, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException {
+    public Activity(String name, String description, Theme theme, TimeInterval ti, Day day) {
         this.name = name;
         this.description = description;
         this.theme = theme;
-        this.interval = new TimeInterval(iniH, iniM, endH, endM);
+        this.interval = ti;
         this.day = day;
     }
 
@@ -105,14 +101,10 @@ public class Activity implements Comparable<Activity>{
 
     /**
      * Setter de l'interval de temps que crea un nou interval
-     * @param iniH nova hora d'inici de l'activitat
-     * @param iniM nou minut d'inici de l'activitat
-     * @param endH nova hora de fi de l'activitat
-     * @param endM nou minut de fi de l'activitat
-     * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
+     * @param ti nou interval de temps
      */
-    public void setInterval(int iniH, int iniM, int endH, int endM) throws InvalidTimeIntervalException {
-        this.interval = new TimeInterval(iniH, iniM, endH, endM);
+    public void setInterval(TimeInterval ti) {
+        this.interval = ti;
     }
 
     /**
@@ -136,18 +128,15 @@ public class Activity implements Comparable<Activity>{
      * @param name nou nom de l'activitat
      * @param description nova descripcio de l'activitat
      * @param theme tema de la nova activitat
-     * @param iniH nova hora d'inici de l'activitat
-     * @param iniM nous minuts d'inici de l'activitat
-     * @param endH nova hora de fi de l'activitat
-     * @param endM nous minuts de fi de l'activitat
+     * @param ti nou interval de temps de l'activitat
      * @param day nou dia de l'activitat
      * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
      */
-    public void update(String name, String description, Theme theme, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException {
+    public void update(String name, String description, Theme theme, TimeInterval ti, Day day) throws InvalidTimeIntervalException {
         setName(name);
         setDescription(description);
         setTheme(theme);
-        setInterval(iniH, iniM, endH, endM);
+        setInterval(ti);
         setDay(day);
     }
 

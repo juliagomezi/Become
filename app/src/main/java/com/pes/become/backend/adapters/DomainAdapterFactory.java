@@ -67,8 +67,9 @@ public class DomainAdapterFactory {
      * @param endDayString dia de fi de l'activitat
      * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
      * @throws InvalidDayIntervalException es llença si el dia de fi es anterior al dia d'inici
+     * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
      */
-    public void createActivity(String name, String description, String theme, String iniH, String iniM, String endH, String endM, String iniDayString, String endDayString) throws InvalidTimeIntervalException, InvalidDayIntervalException {
+    public void createActivity(String name, String description, String theme, String iniH, String iniM, String endH, String endM, String iniDayString, String endDayString) throws InvalidTimeIntervalException, InvalidDayIntervalException, OverlappingActivitiesException {
         Day iniDay = Day.values()[Integer.parseInt(iniDayString)];
         Day endDay = Day.values()[Integer.parseInt(endDayString)];
         int comparison = iniDay.compareTo(endDay); //negatiu si iniDay<endDay; 0 si iguals; positiu si iniDay>endDay
@@ -110,8 +111,9 @@ public class DomainAdapterFactory {
      * @param endDayString nou dia de fi de l'activitat
      * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
      * @throws InvalidDayIntervalException es llença si el dia d'inici es posterior al dia de fi
+     * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
      */
-    public void updateActivity(String name, String description, String theme, String oldIniH, String oldIniM, String oldEndH, String oldEndM, String iniH, String iniM, String endH, String endM, String iniDayString, String endDayString) throws InvalidDayIntervalException, InvalidTimeIntervalException {
+    public void updateActivity(String name, String description, String theme, String oldIniH, String oldIniM, String oldEndH, String oldEndM, String iniH, String iniM, String endH, String endM, String iniDayString, String endDayString) throws InvalidDayIntervalException, InvalidTimeIntervalException, OverlappingActivitiesException {
         Day iniDay = Day.values()[Integer.parseInt(iniDayString)];
         Day endDay = Day.values()[Integer.parseInt(endDayString)];
         int comparison = iniDay.compareTo(endDay); //negatiu si iniDay<endDay; 0 si iguals; positiu si iniDay>endDay
@@ -155,8 +157,9 @@ public class DomainAdapterFactory {
      * Metode per rebre la resposta de la DB amb les activitats d'una rutina
      * @param acts activitats de la rutina
      * @throws InvalidTimeIntervalException l'interval de temps es incorrecte
+     * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
      */
-    public void setActivitiesByDay(ArrayList<ArrayList<String>> acts) throws InvalidTimeIntervalException {
+    public void setActivitiesByDay(ArrayList<ArrayList<String>> acts) throws InvalidTimeIntervalException, OverlappingActivitiesException {
         routineAdapter.clearActivities();
         for(ArrayList<String> act : acts) {
             String[] s = act.get(4).split(":");
@@ -178,8 +181,8 @@ public class DomainAdapterFactory {
      * @param endM minuts de fi de l'activitat
      * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
      */
-    public void deleteActivity(String iniH, String iniM, String endH, String endM) throws InvalidTimeIntervalException {
-        routineAdapter.deleteActivity(Integer.parseInt(iniH), Integer.parseInt(iniM), Integer.parseInt(endH), Integer.parseInt(endM));
+    public void deleteActivity(String iniH, String iniM, String endH, String endM, String day) throws InvalidTimeIntervalException {
+        routineAdapter.deleteActivity(Integer.parseInt(iniH), Integer.parseInt(iniM), Integer.parseInt(endH), Integer.parseInt(endM), Day.valueOf(day));
         String beginTime = iniH + ":" + endM;
         String endTime = endH + ":" + endM;
         controllerPersistence.deleteActivity("RutinaDeProva", beginTime, endTime);

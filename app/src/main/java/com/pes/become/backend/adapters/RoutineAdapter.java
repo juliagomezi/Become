@@ -4,7 +4,9 @@ import com.pes.become.backend.domain.Activity;
 import com.pes.become.backend.domain.Day;
 import com.pes.become.backend.domain.Routine;
 import com.pes.become.backend.domain.Theme;
+import com.pes.become.backend.domain.TimeInterval;
 import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
+import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 
 import java.util.ArrayList;
 
@@ -82,9 +84,10 @@ public class RoutineAdapter {
      * @param endM minuts de fi de l'activitat
      * @param day dia de l'activitat
      * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
+     * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
      */
-    public void addActivity(String name, String description, Theme theme, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException {
-        routine.addActivity(new Activity(name, description, theme, iniH, iniM, endH, endM, day));
+    public void addActivity(String name, String description, Theme theme, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException, OverlappingActivitiesException {
+        routine.addActivity(new Activity(name, description, theme, new TimeInterval(iniH, iniM, endH, endM), day));
     }
 
     /**
@@ -102,9 +105,10 @@ public class RoutineAdapter {
      * @param endM nous minuts de fi de l'activitat
      * @param day nou dia de l'activitat
      * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
+     * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
      */
-    public void updateActivity(String name, String description, Theme theme, int oldIniH, int oldIniM, int oldEndH, int oldEndM, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException {
-        routine.updateActivity(name, description, theme, oldIniH, oldIniM, oldEndH, oldEndM, iniH, iniM, endH, endM, day);
+    public void updateActivity(String name, String description, Theme theme, int oldIniH, int oldIniM, int oldEndH, int oldEndM, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException, OverlappingActivitiesException {
+        routine.updateActivity(new TimeInterval(oldIniH, oldIniM, oldEndH, oldEndM), day, new Activity(name, description, theme, new TimeInterval(iniH,iniM,endH,endM), day));
     }
 
     /**
@@ -115,7 +119,7 @@ public class RoutineAdapter {
      * @param endM minuts de fi de l'activitat
      * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
      */
-    public void deleteActivity(int iniH, int iniM, int endH, int endM) throws InvalidTimeIntervalException {
-        routine.deleteActivity(iniH, iniM, endH, endM);
+    public void deleteActivity(int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException {
+        routine.deleteActivity(new TimeInterval(iniH, iniM, endH, endM), day);
     }
 }

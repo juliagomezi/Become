@@ -102,9 +102,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             String initialMinute= iniTime[1];
             String finishHour = finishTime[0];
             String finishMinute = finishTime[1];
+            String day = activitiesList.get(position).get(3);
 
             try{
-                DAF.deleteActivity(initialHour, initialMinute, finishHour, finishMinute);
+                DAF.deleteActivity(initialHour, initialMinute, finishHour, finishMinute, day);
             }
             catch (InvalidTimeIntervalException ignored) {}
         });

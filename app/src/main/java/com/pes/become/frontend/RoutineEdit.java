@@ -27,6 +27,7 @@ import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapterFactory;
 import com.pes.become.backend.exceptions.InvalidDayIntervalException;
 import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
+import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -267,11 +268,14 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
                 Toast.makeText(getContext(), "Error: Start time cannot be subsequent to end time", Toast.LENGTH_SHORT).show();
                 startTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
                 endTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
-
             } catch (InvalidDayIntervalException e) {
                 Toast.makeText(getContext(), "Error: Start day cannot be subsequent to end day", Toast.LENGTH_SHORT).show();
                 spinnerStartDay.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
                 spinnerEndDay.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
+            } catch (OverlappingActivitiesException e) {
+                Toast.makeText(getContext(), "Error: Another activity belongs to that time interval", Toast.LENGTH_SHORT).show();
+                startTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
+                endTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
             }
         }
     }
@@ -306,6 +310,8 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
             Toast.makeText(getContext(), "Error: Start time cannot be subsequent to end time", Toast.LENGTH_SHORT).show();
         } catch (InvalidDayIntervalException e) {
             Toast.makeText(getContext(), "Error: Start day cannot be subsequent to end day", Toast.LENGTH_SHORT).show();
+        } catch (OverlappingActivitiesException e){
+            Toast.makeText(getContext(), "Error: Another activity belongs to that time interval", Toast.LENGTH_SHORT).show();
         }
     }
 
