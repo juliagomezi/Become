@@ -35,8 +35,8 @@ public class TimeIntervalTest {
     public void comparatorOverlappingIntervals() throws InvalidTimeIntervalException {
         TimeInterval t1 = new TimeInterval(17,0,18,0);
         TimeInterval t2 = new TimeInterval(17,30,19,0);
-        assertTrue(t1.compareTo(t2) == 0);
-        assertTrue(t2.compareTo(t1) == 0);
+        assertEquals(0, t1.compareTo(t2));
+        assertEquals(0, t2.compareTo(t1));
     }
 
 }

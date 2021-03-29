@@ -61,7 +61,7 @@ public class Routine {
         if(!checkOverlappings(activity)) {
             ArrayList<Activity> actDay = getActivitiesByDay(activity.getDay());
             actDay.add(activity);
-            //Collections.sort(actDay);
+            Collections.sort(actDay); //NO FUNCIONA, NO ORDENA
         } else throw new OverlappingActivitiesException();
     }
 
@@ -82,13 +82,13 @@ public class Routine {
      * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
      */
     public void updateActivity(TimeInterval oldTime, Day oldDay, Activity newActivity) throws OverlappingActivitiesException {
-        if(!checkOverlappings(newActivity)) {
+        if(!checkOverlappings(newActivity)) { //ARA MATEIX NO VA EL UPDATE PERQUE EL CHECKOVERLAPPING SEMPRE RETORNA TRUE (COMAPARA AMB SI MATEIXA, NOMES S'ARREGLA AMB IDs)
             ArrayList<Activity> a = activities.get(oldDay);
             for (Activity act : a) {
                 if (act.getInterval().compareTo(oldTime) == 0) {
-                    a.remove(act); // eliminem del dia anterior
-                    activities.get(newActivity.getDay()).add(newActivity); // posem al dia nou
-                    //Collections.sort(activities.get(newActivity.getDay()));
+                    a.remove(act);
+                    activities.get(newActivity.getDay()).add(newActivity);
+                    Collections.sort(activities.get(newActivity.getDay())); //NO FUNCIONA, NO ORDENA
                     break;
                 }
             }
@@ -116,13 +116,8 @@ public class Routine {
      * @return true si hi ha solapament, false altrament
      */
     private boolean checkOverlappings(Activity a) {
-        // fix
         ArrayList<Activity> acts = activities.get(a.getDay());
-        Log.d("sizeActivity", String.valueOf(acts.size()));
-
         for (Activity activity : acts) {
-            Log.d("comparacioXaxi", a.getName() + activity.getName());
-            Log.d("comparacioXaxi", String.valueOf(activity.compareTo(a)));
             if (activity.compareTo(a) == 0) {
                 return true;
             }

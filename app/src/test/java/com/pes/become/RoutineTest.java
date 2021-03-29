@@ -18,7 +18,7 @@ public class RoutineTest {
     public void addActivity() throws InvalidTimeIntervalException, OverlappingActivitiesException {
         Routine r = new Routine("test");
         Activity a1 = new Activity("testActivity", "testDescription", Theme.Sport, new TimeInterval(17,0,18,0), Day.Monday);
-        r.addActivity(a1);
+        r.createActivity(a1);
         assertEquals(a1,r.getActivitiesByDay(Day.valueOf("Monday")).get(0));
     }
 
@@ -26,7 +26,7 @@ public class RoutineTest {
     public void updateActivity() throws InvalidTimeIntervalException, OverlappingActivitiesException {
         Routine r = new Routine("test");
         Activity a1 = new Activity("testActivity", "testDescription", Theme.Sport, new TimeInterval(17,0,18,0), Day.Monday);
-        r.addActivity(a1);
+        r.createActivity(a1);
         r.updateActivity(new TimeInterval(17,0,18,0), Day.Monday, new Activity("testActivityUpdated", "testDescriptionUpdated", Theme.Entertainment, new TimeInterval(11,0,12,0), Day.Tuesday));
         assertEquals("testActivityUpdated",r.getActivitiesByDay(Day.valueOf("Tuesday")).get(0).getName());
         assertEquals("testDescriptionUpdated",r.getActivitiesByDay(Day.valueOf("Tuesday")).get(0).getDescription());
@@ -39,13 +39,13 @@ public class RoutineTest {
     public void sortActivities() throws InvalidTimeIntervalException, OverlappingActivitiesException {
         Routine r = new Routine("test");
         Activity a1 = new Activity("testActivity", "testDescription", Theme.Sport, new TimeInterval(17,0,18,0), Day.Monday);
-        r.addActivity(a1);
+        r.createActivity(a1);
         Activity a2 = new Activity("testActivity", "testDescription", Theme.Sport, new TimeInterval(15,0,16,0), Day.Monday);
-        r.addActivity(a2);
+        r.createActivity(a2);
         Activity a3 = new Activity("testActivity", "testDescription", Theme.Sport, new TimeInterval(18,0,19,30), Day.Monday);
-        r.addActivity(a3);
+        r.createActivity(a3);
         Activity a4 = new Activity("testActivity", "testDescription", Theme.Sport, new TimeInterval(19,30,20,0), Day.Monday);
-        r.addActivity(a4);
+        r.createActivity(a4);
         assertTrue(r.getActivitiesByDay(Day.valueOf("Monday")).get(0).getInterval().compareTo(a2.getInterval()) == 0);
         assertTrue(r.getActivitiesByDay(Day.valueOf("Monday")).get(1).getInterval().compareTo(a1.getInterval()) == 0);
         assertTrue(r.getActivitiesByDay(Day.valueOf("Monday")).get(2).getInterval().compareTo(a3.getInterval()) == 0);
@@ -56,9 +56,9 @@ public class RoutineTest {
     public void overlappingActivitiesThrowsException() throws OverlappingActivitiesException, InvalidTimeIntervalException {
         Routine r = new Routine("test");
         Activity a1 = new Activity("testActivity", "testDescription", Theme.Sport, new TimeInterval(17,0,18,0), Day.Monday);
-        r.addActivity(a1);
+        r.createActivity(a1);
         Activity a2 = new Activity("testActivity2", "testDescription2", Theme.Sport, new TimeInterval(16,0,17,30), Day.Monday);
-        r.addActivity(a2);
+        r.createActivity(a2);
     }
 
 }
