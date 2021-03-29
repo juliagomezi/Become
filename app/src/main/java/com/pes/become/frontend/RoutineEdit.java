@@ -35,11 +35,12 @@ import java.util.Date;
 
 public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedListener{
 
-    private final DomainAdapterFactory DAF = DomainAdapterFactory.getInstance();
     private static RoutineEdit instance;
 
     private View view;
     private Context global;
+
+    private final DomainAdapterFactory DAF = DomainAdapterFactory.getInstance();
 
     private ArrayList<ArrayList<String>> activitiesList;
 
@@ -53,17 +54,47 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
     private TextView endTime;
     private TextView sheetLabel;
     private int startHour, startMinute, endHour, endMinute;
-    private String oldIniTime, oldEndTime;
+    private String oldStartTime, oldEndTime;
 
-    public RoutineEdit() {
-        // Required empty public constructor
+    public RoutineEdit() { }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.routine_edit, container, false);
+        super.onCreate(savedInstanceState);
+        instance = this;
+        global = this.getActivity();
+
+        getActivities();
+
+        TextView addActivity = view.findViewById(R.id.addActivity);
+        addActivity.setOnClickListener(v -> createActivitySheet(false));
+
+        return view;
     }
 
     /**
-     * Funció per crear la pestanya de creació d'activitat
-     * Pre: ninguna
-     * Post: s'ha creat la pestanya de creació d'activitat
+     * Funció obtenir la isntància de la MainActivity actual
      * */
+    public static RoutineEdit getInstance() {
+        return instance;
+    }
+
+    /**
+     * Funció per inicialitzar l'element que mostra el llistat d'activitats
+     */
+    private void initRecyclerView() {
+        // llistat d'activitats
+        RecyclerView recyclerView = view.findViewById(R.id.activityList);
+        recyclerView.setLayoutManager((new LinearLayoutManager(global)));
+        RecyclerAdapter recyclerAdapter = new RecyclerAdapter(activitiesList);
+        recyclerView.setAdapter(recyclerAdapter);
+    }
+
+    /**
+     * Funció per crear la pestanya de creacio/modificacio d'activitat
+     * @param modify boolea que indica si s'esta modificicant una activitat existent o creant una de nova
+     */
     public void createActivitySheet(boolean modify) {
         activitySheet = new BottomSheetDialog(global,R.style.BottomSheetTheme);
         View sheetView = LayoutInflater.from(getContext()).inflate(R.layout.activity_edit, view.findViewById(R.id.bottom_sheet));
@@ -107,7 +138,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
 
         doneButton.setOnClickListener(v -> {
             if (modify) {
-                modifyActivity();
+                updateActivity();
             }
             else createActivity();
             activitySheet.dismiss();
@@ -162,20 +193,24 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
 
     /**
      * Funció per posar els valors a la pestanya de modificació d'activitat
-     * Pre: ninguna
-     * Post: s'han posat els valors a la pestanya de modificació d'activitat
-     * */
+     * @param name nom de l'activitat
+     * @param description descripció de l'activitat
+     * @param theme tema de l'activitat
+     * @param startDay dia d'inici de l'activitat
+     * @param startTime temps d'inici de l'activitat
+     * @param endTime temps de fi de l'activitat
+     */
     public void fillActivitySheet(String name, String description, String theme, String startDay, String startTime, String endTime) {
         this.sheetLabel.setText(R.string.modifytext);
         this.activityName.setText(name);
         this.activityDescr.setText(description);
         this.spinnerTheme.setSelection(findPositionInAdapterTheme(theme));
         this.spinnerStartDay.setSelection(findPositionInAdapterDay(startDay));
-        this.startTime.setText(startTime);
         //this.spinnerEndDay.setSelection(findPositionInAdapter(adapterEndDay, endDay));
+        this.startTime.setText(startTime);
         this.endTime.setText(endTime);
-        oldIniTime = startTime;
-        oldEndTime = endTime;
+        this.oldStartTime = startTime;
+        this.oldEndTime = endTime;
     }
 
     /**
@@ -195,103 +230,83 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
     private int findPositionInAdapterDay(String element) {
         return DAF.getPositionDay(element);
     }
-
-
-
+    
     /**
      * Funció necessària pel correcte funcionament dels spinners
-     * */
+     */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) { }
 
     /**
      * Funció necessària pel correcte funcionament dels spinners
-     * */
+     */
     @Override
     public void onNothingSelected(AdapterView<?> parent) { }
 
     /**
      * Funció per crear una nova activitat i afegir-la a la rutina que està sent editada
-     * Pre: ninguna
-     * Post: s'ha creat una nova activitat a la rutina
-     * */
+     */
     private void createActivity() {
-
-            String name = activityName.getText().toString();
-            String descr = activityDescr.getText().toString();
-            String theme = String.valueOf(spinnerTheme.getSelectedItemPosition());
-            String dayStart = String.valueOf(spinnerStartDay.getSelectedItemPosition());
-            String dayEnd = String.valueOf(spinnerEndDay.getSelectedItemPosition());
-
-            if (name.isEmpty()) activityName.setError("This field cannot be null");
-            else {
-                try {
-                    DAF.createActivity(name, descr, theme, String.format("%02d", startHour), String.format("%02d", startMinute), String.format("%02d", endHour), String.format("%02d",endMinute), dayStart, dayEnd);
-                    Toast.makeText(getContext(), "Activity created", Toast.LENGTH_SHORT).show();
-                } catch (InvalidTimeIntervalException e) {
-                    Toast.makeText(getContext(), "Error: Start time cannot be subsequent to end time", Toast.LENGTH_SHORT).show();
-                    startTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
-                    endTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
-
-                } catch (InvalidDayIntervalException e) {
-                    Toast.makeText(getContext(), "Error: Start day cannot be subsequent to end day", Toast.LENGTH_SHORT).show();
-                    spinnerStartDay.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
-                    spinnerEndDay.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
-                }
-            }
-
-
-    }
-
-    /**
-     * Funció per modificar una activitat existent i afegir-la a la rutina que està sent editada
-     * Pre: ninguna
-     * Post: s'ha modificat l'activitat a la rutina
-     * */
-    private void modifyActivity() {
         String name = activityName.getText().toString();
         String descr = activityDescr.getText().toString();
         String theme = String.valueOf(spinnerTheme.getSelectedItemPosition());
         String dayStart = String.valueOf(spinnerStartDay.getSelectedItemPosition());
         String dayEnd = String.valueOf(spinnerEndDay.getSelectedItemPosition());
-        String[] iniTime = startTime.getText().toString().split(":");
-        String[] finishTime = endTime.getText().toString().split(":");
-        String initialHour = iniTime[0];
-        String initialMinute= iniTime[1];
-        String finishHour = finishTime[0];
-        String finishMinute = finishTime[1];
 
-        String[] oldiniTime = oldIniTime.split(":");
-        String[] oldfinishTime = oldEndTime.split(":");
-        String oldinitialHour = oldiniTime[0];
-        String oldinitialMinute= oldiniTime[1];
-        String oldfinishHour = oldfinishTime[0];
-        String oldfinishMinute = oldfinishTime[1];
+        if (name.isEmpty()) activityName.setError("This field cannot be null");
+        else {
+            try {
+                DAF.createActivity(name, descr, theme, String.format("%02d", startHour), String.format("%02d", startMinute), String.format("%02d", endHour), String.format("%02d",endMinute), dayStart, dayEnd);
+                Toast.makeText(getContext(), "Activity created", Toast.LENGTH_SHORT).show();
+            } catch (InvalidTimeIntervalException e) {
+                Toast.makeText(getContext(), "Error: Start time cannot be subsequent to end time", Toast.LENGTH_SHORT).show();
+                startTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
+                endTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
+
+            } catch (InvalidDayIntervalException e) {
+                Toast.makeText(getContext(), "Error: Start day cannot be subsequent to end day", Toast.LENGTH_SHORT).show();
+                spinnerStartDay.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
+                spinnerEndDay.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
+            }
+        }
+    }
+
+    /**
+     * Funció per modificar una activitat existent i afegir-la a la rutina que està sent editada
+     */
+    private void updateActivity() {
+        String name = activityName.getText().toString();
+        String description = activityDescr.getText().toString();
+        String theme = String.valueOf(spinnerTheme.getSelectedItemPosition());
+        String startDay = String.valueOf(spinnerStartDay.getSelectedItemPosition());
+        String endDay = String.valueOf(spinnerEndDay.getSelectedItemPosition());
+
+        String[] startTime = this.startTime.getText().toString().split(":");
+        String[] endTime = this.endTime.getText().toString().split(":");
+        String startHour = startTime[0];
+        String startMinute = startTime[1];
+        String endHour = endTime[0];
+        String endMinute = endTime[1];
+
+        String[] oldStartTime = this.oldStartTime.split(":");
+        String[] oldEndTime = this.oldEndTime.split(":");
+        String oldStartHour = oldStartTime[0];
+        String olStartMinute = oldStartTime[1];
+        String oldEndHour = oldEndTime[0];
+        String oldEndMinute = oldEndTime[1];
 
         try {
-            DAF.updateActivity(name, descr, theme, oldinitialHour, oldinitialMinute, oldfinishHour, oldfinishMinute, initialHour, initialMinute, finishHour, finishMinute, dayStart, dayEnd);
+            DAF.updateActivity(name, description, theme, oldStartHour, olStartMinute, oldEndHour, oldEndMinute, startHour, startMinute, endHour, endMinute, startDay, endDay);
         } catch (InvalidTimeIntervalException e) {
             Toast.makeText(getContext(), "Error: Start time cannot be subsequent to end time", Toast.LENGTH_SHORT).show();
         } catch (InvalidDayIntervalException e) {
             Toast.makeText(getContext(), "Error: Start day cannot be subsequent to end day", Toast.LENGTH_SHORT).show();
         }
-
-    }
-
-    /**
-     * Funció obtenir la isntància de la MainActivity actual
-     * Pre: ninguna
-     * Post: retorna la MainActivity
-     * */
-    public static RoutineEdit getInstance() {
-        return instance;
     }
 
     /**
      * Funció per obtenir les activitats de dia de la rutina
-     * Pre: ninguna
-     * Post: s'obtenen les activitats del dia de la rutina
-     * */
+     */
     public void getActivities() {
         /*
         int today = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
@@ -330,44 +345,12 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
 
     /**
      * Funció per inicialitzar l'element que mostra el llistat d'activitats
-     * Pre: ninguna
-     * Post: s'ha inicialitzat el recycler amb el seu adapter corresponent
-     * */
+     * @param activitiesListCallback llistat d'activitats que retorna la BD
+     */
     public void getActivitiesCallback(ArrayList<ArrayList<String>> activitiesListCallback) {
-        //Convertir missatge a activities list
-
         activitiesList = new ArrayList<>(activitiesListCallback.size());
-
         activitiesList.addAll(activitiesListCallback);
         initRecyclerView();
     }
 
-    /**
-     * Funció per inicialitzar l'element que mostra el llistat d'activitats
-     * Pre: ninguna
-     * Post: s'ha inicialitzar el recycler amb el seu adapter corresponent
-     * */
-    private void initRecyclerView() {
-        // llistat d'activitats
-        RecyclerView recyclerView = view.findViewById(R.id.activityList);
-        recyclerView.setLayoutManager((new LinearLayoutManager(global)));
-        RecyclerAdapter recyclerAdapter = new RecyclerAdapter(activitiesList);
-        recyclerView.setAdapter(recyclerAdapter);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.routine_edit, container, false);
-        super.onCreate(savedInstanceState);
-        instance = this;
-        global = this.getActivity();
-
-        getActivities();
-        //
-
-        TextView addActivity = view.findViewById(R.id.addActivity);
-        addActivity.setOnClickListener(v -> createActivitySheet(false));
-
-        return view;
-    }
 }
