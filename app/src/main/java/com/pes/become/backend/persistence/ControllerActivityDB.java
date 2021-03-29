@@ -76,8 +76,8 @@ public class ControllerActivityDB {
      * @param finishTime és l'hora d'acabament de l'activitat
      * Post: si l'activitat no se sol·lapa amb cap altre, es crea.
      */
-    public void createActivity(String routineName, String activityName, String actTheme,String actDescription, String actDay,
-                               String beginTime, String finishTime)  {
+    public String createActivity(String routineName, String activityName, String actTheme,String actDescription, String actDay,
+                                 String beginTime, String finishTime)  {
 
         CollectionReference refToActivities = db.collection("routines").document(routineName).collection("activities");
 
@@ -88,7 +88,14 @@ public class ControllerActivityDB {
         dataInput.put("beginTime",beginTime);
         dataInput.put("finishTime",finishTime);
         dataInput.put("day",actDay);
-        refToActivities.document().set(dataInput);
+
+        DocumentReference refToNewActivity = refToActivities.document();
+        String ID = refToNewActivity.getId();
+
+        refToNewActivity.set(dataInput);
+
+        return ID;
+
     }
 
     /**
@@ -96,23 +103,18 @@ public class ControllerActivityDB {
      * Pre: L'activitat que es vol esborrar ja existeix i
      * està identificada pels paràmetres següents.
      * @param routineName és el nom de la rutina ja existent.
-     * @param beginTime és l'hora d'inici de l'activitat.
-     * @param finishTime és l'hora d'acabament de l'activitat
+     * @param idActivitat és l'identificador de l'activitat.
      * Post: S'esborra l'activitat indicada.
      */
-    public void deleteActivity(String routineName, String beginTime, String finishTime){
+    public void deleteActivity(String routineName, String idActivitat){
 
-        CollectionReference collRefToActivities;
-        collRefToActivities = db.collection("routines").document(routineName).collection("activities");
+        DocumentReference docRefToActivity;
+        docRefToActivity = db.collection("routines").document(routineName)
+                .collection("activities").document(idActivitat);
 
-        Query consulta = collRefToActivities.whereEqualTo("beginTime",beginTime).whereEqualTo("finishTime",finishTime);
+        docRefToActivity.delete();
 
-        consulta.get().addOnSuccessListener(queryDocumentSnapshots -> {
-            for (DocumentSnapshot document : queryDocumentSnapshots){
-                DocumentReference docRefToActivity = document.getReference();
-                docRefToActivity.delete().addOnSuccessListener(aVoid -> Log.d("SUCCESS", "Tasca esborrada amb exit"));
-            }
-        });
+
     }
 
     /**
@@ -120,32 +122,29 @@ public class ControllerActivityDB {
      * Pre: L'activitat que es vol modificar ja existeix.
      * @param routineName és el nom de la rutina ja existent.
      * @param actName és el nom de l'activitat que es vol modificar.
+     * @param description és la nova descripció que es vol afegir a l'activitat.
+     * @param theme és el tema que es vol afegir a l'activitat.
      * @param day és el dia de  l'activitat que es vol modificar.
      * @param iniT és l'hora d'inici de l'activitat.
      * @param endT és l'hora d'acabament de l'activitat.
-     * @param description és la nova descripció que es vol afegir a l'activitat.
+     * @param idActivitat és l'identificador de l'activitat
+     *
      * Post: Es modifica la descripció de l'activitat indicada.
      */
-    public void updateActivity(String routineName, String actName, String description, String theme, String oldIniTime,  String oldEndTime, String iniT, String endT, String day){
+    public void updateActivity(String routineName, String actName, String description,
+                               String theme, String day, String iniT, String endT,  String idActivitat){
 
+        DocumentReference docRefToActivity = db.collection("routines").document(routineName)
+                .collection("activities").document(idActivitat);
 
-        CollectionReference collRefToActivities = db.collection("routines").document(routineName).collection("activities");
+        docRefToActivity.update("name", actName);
+        docRefToActivity.update("description", description);
+        docRefToActivity.update("theme", theme);
+        docRefToActivity.update("day", day);
+        docRefToActivity.update("beginTime",iniT);
+        docRefToActivity.update("finishTime", endT);
 
-
-        Query consulta = collRefToActivities.whereEqualTo("beginTime",oldIniTime).whereEqualTo("finishTime",oldEndTime);
-
-        consulta.get().addOnSuccessListener(queryDocumentSnapshots -> {
-            for (DocumentSnapshot document : queryDocumentSnapshots){
-                DocumentReference docRef = document.getReference();
-                docRef.update("name", actName);
-                docRef.update("description", description);
-                docRef.update("theme", theme);
-                docRef.update("day", day);
-                docRef.update("beginTime",iniT);
-                docRef.update("finishTime", endT);
-
-                Log.d("SUCCESS", "Descripcio modificada amb exit");
-            }
-        });
+        //Log.d("SUCCESS", "Descripcio modificada amb exit");
     }
+
 }

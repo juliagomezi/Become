@@ -53,20 +53,22 @@ public class ControllerPersistence{
      * @param finishTime és l'hora de finalització de l'activitat.
      * Post: Es crea una nova activitat a la rutina.
      */
-    public void createActivity(String routineName, String activityName, String actTheme,String actDescription, String actDay,
-                               String beginTime, String finishTime)  {
+    public String createActivity(String routineName, String activityName, String actTheme,String actDescription, String actDay,
+                                 String beginTime, String finishTime)  {
         createCtrlActivity();
-        CA.createActivity(routineName, activityName,actTheme,actDescription, actDay, beginTime, finishTime);
+        return CA.createActivity(routineName, activityName,actTheme,actDescription, actDay, beginTime, finishTime);
     }
 
-    public void deleteActivity(String routineName, String beginTime, String finishTime) {
+    public void deleteActivity(String routineName, String idActivitat) {
         createCtrlActivity();
-        CA.deleteActivity( routineName,  beginTime, finishTime);
+        CA.deleteActivity( routineName, idActivitat);
     }
 
-    public void updateActivity(String routineName, String actName, String description, String theme, String oldIniTime,  String oldEndTime, String iniT, String endT, String day){
+    public void updateActivity(String routineName, String actName,
+                               String description, String theme,  String iniT, String endT, String day,String idActivitat){
         createCtrlActivity();
-        CA.updateActivity(routineName, actName, description, theme, oldIniTime, oldEndTime, iniT, endT, day);
+        CA.updateActivity(routineName, actName, description,
+                theme, day, iniT, endT, idActivitat);
     }
 
     //Consultores activity
