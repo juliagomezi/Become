@@ -13,6 +13,9 @@ import com.pes.become.R;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
+    /**
+     * Funcio del MaincActivity que s'executa al crear-lo
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,7 +28,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                .replace(R.id.fragment_layout, new RoutineEdit()).commit(); //aquí es posa el fragment que vols que es vegi quan s'encén l'aplicació
     }
 
-    //Listener navigation view
+    /**
+     * Listener del navigation view
+     */
     private final BottomNavigationView.OnNavigationItemSelectedListener navListener = item -> {
         Fragment selectedFragment = null;
         switch (item.getItemId()) {
@@ -51,16 +56,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     /**
      * Funció necessària pel correcte funcionament de l'aplicació
-     * */
+     */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) { }
 
     /**
      * Funció necessària pel correcte funcionament del l'aplicació
-     * */
+     */
     @Override
     public void onNothingSelected(AdapterView<?> parent) { }
-
-
 
 }

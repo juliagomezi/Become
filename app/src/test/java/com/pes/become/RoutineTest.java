@@ -17,7 +17,7 @@ public class RoutineTest {
         Routine r = new Routine("test");
         Activity a1 = new Activity("testActivity", "testDescription", Theme.Sport,17,0,18,0, Day.Monday);
         r.addActivity(a1);
-        assertEquals(a1,r.getActivitiesByDay("Monday").get(0));
+        assertEquals(a1,r.getActivitiesByDay(Day.valueOf("Monday")).get(0));
     }
 
     @Test
@@ -26,10 +26,10 @@ public class RoutineTest {
         Activity a1 = new Activity("testActivity", "testDescription", Theme.Sport,17,0,18,0, Day.Monday);
         r.addActivity(a1);
         r.updateActivity("testActivityUpdated", "testDescriptionUpdated", Theme.Sport, 17, 0,18,0,11,0,12,0, Day.Tuesday);
-        assertEquals("testActivityUpdated",r.getActivitiesByDay("Tuesday").get(0).getName());
-        assertEquals("testDescriptionUpdated",r.getActivitiesByDay("Tuesday").get(0).getDescription());
-        assertEquals(11,r.getActivitiesByDay("Tuesday").get(0).getInterval().getStartTime().getHours());
-        assertEquals(12,r.getActivitiesByDay("Tuesday").get(0).getInterval().getEndTime().getHours());
+        assertEquals("testActivityUpdated",r.getActivitiesByDay(Day.valueOf("Tuesday")).get(0).getName());
+        assertEquals("testDescriptionUpdated",r.getActivitiesByDay(Day.valueOf("Tuesday")).get(0).getDescription());
+        assertEquals(11,r.getActivitiesByDay(Day.valueOf("Tuesday")).get(0).getInterval().getStartTime().getHours());
+        assertEquals(12,r.getActivitiesByDay(Day.valueOf("Tuesday")).get(0).getInterval().getEndTime().getHours());
     }
 
     @Test
@@ -43,10 +43,10 @@ public class RoutineTest {
         r.addActivity(a3);
         Activity a4 = new Activity("testActivity", "testDescription", Theme.Sport,19,30,20,0, Day.Monday);
         r.addActivity(a4);
-        assertEquals(a2,r.getActivitiesByDay("Monday").get(0));
-        assertEquals(a1,r.getActivitiesByDay("Monday").get(1));
-        assertEquals(a3,r.getActivitiesByDay("Monday").get(2));
-        assertEquals(a4,r.getActivitiesByDay("Monday").get(3));
+        assertEquals(a2,r.getActivitiesByDay(Day.valueOf("Monday")).get(0));
+        assertEquals(a1,r.getActivitiesByDay(Day.valueOf("Monday")).get(1));
+        assertEquals(a3,r.getActivitiesByDay(Day.valueOf("Monday")).get(2));
+        assertEquals(a4,r.getActivitiesByDay(Day.valueOf("Monday")).get(3));
     }
 
 }

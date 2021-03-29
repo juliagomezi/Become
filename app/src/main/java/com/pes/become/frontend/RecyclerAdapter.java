@@ -20,22 +20,28 @@ import java.util.Arrays;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
-    // llistat d'activitats
     private final DomainAdapterFactory DAF = DomainAdapterFactory.getInstance();
-    private static RecyclerAdapter instance;
+
     private final ArrayList<ArrayList<String>> activitiesList;
     private final Boolean[] isExpanded;
 
+    /**
+     * Constructora del RecyclerAdapter
+     * @param activitiesList llistat d'activitats que es mostren al RecyclerView
+     */
     public RecyclerAdapter(ArrayList<ArrayList<String>> activitiesList) {
         this.activitiesList = activitiesList;
         isExpanded = new Boolean[activitiesList.size()];
         Arrays.fill(isExpanded, Boolean.FALSE);
     }
 
-    public static RecyclerAdapter getInstance() {
-        return instance;
-    }
-
+    /**
+     * Funcio del RecyclerAdapter que s'executa al crear-lo
+     */
+    /**
+     * Funcio del RecyclerAdapter que s'executa al crear-lo
+     * @return retorna el ViewHolder que representa cada element de la llista
+     */
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -44,7 +50,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         return new ViewHolder(view);
     }
 
-
+    /**
+     * Funcio del RecyclerAdapter que s'executa per cada element de la llista
+     */
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.activityNameDisplay.setText(activitiesList.get(position).get(0));
@@ -97,16 +105,24 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
             try{
                 DAF.deleteActivity(initialHour, initialMinute, finishHour, finishMinute);
-            }catch (InvalidTimeIntervalException ignored) {}
+            }
+            catch (InvalidTimeIntervalException ignored) {}
         });
 
     }
 
+    /**
+     * Funcio del RecyclerAdapter per obtenir la mida del RecyclerView
+     * @return la mida del llistat que es mostra al RecyclerView
+     */
     @Override
     public int getItemCount() {
         return activitiesList.size();
     }
 
+    /**
+     * Classe que representa un element de la llista del RecyclerView
+     */
     class ViewHolder extends RecyclerView.ViewHolder {
 
         CardView cardActivityDisplay;
@@ -114,6 +130,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         ConstraintLayout expandableLayout;
         ImageButton editButton, deleteButton;
 
+        /**
+         * Constructora del ViewHolder
+         */
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
