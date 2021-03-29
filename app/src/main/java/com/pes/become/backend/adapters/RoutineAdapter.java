@@ -75,51 +75,30 @@ public class RoutineAdapter {
 
     /**
      * Metode per a afegir una activitat a una rutina
-     * @param name nom de l'activitat
-     * @param description descripcio de l'activitat
-     * @param theme tema de l'activitat
-     * @param iniH hora d'inici de l'activitat
-     * @param iniM minuts d'inici de l'activitat
-     * @param endH hora de fi de l'activitat
-     * @param endM minuts de fi de l'activitat
-     * @param day dia de l'activitat
-     * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
+     * @param activity nova activitat
      * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
      */
-    public void addActivity(String name, String description, Theme theme, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException, OverlappingActivitiesException {
-        routine.addActivity(new Activity(name, description, theme, new TimeInterval(iniH, iniM, endH, endM), day));
+    public void createActivity(Activity activity) throws OverlappingActivitiesException {
+        routine.createActivity(activity);
     }
 
     /**
      * Metode per actualitzar els parametres d'una activitat d'una rutina
-     * @param name nou nom de l'activitat
-     * @param description nova descripcio de l'activitat
-     * @param theme tema la activitat actualitzat
-     * @param oldIniH hora inicial descatualitzada
-     * @param oldIniM minuts incials descatualitzats
-     * @param oldEndH hora final descatualitzada
-     * @param oldEndM minuts finals descatualitzats
-     * @param iniH nova hora d'inici de l'activitat
-     * @param iniM nous minuts d'inici de l'activitat
-     * @param endH nova hora de fi de l'activitat
-     * @param endM nous minuts de fi de l'activitat
-     * @param day nou dia de l'activitat
-     * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
+     * @param oldTimeInterval interval de temps desactualitzat
+     * @param oldStartDay dia d'inici desactualitzat
+     * @param activity activitat actualitzada
      * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
      */
-    public void updateActivity(String name, String description, Theme theme, int oldIniH, int oldIniM, int oldEndH, int oldEndM, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException, OverlappingActivitiesException {
-        routine.updateActivity(new TimeInterval(oldIniH, oldIniM, oldEndH, oldEndM), day, new Activity(name, description, theme, new TimeInterval(iniH,iniM,endH,endM), day));
+    public void updateActivity(TimeInterval oldTimeInterval, Day oldStartDay, Activity activity) throws OverlappingActivitiesException {
+        routine.updateActivity(oldTimeInterval, oldStartDay, activity);
     }
 
     /**
      * Metode per eliminar una activitat de la rutina
-     * @param iniH hora d'inici de l'activitat
-     * @param iniM minuts d'inici de l'activitat
-     * @param endH hora de fi de l'activitat
-     * @param endM minuts de fi de l'activitat
-     * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
+     * @param timeInterval interval de temps de l'activitat
+     * @param day dia de l'activitat
      */
-    public void deleteActivity(int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException {
-        routine.deleteActivity(new TimeInterval(iniH, iniM, endH, endM), day);
+    public void deleteActivity(TimeInterval timeInterval, Day day) {
+        routine.deleteActivity(timeInterval, day);
     }
 }
