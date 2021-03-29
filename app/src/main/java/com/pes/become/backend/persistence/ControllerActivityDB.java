@@ -103,14 +103,14 @@ public class ControllerActivityDB {
      * Pre: L'activitat que es vol esborrar ja existeix i
      * està identificada pels paràmetres següents.
      * @param routineName és el nom de la rutina ja existent.
-     * @param idActivitat és l'identificador de l'activitat.
+     * @param idActivity és l'identificador de l'activitat.
      * Post: S'esborra l'activitat indicada.
      */
-    public void deleteActivity(String routineName, String idActivitat){
+    public void deleteActivity(String routineName, String idActivity){
 
         DocumentReference docRefToActivity;
         docRefToActivity = db.collection("routines").document(routineName)
-                .collection("activities").document(idActivitat);
+                .collection("activities").document(idActivity);
 
         docRefToActivity.delete();
 
@@ -127,15 +127,15 @@ public class ControllerActivityDB {
      * @param day és el dia de  l'activitat que es vol modificar.
      * @param iniT és l'hora d'inici de l'activitat.
      * @param endT és l'hora d'acabament de l'activitat.
-     * @param idActivitat és l'identificador de l'activitat
+     * @param idActivity és l'identificador de l'activitat
      *
      * Post: Es modifica la descripció de l'activitat indicada.
      */
     public void updateActivity(String routineName, String actName, String description,
-                               String theme, String day, String iniT, String endT,  String idActivitat){
+                               String theme, String day, String iniT, String endT,  String idActivity){
 
         DocumentReference docRefToActivity = db.collection("routines").document(routineName)
-                .collection("activities").document(idActivitat);
+                .collection("activities").document(idActivity);
 
         docRefToActivity.update("name", actName);
         docRefToActivity.update("description", description);
