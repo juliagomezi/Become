@@ -28,7 +28,7 @@ public class Routine {
      */
     public Routine(String name){
         this.name = name;
-        activities = new TreeMap<>();
+        clearActivities();
     }
 
     /**
@@ -84,8 +84,9 @@ public class Routine {
             ArrayList<Activity> a = activities.get(oldDay);
             for (Activity act : a) {
                 if (act.getInterval().compareTo(oldTime) == 0) {
-                    activities.get(oldDay).remove(act); //Eliminem del dia anterior
+                    a.remove(act); //Eliminem del dia anterior
                     activities.get(newact.getDay()).add(newact); //Posem al dia nou
+                    Collections.sort(activities.get(newact.getDay()));
                     break;
                 }
             }
@@ -114,6 +115,7 @@ public class Routine {
      */
     private boolean checkOverlappings(Activity a) {
         ArrayList<Activity> acts = activities.get(a.getDay());
+        if(acts == null || acts.size() == 0) return false;
         for (Activity activity : acts) {
             if (activity.compareTo(a) == 0) {
                 return true;

@@ -162,6 +162,7 @@ public class DomainAdapterFactory {
     public void setActivitiesByDay(ArrayList<ArrayList<String>> acts) throws InvalidTimeIntervalException, OverlappingActivitiesException {
         routineAdapter.clearActivities();
         for(ArrayList<String> act : acts) {
+            Log.d("ACTNAMES", act.get(0));
             String[] s = act.get(4).split(":");
             String[] s2 = act.get(5).split(":");
             int iniH = Integer.parseInt(s[0]);
