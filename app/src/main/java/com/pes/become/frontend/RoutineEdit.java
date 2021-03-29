@@ -56,8 +56,14 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
     private int startHour, startMinute, endHour, endMinute;
     private String oldStartTime, oldEndTime;
 
+    /**
+     * Constructora del RoutineEdit
+     */
     public RoutineEdit() { }
 
+    /**
+     * Funcio del RoutineEdit que s'executa al crear-la
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.routine_edit, container, false);
@@ -74,7 +80,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
     }
 
     /**
-     * Funció obtenir la isntància de la MainActivity actual
+     * Funció obtenir la instancia de la MainActivity actual
      * */
     public static RoutineEdit getInstance() {
         return instance;
@@ -84,7 +90,6 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
      * Funció per inicialitzar l'element que mostra el llistat d'activitats
      */
     private void initRecyclerView() {
-        // llistat d'activitats
         RecyclerView recyclerView = view.findViewById(R.id.activityList);
         recyclerView.setLayoutManager((new LinearLayoutManager(global)));
         RecyclerAdapter recyclerAdapter = new RecyclerAdapter(activitiesList);
@@ -337,7 +342,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
 
         activitiesList = new ArrayList<>(); //temporal
         try {
-            DAF.getActivitiesFromDB("Monday", this);
+            DAF.getActivitiesByDay("Monday", this);
         } catch (NoSuchMethodException e) {
             Log.d("METHODEXCEPTION", e.getMessage());
         }

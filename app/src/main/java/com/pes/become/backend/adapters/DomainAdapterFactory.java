@@ -143,11 +143,11 @@ public class DomainAdapterFactory {
      * @param re instància de RoutineEdit
      * @throws NoSuchMethodException el mètode no existeix
      */
-    public void getActivitiesFromDB(String dayString, RoutineEdit re) throws NoSuchMethodException {
+    public void getActivitiesByDay(String dayString, RoutineEdit re) throws NoSuchMethodException {
         routineEdit = re;
         Class[] parameterTypes = new Class[1];
         parameterTypes[0] = ArrayList.class;
-        Method method1 = DomainAdapterFactory.class.getMethod("setActivitiesFromDB", parameterTypes);
+        Method method1 = DomainAdapterFactory.class.getMethod("setActivitiesByDay", parameterTypes);
         controllerPersistence.getActivitiesByDay("RutinaDeProva", dayString, method1, DomainAdapterFactory.getInstance());
     }
 
@@ -156,7 +156,7 @@ public class DomainAdapterFactory {
      * @param acts activitats de la rutina
      * @throws InvalidTimeIntervalException l'interval de temps es incorrecte
      */
-    public void setActivitiesFromDB(ArrayList<ArrayList<String>> acts) throws InvalidTimeIntervalException {
+    public void setActivitiesByDay(ArrayList<ArrayList<String>> acts) throws InvalidTimeIntervalException {
         routineAdapter.clearActivities();
         for(ArrayList<String> act : acts) {
             String[] s = act.get(4).split(":");
