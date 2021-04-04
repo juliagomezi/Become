@@ -8,9 +8,9 @@ public class ControllerPersistence{
     ControllerRoutineDB CR;
     ControllerActivityDB CA;
 
-    /**
-     * Pre: cert.
-     * Post: si el controlador de rutina no estava creat ja, el crea.
+    /** Brief: Funció per a crear el controlador de rutines de la BD.
+     * Pre: Cert.
+     * Post: Si el controlador de rutina no estava creat ja, el crea.
      */
     public void createCtrlRoutine(){
         if (CR==null){
@@ -18,9 +18,9 @@ public class ControllerPersistence{
         }
     }
 
-    /**
-     * Pre: cert.
-     * Post: si el controlador de rutina no estava creat ja, el crea.
+    /** Brief: Funció per a crear el controlador d'activitats de la BD.
+     * Pre: Cert.
+     * Post: Si el controlador de rutina no estava creat ja, el crea.
      */
     public void createCtrlActivity(){
         if (CA==null){
@@ -28,10 +28,10 @@ public class ControllerPersistence{
         }
     }
 
-    /**
-     * Pre: cert.
-     * Param: no hi ha cap rutina que tingui "routineName" com a nom.
-     * Post: si el controlador de rutina no estava creat ja, el crea.
+    /** Brief: Funció que crea una nova rutina.
+     * Pre: No hi ha cap rutina que tingui "routineName" com a nom.
+     * @param routineName és el nom que es vol que tingui la rutina.
+     * Post: Es crea una nova rutina.
      */
     public void createNewRoutine(String routineName){
         createCtrlRoutine();
@@ -40,33 +40,41 @@ public class ControllerPersistence{
 
 
     // Creadores Activity
-    /**Brief: funció que afegeix una nova activitat a una certa rutina de la base de dades.
-     * Pre: la rutina que té com a nom routineName ja existeix
-     * Pre: l'interval de temps  de l'activitat no se sol·lapa amb cap altra activitat de
+    /**Brief: Funció que afegeix una nova activitat a una certa rutina de la base de dades.
+     * Pre: La rutina que té com a nom routineName ja existeix.
+     * Pre: L'interval de temps  de l'activitat no se sol·lapa amb cap altra activitat de
      * la mateixa rutina.
-     * @param routineName és el nom de la rutina on es vol afegir l'activitat.
+     * @param routineName és el nom i identificador de la rutina on es vol afegir l'activitat.
      * @param activityName és el nom de l'activitat que es vol afegir.
      * @param actTheme és el tema de l'activitat.
      * @param actDescription és la descripció de l'activitat.
      * @param actDay és el dia on es vol posar l'actiivtat.
      * @param beginTime és l'hora d'inici de l'activitat.
      * @param finishTime és l'hora de finalització de l'activitat.
-     * Post: Es crea una nova activitat a la rutina.
+     * Post: Es crea una nova activitat a la rutina i retorna el seu identificador.
      */
-    public void createActivity(String routineName, String activityName, String actTheme,String actDescription, String actDay,
-                               String beginTime, String finishTime)  {
+    public String createActivity(String routineName, String activityName, String actTheme,String actDescription, String actDay,
+                                 String beginTime, String finishTime)  {
         createCtrlActivity();
-        CA.createActivity(routineName, activityName,actTheme,actDescription, actDay, beginTime, finishTime);
+        return CA.createActivity(routineName, activityName,actTheme,actDescription, actDay, beginTime, finishTime);
     }
 
-    public void deleteActivity(String routineName, String beginTime, String finishTime) {
+    /** Brief: Funció que esborra una activitat d'una rutina.
+     * Pre: Cert.
+     * @param routineName és el nom i l'identificador de la rutina.
+     * @param idActivity és l'identificador de l'activitat.
+     * Post: Esborra l'activitat de la rutina.
+     */
+    public void deleteActivity(String routineName, String idActivity) {
         createCtrlActivity();
-        CA.deleteActivity( routineName,  beginTime, finishTime);
+        CA.deleteActivity( routineName, idActivity);
     }
 
-    public void updateActivity(String routineName, String actName, String description, String theme, String oldIniTime,  String oldEndTime, String iniT, String endT, String day){
+    public void updateActivity(String routineName, String actName,
+                               String description, String theme,  String iniT, String endT, String day,String idActivity){
         createCtrlActivity();
-        CA.updateActivity(routineName, actName, description, theme, oldIniTime, oldEndTime, iniT, endT, day);
+        CA.updateActivity(routineName, actName, description,
+                theme, day, iniT, endT, idActivity);
     }
 
     //Consultores activity
