@@ -3,16 +3,16 @@
     <item
         android:id="@+id/communityView"
         android:title="Community"
-        android:icon="@mipmap/ic_launcher" />
+        android:icon="@drawable/ic_globe" />
 
     <item
         android:id="@+id/homeView"
         android:title="Home"
-        android:icon="@mipmap/ic_launcher" />
+        android:icon="@drawable/ic_home" />
 
 
     <item
         android:id="@+id/profileView"
         android:title="Profile"
-        android:icon="@mipmap/ic_launcher" />
+        android:icon="@drawable/ic_user" />
 </menu>

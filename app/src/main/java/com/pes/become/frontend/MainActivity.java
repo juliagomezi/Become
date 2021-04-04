@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         setContentView(R.layout.main);
 
         BottomNavigationView navigation = findViewById(R.id.bottomNavigationView);
+        navigation.setSelectedItemId(R.id.homeView);
         navigation.setOnNavigationItemSelectedListener(navListener);
 
         getSupportFragmentManager().beginTransaction()
