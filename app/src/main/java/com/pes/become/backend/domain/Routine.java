@@ -53,11 +53,13 @@ public class Routine {
      * Metode que afegeix una activitat a la rutina
      * @param activity activitat a afegir
      * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
-     */
+     * */
     public void createActivity(Activity activity) throws OverlappingActivitiesException {
-        ArrayList<Activity> actDay = getActivitiesByDay(activity.getDay());
-        actDay.add(activity);
-        Collections.sort(actDay); //NO FUNCIONA, NO ORDENA
+        if(!checkOverlappings(activity)) {
+            ArrayList<Activity> actDay = getActivitiesByDay(activity.getDay());
+            actDay.add(activity);
+            Collections.sort(actDay);
+        } else throw new OverlappingActivitiesException();
     }
 
     /**
@@ -85,6 +87,7 @@ public class Routine {
                 }
             }
             activities.get(updatedActivity.getDay()).add(updatedActivity);
+            Collections.sort(activities.get(updatedActivity.getDay()));
         } else throw new OverlappingActivitiesException();
     }
 

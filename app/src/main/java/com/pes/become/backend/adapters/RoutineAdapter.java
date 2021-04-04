@@ -51,6 +51,7 @@ public class RoutineAdapter {
         ArrayList<ArrayList<String>> res = new ArrayList<>();
         for(Activity activity : activities) {
             ArrayList<String> resaux = new ArrayList<>();
+            resaux.add(activity.getId());
             resaux.add(activity.getName());
             resaux.add(activity.getDescription());
             resaux.add(activity.getTheme().toString());
@@ -84,9 +85,6 @@ public class RoutineAdapter {
 
     /**
      * Metode per actualitzar els parametres d'una activitat d'una rutina
-     * @param oldTimeInterval interval de temps desactualitzat
-     * @param oldStartDay dia d'inici desactualitzat
-     * @param activity activitat actualitzada
      * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
      */
     public void updateActivity(Activity a) throws OverlappingActivitiesException {
@@ -95,11 +93,11 @@ public class RoutineAdapter {
 
     /**
      * Metode per eliminar una activitat de la rutina
-     * @param timeInterval interval de temps de l'activitat
+     * @param id identificador de l'activitat
      * @param day dia de l'activitat
      */
-    public void deleteActivity(TimeInterval timeInterval, Day day) {
-        routine.deleteActivity(timeInterval, day);
+    public void deleteActivity(String id, Day day) {
+        routine.deleteActivity(id, day);
     }
 
     /**

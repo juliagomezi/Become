@@ -132,7 +132,7 @@ public class DomainAdapterFactory {
             routineAdapter.updateActivity(updatedActivity1);
             String beginTime = iniH + ":" + iniM;
             String endTime = "23:59";
-            controllerPersistence.updateActivity("RutinaDeProva", name, description, Theme.values()[Integer.parseInt(theme)].toString(), beginTime, endTime, startDay.toString());
+            controllerPersistence.updateActivity("RutinaDeProva", name, description, Theme.values()[Integer.parseInt(theme)].toString(), beginTime, endTime, startDay.toString(), id);
             // activitat dia 2
             createActivity(name, description, theme, endDayString, endDayString, "0","0", endH, endM);
         }
@@ -141,7 +141,7 @@ public class DomainAdapterFactory {
             routineAdapter.updateActivity(updatedActivity);
             String beginTime = iniH + ":" + iniM;
             String endTime = endH + ":" + endM;
-            controllerPersistence.updateActivity("RutinaDeProva", name, description, Theme.values()[Integer.parseInt(theme)].toString(), oldBeginTime, oldEndTime, beginTime, endTime, startDay.toString());
+            controllerPersistence.updateActivity("RutinaDeProva", name, description, Theme.values()[Integer.parseInt(theme)].toString(), beginTime, endTime, startDay.toString(), id);
         }
         else throw new InvalidDayIntervalException();
     }
@@ -184,17 +184,12 @@ public class DomainAdapterFactory {
 
     /**
      * Metode per eliminar una activitat
-     * @param iniH hora d'inici de l'activitat
-     * @param iniM minuts d'inici de l'activitat
-     * @param endH hora de fi de l'activitat
-     * @param endM minuts de fi de l'activitat
-     * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
+     * @param id identificador de l'activitat
+     * @param day dia de l'activitat
      */
-    public void deleteActivity(String iniH, String iniM, String endH, String endM, String day) throws InvalidTimeIntervalException {
-        routineAdapter.deleteActivity(new TimeInterval(Integer.parseInt(iniH), Integer.parseInt(iniM), Integer.parseInt(endH), Integer.parseInt(endM)), Day.valueOf(day));
-        String beginTime = iniH + ":" + endM;
-        String endTime = endH + ":" + endM;
-        controllerPersistence.deleteActivity("RutinaDeProva", beginTime, endTime);
+    public void deleteActivity(String id, String day) {
+        routineAdapter.deleteActivity(id, Day.valueOf(day));
+        controllerPersistence.deleteActivity("RutinaDeProva", id);
     }
 
     /**
