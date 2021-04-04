@@ -74,34 +74,40 @@ public class DomainAdapterFactory {
     public void createActivity(String name, String description, String theme, String startDayString, String endDayString, String iniH, String iniM, String endH, String endM) throws InvalidTimeIntervalException, InvalidDayIntervalException, OverlappingActivitiesException {
         Day startDay = Day.values()[Integer.parseInt(startDayString)];
         Day endDay = Day.values()[Integer.parseInt(endDayString)];
-        int comparison = startDay.compareTo(endDay); // negatiu si iniDay<endDay; 0 si iguals; positiu si iniDay>endDay
-        if (comparison < 0) { // activitat en dies diferents
+        int comparison = startDay.compareTo(endDay);
+        if (comparison < 0) {
             // activitat dia 1
-            routineAdapter.createActivity(new Activity(name, description, Theme.values()[Integer.parseInt(theme)], new TimeInterval (Integer.parseInt(iniH), Integer.parseInt(iniM), 23, 59), startDay));
-            String beginTime = iniH + ":" + iniM;
-            String endTime = "23:59";
-            controllerPersistence.createActivity("RutinaDeProva", name, Theme.values()[Integer.parseInt(theme)].toString(), description, startDay.toString(), beginTime, endTime);
-            // activitat dia 2
-            routineAdapter.createActivity(new Activity(name, description, Theme.values()[Integer.parseInt(theme)], new TimeInterval (0, 0, Integer.parseInt(endH), Integer.parseInt(endM)), endDay));
-            beginTime = "00:00";
-            endTime = endH + ":" + endM;
-            controllerPersistence.createActivity("RutinaDeProva", name, Theme.values()[Integer.parseInt(theme)].toString(), description, startDay.toString(), beginTime, endTime);
+            Activity newActDay1 = new Activity(name, description, Theme.values()[Integer.parseInt(theme)], new TimeInterval (Integer.parseInt(iniH), Integer.parseInt(iniM), 23, 59), startDay);
+            Activity newActDay2 = new Activity(name, description, Theme.values()[Integer.parseInt(theme)], new TimeInterval (0, 0, Integer.parseInt(endH), Integer.parseInt(endM)), endDay);
+            if(!routineAdapter.checkOverlappings(newActDay1) && !routineAdapter.checkOverlappings(newActDay2)) {
+                String beginTime = iniH + ":" + iniM;
+                String endTime = "23:59";
+                String id = controllerPersistence.createActivity("RutinaDeProva", name, Theme.values()[Integer.parseInt(theme)].toString(), description, startDay.toString(), beginTime, endTime);
+                newActDay1.setId(id);
+                routineAdapter.createActivity(newActDay1);
+                // activitat dia 2
+                beginTime = "00:00";
+                endTime = endH + ":" + endM;
+                id = controllerPersistence.createActivity("RutinaDeProva", name, Theme.values()[Integer.parseInt(theme)].toString(), description, startDay.toString(), beginTime, endTime);
+                newActDay2.setId(id);
+                routineAdapter.createActivity(newActDay2);
+            } else throw new OverlappingActivitiesException();
         }
         else if (comparison == 0) {
-            routineAdapter.createActivity(new Activity(name, description, Theme.values()[Integer.parseInt(theme)], new TimeInterval (Integer.parseInt(iniH), Integer.parseInt(iniM), Integer.parseInt(endH), Integer.parseInt(endM)), startDay));
-            String beginTime = iniH + ":" + iniM;
-            String endTime = endH + ":" + endM;
-            controllerPersistence.createActivity("RutinaDeProva", name, Theme.values()[Integer.parseInt(theme)].toString(), description, startDay.toString(), beginTime, endTime);
+            Activity a = new Activity(name, description, Theme.values()[Integer.parseInt(theme)], new TimeInterval (Integer.parseInt(iniH), Integer.parseInt(iniM), Integer.parseInt(endH), Integer.parseInt(endM)), startDay);
+            if(!routineAdapter.checkOverlappings(a)) {
+                String beginTime = iniH + ":" + iniM;
+                String endTime = endH + ":" + endM;
+                String id = controllerPersistence.createActivity("RutinaDeProva", name, Theme.values()[Integer.parseInt(theme)].toString(), description, startDay.toString(), beginTime, endTime);
+                a.setId(id);
+                routineAdapter.createActivity(a);
+            } else throw new OverlappingActivitiesException();
         }
-        else throw new InvalidDayIntervalException("Error: el dia de fi és anterior al dia d'inici");
+        else throw new InvalidDayIntervalException();
     }
 
     /**
      * Metode per actualitzar els parametres d'una activitat d'una rutina
-     * @param oldIniH hora inicial desactualitzada
-     * @param oldIniM minuts inicials descatualitzats
-     * @param oldEndH hora final descatualitzada
-     * @param oldEndM minuts finals decastualitzats
      * @param name nou nom de l'activitat
      * @param description nova descripcio de l'activitat
      * @param theme nou tema de l'activitat
@@ -115,35 +121,29 @@ public class DomainAdapterFactory {
      * @throws InvalidDayIntervalException es llença si el dia d'inici es posterior al dia de fi
      * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
      */
-    public void updateActivity(String name, String description, String theme, String startDayString, String endDayString, String oldIniH, String oldIniM, String oldEndH, String oldEndM, String iniH, String iniM, String endH, String endM) throws InvalidDayIntervalException, InvalidTimeIntervalException, OverlappingActivitiesException {
+    public void updateActivity(String id, String name, String description, String theme, String startDayString, String endDayString, String iniH, String iniM, String endH, String endM) throws InvalidDayIntervalException, InvalidTimeIntervalException, OverlappingActivitiesException {
         Day startDay = Day.values()[Integer.parseInt(startDayString)];
         Day endDay = Day.values()[Integer.parseInt(endDayString)];
-        int comparison = startDay.compareTo(endDay); // negatiu si iniDay<endDay; 0 si iguals; positiu si iniDay>endDay
-        String oldBeginTime = oldIniH + ":" + oldIniM;
-        String oldEndTime = oldEndH + ":" + oldEndM;
-        if (comparison < 0) { // activitat en dies diferents
+        int comparison = startDay.compareTo(endDay);
+        if (comparison < 0) {
             // activitat dia 1
-            TimeInterval oldTimeInterval = new TimeInterval(Integer.parseInt(oldIniH), Integer.parseInt(oldIniM), Integer.parseInt(oldEndH), Integer.parseInt(oldEndM));
-            Activity newActivity = new Activity(name, description, Theme.values()[Integer.parseInt(theme)], new TimeInterval(Integer.parseInt(iniH), Integer.parseInt(iniM), 23, 59), startDay);
-            routineAdapter.updateActivity(oldTimeInterval, startDay, newActivity);
+            Activity updatedActivity1 = new Activity(name, description, Theme.values()[Integer.parseInt(theme)], new TimeInterval(Integer.parseInt(iniH), Integer.parseInt(iniM), 23, 59), startDay);
+            updatedActivity1.setId(id);
+            routineAdapter.updateActivity(updatedActivity1);
             String beginTime = iniH + ":" + iniM;
             String endTime = "23:59";
-            controllerPersistence.updateActivity("RutinaDeProva", name, description, Theme.values()[Integer.parseInt(theme)].toString(), oldBeginTime, oldEndTime, beginTime, endTime, startDay.toString());
+            controllerPersistence.updateActivity("RutinaDeProva", name, description, Theme.values()[Integer.parseInt(theme)].toString(), beginTime, endTime, startDay.toString());
             // activitat dia 2
-            routineAdapter.createActivity(new Activity(name, description, Theme.values()[Integer.parseInt(theme)], new TimeInterval (0, 0, Integer.parseInt(endH), Integer.parseInt(endM)), endDay));
-            beginTime = "00:00";
-            endTime = endH + ":" + endM;
-            controllerPersistence.createActivity("RutinaDeProva", name, Theme.values()[Integer.parseInt(theme)].toString(), description, endDay.toString(), beginTime, endTime);
+            createActivity(name, description, theme, endDayString, endDayString, "0","0", endH, endM);
         }
         else if (comparison == 0) {
-            TimeInterval oldTimeInterval = new TimeInterval(Integer.parseInt(oldIniH), Integer.parseInt(oldIniM), Integer.parseInt(oldEndH), Integer.parseInt(oldEndM));
-            Activity newActivity = new Activity(name, description, Theme.values()[Integer.parseInt(theme)], new TimeInterval(Integer.parseInt(iniH), Integer.parseInt(iniM), Integer.parseInt(endH), Integer.parseInt(endM)), startDay);
-            routineAdapter.updateActivity(oldTimeInterval, startDay, newActivity);
+            Activity updatedActivity = new Activity(name, description, Theme.values()[Integer.parseInt(theme)], new TimeInterval(Integer.parseInt(iniH), Integer.parseInt(iniM), Integer.parseInt(endH), Integer.parseInt(endM)), startDay);
+            routineAdapter.updateActivity(updatedActivity);
             String beginTime = iniH + ":" + iniM;
             String endTime = endH + ":" + endM;
             controllerPersistence.updateActivity("RutinaDeProva", name, description, Theme.values()[Integer.parseInt(theme)].toString(), oldBeginTime, oldEndTime, beginTime, endTime, startDay.toString());
         }
-        else throw new InvalidDayIntervalException("Error: el dia de fi és anterior al dia d'inici");
+        else throw new InvalidDayIntervalException();
     }
 
     /**

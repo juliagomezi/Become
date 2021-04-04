@@ -1,8 +1,5 @@
 package com.pes.become.backend.domain;
 
-import android.util.Log;
-
-import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
 import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 
 import java.util.ArrayList;
@@ -58,11 +55,9 @@ public class Routine {
      * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
      */
     public void createActivity(Activity activity) throws OverlappingActivitiesException {
-        if(!checkOverlappings(activity)) {
-            ArrayList<Activity> actDay = getActivitiesByDay(activity.getDay());
-            actDay.add(activity);
-            Collections.sort(actDay); //NO FUNCIONA, NO ORDENA
-        } else throw new OverlappingActivitiesException();
+        ArrayList<Activity> actDay = getActivitiesByDay(activity.getDay());
+        actDay.add(activity);
+        Collections.sort(actDay); //NO FUNCIONA, NO ORDENA
     }
 
     /**
@@ -76,35 +71,33 @@ public class Routine {
 
     /**
      * Metode per actualitzar els parametres d'una activitat de la rutina
-     * @param oldTime interval desactualitzat
-     * @param oldDay dia desactualitzat
-     * @param newActivity nova activitat
+     * @param updatedActivity activitat actualitzada
      * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
      */
-    public void updateActivity(TimeInterval oldTime, Day oldDay, Activity newActivity) throws OverlappingActivitiesException {
-        if(!checkOverlappings(newActivity)) { //ARA MATEIX NO VA EL UPDATE PERQUE EL CHECKOVERLAPPING SEMPRE RETORNA TRUE (COMAPARA AMB SI MATEIXA, NOMES S'ARREGLA AMB IDs)
-            ArrayList<Activity> a = activities.get(oldDay);
-            for (Activity act : a) {
-                if (act.getInterval().compareTo(oldTime) == 0) {
-                    a.remove(act);
-                    activities.get(newActivity.getDay()).add(newActivity);
-                    Collections.sort(activities.get(newActivity.getDay())); //NO FUNCIONA, NO ORDENA
-                    break;
+    public void updateActivity(Activity updatedActivity) throws OverlappingActivitiesException {
+        if(!checkOverlappings(updatedActivity)) {
+            for(Map.Entry<Day, ArrayList<Activity>> entry : activities.entrySet()) {
+                for(Activity a : entry.getValue()) {
+                    if(a.getId().equals(updatedActivity.getId())) {
+                        entry.getValue().remove(a);
+                        break;
+                    }
                 }
             }
+            activities.get(updatedActivity.getDay()).add(updatedActivity);
         } else throw new OverlappingActivitiesException();
     }
 
     /**
      * Metode per eliminar una activitat de la rutina
-     * @param time hora de l'activitat a esborrar
+     * @param id identificador de l'activitat
      * @param day dia de l'activitat
      */
-    public void deleteActivity(TimeInterval time, Day day) {
+    public void deleteActivity(String id, Day day) {
         ArrayList<Activity> acts = activities.get(day);
         for (Activity activity : acts) {
-            if (activity.getInterval().compareTo(time) == 0) {
-                activities.get(day).remove(activity);
+            if (activity.getId().equals(id)) {
+                acts.remove(activity);
                 break;
             }
         }
@@ -112,15 +105,13 @@ public class Routine {
 
     /**
      * Funcio que comprova si una activitat donada es solapa temporalment amb alguna del seu mateix dia
-     * @param a activitat a comparar
+     * @param a activitat a comprovar
      * @return true si hi ha solapament, false altrament
      */
-    private boolean checkOverlappings(Activity a) {
+    public boolean checkOverlappings(Activity a) {
         ArrayList<Activity> acts = activities.get(a.getDay());
         for (Activity activity : acts) {
-            if (activity.compareTo(a) == 0) {
-                return true;
-            }
+            if(!activity.getId().equals(a.getId()) && activity.compareTo(a) == 0) return true;
         }
         return false;
     }

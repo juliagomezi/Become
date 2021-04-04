@@ -89,8 +89,8 @@ public class RoutineAdapter {
      * @param activity activitat actualitzada
      * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
      */
-    public void updateActivity(TimeInterval oldTimeInterval, Day oldStartDay, Activity activity) throws OverlappingActivitiesException {
-        routine.updateActivity(oldTimeInterval, oldStartDay, activity);
+    public void updateActivity(Activity a) throws OverlappingActivitiesException {
+        routine.updateActivity(a);
     }
 
     /**
@@ -101,4 +101,14 @@ public class RoutineAdapter {
     public void deleteActivity(TimeInterval timeInterval, Day day) {
         routine.deleteActivity(timeInterval, day);
     }
+
+    /**
+     * Funcio que comprova si una activitat donada es solapa temporalment amb alguna del seu mateix dia
+     * @param a activitat a comprovar
+     * @return true si hi ha solapament, false altrament
+     */
+    public boolean checkOverlappings(Activity a) {
+        return routine.checkOverlappings(a);
+    }
+
 }

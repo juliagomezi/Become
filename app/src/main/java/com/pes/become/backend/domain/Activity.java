@@ -1,11 +1,13 @@
 package com.pes.become.backend.domain;
 
-import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
-
 /**
  * Classe que defineix les activitats que composen una rutina
  */
 public class Activity implements Comparable<Activity>{
+    /**
+     *  Identificador de l'activitat
+     */
+    private String id;
     /**
      * Nom de l'activitat
      */
@@ -36,11 +38,28 @@ public class Activity implements Comparable<Activity>{
      * @param day dia de l'activitat
      */
     public Activity(String name, String description, Theme theme, TimeInterval ti, Day day) {
+        id = "-1";
         this.name = name;
         this.description = description;
         this.theme = theme;
         this.interval = ti;
         this.day = day;
+    }
+
+    /**
+     * Getter de la id
+     * @return id de l'activitat
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * Setter de la id
+     * @param id nova id de l'activitat
+     */
+    public void setId(String id) {
+        this.id = id;
     }
 
     /**
@@ -130,9 +149,8 @@ public class Activity implements Comparable<Activity>{
      * @param theme tema de la nova activitat
      * @param ti nou interval de temps de l'activitat
      * @param day nou dia de l'activitat
-     * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
      */
-    public void update(String name, String description, Theme theme, TimeInterval ti, Day day) throws InvalidTimeIntervalException {
+    public void updateInfo(String name, String description, Theme theme, TimeInterval ti, Day day) {
         setName(name);
         setDescription(description);
         setTheme(theme);
