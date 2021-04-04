@@ -27,6 +27,7 @@ import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapterFactory;
 import com.pes.become.backend.exceptions.InvalidDayIntervalException;
 import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
+import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -252,25 +253,28 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
      */
     private void createActivity() {
         String name = activityName.getText().toString();
-        String descr = activityDescr.getText().toString();
+        String description = activityDescr.getText().toString();
         String theme = String.valueOf(spinnerTheme.getSelectedItemPosition());
-        String dayStart = String.valueOf(spinnerStartDay.getSelectedItemPosition());
-        String dayEnd = String.valueOf(spinnerEndDay.getSelectedItemPosition());
+        String startDay = String.valueOf(spinnerStartDay.getSelectedItemPosition());
+        String endDay = String.valueOf(spinnerEndDay.getSelectedItemPosition());
 
         if (name.isEmpty()) activityName.setError("This field cannot be null");
         else {
             try {
-                DAF.createActivity(name, descr, theme, String.format("%02d", startHour), String.format("%02d", startMinute), String.format("%02d", endHour), String.format("%02d",endMinute), dayStart, dayEnd);
+                DAF.createActivity(name, description, theme, startDay, endDay, String.format("%02d", startHour), String.format("%02d", startMinute), String.format("%02d", endHour), String.format("%02d",endMinute));
                 Toast.makeText(getContext(), "Activity created", Toast.LENGTH_SHORT).show();
             } catch (InvalidTimeIntervalException e) {
                 Toast.makeText(getContext(), "Error: Start time cannot be subsequent to end time", Toast.LENGTH_SHORT).show();
                 startTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
                 endTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
-
             } catch (InvalidDayIntervalException e) {
                 Toast.makeText(getContext(), "Error: Start day cannot be subsequent to end day", Toast.LENGTH_SHORT).show();
                 spinnerStartDay.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
                 spinnerEndDay.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
+            } catch (OverlappingActivitiesException e) {
+                Toast.makeText(getContext(), "Error: Another activity belongs to that time interval", Toast.LENGTH_SHORT).show();
+                startTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
+                endTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
             }
         }
     }
@@ -300,11 +304,13 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         String oldEndMinute = oldEndTime[1];
 
         try {
-            DAF.updateActivity(name, description, theme, oldStartHour, olStartMinute, oldEndHour, oldEndMinute, startHour, startMinute, endHour, endMinute, startDay, endDay);
+            DAF.updateActivity(name, description, theme, startDay, endDay, oldStartHour, olStartMinute, oldEndHour, oldEndMinute, startHour, startMinute, endHour, endMinute);
         } catch (InvalidTimeIntervalException e) {
             Toast.makeText(getContext(), "Error: Start time cannot be subsequent to end time", Toast.LENGTH_SHORT).show();
         } catch (InvalidDayIntervalException e) {
             Toast.makeText(getContext(), "Error: Start day cannot be subsequent to end day", Toast.LENGTH_SHORT).show();
+        } catch (OverlappingActivitiesException e) {
+            Toast.makeText(getContext(), "Error: Another activity belongs to that time interval", Toast.LENGTH_SHORT).show();
         }
     }
 

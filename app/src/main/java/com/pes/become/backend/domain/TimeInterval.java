@@ -53,12 +53,16 @@ public class TimeInterval implements Comparable<TimeInterval>{
     /**
      * Funcio que compara un interval de temps amb un altre
      * @param tI2 interval de temps amb que comparem
-     * @return -1 si el temps de fi de l'interval original es mes petit que el del tI2, 0 si son iguals i 1 si es mes gran
+     * @return 0 si hi ha solapament, 1 altrament
      */
     @Override
     public int compareTo(TimeInterval tI2) {
-        if(this.getStartTime().compareTo(tI2.getStartTime()) == 0 && this.getEndTime().compareTo(tI2.getEndTime()) == 0)
-            return 0;
-        return this.getStartTime().compareTo(tI2.getStartTime());
+        Time tIni = this.getStartTime();
+        Time tEnd = this.getEndTime();
+        Time t2Ini = tI2.getStartTime();
+        Time t2End = tI2.getEndTime();
+
+        if(tEnd.compareTo(t2Ini) <= 0 || tIni.compareTo(t2End) >= 0) return 1;
+        return 0;
     }
 }

@@ -1,9 +1,15 @@
 package com.pes.become.backend.domain;
 
+import android.util.Log;
+
 import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
+import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 /**
  * Classe que defineix una rutina
@@ -16,7 +22,7 @@ public class Routine {
     /**
      * Mapa amb totes les activitats ordenades temporalment
      */
-    private ArrayList<Activity> activities;
+    private SortedMap<Day, ArrayList<Activity>> activities;
 
     /**
      * Creadora de la rutina
@@ -24,7 +30,7 @@ public class Routine {
      */
     public Routine(String name){
         this.name = name;
-        this.activities = new ArrayList<>();
+        clearActivities();
     }
 
     /**
@@ -39,16 +45,24 @@ public class Routine {
      * Métode per buidar les activitats d'una rutina
      */
     public void clearActivities() {
-        activities = new ArrayList<>();
+        activities = new TreeMap<>();
+        for(int i=0; i<7; ++i){
+            ArrayList<Activity> tmp = new ArrayList<>();
+            activities.put(Day.values()[i], tmp);
+        }
     }
 
     /**
      * Metode que afegeix una activitat a la rutina
      * @param activity activitat a afegir
+     * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
      */
-    public void addActivity(Activity activity) {
-        activities.add(activity);
-        Collections.sort(activities);
+    public void createActivity(Activity activity) throws OverlappingActivitiesException {
+        if(!checkOverlappings(activity)) {
+            ArrayList<Activity> actDay = getActivitiesByDay(activity.getDay());
+            actDay.add(activity);
+            Collections.sort(actDay); //NO FUNCIONA, NO ORDENA
+        } else throw new OverlappingActivitiesException();
     }
 
     /**
@@ -57,61 +71,57 @@ public class Routine {
      * @return les activitats de la rutina al dia indicat
      */
     public ArrayList<Activity> getActivitiesByDay(Day day){
-        ArrayList<Activity> res = new ArrayList<>();
-        for(Activity act : activities) {
-            if(act.getDay().equals(day)) {
-                res.add(act);
-            }
-        }
-        Collections.sort(res);
-        return res;
+        return activities.get(day);
     }
 
     /**
      * Metode per actualitzar els parametres d'una activitat de la rutina
-     * @param name nou nom de l'activitat
-     * @param description nova descripcio de l'activitat
-     * @param theme tema de l'activitat
-     * @param oldIniH hora inical desactualitzada
-     * @param oldIniM minuts inicals descatualitzats
-     * @param oldEndH hora final descatualitzada
-     * @param oldEndM minuts finals desactualitzats
-     * @param iniH nova hora d'inici de l'activitat
-     * @param iniM nous minuts d'inici de l'activitat
-     * @param endH nova hora de fi de l'activitat
-     * @param endM nous minuts de fi de l'activitat
-     * @param day nou dia de l'activitat
-     * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
+     * @param oldTime interval desactualitzat
+     * @param oldDay dia desactualitzat
+     * @param newActivity nova activitat
+     * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
      */
-    public void updateActivity(String name, String description, Theme theme, int oldIniH, int oldIniM, int oldEndH, int oldEndM, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException {
-        TimeInterval t = new TimeInterval(oldIniH, oldIniM, oldEndH, oldEndM);
-        for (Activity act : activities) {
-            TimeInterval taux = act.getInterval();
-            if (taux.compareTo(t) == 0) {
-                act.update(name, description, theme, iniH, iniM, endH, endM, day);
-                Collections.sort(activities);
+    public void updateActivity(TimeInterval oldTime, Day oldDay, Activity newActivity) throws OverlappingActivitiesException {
+        if(!checkOverlappings(newActivity)) { //ARA MATEIX NO VA EL UPDATE PERQUE EL CHECKOVERLAPPING SEMPRE RETORNA TRUE (COMAPARA AMB SI MATEIXA, NOMES S'ARREGLA AMB IDs)
+            ArrayList<Activity> a = activities.get(oldDay);
+            for (Activity act : a) {
+                if (act.getInterval().compareTo(oldTime) == 0) {
+                    a.remove(act);
+                    activities.get(newActivity.getDay()).add(newActivity);
+                    Collections.sort(activities.get(newActivity.getDay())); //NO FUNCIONA, NO ORDENA
+                    break;
+                }
+            }
+        } else throw new OverlappingActivitiesException();
+    }
+
+    /**
+     * Metode per eliminar una activitat de la rutina
+     * @param time hora de l'activitat a esborrar
+     * @param day dia de l'activitat
+     */
+    public void deleteActivity(TimeInterval time, Day day) {
+        ArrayList<Activity> acts = activities.get(day);
+        for (Activity activity : acts) {
+            if (activity.getInterval().compareTo(time) == 0) {
+                activities.get(day).remove(activity);
                 break;
             }
         }
     }
 
     /**
-     * Metode per eliminar una activitat de la rutina
-     * @param iniH hora d'inici de l'activitat
-     * @param iniM minuts d'inici de l'activitat
-     * @param endH hora de fi de l'activitat
-     * @param endM minuts de fi de l'activitat
-     * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
+     * Funcio que comprova si una activitat donada es solapa temporalment amb alguna del seu mateix dia
+     * @param a activitat a comparar
+     * @return true si hi ha solapament, false altrament
      */
-    public void deleteActivity(int iniH, int iniM, int endH, int endM) throws InvalidTimeIntervalException {
-        TimeInterval t = new TimeInterval(iniH, iniM, endH, endM);
-        for (Activity act : activities) {
-            TimeInterval taux = act.getInterval();
-            if (taux.compareTo(t) == 0) {
-                activities.remove(act);
-                Collections.sort(activities);
-                break;
+    private boolean checkOverlappings(Activity a) {
+        ArrayList<Activity> acts = activities.get(a.getDay());
+        for (Activity activity : acts) {
+            if (activity.compareTo(a) == 0) {
+                return true;
             }
         }
+        return false;
     }
 }
