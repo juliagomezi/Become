@@ -1,5 +1,7 @@
 package com.pes.become.backend.domain;
 
+import android.util.Log;
+
 import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 
 import java.util.ArrayList;

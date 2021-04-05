@@ -45,6 +45,7 @@ public class ControllerActivityDB {
                     ArrayList<ArrayList<String>> activitiesResult = new ArrayList<>();
                     for (QueryDocumentSnapshot document : value) {
                         ArrayList<String> activity = new ArrayList<>();
+                        activity.add(document.getId());
                         activity.add(document.get("name").toString());
                         activity.add(document.get("description").toString());
                         activity.add(document.get("theme").toString());

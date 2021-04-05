@@ -138,6 +138,7 @@ public class DomainAdapterFactory {
         }
         else if (comparison == 0) {
             Activity updatedActivity = new Activity(name, description, Theme.values()[Integer.parseInt(theme)], new TimeInterval(Integer.parseInt(iniH), Integer.parseInt(iniM), Integer.parseInt(endH), Integer.parseInt(endM)), startDay);
+            updatedActivity.setId(id);
             routineAdapter.updateActivity(updatedActivity);
             String beginTime = iniH + ":" + iniM;
             String endTime = endH + ":" + endM;
@@ -170,14 +171,15 @@ public class DomainAdapterFactory {
     public void setActivitiesByDay(ArrayList<ArrayList<String>> acts) throws InvalidTimeIntervalException, OverlappingActivitiesException {
         routineAdapter.clearActivities();
         for(ArrayList<String> act : acts) {
-            Log.d("ACTNAMES", act.get(0));
-            String[] s = act.get(4).split(":");
-            String[] s2 = act.get(5).split(":");
+            String[] s = act.get(5).split(":");
+            String[] s2 = act.get(6).split(":");
             int iniH = Integer.parseInt(s[0]);
             int iniM = Integer.parseInt(s[1]);
             int endH = Integer.parseInt(s2[0]);
             int endM = Integer.parseInt(s2[1]);
-            routineAdapter.createActivity(new Activity(act.get(0), act.get(1),Theme.valueOf(act.get(2)), new TimeInterval(iniH, iniM, endH, endM), Day.valueOf(act.get(3))));
+            Activity activity = new Activity(act.get(1), act.get(2),Theme.valueOf(act.get(3)), new TimeInterval(iniH, iniM, endH, endM), Day.valueOf(act.get(4)));
+            activity.setId(act.get(0));
+            routineAdapter.createActivity(activity);
         }
         routineEdit.getActivitiesCallback(routineAdapter.getActivitiesByDay("Monday"));
     }

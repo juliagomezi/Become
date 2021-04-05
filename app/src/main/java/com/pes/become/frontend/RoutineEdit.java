@@ -55,7 +55,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
     private TextView endTime;
     private TextView sheetLabel;
     private int startHour, startMinute, endHour, endMinute;
-    private String oldStartTime, oldEndTime;
+    private String id;
 
     /**
      * Constructora del RoutineEdit
@@ -205,7 +205,8 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
      * @param startTime temps d'inici de l'activitat
      * @param endTime temps de fi de l'activitat
      */
-    public void fillActivitySheet(String name, String description, String theme, String startDay, String startTime, String endTime) {
+    public void fillActivitySheet(String id, String name, String description, String theme, String startDay, String startTime, String endTime) {
+        this.id = id;
         this.sheetLabel.setText(R.string.modifytext);
         this.activityName.setText(name);
         this.activityDescr.setText(description);
@@ -214,8 +215,6 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         //this.spinnerEndDay.setSelection(findPositionInAdapter(adapterEndDay, endDay));
         this.startTime.setText(startTime);
         this.endTime.setText(endTime);
-        this.oldStartTime = startTime;
-        this.oldEndTime = endTime;
     }
 
     /**
@@ -263,6 +262,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
             try {
                 DAF.createActivity(name, description, theme, startDay, endDay, String.format("%02d", startHour), String.format("%02d", startMinute), String.format("%02d", endHour), String.format("%02d",endMinute));
                 Toast.makeText(getContext(), "Activity created", Toast.LENGTH_SHORT).show();
+                activitySheet.dismiss();
             } catch (InvalidTimeIntervalException e) {
                 Toast.makeText(getContext(), "Error: Start time cannot be subsequent to end time", Toast.LENGTH_SHORT).show();
                 startTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
@@ -296,21 +296,22 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         String endHour = endTime[0];
         String endMinute = endTime[1];
 
-        String[] oldStartTime = this.oldStartTime.split(":");
-        String[] oldEndTime = this.oldEndTime.split(":");
-        String oldStartHour = oldStartTime[0];
-        String olStartMinute = oldStartTime[1];
-        String oldEndHour = oldEndTime[0];
-        String oldEndMinute = oldEndTime[1];
-
         try {
-            DAF.updateActivity(name, description, theme, startDay, endDay, oldStartHour, olStartMinute, oldEndHour, oldEndMinute, startHour, startMinute, endHour, endMinute);
+            DAF.updateActivity(id, name, description, theme, startDay, endDay, startHour, startMinute, endHour, endMinute);
+            Toast.makeText(getContext(), "Activity created", Toast.LENGTH_SHORT).show();
+            activitySheet.dismiss();
         } catch (InvalidTimeIntervalException e) {
             Toast.makeText(getContext(), "Error: Start time cannot be subsequent to end time", Toast.LENGTH_SHORT).show();
+            this.startTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
+            this.endTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
         } catch (InvalidDayIntervalException e) {
             Toast.makeText(getContext(), "Error: Start day cannot be subsequent to end day", Toast.LENGTH_SHORT).show();
+            spinnerStartDay.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
+            spinnerEndDay.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
         } catch (OverlappingActivitiesException e) {
             Toast.makeText(getContext(), "Error: Another activity belongs to that time interval", Toast.LENGTH_SHORT).show();
+            this.startTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
+            this.endTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
         }
     }
 
