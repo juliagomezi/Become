@@ -37,9 +37,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     /**
      * Funcio del RecyclerAdapter que s'executa al crear-lo
-     */
-    /**
-     * Funcio del RecyclerAdapter que s'executa al crear-lo
      * @return retorna el ViewHolder que representa cada element de la llista
      */
     @NonNull
@@ -96,17 +93,17 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         });
 
         holder.deleteButton.setOnClickListener(view -> {
-            String[] iniTime = activitiesList.get(position).get(4).split(":");
-            String[] finishTime = activitiesList.get(position).get(5).split(":");
-            String initialHour = iniTime[0];
-            String initialMinute= iniTime[1];
-            String finishHour = finishTime[0];
-            String finishMinute = finishTime[1];
+            String[] startTime = activitiesList.get(position).get(4).split(":");
+            String[] endTime = activitiesList.get(position).get(5).split(":");
+            String startHour = startTime[0];
+            String startMinute = startTime[1];
+            String endHour = endTime[0];
+            String endMinute = endTime[1];
+            String day = activitiesList.get(position).get(3);
 
-            try{
-                DAF.deleteActivity(initialHour, initialMinute, finishHour, finishMinute);
-            }
-            catch (InvalidTimeIntervalException ignored) {}
+            try {
+                DAF.deleteActivity(startHour, startMinute, endHour, endMinute, day);
+            } catch (InvalidTimeIntervalException ignored) {}
         });
 
     }

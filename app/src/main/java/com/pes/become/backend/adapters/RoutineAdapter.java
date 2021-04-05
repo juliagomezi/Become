@@ -4,7 +4,9 @@ import com.pes.become.backend.domain.Activity;
 import com.pes.become.backend.domain.Day;
 import com.pes.become.backend.domain.Routine;
 import com.pes.become.backend.domain.Theme;
+import com.pes.become.backend.domain.TimeInterval;
 import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
+import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 
 import java.util.ArrayList;
 
@@ -49,6 +51,7 @@ public class RoutineAdapter {
         ArrayList<ArrayList<String>> res = new ArrayList<>();
         for(Activity activity : activities) {
             ArrayList<String> resaux = new ArrayList<>();
+            resaux.add(activity.getId());
             resaux.add(activity.getName());
             resaux.add(activity.getDescription());
             resaux.add(activity.getTheme().toString());
@@ -73,49 +76,37 @@ public class RoutineAdapter {
 
     /**
      * Metode per a afegir una activitat a una rutina
-     * @param name nom de l'activitat
-     * @param description descripcio de l'activitat
-     * @param theme tema de l'activitat
-     * @param iniH hora d'inici de l'activitat
-     * @param iniM minuts d'inici de l'activitat
-     * @param endH hora de fi de l'activitat
-     * @param endM minuts de fi de l'activitat
-     * @param day dia de l'activitat
-     * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
+     * @param activity nova activitat
+     * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
      */
-    public void addActivity(String name, String description, Theme theme, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException {
-        routine.addActivity(new Activity(name, description, theme, iniH, iniM, endH, endM, day));
+    public void createActivity(Activity activity) throws OverlappingActivitiesException {
+        routine.createActivity(activity);
     }
 
     /**
      * Metode per actualitzar els parametres d'una activitat d'una rutina
-     * @param name nou nom de l'activitat
-     * @param description nova descripcio de l'activitat
-     * @param theme tema la activitat actualitzat
-     * @param oldIniH hora inicial descatualitzada
-     * @param oldIniM minuts incials descatualitzats
-     * @param oldEndH hora final descatualitzada
-     * @param oldEndM minuts finals descatualitzats
-     * @param iniH nova hora d'inici de l'activitat
-     * @param iniM nous minuts d'inici de l'activitat
-     * @param endH nova hora de fi de l'activitat
-     * @param endM nous minuts de fi de l'activitat
-     * @param day nou dia de l'activitat
-     * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
+     * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
      */
-    public void updateActivity(String name, String description, Theme theme, int oldIniH, int oldIniM, int oldEndH, int oldEndM, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException {
-        routine.updateActivity(name, description, theme, oldIniH, oldIniM, oldEndH, oldEndM, iniH, iniM, endH, endM, day);
+    public void updateActivity(Activity a) throws OverlappingActivitiesException {
+        routine.updateActivity(a);
     }
 
     /**
      * Metode per eliminar una activitat de la rutina
-     * @param iniH hora d'inici de l'activitat
-     * @param iniM minuts d'inici de l'activitat
-     * @param endH hora de fi de l'activitat
-     * @param endM minuts de fi de l'activitat
-     * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
+     * @param id identificador de l'activitat
+     * @param day dia de l'activitat
      */
-    public void deleteActivity(int iniH, int iniM, int endH, int endM) throws InvalidTimeIntervalException {
-        routine.deleteActivity(iniH, iniM, endH, endM);
+    public void deleteActivity(String id, Day day) {
+        routine.deleteActivity(id, day);
     }
+
+    /**
+     * Funcio que comprova si una activitat donada es solapa temporalment amb alguna del seu mateix dia
+     * @param a activitat a comprovar
+     * @return true si hi ha solapament, false altrament
+     */
+    public boolean checkOverlappings(Activity a) {
+        return routine.checkOverlappings(a);
+    }
+
 }
