@@ -16,6 +16,9 @@ import java.lang.reflect.Method;
 
 public class ControllerActivityDB {
 
+    /**
+     * Instància de la bd
+     */
     private final FirebaseFirestore db;
 
     /**
@@ -33,35 +36,34 @@ public class ControllerActivityDB {
      * @param object classe que conté el mètode
      */
     public void getActivitiesByDay(String routineName, String day, Method method, Object object) {
-        db.collection("routines").document(routineName).collection("activities").whereEqualTo("day", day)
-                .addSnapshotListener((value, e) -> {
-                    if (e != null) {
-                        Log.w("LISTENER FAILED", "Listen failed.", e);
-                        return;
-                    }
+        db.collection("routines").document(routineName).collection("activities").whereEqualTo("day", day).addSnapshotListener((value, e) -> {
+            if (e != null) {
+                Log.w("LISTENER FAILED", "Listen failed.", e);
+                return;
+            }
 
-                    ArrayList<ArrayList<String>> activitiesResult = new ArrayList<>();
-                    for (QueryDocumentSnapshot document : value) {
-                        ArrayList<String> activity = new ArrayList<>();
-                        activity.add(document.getId());
-                        activity.add(document.get("name").toString());
-                        activity.add(document.get("description").toString());
-                        activity.add(document.get("theme").toString());
-                        activity.add(document.get("day").toString());
-                        activity.add(document.get("beginTime").toString());
-                        activity.add(document.get("finishTime").toString());
-                        activitiesResult.add(activity);
-                    }
-                    Object[] params = new Object[1];
-                    params[0] = activitiesResult;
-                    try {
-                        method.invoke(object, params);
-                    } catch (IllegalAccessException e1) {
-                        System.out.println("Acces invàlid");
-                    } catch (InvocationTargetException e2) {
-                        System.out.println("Target no vàlid");
-                    }
-                });
+            ArrayList<ArrayList<String>> activitiesResult = new ArrayList<>();
+            for (QueryDocumentSnapshot document : value) {
+                ArrayList<String> activity = new ArrayList<>();
+                activity.add(document.getId());
+                activity.add(document.get("name").toString());
+                activity.add(document.get("description").toString());
+                activity.add(document.get("theme").toString());
+                activity.add(document.get("day").toString());
+                activity.add(document.get("beginTime").toString());
+                activity.add(document.get("finishTime").toString());
+                activitiesResult.add(activity);
+            }
+            Object[] params = new Object[1];
+            params[0] = activitiesResult;
+            try {
+                method.invoke(object, params);
+            } catch (IllegalAccessException e1) {
+                System.out.println("Acces invàlid");
+            } catch (InvocationTargetException e2) {
+                System.out.println("Target no vàlid");
+            }
+        });
     }
 
     /**
@@ -75,11 +77,8 @@ public class ControllerActivityDB {
      * @param finishTime es l'hora d'acabament de l'activitat
      * @return el valor del id de l'activitat creada
      */
-    public String createActivity(String routineName, String activityName, String actTheme,String actDescription, String actDay,
-                                 String beginTime, String finishTime) {
-
+    public String createActivity(String routineName, String activityName, String actTheme,String actDescription, String actDay, String beginTime, String finishTime) {
         CollectionReference refToActivities = db.collection("routines").document(routineName).collection("activities");
-
         Map<String,Object> dataInput = new HashMap<>();
         dataInput.put("name",activityName);
         dataInput.put("theme",actTheme);
@@ -94,7 +93,6 @@ public class ControllerActivityDB {
         refToNewActivity.set(dataInput);
 
         return ID;
-
     }
 
     /**
@@ -103,14 +101,10 @@ public class ControllerActivityDB {
      * @param idActivity es l'identificador de l'activitat
      */
     public void deleteActivity(String routineName, String idActivity) {
-
         DocumentReference docRefToActivity;
-        docRefToActivity = db.collection("routines").document(routineName)
-                .collection("activities").document(idActivity);
+        docRefToActivity = db.collection("routines").document(routineName).collection("activities").document(idActivity);
 
         docRefToActivity.delete();
-
-
     }
 
     /**
@@ -124,11 +118,8 @@ public class ControllerActivityDB {
      * @param endT es l'hora d'acabament de l'activitat
      * @param idActivity és l'identificador de l'activitat
      */
-    public void updateActivity(String routineName, String actName, String description,
-                               String theme, String day, String iniT, String endT,  String idActivity) {
-
-        DocumentReference docRefToActivity = db.collection("routines").document(routineName)
-                .collection("activities").document(idActivity);
+    public void updateActivity(String routineName, String actName, String description, String theme, String day, String iniT, String endT,  String idActivity) {
+        DocumentReference docRefToActivity = db.collection("routines").document(routineName).collection("activities").document(idActivity);
 
         docRefToActivity.update("name", actName);
         docRefToActivity.update("description", description);

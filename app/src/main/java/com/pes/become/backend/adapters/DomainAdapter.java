@@ -29,11 +29,13 @@ public class DomainAdapter {
      * Unica instancia de l'adaptador de la classe Rutina
      */
     private static final RoutineAdapter routineAdapter = RoutineAdapter.getInstance();
-
+    /**
+     * Instancia de la classe routineEdit del frontend
+     */
     private RoutineEdit routineEdit;
 
     /**
-     * Metode per obtenir la instancia de la classe
+     * Obtenir la instancia de la classe
      * @return instancia
      */
     public static DomainAdapter getInstance() {
@@ -45,7 +47,7 @@ public class DomainAdapter {
 
     //Aqui necessitarem, mes endavant, el correu de l'usuari
     /**
-     * Metode per crear una rutina
+     * Crear una rutina
      * @param name nom de la rutina
      */
     public void createRoutine(String name) {
@@ -54,7 +56,7 @@ public class DomainAdapter {
     }
 
     /**
-     * Metode per crear una activitat
+     * Crear una activitat
      * @param name nom de l'activitat
      * @param description descripcio de l'activitat
      * @param theme tema de l'activitat
@@ -104,7 +106,7 @@ public class DomainAdapter {
     }
 
     /**
-     * Metode per actualitzar els parametres d'una activitat d'una rutina
+     * Actualitzar els parametres d'una activitat d'una rutina
      * @param name nou nom de l'activitat
      * @param description nova descripcio de l'activitat
      * @param theme nou tema de l'activitat
@@ -145,7 +147,7 @@ public class DomainAdapter {
     }
 
     /**
-     * Metode per demanar les activitats d'un dia
+     * Demanar les activitats d'un dia
      * @param dayString dia de les activitats
      * @param re instància de RoutineEdit
      * @throws NoSuchMethodException el mètode no existeix
@@ -159,7 +161,7 @@ public class DomainAdapter {
     }
 
     /**
-     * Metode per rebre la resposta de la DB amb les activitats d'una rutina
+     * Rebre la resposta de la DB amb les activitats d'una rutina
      * @param acts activitats de la rutina
      * @throws InvalidTimeIntervalException l'interval de temps es incorrecte
      * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
@@ -181,7 +183,7 @@ public class DomainAdapter {
     }
 
     /**
-     * Metode per eliminar una activitat
+     * Eliminar una activitat
      * @param id identificador de l'activitat
      * @param day dia de l'activitat
      */
@@ -191,7 +193,7 @@ public class DomainAdapter {
     }
 
     /**
-     * Funcio per saber la posicio del tema al spinner
+     * Obtenir la posicio del tema al spinner
      * @param element nom del tema
      * @return posicio del tema al spinner
      */
@@ -203,7 +205,7 @@ public class DomainAdapter {
     }
 
     /**
-     * Funcio per saber la posició del dia al spinner
+     * Obtenir la posició del dia al spinner
      * @param element nom del dia
      * @return posició del dia al spinner
      */

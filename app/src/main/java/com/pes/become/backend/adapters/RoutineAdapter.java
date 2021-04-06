@@ -20,7 +20,7 @@ public class RoutineAdapter {
     private final Routine routine = new Routine("RutinaDeProva"); //sample routine
 
     /**
-     * Metode per obtenir la instancia de la classe
+     * Obtenir la instancia de la classe
      * @return instancia
      */
     public static RoutineAdapter getInstance() {
@@ -32,7 +32,7 @@ public class RoutineAdapter {
 
     //tot aixo s'haura de canviar perque la clau de rutina es nom+correuUsuari
     /**
-     * Metode per a crear una nova rutina
+     * Crear una nova rutina
      * @param name nom de la rutina
      */
     public void createRoutine(String name) {
@@ -40,7 +40,7 @@ public class RoutineAdapter {
     }
 
     /**
-     * Metode per consultar les activitats d'un dia
+     * Consultar les activitats d'un dia
      * @param day nom del dia
      */
     public ArrayList<ArrayList<String>> getActivitiesByDay(String day) {
@@ -65,14 +65,14 @@ public class RoutineAdapter {
     }
 
     /**
-     * Métode per buidar les activitats d'una rutina
+     * Buidar les activitats d'una rutina
      */
     public void clearActivities() {
         routine.clearActivities();
     }
 
     /**
-     * Metode per a afegir una activitat a una rutina
+     * Afegir una activitat a una rutina
      * @param activity nova activitat
      * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
      */
@@ -81,7 +81,7 @@ public class RoutineAdapter {
     }
 
     /**
-     * Metode per actualitzar els parametres d'una activitat d'una rutina
+     * Actualitzar els parametres d'una activitat d'una rutina
      * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
      */
     public void updateActivity(Activity a) throws OverlappingActivitiesException {
@@ -89,7 +89,7 @@ public class RoutineAdapter {
     }
 
     /**
-     * Metode per eliminar una activitat de la rutina
+     * Eliminar una activitat de la rutina
      * @param id identificador de l'activitat
      * @param day dia de l'activitat
      */
@@ -98,7 +98,7 @@ public class RoutineAdapter {
     }
 
     /**
-     * Funcio que comprova si una activitat donada es solapa temporalment amb alguna del seu mateix dia
+     * Comprovar si una activitat donada es solapa temporalment amb alguna del seu mateix dia
      * @param a activitat a comprovar
      * @return true si hi ha solapament, false altrament
      */

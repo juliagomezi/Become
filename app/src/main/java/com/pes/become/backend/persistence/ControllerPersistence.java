@@ -45,8 +45,7 @@ public class ControllerPersistence{
      * @param finishTime és l'hora de finalització de l'activitat
      * @return el valor del id de l'activitat creada
      */
-    public String createActivity(String routineName, String activityName, String actTheme,String actDescription, String actDay,
-                                 String beginTime, String finishTime) {
+    public String createActivity(String routineName, String activityName, String actTheme,String actDescription, String actDay, String beginTime, String finishTime) {
         createCtrlActivity();
         return CA.createActivity(routineName, activityName,actTheme,actDescription, actDay, beginTime, finishTime);
     }
@@ -72,11 +71,9 @@ public class ControllerPersistence{
      * @param endT és l'hora d'acabament de l'activitat
      * @param idActivity és l'identificador de l'activitat
      */
-    public void updateActivity(String routineName, String actName,
-                               String description, String theme,  String iniT, String endT, String day,String idActivity) {
+    public void updateActivity(String routineName, String actName, String description, String theme,  String iniT, String endT, String day,String idActivity) {
         createCtrlActivity();
-        CA.updateActivity(routineName, actName, description,
-                theme, day, iniT, endT, idActivity);
+        CA.updateActivity(routineName, actName, description, theme, day, iniT, endT, idActivity);
     }
 
     /**
