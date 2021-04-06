@@ -1,6 +1,5 @@
 package com.pes.become.frontend;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,15 +12,14 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.pes.become.R;
-import com.pes.become.backend.adapters.DomainAdapterFactory;
-import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
+import com.pes.become.backend.adapters.DomainAdapter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
-    private final DomainAdapterFactory DAF = DomainAdapterFactory.getInstance();
+    private final DomainAdapter DA = DomainAdapter.getInstance();
 
     private final ArrayList<ArrayList<String>> activitiesList;
     private final Boolean[] isExpanded;
@@ -97,7 +95,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             String currentId = activitiesList.get(position).get(0);
             String day = activitiesList.get(position).get(4);
 
-            DAF.deleteActivity(currentId, day);
+            DA.deleteActivity(currentId, day);
         });
 
     }

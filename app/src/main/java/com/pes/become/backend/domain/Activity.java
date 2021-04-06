@@ -143,22 +143,6 @@ public class Activity implements Comparable<Activity>{
     }
 
     /**
-     * Metode per actualitzar els parametres d'una activitat
-     * @param name nou nom de l'activitat
-     * @param description nova descripcio de l'activitat
-     * @param theme tema de la nova activitat
-     * @param ti nou interval de temps de l'activitat
-     * @param day nou dia de l'activitat
-     */
-    public void updateInfo(String name, String description, Theme theme, TimeInterval ti, Day day) {
-        setName(name);
-        setDescription(description);
-        setTheme(theme);
-        setInterval(ti);
-        setDay(day);
-    }
-
-    /**
      * Funcio que compara una activitat amb una altra
      * @param a2 activitat amb que comparem
      * @return -1 l'activitat original es anterior a la de a2, 0 si son iguals i 1 si es posterior

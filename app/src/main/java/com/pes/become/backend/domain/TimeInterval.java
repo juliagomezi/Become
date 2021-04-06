@@ -27,7 +27,7 @@ public class TimeInterval implements Comparable<TimeInterval>{
         Time startTime = new Time(iniH, iniM);
         Time endTime = new Time(endH, endM);
         int compareTime = startTime.compareTo(endTime);
-        if(compareTime < 0){
+        if(compareTime < 0) {
             this.startTime = startTime;
             this.endTime = endTime;
         }

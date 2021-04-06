@@ -1,7 +1,5 @@
 package com.pes.become.backend.domain;
 
-import android.util.Log;
-
 import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 
 import java.util.ArrayList;
@@ -27,7 +25,7 @@ public class Routine {
      * Creadora de la rutina
      * @param name nom de la rutina
      */
-    public Routine(String name){
+    public Routine(String name) {
         this.name = name;
         clearActivities();
     }
@@ -36,7 +34,7 @@ public class Routine {
      * Getter del nom
      * @return nom de la rutina
      */
-    public String getName(){
+    public String getName() {
         return this.name;
     }
 
@@ -45,7 +43,7 @@ public class Routine {
      */
     public void clearActivities() {
         activities = new TreeMap<>();
-        for(int i=0; i<7; ++i){
+        for(int i=0; i<7; ++i) {
             ArrayList<Activity> tmp = new ArrayList<>();
             activities.put(Day.values()[i], tmp);
         }
@@ -69,7 +67,7 @@ public class Routine {
      * @param day dia a consultar
      * @return les activitats de la rutina al dia indicat
      */
-    public ArrayList<Activity> getActivitiesByDay(Day day){
+    public ArrayList<Activity> getActivitiesByDay(Day day) {
         return activities.get(day);
     }
 

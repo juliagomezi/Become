@@ -1,11 +1,8 @@
 package com.pes.become.backend.adapters;
 
-import android.util.Log;
-
 import com.pes.become.backend.domain.Activity;
 import com.pes.become.backend.domain.Day;
 import com.pes.become.backend.domain.Theme;
-import com.pes.become.backend.domain.Time;
 import com.pes.become.backend.domain.TimeInterval;
 import com.pes.become.backend.exceptions.InvalidDayIntervalException;
 import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
@@ -19,11 +16,11 @@ import java.util.ArrayList;
 /**
  * Classe que gestiona la comunicacio entre la capa de presentacio i la capa de domini, i la creacio dels adaptadors de cada classe de domini
  */
-public class DomainAdapterFactory {
+public class DomainAdapter {
     /**
      * Unica instancia de la classe
      */
-    private static DomainAdapterFactory instance;
+    private static DomainAdapter instance;
     /**
      * Unica instancia del controlador de persistencia
      */
@@ -33,15 +30,15 @@ public class DomainAdapterFactory {
      */
     private static final RoutineAdapter routineAdapter = RoutineAdapter.getInstance();
 
-    private static RoutineEdit routineEdit;
+    private RoutineEdit routineEdit;
 
     /**
      * Metode per obtenir la instancia de la classe
      * @return instancia
      */
-    public static DomainAdapterFactory getInstance(){
-        if(instance == null){
-            instance = new DomainAdapterFactory();
+    public static DomainAdapter getInstance() {
+        if(instance == null) {
+            instance = new DomainAdapter();
         }
         return instance;
     }
@@ -51,7 +48,7 @@ public class DomainAdapterFactory {
      * Metode per crear una rutina
      * @param name nom de la rutina
      */
-    public void createRoutine(String name){
+    public void createRoutine(String name) {
         routineAdapter.createRoutine(name);
         //controllerPersistence.createNewRoutine(name);
     }
@@ -154,12 +151,11 @@ public class DomainAdapterFactory {
      * @throws NoSuchMethodException el mètode no existeix
      */
     public void getActivitiesByDay(String dayString, RoutineEdit re) throws NoSuchMethodException {
-        Log.d("getActivitiesByDay","getActivitiesByDay");
         routineEdit = re;
         Class[] parameterTypes = new Class[1];
         parameterTypes[0] = ArrayList.class;
-        Method method1 = DomainAdapterFactory.class.getMethod("setActivitiesByDay", parameterTypes);
-        controllerPersistence.getActivitiesByDay("RutinaDeProva", dayString, method1, DomainAdapterFactory.getInstance());
+        Method method1 = DomainAdapter.class.getMethod("setActivitiesByDay", parameterTypes);
+        controllerPersistence.getActivitiesByDay("RutinaDeProva", dayString, method1, DomainAdapter.getInstance());
     }
 
     /**

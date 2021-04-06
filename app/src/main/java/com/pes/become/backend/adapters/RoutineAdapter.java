@@ -3,9 +3,6 @@ package com.pes.become.backend.adapters;
 import com.pes.become.backend.domain.Activity;
 import com.pes.become.backend.domain.Day;
 import com.pes.become.backend.domain.Routine;
-import com.pes.become.backend.domain.Theme;
-import com.pes.become.backend.domain.TimeInterval;
-import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
 import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 
 import java.util.ArrayList;
@@ -26,8 +23,8 @@ public class RoutineAdapter {
      * Metode per obtenir la instancia de la classe
      * @return instancia
      */
-    public static RoutineAdapter getInstance(){
-        if(instance == null){
+    public static RoutineAdapter getInstance() {
+        if(instance == null) {
             instance = new RoutineAdapter();
         }
         return instance;
