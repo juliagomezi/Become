@@ -13,6 +13,13 @@
     <string name="activity_name">Name</string>
     <string name="activity_description">Description</string>
     <string name="theme">Theme:</string>
+    <string name="modifytext">Modify activity</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="log_in">Log in</string>
+    <string name="not_registered_yet">Not registered yet?</string>
+    <string name="signup">Sign up!</string>
+    <string name="google">Google</string>
 
     <string-array name="themesValues">
         <item>Music</item>
