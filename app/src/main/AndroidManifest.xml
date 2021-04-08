@@ -8,6 +8,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Become">
+        <activity android:name=".frontend.login"></activity>
         <activity android:name=".frontend.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
