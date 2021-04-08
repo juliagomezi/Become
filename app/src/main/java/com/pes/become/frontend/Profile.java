@@ -23,6 +23,9 @@ public class Profile extends Fragment {
     private TabLayout tabLayout;
     private ViewPager viewPager;
 
+    /**
+     * Pestanyes del TabLayout
+     */
     private ArrayList<Fragment> tabs;
 
     /**
@@ -31,7 +34,7 @@ public class Profile extends Fragment {
     public Profile() {}
 
     /**
-     * Funcio del RoutineEdit que s'executa al crear-la
+     * Funcio del Profile que s'executa al crear-la
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -46,18 +49,19 @@ public class Profile extends Fragment {
         viewPager = view.findViewById(R.id.viewPager);
         viewPager.setAdapter(new MainAdapter(getFragmentManager()));
         tabLayout.setupWithViewPager(viewPager);
+        tabLayout.getTabAt(0).setIcon(R.drawable.bookmark_icon);
+        tabLayout.getTabAt(1).setIcon(R.drawable.stats_icon);
 
         return view;
     }
 
+    /**
+     * Classe que controla els canvis de pestanya
+     */
     private class MainAdapter extends FragmentPagerAdapter {
-
-        private ArrayList<String> titles = new ArrayList<>();
 
         public MainAdapter(@NonNull FragmentManager fm) {
             super(fm);
-            titles.add("Routines");
-            titles.add("Stats");
         }
 
         @NonNull
@@ -71,9 +75,5 @@ public class Profile extends Fragment {
             return tabs.size();
         }
 
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return titles.get(position);
-        }
     }
 }

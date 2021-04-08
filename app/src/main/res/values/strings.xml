@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Become</string>
+    <string name="app_name" translatable="false">Become</string>
     <string name="new_activityLabel">New Activity</string>
     <string name="descriptionLabel">Description (optional)</string>
     <string name="activity_nameLabel">Name</string>
@@ -19,7 +19,7 @@
     <string name="log_in">Log in</string>
     <string name="not_registered_yet">Not registered yet?</string>
     <string name="signup">Sign up!</string>
-    <string name="google">Google</string>
+    <string name="google" translatable="false">Google</string>
 
     <string-array name="themesValues">
         <item>Music</item>
@@ -42,6 +42,6 @@
         <item>Sunday</item>
     </string-array>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
 
 </resources>
