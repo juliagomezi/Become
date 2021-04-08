@@ -4,6 +4,7 @@ import com.pes.become.backend.domain.Activity;
 import com.pes.become.backend.domain.Day;
 import com.pes.become.backend.domain.Theme;
 import com.pes.become.backend.domain.TimeInterval;
+import com.pes.become.backend.domain.User;
 import com.pes.become.backend.exceptions.InvalidDayIntervalException;
 import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
 import com.pes.become.backend.exceptions.OverlappingActivitiesException;
@@ -35,6 +36,11 @@ public class DomainAdapter {
     private RoutineEdit routineEdit;
 
     /**
+     * Usuari autenticat que esta usant l'aplicació actualment
+     */
+    private User currentUser;
+
+    /**
      * Obtenir la instancia de la classe
      * @return instancia
      */
@@ -45,7 +51,66 @@ public class DomainAdapter {
         return instance;
     }
 
-    //Aqui necessitarem, mes endavant, el correu de l'usuari
+    /**
+     * Metode per registrar un nou usuari
+     * @param mail correu de l'usuari
+     * @param password contrassenya de l'usuari
+     * @param name nom de l'usuari
+     */
+    public void registerUser(String mail, String password, String name) {
+        controllerPersistence.registerUser(mail,password,name);
+    }
+
+    /**
+     * Metode per iniciar la sessio d'un usuari existent
+     * @param mail correu de l'usuari
+     * @param password contrassenya de l'usuari
+     */
+    public void loginUser(String mail, String password) {
+        ArrayList<String> info = controllerPersistence.getUser(mail,password);
+        currentUser = new User(info.get(0),info.get(1),info.get(2),info.get(3));
+    }
+
+    /**
+     * Metode per iniciar sessio amb un compte de Google
+     */
+    public void loginGoogleUser() {
+
+    }
+
+    /**
+     * Metode per tancar la sessio d'un usuari que previament havia iniciat sessio
+     */
+    public void logoutUser() {
+        currentUser = null;
+    }
+
+    /**
+     * Metode per donar de baixa un compte d'usuari
+     * @param mail correu de l'usuari
+     * @param password contrassenya de l'usuari
+     */
+    public void deleteUser(String mail, String password) {
+
+    }
+
+    /**
+     * Metode per canviar la contrassenya d'un usuari
+     * @param oldPassword contrassenya antiga
+     * @param newPassword contrassenya nova
+     */
+    public void changePassword(String oldPassword, String newPassword) {
+
+    }
+
+    /**
+     * Metode per canviar el nom de l'usuari
+     * @param newname nou nom de l'usuari
+     */
+    public void changeUserName(String newname) {
+        //currentUser.setName(newname);
+    }
+
     /**
      * Crear una rutina
      * @param name nom de la rutina
@@ -53,6 +118,31 @@ public class DomainAdapter {
     public void createRoutine(String name) {
         routineAdapter.createRoutine(name);
         //controllerPersistence.createNewRoutine(name);
+    }
+
+    /**
+     * Metode per seleccionar una rutina ja existent
+     * @param idRoutine identificador de la rutina
+     */
+    public void selectRoutine(String idRoutine) {
+
+    }
+
+    /**
+     * Metode per canviar el nom d'una rutina existent
+     * @param id identificador de la rutina
+     * @param name nou nom de la rutina
+     */
+    public void changeRoutineName(String id, String name) {
+
+    }
+
+    /**
+     * Metode per esborrar una rutina existent
+     * @param id identificador de la rutina
+     */
+    public void deleteRoutine(String id) {
+
     }
 
     /**
