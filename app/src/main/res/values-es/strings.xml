@@ -36,4 +36,11 @@
     </string-array>
     <string name="theme">Tema:</string>
     <string name="modifytext">Modificar actividad</string>
+    <string name="password">Contraseña</string>
+    <string name="email">Correo</string>
+    <string name="log_in">Iniciar sesión</string>
+    <string name="not_registered_yet">Aún no estás registrado?</string>
+    <string name="signup">Registarse!</string>
+    <string name="google">Google</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

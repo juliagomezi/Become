@@ -58,7 +58,7 @@ public class DomainAdapter {
      * @param name nom de l'usuari
      */
     public void registerUser(String mail, String password, String name) {
-        controllerPersistence.registerUser(mail,password,name);
+        //controllerPersistence.registerUser(mail,password,name);
     }
 
     /**
@@ -67,8 +67,8 @@ public class DomainAdapter {
      * @param password contrassenya de l'usuari
      */
     public void loginUser(String mail, String password) {
-        ArrayList<String> info = controllerPersistence.getUser(mail,password);
-        currentUser = new User(info.get(0),info.get(1),info.get(2),info.get(3));
+        //ArrayList<String> info = controllerPersistence.getUser(mail,password);
+        //currentUser = new User(info.get(0),info.get(1),info.get(2),info.get(3));
     }
 
     /**

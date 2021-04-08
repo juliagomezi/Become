@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 break;
 
             case R.id.profileView:
-                selectedFragment = new RoutineEdit(); //aixo haura de ser el fragment del perfil
+                selectedFragment = new Profile(); //aixo haura de ser el fragment del perfil
                 break;
             default:
                 selectedFragment = new RoutineEdit(); //aixo haura de ser el fragment de de la pantalla incial
