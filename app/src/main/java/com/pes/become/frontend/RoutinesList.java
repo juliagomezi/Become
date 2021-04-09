@@ -1,66 +1,85 @@
 package com.pes.become.frontend;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.pes.become.R;
+import com.pes.become.backend.adapters.DomainAdapter;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link RoutinesList#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+
 public class RoutinesList extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private View view;
+    private Context global;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private final DomainAdapter DA = DomainAdapter.getInstance();
 
-    public RoutinesList() {
-        // Required empty public constructor
+    private ArrayList<ArrayList<String>> routinesList;
+
+    /**
+     * Constructora per defecte de RoutinesList
+     */
+    public RoutinesList() {}
+
+    /**
+     * Funcio del RoutinesList que s'executa al crear-la
+     */
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.routines_list, container, false);
+        super.onCreate(savedInstanceState);
+        global = this.getActivity();
+
+        getRoutines();
+
+        return view;
     }
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment routinesList.
+     * Funció per inicialitzar l'element que mostra el llistat d'activitats
      */
-    // TODO: Rename and change types and number of parameters
-    public static RoutinesList newInstance(String param1, String param2) {
-        RoutinesList fragment = new RoutinesList();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    private void initRecyclerView() {
+        RecyclerView recyclerView = view.findViewById(R.id.activityList);
+        recyclerView.setLayoutManager((new LinearLayoutManager(global)));
+        RecyclerAdapterRoutinesList recyclerAdapter = new RecyclerAdapterRoutinesList(routinesList);
+        recyclerView.setAdapter(recyclerAdapter);
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+    /**
+     * Funció per obtenir les rutines de l'usuari
+     */
+    public void getRoutines() {
+
+        //temporalment hardcodejat
+        routinesList = new ArrayList<>();
+        for(int i=1; i<5;++i) {
+            ArrayList<String> routine = new ArrayList<>();
+            routine.add(String.valueOf(i));
+            routine.add("Rutina "+String.valueOf(i));
+            routinesList.add(routine);
         }
+        initRecyclerView();
+
+        //DA.getRoutines();
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.routines_list, container, false);
+    /**
+     * Funció per inicialitzar l'element que mostra el llistat de rutines
+     * @param routinesListCallback llistat de rutines que retorna la BD
+     */
+    public void getRoutinesCallback(ArrayList<ArrayList<String>> routinesListCallback) {
+        routinesList = new ArrayList<>(routinesListCallback.size());
+        routinesList.addAll(routinesListCallback);
+        initRecyclerView();
     }
 }
