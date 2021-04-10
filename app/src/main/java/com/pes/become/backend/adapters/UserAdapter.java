@@ -1,6 +1,9 @@
 package com.pes.become.backend.adapters;
 
+import com.pes.become.backend.domain.Routine;
 import com.pes.become.backend.domain.User;
+
+import java.util.ArrayList;
 
 public class UserAdapter {
 
@@ -18,6 +21,14 @@ public class UserAdapter {
             instance = new UserAdapter();
         }
         return instance;
+    }
+
+    public User createUser(String mail, String name){
+        return new User(mail, name);
+    }
+
+    public User createUser(String mail, String name, ArrayList<String> routines){
+        return new User(mail, name, routines);
     }
 
     /**

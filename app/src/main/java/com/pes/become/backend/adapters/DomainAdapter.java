@@ -32,6 +32,10 @@ public class DomainAdapter {
      */
     private static final RoutineAdapter routineAdapter = RoutineAdapter.getInstance();
     /**
+     * Unica instancia de l'adaptador de la classe Usuari
+     */
+    private static final UserAdapter userAdapter = UserAdapter.getInstance();
+    /**
      * Instancia de la classe routineEdit del frontend
      */
     private RoutineEdit routineEdit;
@@ -60,6 +64,7 @@ public class DomainAdapter {
      */
     public void registerUser(String mail, String password, String name) {
         //controllerPersistence.registerUser(mail,password,name);
+        //currentUser = UserAdapter.createUser(mail, name);
     }
 
     /**
@@ -69,6 +74,8 @@ public class DomainAdapter {
      */
     public void loginUser(String mail, String password) {
         //ArrayList<String> info = controllerPersistence.getUser(mail,password);
+        //currentUser = UserAdapter.createUser(mail, name, routines);
+        //setSelectedRoutine(selectedRoutineID);
     }
 
     /**
@@ -91,7 +98,8 @@ public class DomainAdapter {
      * @param password contrassenya de l'usuari
      */
     public void deleteUser(String mail, String password) {
-
+        logoutUser();
+        //controllerPersistence.deleteUser(mail, password);
     }
 
     /**
@@ -100,7 +108,7 @@ public class DomainAdapter {
      * @param newPassword contrassenya nova
      */
     public void changePassword(String oldPassword, String newPassword) {
-
+        //controllerPersistence.changePassword(oldPassword, newPassword);
     }
 
     /**
@@ -108,7 +116,7 @@ public class DomainAdapter {
      * @param newname nou nom de l'usuari
      */
     public void changeUserName(String newname) {
-        //currentUser.setName(newname);
+        currentUser.setName(newname);
     }
 
     /**
@@ -116,8 +124,8 @@ public class DomainAdapter {
      * @param name nom de la rutina
      */
     public void createRoutine(String name) {
-        //controllerPersistence.createNewRoutine(name);
-        //afegir la rutina a la llista de rutines del currentUser ¿?
+        //String id = controllerPersistence.createNewRoutine(name);
+        //currentUser.addRoutine(id);
     }
 
     /**

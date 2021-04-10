@@ -40,13 +40,12 @@ public class User {
      * Creadora de la classe per a un usuari preexistent (amb rutines)
      * @param mail
      * @param name
-     * @param selectedRoutine
      * @param routines
      */
-    public User(String mail, String name, Routine selectedRoutine, ArrayList<String> routines) {
+    public User(String mail, String name, ArrayList<String> routines) {
         this.mail = mail;
         this.name = name;
-        this.selectedRoutine = selectedRoutine;
+        this.selectedRoutine = null;
         this.routines.addAll(routines);
     }
 
@@ -102,7 +101,7 @@ public class User {
      * Metode per afegir una rutina a la llista de rutines de l'usuari
      * @param id ID de la rutina a afegir
      */
-    public void addRoutines(String id){
+    public void addRoutine(String id){
         routines.add(id);
     }
 
