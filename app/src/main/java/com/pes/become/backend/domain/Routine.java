@@ -13,6 +13,10 @@ import java.util.TreeMap;
  */
 public class Routine {
     /**
+     * Identificador de la rutina
+     */
+    private String id;
+    /**
      * Nom de la rutina
      */
     private String name;
@@ -26,8 +30,25 @@ public class Routine {
      * @param name nom de la rutina
      */
     public Routine(String name) {
+        this.id = null;
         this.name = name;
         clearActivities();
+    }
+
+    /**
+     * Getter de la id
+     * @return id de la rutina
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * Setter de la id
+     * @param id nova id de la rutina
+     */
+    public void setId(String id) {
+        this.id = id;
     }
 
     /**
@@ -36,6 +57,14 @@ public class Routine {
      */
     public String getName() {
         return this.name;
+    }
+
+    /**
+     *
+     * @param name
+     */
+    public void setName(String name){
+        this.name = name;
     }
 
     /**
