@@ -1,6 +1,5 @@
 package com.pes.become.backend.domain;
 
-import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
 import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 
 import java.util.ArrayList;
@@ -26,16 +25,16 @@ public class Routine {
      * Creadora de la rutina
      * @param name nom de la rutina
      */
-    public Routine(String name){
+    public Routine(String name) {
         this.name = name;
-        activities = new TreeMap<>();
+        clearActivities();
     }
 
     /**
      * Getter del nom
      * @return nom de la rutina
      */
-    public String getName(){
+    public String getName() {
         return this.name;
     }
 
@@ -44,7 +43,7 @@ public class Routine {
      */
     public void clearActivities() {
         activities = new TreeMap<>();
-        for(int i=0; i<7; ++i){
+        for(int i=0; i<7; ++i) {
             ArrayList<Activity> tmp = new ArrayList<>();
             activities.put(Day.values()[i], tmp);
         }
@@ -54,8 +53,8 @@ public class Routine {
      * Metode que afegeix una activitat a la rutina
      * @param activity activitat a afegir
      * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
-     */
-    public void addActivity(Activity activity) throws OverlappingActivitiesException {
+     * */
+    public void createActivity(Activity activity) throws OverlappingActivitiesException {
         if(!checkOverlappings(activity)) {
             ArrayList<Activity> actDay = getActivitiesByDay(activity.getDay());
             actDay.add(activity);
@@ -68,40 +67,40 @@ public class Routine {
      * @param day dia a consultar
      * @return les activitats de la rutina al dia indicat
      */
-    public ArrayList<Activity> getActivitiesByDay(Day day){
+    public ArrayList<Activity> getActivitiesByDay(Day day) {
         return activities.get(day);
     }
 
     /**
      * Metode per actualitzar els parametres d'una activitat de la rutina
-     * @param oldTime interval desactualitzat
-     * @param oldDay dia desactualitzat
-     * @param newact nova activitat
+     * @param updatedActivity activitat actualitzada
      * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
      */
-    public void updateActivity(TimeInterval oldTime, Day oldDay, Activity newact) throws OverlappingActivitiesException {
-        if(!checkOverlappings(newact)) {
-            ArrayList<Activity> a = activities.get(oldDay);
-            for (Activity act : a) {
-                if (act.getInterval().compareTo(oldTime) == 0) {
-                    activities.get(oldDay).remove(act); //Eliminem del dia anterior
-                    activities.get(newact.getDay()).add(newact); //Posem al dia nou
-                    break;
+    public void updateActivity(Activity updatedActivity) throws OverlappingActivitiesException {
+        if(!checkOverlappings(updatedActivity)) {
+            for(Map.Entry<Day, ArrayList<Activity>> entry : activities.entrySet()) {
+                for(Activity a : entry.getValue()) {
+                    if(a.getId().equals(updatedActivity.getId())) {
+                        entry.getValue().remove(a);
+                        break;
+                    }
                 }
             }
+            activities.get(updatedActivity.getDay()).add(updatedActivity);
+            Collections.sort(activities.get(updatedActivity.getDay()));
         } else throw new OverlappingActivitiesException();
     }
 
     /**
      * Metode per eliminar una activitat de la rutina
-     * @param time hora de l'activitat a esborrar
+     * @param id identificador de l'activitat
      * @param day dia de l'activitat
      */
-    public void deleteActivity(TimeInterval time, Day day) {
-        ArrayList<Activity> a = activities.get(day);
-        for (Activity act : a) {
-            if (act.getInterval().compareTo(time) == 0) {
-                activities.get(day).remove(act);
+    public void deleteActivity(String id, Day day) {
+        ArrayList<Activity> acts = activities.get(day);
+        for (Activity activity : acts) {
+            if (activity.getId().equals(id)) {
+                acts.remove(activity);
                 break;
             }
         }
@@ -109,15 +108,13 @@ public class Routine {
 
     /**
      * Funcio que comprova si una activitat donada es solapa temporalment amb alguna del seu mateix dia
-     * @param a activitat a comparar
+     * @param a activitat a comprovar
      * @return true si hi ha solapament, false altrament
      */
-    private boolean checkOverlappings(Activity a) {
+    public boolean checkOverlappings(Activity a) {
         ArrayList<Activity> acts = activities.get(a.getDay());
         for (Activity activity : acts) {
-            if (activity.compareTo(a) == 0) {
-                return true;
-            }
+            if(!activity.getId().equals(a.getId()) && activity.compareTo(a) == 0) return true;
         }
         return false;
     }

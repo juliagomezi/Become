@@ -3,9 +3,6 @@ package com.pes.become.backend.adapters;
 import com.pes.become.backend.domain.Activity;
 import com.pes.become.backend.domain.Day;
 import com.pes.become.backend.domain.Routine;
-import com.pes.become.backend.domain.Theme;
-import com.pes.become.backend.domain.TimeInterval;
-import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
 import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 
 import java.util.ArrayList;
@@ -23,11 +20,11 @@ public class RoutineAdapter {
     private final Routine routine = new Routine("RutinaDeProva"); //sample routine
 
     /**
-     * Metode per obtenir la instancia de la classe
+     * Obtenir la instancia de la classe
      * @return instancia
      */
-    public static RoutineAdapter getInstance(){
-        if(instance == null){
+    public static RoutineAdapter getInstance() {
+        if(instance == null) {
             instance = new RoutineAdapter();
         }
         return instance;
@@ -35,7 +32,7 @@ public class RoutineAdapter {
 
     //tot aixo s'haura de canviar perque la clau de rutina es nom+correuUsuari
     /**
-     * Metode per a crear una nova rutina
+     * Crear una nova rutina
      * @param name nom de la rutina
      */
     public void createRoutine(String name) {
@@ -43,7 +40,7 @@ public class RoutineAdapter {
     }
 
     /**
-     * Metode per consultar les activitats d'un dia
+     * Consultar les activitats d'un dia
      * @param day nom del dia
      */
     public ArrayList<ArrayList<String>> getActivitiesByDay(String day) {
@@ -51,6 +48,7 @@ public class RoutineAdapter {
         ArrayList<ArrayList<String>> res = new ArrayList<>();
         for(Activity activity : activities) {
             ArrayList<String> resaux = new ArrayList<>();
+            resaux.add(activity.getId());
             resaux.add(activity.getName());
             resaux.add(activity.getDescription());
             resaux.add(activity.getTheme().toString());
@@ -67,59 +65,45 @@ public class RoutineAdapter {
     }
 
     /**
-     * Métode per buidar les activitats d'una rutina
+     * Buidar les activitats d'una rutina
      */
     public void clearActivities() {
         routine.clearActivities();
     }
 
     /**
-     * Metode per a afegir una activitat a una rutina
-     * @param name nom de l'activitat
-     * @param description descripcio de l'activitat
-     * @param theme tema de l'activitat
-     * @param iniH hora d'inici de l'activitat
-     * @param iniM minuts d'inici de l'activitat
-     * @param endH hora de fi de l'activitat
-     * @param endM minuts de fi de l'activitat
+     * Afegir una activitat a una rutina
+     * @param activity nova activitat
+     * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
+     */
+    public void createActivity(Activity activity) throws OverlappingActivitiesException {
+        routine.createActivity(activity);
+    }
+
+    /**
+     * Actualitzar els parametres d'una activitat d'una rutina
+     * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
+     */
+    public void updateActivity(Activity a) throws OverlappingActivitiesException {
+        routine.updateActivity(a);
+    }
+
+    /**
+     * Eliminar una activitat de la rutina
+     * @param id identificador de l'activitat
      * @param day dia de l'activitat
-     * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
-     * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
      */
-    public void addActivity(String name, String description, Theme theme, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException, OverlappingActivitiesException {
-        routine.addActivity(new Activity(name, description, theme, new TimeInterval(iniH, iniM, endH, endM), day));
+    public void deleteActivity(String id, Day day) {
+        routine.deleteActivity(id, day);
     }
 
     /**
-     * Metode per actualitzar els parametres d'una activitat d'una rutina
-     * @param name nou nom de l'activitat
-     * @param description nova descripcio de l'activitat
-     * @param theme tema la activitat actualitzat
-     * @param oldIniH hora inicial descatualitzada
-     * @param oldIniM minuts incials descatualitzats
-     * @param oldEndH hora final descatualitzada
-     * @param oldEndM minuts finals descatualitzats
-     * @param iniH nova hora d'inici de l'activitat
-     * @param iniM nous minuts d'inici de l'activitat
-     * @param endH nova hora de fi de l'activitat
-     * @param endM nous minuts de fi de l'activitat
-     * @param day nou dia de l'activitat
-     * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
-     * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
+     * Comprovar si una activitat donada es solapa temporalment amb alguna del seu mateix dia
+     * @param a activitat a comprovar
+     * @return true si hi ha solapament, false altrament
      */
-    public void updateActivity(String name, String description, Theme theme, int oldIniH, int oldIniM, int oldEndH, int oldEndM, int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException, OverlappingActivitiesException {
-        routine.updateActivity(new TimeInterval(oldIniH, oldIniM, oldEndH, oldEndM), day, new Activity(name, description, theme, new TimeInterval(iniH,iniM,endH,endM), day));
+    public boolean checkOverlappings(Activity a) {
+        return routine.checkOverlappings(a);
     }
 
-    /**
-     * Metode per eliminar una activitat de la rutina
-     * @param iniH hora d'inici de l'activitat
-     * @param iniM minuts d'inici de l'activitat
-     * @param endH hora de fi de l'activitat
-     * @param endM minuts de fi de l'activitat
-     * @throws InvalidTimeIntervalException es llença si el temps d'inici no es anterior al temps de fi
-     */
-    public void deleteActivity(int iniH, int iniM, int endH, int endM, Day day) throws InvalidTimeIntervalException {
-        routine.deleteActivity(new TimeInterval(iniH, iniM, endH, endM), day);
-    }
 }

@@ -12,15 +12,14 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.pes.become.R;
-import com.pes.become.backend.adapters.DomainAdapterFactory;
-import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
+import com.pes.become.backend.adapters.DomainAdapter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
-    private final DomainAdapterFactory DAF = DomainAdapterFactory.getInstance();
+    private final DomainAdapter DA = DomainAdapter.getInstance();
 
     private final ArrayList<ArrayList<String>> activitiesList;
     private final Boolean[] isExpanded;
@@ -35,9 +34,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         Arrays.fill(isExpanded, Boolean.FALSE);
     }
 
-    /**
-     * Funcio del RecyclerAdapter que s'executa al crear-lo
-     */
     /**
      * Funcio del RecyclerAdapter que s'executa al crear-lo
      * @return retorna el ViewHolder que representa cada element de la llista
@@ -55,14 +51,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
      */
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.activityNameDisplay.setText(activitiesList.get(position).get(0));
-        holder.activityDescriptionDisplay.setText(activitiesList.get(position).get(1));
-        holder.startTimeDisplay.setText(activitiesList.get(position).get(4));
-        holder.endTimeDisplay.setText(activitiesList.get(position).get(5));
 
+        holder.activityNameDisplay.setText(activitiesList.get(position).get(1));
+        holder.activityDescriptionDisplay.setText(activitiesList.get(position).get(2));
+        holder.startTimeDisplay.setText(activitiesList.get(position).get(5));
+        holder.endTimeDisplay.setText(activitiesList.get(position).get(6));
         holder.expandableLayout.setVisibility(isExpanded[position] ? View.VISIBLE : View.GONE);
 
-        String theme = activitiesList.get(position).get(2);
+        String theme = activitiesList.get(position).get(3);
         switch (theme) {
             case "Cooking":
                 holder.cardActivityDisplay.setBackgroundResource(R.drawable.theme_cooking_background);
@@ -92,22 +88,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
         holder.editButton.setOnClickListener(view -> {
             RoutineEdit.getInstance().createActivitySheet(true);
-            RoutineEdit.getInstance().fillActivitySheet(activitiesList.get(position).get(0), activitiesList.get(position).get(1), activitiesList.get(position).get(2), activitiesList.get(position).get(3), activitiesList.get(position).get(4), activitiesList.get(position).get(5));
+            RoutineEdit.getInstance().fillActivitySheet(activitiesList.get(position).get(0), activitiesList.get(position).get(1), activitiesList.get(position).get(2), activitiesList.get(position).get(3), activitiesList.get(position).get(4), activitiesList.get(position).get(5), activitiesList.get(position).get(6));
         });
 
         holder.deleteButton.setOnClickListener(view -> {
-            String[] iniTime = activitiesList.get(position).get(4).split(":");
-            String[] finishTime = activitiesList.get(position).get(5).split(":");
-            String initialHour = iniTime[0];
-            String initialMinute= iniTime[1];
-            String finishHour = finishTime[0];
-            String finishMinute = finishTime[1];
-            String day = activitiesList.get(position).get(3);
+            String currentId = activitiesList.get(position).get(0);
+            String day = activitiesList.get(position).get(4);
 
-            try{
-                DAF.deleteActivity(initialHour, initialMinute, finishHour, finishMinute, day);
-            }
-            catch (InvalidTimeIntervalException ignored) {}
+            DA.deleteActivity(currentId, day);
         });
 
     }

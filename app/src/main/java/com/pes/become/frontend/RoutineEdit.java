@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +23,7 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.pes.become.R;
-import com.pes.become.backend.adapters.DomainAdapterFactory;
+import com.pes.become.backend.adapters.DomainAdapter;
 import com.pes.become.backend.exceptions.InvalidDayIntervalException;
 import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
 import com.pes.become.backend.exceptions.OverlappingActivitiesException;
@@ -41,13 +40,10 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
     private View view;
     private Context global;
 
-    private final DomainAdapterFactory DAF = DomainAdapterFactory.getInstance();
+    private final DomainAdapter DA = DomainAdapter.getInstance();
 
     private ArrayList<ArrayList<String>> activitiesList;
 
-    // desplegable nova activitat
-    private ArrayAdapter<CharSequence> adapterTheme;
-    private ArrayAdapter<CharSequence> adapterStartDay;
     private BottomSheetDialog activitySheet;
     private Spinner spinnerTheme, spinnerStartDay, spinnerEndDay;
     private EditText activityName, activityDescr;
@@ -55,7 +51,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
     private TextView endTime;
     private TextView sheetLabel;
     private int startHour, startMinute, endHour, endMinute;
-    private String oldStartTime, oldEndTime;
+    private String id;
 
     /**
      * Constructora del RoutineEdit
@@ -116,12 +112,13 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         endTime = sheetView.findViewById(R.id.endTime);
         sheetLabel = sheetView.findViewById(R.id.newTitle);
 
-        adapterTheme = ArrayAdapter.createFromResource(global, R.array.themesValues, R.layout.spinner_selected_item);
+        // desplegable nova activitat
+        ArrayAdapter<CharSequence> adapterTheme = ArrayAdapter.createFromResource(global, R.array.themesValues, R.layout.spinner_selected_item);
         adapterTheme.setDropDownViewResource(R.layout.spinner_item_dropdown);
         spinnerTheme.setAdapter(adapterTheme);
         spinnerTheme.setOnItemSelectedListener((AdapterView.OnItemSelectedListener) global);
 
-        adapterStartDay = ArrayAdapter.createFromResource(global, R.array.dayValues, R.layout.spinner_selected_item);
+        ArrayAdapter<CharSequence> adapterStartDay = ArrayAdapter.createFromResource(global, R.array.dayValues, R.layout.spinner_selected_item);
         adapterStartDay.setDropDownViewResource(R.layout.spinner_item_dropdown);
         spinnerStartDay.setAdapter(adapterStartDay);
         spinnerStartDay.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -205,7 +202,8 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
      * @param startTime temps d'inici de l'activitat
      * @param endTime temps de fi de l'activitat
      */
-    public void fillActivitySheet(String name, String description, String theme, String startDay, String startTime, String endTime) {
+    public void fillActivitySheet(String id, String name, String description, String theme, String startDay, String startTime, String endTime) {
+        this.id = id;
         this.sheetLabel.setText(R.string.modifytext);
         this.activityName.setText(name);
         this.activityDescr.setText(description);
@@ -214,8 +212,6 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         //this.spinnerEndDay.setSelection(findPositionInAdapter(adapterEndDay, endDay));
         this.startTime.setText(startTime);
         this.endTime.setText(endTime);
-        this.oldStartTime = startTime;
-        this.oldEndTime = endTime;
     }
 
     /**
@@ -224,7 +220,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
      * @return posicio del tema al spinner
      */
     private int findPositionInAdapterTheme(String element) {
-       return DAF.getPositionTheme(element);
+       return DA.getPositionTheme(element);
     }
 
     /**
@@ -233,7 +229,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
      * @return posició del dia al spinner
      */
     private int findPositionInAdapterDay(String element) {
-        return DAF.getPositionDay(element);
+        return DA.getPositionDay(element);
     }
     
     /**
@@ -253,16 +249,17 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
      */
     private void createActivity() {
         String name = activityName.getText().toString();
-        String descr = activityDescr.getText().toString();
+        String description = activityDescr.getText().toString();
         String theme = String.valueOf(spinnerTheme.getSelectedItemPosition());
-        String dayStart = String.valueOf(spinnerStartDay.getSelectedItemPosition());
-        String dayEnd = String.valueOf(spinnerEndDay.getSelectedItemPosition());
+        String startDay = String.valueOf(spinnerStartDay.getSelectedItemPosition());
+        String endDay = String.valueOf(spinnerEndDay.getSelectedItemPosition());
 
         if (name.isEmpty()) activityName.setError("This field cannot be null");
         else {
             try {
-                DAF.createActivity(name, descr, theme, String.format("%02d", startHour), String.format("%02d", startMinute), String.format("%02d", endHour), String.format("%02d",endMinute), dayStart, dayEnd);
+                DA.createActivity(name, description, theme, startDay, endDay, String.format("%02d", startHour), String.format("%02d", startMinute), String.format("%02d", endHour), String.format("%02d",endMinute));
                 Toast.makeText(getContext(), "Activity created", Toast.LENGTH_SHORT).show();
+                activitySheet.dismiss();
             } catch (InvalidTimeIntervalException e) {
                 Toast.makeText(getContext(), "Error: Start time cannot be subsequent to end time", Toast.LENGTH_SHORT).show();
                 startTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
@@ -296,21 +293,22 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         String endHour = endTime[0];
         String endMinute = endTime[1];
 
-        String[] oldStartTime = this.oldStartTime.split(":");
-        String[] oldEndTime = this.oldEndTime.split(":");
-        String oldStartHour = oldStartTime[0];
-        String olStartMinute = oldStartTime[1];
-        String oldEndHour = oldEndTime[0];
-        String oldEndMinute = oldEndTime[1];
-
         try {
-            DAF.updateActivity(name, description, theme, oldStartHour, olStartMinute, oldEndHour, oldEndMinute, startHour, startMinute, endHour, endMinute, startDay, endDay);
+            DA.updateActivity(id, name, description, theme, startDay, endDay, startHour, startMinute, endHour, endMinute);
+            Toast.makeText(getContext(), "Activity created", Toast.LENGTH_SHORT).show();
+            activitySheet.dismiss();
         } catch (InvalidTimeIntervalException e) {
             Toast.makeText(getContext(), "Error: Start time cannot be subsequent to end time", Toast.LENGTH_SHORT).show();
+            this.startTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
+            this.endTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
         } catch (InvalidDayIntervalException e) {
             Toast.makeText(getContext(), "Error: Start day cannot be subsequent to end day", Toast.LENGTH_SHORT).show();
-        } catch (OverlappingActivitiesException e){
+            spinnerStartDay.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
+            spinnerEndDay.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
+        } catch (OverlappingActivitiesException e) {
             Toast.makeText(getContext(), "Error: Another activity belongs to that time interval", Toast.LENGTH_SHORT).show();
+            this.startTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
+            this.endTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
         }
     }
 
@@ -347,10 +345,8 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
 
         activitiesList = new ArrayList<>(); //temporal
         try {
-            DAF.getActivitiesByDay("Monday", this);
-        } catch (NoSuchMethodException e) {
-            Log.d("METHODEXCEPTION", e.getMessage());
-        }
+            DA.getActivitiesByDay("Monday", this);
+        } catch (NoSuchMethodException ignored) { }
     }
 
     /**
