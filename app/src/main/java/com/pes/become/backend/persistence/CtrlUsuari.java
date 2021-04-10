@@ -33,6 +33,10 @@ public class CtrlUsuari {
                             Object[] params = new Object[1];
                             params[0] = user;
 
+
+
+
+
                             try {
                                 method.invoke(object, params);
                             } catch (IllegalAccessException e1) {

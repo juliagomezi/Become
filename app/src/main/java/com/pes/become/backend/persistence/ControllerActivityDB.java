@@ -42,6 +42,7 @@ public class ControllerActivityDB {
                 return;
             }
 
+
             ArrayList<ArrayList<String>> activitiesResult = new ArrayList<>();
             for (QueryDocumentSnapshot document : value) {
                 ArrayList<String> activity = new ArrayList<>();

@@ -46,7 +46,6 @@ public class ControllerRoutineDB {
 
         deleteActivities(colRefToActivities,10);
 
-
         DocRefToRoutine.delete();
     }
 
