@@ -132,8 +132,11 @@ public class DomainAdapter {
      * Metode per seleccionar una rutina ja existent
      * @param idRoutine identificador de la rutina
      */
-    public void selectRoutine(String idRoutine) {
-        //controllerPersistence.getRoutine(idRoutine);
+    public void selectRoutine(String idRoutine) throws NoSuchMethodException {
+        Class[] parameterTypes = new Class[1];
+        parameterTypes[0] = ArrayList.class;
+        Method method1 = DomainAdapter.class.getMethod("setSelectedRoutine", parameterTypes);
+        //controllerPersistence.getRoutine(idRoutine, method1, DomainAdapter.getInstance());
     }
 
     /**
