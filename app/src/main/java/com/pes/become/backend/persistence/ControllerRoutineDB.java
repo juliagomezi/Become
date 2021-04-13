@@ -24,6 +24,15 @@ public class ControllerRoutineDB {
         db = FirebaseFirestore.getInstance();
     }
 
+
+
+
+    /***************CONSULTORES***************/
+
+    /***************MODIFICADORES***************/
+
+
+
     /**
      * Crear una rutina nova.
      * @param routineName nom de la rutina a crear.
@@ -37,20 +46,7 @@ public class ControllerRoutineDB {
     }
 
     /**
-     * Eliminar una rutina existent.
-     * @param idRoutine identificador de la rutina a eliminar.
-     */
-    public void deleteRoutine(String idRoutine) {
-        DocumentReference DocRefToRoutine = db.collection("routines").document(idRoutine);
-        CollectionReference colRefToActivities = DocRefToRoutine.collection("activities");
-
-        deleteActivities(colRefToActivities,10);
-
-        DocRefToRoutine.delete();
-    }
-
-    /**
-     *
+     * Esborra les activitats de la rutina.
      * @param collection és la referència a la col·lecció que es vol borrar.
      * @param batchSize és el límit de documents que pot agafar.
      */
@@ -73,6 +69,21 @@ public class ControllerRoutineDB {
             System.err.println("Error deleting collection : " + e.getMessage());
         }
     }
+
+    /**
+     * Eliminar una rutina existent.
+     * @param idRoutine identificador de la rutina a eliminar.
+     */
+    public void deleteRoutine(String idRoutine) {
+        DocumentReference DocRefToRoutine = db.collection("routines").document(idRoutine);
+        CollectionReference colRefToActivities = DocRefToRoutine.collection("activities");
+
+        deleteActivities(colRefToActivities,10);
+
+        DocRefToRoutine.delete();
+    }
+
+
 
 }
 

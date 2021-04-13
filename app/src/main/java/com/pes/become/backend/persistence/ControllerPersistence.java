@@ -7,36 +7,51 @@ public class ControllerPersistence{
     ControllerRoutineDB CR;
     ControllerActivityDB CA;
 
-    /**
-     * Crear el controlador de rutines de la BD
-     */
-    public void createCtrlRoutine() {
-        if (CR == null) {
-            CR = new ControllerRoutineDB();
-        }
-    }
+
 
     /**
      * Crear el controlador d'activitats de la BD
      */
-    public void createCtrlActivity() {
+    private void createCtrlActivity() {
         if (CA == null) {
             CA = new ControllerActivityDB();
         }
     }
 
     /**
-     * Crear una nova rutina
-     * @param routineName és el nom que es vol que tingui la rutina
+     * Crear el controlador de rutines de la BD
      */
-    public void createRoutine(String routineName) {
-        createCtrlRoutine();
-        CR.createRoutine(routineName);
+    private void createCtrlRoutine() {
+        if (CR == null) {
+            CR = new ControllerRoutineDB();
+        }
     }
+
+
+
+
+    /**FUNCIONS RELACIONADES AMB ACTIVITAT*********************************************************/
+    /***************CONSULTORES***************/
+
+    /**
+     * Obtenir les activitats d'una rutina i un dia indicats
+     * @param idRoutine identificador de la rutina
+     * @param day dia a consultar
+     * @param method metode a cridar quan es retornin les dades
+     * @param object classe que conté el mètode
+     */
+    public void getActivitiesByDay(String idRoutine, String day, Method method, Object object) {
+        createCtrlActivity();
+        CA.getActivitiesByDay(idRoutine,day,method,object);
+    }
+
+
+    /***************MODIFICADORES***************/
+
 
     /**
      * Afegir una nova activitat a una certa rutina de la base de dades
-     * @param routineName és el nom i identificador de la rutina on es vol afegir l'activitat
+     * @param idRoutine és l'identificador de la rutina on es vol afegir l'activitat
      * @param activityName és el nom de l'activitat que es vol afegir
      * @param actTheme és el tema de l'activitat
      * @param actDescription és la descripció de l'activitat
@@ -45,24 +60,24 @@ public class ControllerPersistence{
      * @param finishTime és l'hora de finalització de l'activitat
      * @return el valor del id de l'activitat creada
      */
-    public String createActivity(String routineName, String activityName, String actTheme,String actDescription, String actDay, String beginTime, String finishTime) {
+    public String createActivity(String idRoutine, String activityName, String actTheme,String actDescription, String actDay, String beginTime, String finishTime) {
         createCtrlActivity();
-        return CA.createActivity(routineName, activityName,actTheme,actDescription, actDay, beginTime, finishTime);
+        return CA.createActivity(idRoutine, activityName,actTheme,actDescription, actDay, beginTime, finishTime);
     }
 
     /**
      * Esborrar una activitat d'una rutina
-     * @param routineName és el nom i l'identificador de la rutina
+     * @param idRoutine és el nom i l'identificador de la rutina
      * @param idActivity és l'identificador de l'activitat
      */
-    public void deleteActivity(String routineName, String idActivity) {
+    public void deleteActivity(String idRoutine, String idActivity) {
         createCtrlActivity();
-        CA.deleteActivity( routineName, idActivity);
+        CA.deleteActivity(idRoutine, idActivity);
     }
 
     /**
      * Actualitzar una activitat existent en una rutina existent
-     * @param routineName és el nom de la rutina ja existent
+     * @param idRoutine és l'identificador de la rutina ja existent
      * @param actName és el nom de l'activitat que es vol modificar
      * @param description és la nova descripció que es vol afegir a l'activitat
      * @param theme és el tema que es vol afegir a l'activitat
@@ -71,21 +86,37 @@ public class ControllerPersistence{
      * @param endT és l'hora d'acabament de l'activitat
      * @param idActivity és l'identificador de l'activitat
      */
-    public void updateActivity(String routineName, String actName, String description, String theme,  String iniT, String endT, String day,String idActivity) {
+    public void updateActivity(String idRoutine, String actName, String description, String theme,  String iniT, String endT, String day,String idActivity) {
         createCtrlActivity();
-        CA.updateActivity(routineName, actName, description, theme, day, iniT, endT, idActivity);
+        CA.updateActivity(idRoutine, actName, description, theme, day, iniT, endT, idActivity);
     }
 
+
+
+
+
+    /**FUNCIONS RELACIONADES AMB RUTINA************************************************************/
+
+    /***************MODIFICADORES***************/
+
     /**
-     * Obtenir les activitats d'una rutina i un dia indicats
-     * @param routineName nom de la rutina
-     * @param day dia a consultar
-     * @param method metode a cridar quan es retornin les dades
-     * @param object classe que conté el mètode
+     * Crear una nova rutina
+     * @param routineName és el nom que es vol que tingui la rutina
      */
-    public void getActivitiesByDay(String routineName, String day, Method method, Object object) {
-        createCtrlActivity();
-        CA.getActivitiesByDay(routineName,day,method,object);
+    public String createRoutine(String routineName) {
+        createCtrlRoutine();
+        return CR.createRoutine(routineName);
+    }
+
+
+    /**
+     * Esborra la rutina indicada i les seves activitats
+     * @param idRoutine és l'identificador de la rutina que es vol esborrar
+     */
+
+    public void deleteRoutine(String idRoutine){
+        createCtrlRoutine();
+        CR.deleteRoutine(idRoutine);
     }
 
     /*
