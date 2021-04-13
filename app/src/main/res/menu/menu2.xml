@@ -2,17 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/communityView"
-        android:title="Community"
+        android:title="@string/community"
         android:icon="@drawable/ic_globe" />
 
     <item
         android:id="@+id/homeView"
-        android:title="Home"
+        android:title="@string/home"
         android:icon="@drawable/ic_home" />
 
 
     <item
         android:id="@+id/profileView"
-        android:title="Profile"
+        android:title="@string/profile"
         android:icon="@drawable/ic_user" />
 </menu>

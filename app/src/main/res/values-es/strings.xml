@@ -40,4 +40,7 @@
     <string name="log_in">Iniciar sesión</string>
     <string name="not_registered_yet">Aún no estás registrado?</string>
     <string name="signup">Registarse!</string>
+    <string name="community">Comunidad</string>
+    <string name="home">Inicio</string>
+    <string name="profile">Perfil</string>
 </resources>

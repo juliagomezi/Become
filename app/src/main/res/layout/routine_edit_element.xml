@@ -65,6 +65,8 @@
             android:id="@+id/cardActivityDisplay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:outlineSpotShadowColor="@color/coldwhite"
+            android:outlineAmbientShadowColor="@color/coldwhite"
             android:padding="8dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout

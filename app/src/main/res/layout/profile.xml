@@ -13,53 +13,72 @@
         tools:context=".frontend.Profile"
         android:orientation="vertical">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/profile_image"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="85dp"
-            android:src="@drawable/ic_user"
-            app:civ_border_color="#FF000000"
-            app:civ_border_width="2dp"/>
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:id="@+id/settingsButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="15dp"
+                android:tint="@color/black"
+                app:iconTint="@color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_settings"
+                tools:ignore="VectorDrawableCompat" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profile_image"
+                android:layout_width="match_parent"
+                android:layout_marginTop="20dp"
+                android:layout_height="85dp"
+                android:src="@drawable/ic_user"
+                app:civ_border_color="#FF000000"
+                app:civ_border_width="2dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:id="@+id/usernameText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="15dp"
             android:fontFamily="@font/sourcesanspro_regular"
             android:gravity="center_horizontal"
-            android:letterSpacing="0.1"
+            android:letterSpacing="0.15"
             android:text="John Smith"
             android:textAlignment="center"
             android:textColor="@color/black"
-            android:textSize="22sp"/>
+            android:textSize="20sp" />
 
-        <com.google.android.material.card.MaterialCardView
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="12dp">
+            style="@style/AppTabLayout"
+            android:background="@color/white">
 
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tabLayout"
-                android:layout_width="match_parent"
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tabRoutines"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/white">
+                android:text="Routines" />
 
-                <com.google.android.material.tabs.TabItem
-                    android:id="@+id/tabRoutines"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Routines" />
-
-                <com.google.android.material.tabs.TabItem
-                    android:id="@+id/tabStats"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Stats" />
-            </com.google.android.material.tabs.TabLayout>
-        </com.google.android.material.card.MaterialCardView>
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tabStats"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Stats" />
+        </com.google.android.material.tabs.TabLayout>
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/viewPager"

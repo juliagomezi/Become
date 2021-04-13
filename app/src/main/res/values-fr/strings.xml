@@ -40,4 +40,7 @@
     <string name="password">Le mot de passe</string>
     <string name="not_registered_yet">Pas encore inscrit?</string>
     <string name="log_in">Se connecter</string>
+    <string name="community">Communauté</string>
+    <string name="home">Début</string>
+    <string name="profile">Profil</string>
 </resources>

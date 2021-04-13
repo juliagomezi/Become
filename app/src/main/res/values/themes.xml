@@ -27,4 +27,13 @@
         <item name="android:background">@drawable/bottom_sheet_background</item>
     </style>
 
+    <style name="AppTabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabIndicatorColor">@color/orange</item>
+        <item name="tabIndicatorHeight">0dp</item>
+        <item name="tabPaddingStart">6dp</item>
+        <item name="tabPaddingEnd">6dp</item>
+        <item name="tabBackground">@drawable/tab_background</item>
+        <item name="tabSelectedTextColor">@color/black</item>
+    </style>
+
 </resources>

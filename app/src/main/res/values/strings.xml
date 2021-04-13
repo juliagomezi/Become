@@ -20,6 +20,9 @@
     <string name="not_registered_yet">Not registered yet?</string>
     <string name="signup">Sign up!</string>
     <string name="google" translatable="false">Google</string>
+    <string name="community">Community</string>
+    <string name="home">Home</string>
+    <string name="profile">Profile</string>
 
     <string-array name="themesValues">
         <item>Music</item>
@@ -41,7 +44,5 @@
         <item>Saturday</item>
         <item>Sunday</item>
     </string-array>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
 
 </resources>

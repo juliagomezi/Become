@@ -23,6 +23,8 @@
             android:layout_height="match_parent"
             android:background="@color/coldwhite"
             app:cardCornerRadius="20dp"
+            android:outlineSpotShadowColor="@color/white"
+            android:outlineAmbientShadowColor="@color/white"
             android:padding="8dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
