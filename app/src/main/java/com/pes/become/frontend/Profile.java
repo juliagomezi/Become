@@ -47,7 +47,7 @@ public class Profile extends Fragment {
 
         tabLayout = view.findViewById(R.id.tabLayout);
         viewPager = view.findViewById(R.id.viewPager);
-        viewPager.setAdapter(new MainAdapter(getFragmentManager()));
+        viewPager.setAdapter(new MainAdapter(getChildFragmentManager()));
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.getTabAt(0).setIcon(R.drawable.bookmark_icon);
         tabLayout.getTabAt(1).setIcon(R.drawable.stats_icon);
