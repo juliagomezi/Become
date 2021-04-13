@@ -43,4 +43,7 @@
     <string name="community">Comunidad</string>
     <string name="home">Inicio</string>
     <string name="profile">Perfil</string>
+    <string name="sign_up">Registrarse</string>
+    <string name="confirm_password">Confirmar contraseña</string>
+    <string name="username">Nombre de usuario</string>
 </resources>
