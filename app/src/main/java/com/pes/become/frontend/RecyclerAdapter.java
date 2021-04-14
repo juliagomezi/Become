@@ -75,8 +75,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             case "Sport":
                 holder.cardActivityDisplay.setBackgroundResource(R.drawable.theme_sport_background);
                 break;
-            case "Studying":
-                holder.cardActivityDisplay.setBackgroundResource(R.drawable.theme_studying_background);
+            case "Plants":
+                holder.cardActivityDisplay.setBackgroundResource(R.drawable.theme_plants_background);
                 break;
             case "Working":
                 holder.cardActivityDisplay.setBackgroundResource(R.drawable.theme_working_background);

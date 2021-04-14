@@ -17,10 +17,10 @@
         <item >Música</item>
         <item >Deporte</item>
         <item >Dormir</item>
-        <item >Estudio</item>
         <item >Cocina</item>
-        <item >Trabajo</item>
+        <item >Trabajo y estudio</item>
         <item >Entretenimiento</item>
+        <item>Plantas y jardinería</item>
         <item >Otros</item>
     </string-array>
 

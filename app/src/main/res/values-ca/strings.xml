@@ -17,10 +17,10 @@
         <item >Música</item>
         <item >Esport</item>
         <item >Dormir</item>
-        <item >Estudi</item>
         <item >Cuina</item>
-        <item >Feina</item>
+        <item >Feina i estudi</item>
         <item >Entreteniment</item>
+        <item>Plantes i jardineria</item>
         <item >Altres</item>
     </string-array>
 

@@ -17,10 +17,10 @@
         <item >Music</item>
         <item >Sport</item>
         <item >Sleeping</item>
-        <item >Studying</item>
         <item >Cooking</item>
-        <item >Working</item>
+        <item >Working and studying</item>
         <item >Entertainment</item>
+        <item>Plants and gardening</item>
         <item >Other</item>
     </string-array>
 
