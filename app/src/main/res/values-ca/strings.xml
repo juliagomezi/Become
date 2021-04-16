@@ -55,4 +55,6 @@
     <string name="errorTime">Error: El temps d\'inici ha de ser inferior al temps final</string>
     <string name="errorDay">Error: El dia d\'inici ha de ser anterior al final</string>
     <string name="overlapping">Error: Una activitat ja està programada en aquest horari</string>
+    <string name="routineCreated">Rutina creada</string>
+    <string name="new_routine">Nova rutina</string>
 </resources>

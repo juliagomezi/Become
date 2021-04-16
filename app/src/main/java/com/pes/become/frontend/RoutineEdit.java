@@ -77,7 +77,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
     }
 
     /**
-     * Funció obtenir la instancia de la MainActivity actual
+     * Funció obtenir la instancia de la RoutineEdit actual
      * */
     public static RoutineEdit getInstance() {
         return instance;
@@ -195,6 +195,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
 
     /**
      * Funció per posar els valors a la pestanya de modificació d'activitat
+     * @param id identificador de l'activitat
      * @param name nom de l'activitat
      * @param description descripció de l'activitat
      * @param theme tema de l'activitat

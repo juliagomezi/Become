@@ -47,16 +47,14 @@ public class RecyclerAdapterRoutinesList extends RecyclerView.Adapter<RecyclerAd
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.routineName.setText(routinesList.get(position).get(1));
 
-        /*
         holder.editButton.setOnClickListener(view -> {
-            //anar a la pantalla d'editar activitats
+            //go to editing/deleting activities view
         });
 
         holder.deleteButton.setOnClickListener(view -> {
             String currentId = routinesList.get(position).get(0);
             DA.deleteRoutine(currentId);
         });
-         */
     }
 
     /**
