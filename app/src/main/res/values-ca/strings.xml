@@ -46,4 +46,13 @@
     <string name="sign_up">Registrar-se</string>
     <string name="confirm_password">Repetir contrassenya</string>
     <string name="username">Nom d\'usuari</string>
+    <string name="notNull">Aquest camp no pot estar buit</string>
+    <string name="emailExists">Aquest email ja està registrat</string>
+    <string name="userNotMatch">Usuari i contrassenya no coincideixen</string>
+    <string name="passwords">Les contrassenyes no són iguals</string>
+    <string name="activityCreated">Activitat creada correctament</string>
+    <string name="activityModified">Activitat modificada correctament</string>
+    <string name="errorTime">Error: El temps d\'inici ha de ser inferior al temps final</string>
+    <string name="errorDay">Error: El dia d\'inici ha de ser anterior al final</string>
+    <string name="overlapping">Error: Una activitat ja està programada en aquest horari</string>
 </resources>

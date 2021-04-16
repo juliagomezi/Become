@@ -89,7 +89,7 @@
             android:drawablePadding="10dp"/>
 
         <Button
-            android:id="@+id/logInButton"
+            android:id="@+id/signupButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="15dp"

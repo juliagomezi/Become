@@ -46,4 +46,13 @@
     <string name="sign_up">Registrarse</string>
     <string name="confirm_password">Confirmar contraseña</string>
     <string name="username">Nombre de usuario</string>
+    <string name="notNull">Este campo no puede estar vacío</string>
+    <string name="emailExists">Este email ya está registrado</string>
+    <string name="userNotMatch">Usuario y contraseña no coinciden</string>
+    <string name="passwords">Las contraseñas no coinciden</string>
+    <string name="activityCreated">Actividad creada correctamente</string>
+    <string name="activityModified">Actividad modificada correctamente</string>
+    <string name="errorTime">Error: El tiempo de inicio ha de ser anterior al final</string>
+    <string name="errorDay">Error: El día de inicio ha de ser anterior al final</string>
+    <string name="overlapping">Error: Otra actividad ya està programada en este horario</string>
 </resources>

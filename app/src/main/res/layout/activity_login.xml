@@ -39,7 +39,7 @@
             android:drawablePadding="10dp"/>
 
         <EditText
-            android:id="@+id/passwordText"
+            android:id="@+id/passText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0"
@@ -112,7 +112,7 @@
                 android:text="@string/not_registered_yet" />
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/signUp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"

@@ -46,4 +46,13 @@
     <string name="username">Nom d\'utilisateur</string>
     <string name="confirm_password">Confirmer mot de passe</string>
     <string name="sign_up">S\'inscrire</string>
+    <string name="notNull">Ce champ ne peut être vide</string>
+    <string name="emailExists">Cet e-mail est déjà enregistré</string>
+    <string name="userNotMatch">Utilisateur et mot de passe ne correspondent pas</string>
+    <string name="passwords">Les mots de passe ne correspondent pas</string>
+    <string name="activityModified">Activité modifiée avec succès</string>
+    <string name="errorTime">"Erreur: l'heure de début doit être antérieure à la fin "</string>
+    <string name="errorDay">Erreur: le jour de début doit être avant la fin</string>
+    <string name="overlapping">Erreur: une autre activité est déjà planifiée à ce moment</string>
+    <string name="activityCreated">Activité créée avec succès</string>
 </resources>

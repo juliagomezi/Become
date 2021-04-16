@@ -46,4 +46,13 @@
     <string name="sign_up">Sign up</string>
     <string name="confirm_password">Confirm password</string>
     <string name="username">Username</string>
+    <string name="notNull">This field cannot be null</string>
+    <string name="emailExists">This email is already logged</string>
+    <string name="userNotMatch">Username and password do not match</string>
+    <string name="passwords">Passwords not match</string>
+    <string name="activityCreated">Activity created</string>
+    <string name="activityModified">Activity modified</string>
+    <string name="errorTime">Error: Start time cannot be subsequent to end time</string>
+    <string name="errorDay">Error: Start day cannot be subsequent to end day</string>
+    <string name="overlapping">Error: Another activity belongs to that time interval</string>
 </resources>

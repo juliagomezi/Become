@@ -254,22 +254,22 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         String startDay = String.valueOf(spinnerStartDay.getSelectedItemPosition());
         String endDay = String.valueOf(spinnerEndDay.getSelectedItemPosition());
 
-        if (name.isEmpty()) activityName.setError("This field cannot be null");
+        if (name.isEmpty()) activityName.setError(getString(R.string.notNull));
         else {
             try {
                 DA.createActivity(name, description, theme, startDay, endDay, String.format("%02d", startHour), String.format("%02d", startMinute), String.format("%02d", endHour), String.format("%02d",endMinute));
-                Toast.makeText(getContext(), "Activity created", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getString(R.string.activityCreated), Toast.LENGTH_SHORT).show();
                 activitySheet.dismiss();
             } catch (InvalidTimeIntervalException e) {
-                Toast.makeText(getContext(), "Error: Start time cannot be subsequent to end time", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getString(R.string.errorTime), Toast.LENGTH_SHORT).show();
                 startTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
                 endTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
             } catch (InvalidDayIntervalException e) {
-                Toast.makeText(getContext(), "Error: Start day cannot be subsequent to end day", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getString(R.string.errorDay), Toast.LENGTH_SHORT).show();
                 spinnerStartDay.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
                 spinnerEndDay.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
             } catch (OverlappingActivitiesException e) {
-                Toast.makeText(getContext(), "Error: Another activity belongs to that time interval", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getString(R.string.overlapping), Toast.LENGTH_SHORT).show();
                 startTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
                 endTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
             }
@@ -295,18 +295,18 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
 
         try {
             DA.updateActivity(id, name, description, theme, startDay, endDay, startHour, startMinute, endHour, endMinute);
-            Toast.makeText(getContext(), "Activity created", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), getString(R.string.activityModified), Toast.LENGTH_SHORT).show();
             activitySheet.dismiss();
         } catch (InvalidTimeIntervalException e) {
-            Toast.makeText(getContext(), "Error: Start time cannot be subsequent to end time", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), getString(R.string.errorTime), Toast.LENGTH_SHORT).show();
             this.startTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
             this.endTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
         } catch (InvalidDayIntervalException e) {
-            Toast.makeText(getContext(), "Error: Start day cannot be subsequent to end day", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), getString(R.string.errorDay), Toast.LENGTH_SHORT).show();
             spinnerStartDay.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
             spinnerEndDay.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
         } catch (OverlappingActivitiesException e) {
-            Toast.makeText(getContext(), "Error: Another activity belongs to that time interval", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), getString(R.string.overlapping), Toast.LENGTH_SHORT).show();
             this.startTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
             this.endTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
         }
