@@ -55,4 +55,6 @@
     <string name="errorDay">Erreur: le jour de début doit être avant la fin</string>
     <string name="overlapping">Erreur: une autre activité est déjà planifiée à ce moment</string>
     <string name="activityCreated">Activité créée avec succès</string>
+    <string name="new_routine">Nouvelle rutine</string>
+    <string name="routineCreated">Routine créée</string>
 </resources>
