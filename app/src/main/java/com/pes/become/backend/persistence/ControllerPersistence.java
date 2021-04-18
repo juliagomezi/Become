@@ -100,6 +100,16 @@ public class ControllerPersistence{
     /***************MODIFICADORES***************/
 
     /**
+     * Canvia el nom d'una rutina.
+     * @param idRoutine l'identificador de la rutina.
+     * @param newName el nom que se li vol posar a la rutina.
+     */
+    public void changeRoutineName(String idRoutine, String newName){
+        createCtrlRoutine();
+        CR.changeName(idRoutine, newName);
+    }
+
+    /**
      * Crear una nova rutina
      * @param routineName és el nom que es vol que tingui la rutina
      */
@@ -118,6 +128,8 @@ public class ControllerPersistence{
         createCtrlRoutine();
         CR.deleteRoutine(idRoutine);
     }
+
+
 
     /*
     //TUTORIAL

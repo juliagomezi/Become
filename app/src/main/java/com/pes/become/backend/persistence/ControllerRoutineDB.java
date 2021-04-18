@@ -31,10 +31,20 @@ public class ControllerRoutineDB {
 
     /***************MODIFICADORES***************/
 
+    /**
+     * Canvia el nom d'una rutina.
+     * @param idRoutine l'identificador de la rutina.
+     * @param newName el nom que se li vol posar a la rutina.
+     */
+    public void changeName(String idRoutine, String newName){
+        DocumentReference docRefToRoutine = db.collection("routines").document(idRoutine);
+        docRefToRoutine.update("name", newName);
+    }
+
 
 
     /**
-     * Crear una rutina nova.
+     * Crea una rutina nova.
      * @param routineName nom de la rutina a crear.
      */
     public String createRoutine(String routineName) {
