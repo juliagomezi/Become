@@ -8,7 +8,9 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -70,7 +72,7 @@ public class CtrlUsuari {
 
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w("TAG", "createUserWithEmail:failure", task.getException());
+                            Log.w("FirebaseUser", "createUserWithEmail:failure", task.getException());
                         }
                     }
                 });
@@ -97,10 +99,16 @@ public class CtrlUsuari {
                             params[0] = user;
                             params[1] = user.getUid();
                             params[2] = user.getDisplayName();
-
+                            try {
+                                method.invoke(object,params);
+                            } catch (IllegalAccessException e) {
+                                e.printStackTrace();
+                            } catch (InvocationTargetException e) {
+                                e.printStackTrace();
+                            }
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w("TAG", "signInWithEmail:failure", task.getException());
+                            Log.w("FirebaseUser", "signInWithEmail:failure", task.getException());
                             //Toast.makeText(EmailPasswordActivity.this, "Authentication failed.",
                                     //Toast.LENGTH_SHORT).show();
 
@@ -120,7 +128,7 @@ public class CtrlUsuari {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Log.d("TAG", "User account deleted.");
+                            Log.d("FirebaseUser", "User account deleted.");
                         }
                     }
                 });
@@ -140,13 +148,35 @@ public class CtrlUsuari {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Log.d("TAG", "User password updated.");
+                            Log.d("FirebaseUser", "User password updated.");
                         }
                     }
                 });
     }
 
+    /**
+     * SUPER PROVISIONAL Reautentificacio per borrar i canviar contrasenya
+     * @param mail
+     * @param password
+     */
+    public void reauthenticate(String mail, String password) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
+        // Get auth credentials from the user for re-authentication. The example below shows
+        // email and password credentials but there are multiple possible providers,
+        // such as GoogleAuthProvider or FacebookAuthProvider.
+        AuthCredential credential = EmailAuthProvider
+                .getCredential(mail, password);
+
+        // Prompt the user to re-provide their sign-in credentials
+        user.reauthenticate(credential)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Log.d("FirebaseUser", "User re-authenticated.");
+                    }
+                });
+    }
         /*
     //TUTORIAL
     public void tutorial(String routineName, String day)  {
