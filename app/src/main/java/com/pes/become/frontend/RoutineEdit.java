@@ -49,6 +49,10 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
     private int seeingDay;
     private ArrayList<ArrayList<String>> activitiesList;
 
+    RecyclerView recyclerView;
+    RoutineEditRecyclerAdapter routineEditRecyclerAdapter;
+    TextView emptyView;
+
     private BottomSheetDialog activitySheet;
     private Spinner spinnerTheme, spinnerStartDay, spinnerEndDay;
     private EditText activityName, activityDescr;
@@ -86,24 +90,6 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         nextDayButton.setOnClickListener(v -> showNextDay());
 
         return view;
-    }
-
-    private void showPreviousDay() {
-        Log.d("PREV", "PREV");
-        if (seeingDay > 1) {
-            seeingDay--;
-            setDay();
-            getActivitiesByDay(getWeekDay(seeingDay));
-        }
-    }
-
-    private void showNextDay() {
-        Log.d("NEXT", "NEXT");
-        if (seeingDay < 7) {
-            seeingDay++;
-            setDay();
-            getActivitiesByDay(getWeekDay(seeingDay));
-        }
     }
 
     /**
@@ -146,13 +132,47 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
     }
 
     /**
+     * Funcio per veure les activitats del dia anterior
+     */
+    private void showPreviousDay() {
+        if (seeingDay == 1) seeingDay = 7;
+        else seeingDay--;
+        setDay();
+        getActivitiesByDay(getWeekDay(seeingDay));
+    }
+
+    /**
+     * Funcio per veure les activitats del seguent dia
+     */
+    private void showNextDay() {
+        if (seeingDay == 7) seeingDay = 1;
+        else seeingDay++;
+        setDay();
+        getActivitiesByDay(getWeekDay(seeingDay));
+
+    }
+
+    /**
      * Funció per inicialitzar l'element que mostra el llistat d'activitats
      */
     private void initRecyclerView() {
-        RecyclerView recyclerView = view.findViewById(R.id.activityList);
+        recyclerView = view.findViewById(R.id.activityList);
         recyclerView.setLayoutManager((new LinearLayoutManager(global)));
-        RoutineEditRecyclerAdapter routineEditRecyclerAdapter = new RoutineEditRecyclerAdapter(activitiesList);
+        routineEditRecyclerAdapter = new RoutineEditRecyclerAdapter(activitiesList);
         recyclerView.setAdapter(routineEditRecyclerAdapter);
+
+        recyclerView.setVisibility(View.VISIBLE);
+        emptyView.setVisibility(View.INVISIBLE);
+    }
+
+    /**
+     * Funció per inicialitzar l'element que es mostra quan no hi ha activitats
+     */
+    private void initEmptyView() {
+        emptyView = view.findViewById(R.id.emptyView);
+
+        recyclerView.setVisibility(View.INVISIBLE);
+        emptyView.setVisibility(View.VISIBLE);
     }
 
     /**
@@ -183,6 +203,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         ArrayAdapter<CharSequence> adapterStartDay = ArrayAdapter.createFromResource(global, R.array.dayValues, R.layout.spinner_selected_item);
         adapterStartDay.setDropDownViewResource(R.layout.spinner_item_dropdown);
         spinnerStartDay.setAdapter(adapterStartDay);
+        spinnerStartDay.setSelection(seeingDay);
         spinnerStartDay.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
@@ -389,9 +410,16 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
      * @param activitiesListCallback llistat d'activitats que retorna la BD
      */
     public void getActivitiesCallback(ArrayList<ArrayList<String>> activitiesListCallback) {
-        activitiesList = new ArrayList<>(activitiesListCallback.size());
-        activitiesList.addAll(activitiesListCallback);
-        initRecyclerView();
+
+        if (!activitiesListCallback.isEmpty()) {
+            activitiesList = new ArrayList<>(activitiesListCallback.size());
+            activitiesList.addAll(activitiesListCallback);
+            initRecyclerView();
+        }
+
+        else {
+            initEmptyView();
+        }
     }
 
 }

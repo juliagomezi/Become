@@ -263,18 +263,24 @@ public class DomainAdapter {
      */
     public void setActivitiesByDayToView(ArrayList<ArrayList<String>> acts) throws InvalidTimeIntervalException, OverlappingActivitiesException {
         routineAdapter.clearActivities();
-        for(ArrayList<String> act : acts) {
-            String[] s = act.get(5).split(":");
-            String[] s2 = act.get(6).split(":");
-            int iniH = Integer.parseInt(s[0]);
-            int iniM = Integer.parseInt(s[1]);
-            int endH = Integer.parseInt(s2[0]);
-            int endM = Integer.parseInt(s2[1]);
-            Activity activity = new Activity(act.get(1), act.get(2),Theme.valueOf(act.get(3)), new TimeInterval(iniH, iniM, endH, endM), Day.valueOf(act.get(4)));
-            activity.setId(act.get(0));
-            routineAdapter.createActivity(activity);
+        if (!acts.isEmpty()) {
+            String day = acts.get(0).get(4);
+            for (ArrayList<String> act : acts) {
+                String[] s = act.get(5).split(":");
+                String[] s2 = act.get(6).split(":");
+                int iniH = Integer.parseInt(s[0]);
+                int iniM = Integer.parseInt(s[1]);
+                int endH = Integer.parseInt(s2[0]);
+                int endM = Integer.parseInt(s2[1]);
+                Activity activity = new Activity(act.get(1), act.get(2), Theme.valueOf(act.get(3)), new TimeInterval(iniH, iniM, endH, endM), Day.valueOf(act.get(4)));
+                activity.setId(act.get(0));
+                routineAdapter.createActivity(activity);
+            }
+            routineView.getActivitiesCallback(routineAdapter.getActivitiesByDay(day));
         }
-        routineView.getActivitiesCallback(routineAdapter.getActivitiesByDay("Monday"));
+        else {
+            routineView.getActivitiesCallback(new ArrayList<>(0));
+        }
     }
 
     /**
@@ -299,18 +305,24 @@ public class DomainAdapter {
      */
     public void setActivitiesByDayToEdit(ArrayList<ArrayList<String>> acts) throws InvalidTimeIntervalException, OverlappingActivitiesException {
         routineAdapter.clearActivities();
-        for(ArrayList<String> act : acts) {
-            String[] s = act.get(5).split(":");
-            String[] s2 = act.get(6).split(":");
-            int iniH = Integer.parseInt(s[0]);
-            int iniM = Integer.parseInt(s[1]);
-            int endH = Integer.parseInt(s2[0]);
-            int endM = Integer.parseInt(s2[1]);
-            Activity activity = new Activity(act.get(1), act.get(2),Theme.valueOf(act.get(3)), new TimeInterval(iniH, iniM, endH, endM), Day.valueOf(act.get(4)));
-            activity.setId(act.get(0));
-            routineAdapter.createActivity(activity);
+        if (!acts.isEmpty()) {
+            String day = acts.get(0).get(4);
+            for (ArrayList<String> act : acts) {
+                String[] s = act.get(5).split(":");
+                String[] s2 = act.get(6).split(":");
+                int iniH = Integer.parseInt(s[0]);
+                int iniM = Integer.parseInt(s[1]);
+                int endH = Integer.parseInt(s2[0]);
+                int endM = Integer.parseInt(s2[1]);
+                Activity activity = new Activity(act.get(1), act.get(2), Theme.valueOf(act.get(3)), new TimeInterval(iniH, iniM, endH, endM), Day.valueOf(act.get(4)));
+                activity.setId(act.get(0));
+                routineAdapter.createActivity(activity);
+            }
+            routineEdit.getActivitiesCallback(routineAdapter.getActivitiesByDay(day));
         }
-        routineEdit.getActivitiesCallback(routineAdapter.getActivitiesByDay("Monday"));
+        else {
+            routineEdit.getActivitiesCallback(new ArrayList<>(0));
+        }
     }
 
     /**
