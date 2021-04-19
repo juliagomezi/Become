@@ -3,7 +3,6 @@ package com.pes.become.frontend;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,7 +16,7 @@ import com.pes.become.backend.adapters.DomainAdapter;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
+public class RoutineViewRecyclerAdapter extends RecyclerView.Adapter<RoutineViewRecyclerAdapter.ViewHolder> {
 
     private final DomainAdapter DA = DomainAdapter.getInstance();
 
@@ -28,7 +27,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
      * Constructora del RecyclerAdapter
      * @param activitiesList llistat d'activitats que es mostren al RecyclerView
      */
-    public RecyclerAdapter(ArrayList<ArrayList<String>> activitiesList) {
+    public RoutineViewRecyclerAdapter(ArrayList<ArrayList<String>> activitiesList) {
         this.activitiesList = activitiesList;
         isExpanded = new Boolean[activitiesList.size()];
         Arrays.fill(isExpanded, Boolean.FALSE);
@@ -42,7 +41,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View view = layoutInflater.inflate(R.layout.routine_edit_element, parent, false);
+        View view = layoutInflater.inflate(R.layout.routine_view_element, parent, false);
         return new ViewHolder(view);
     }
 
@@ -86,18 +85,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                 break;
         }
 
-        holder.editButton.setOnClickListener(view -> {
-            RoutineEdit.getInstance().createActivitySheet(true);
-            RoutineEdit.getInstance().fillActivitySheet(activitiesList.get(position).get(0), activitiesList.get(position).get(1), activitiesList.get(position).get(2), activitiesList.get(position).get(3), activitiesList.get(position).get(4), activitiesList.get(position).get(5), activitiesList.get(position).get(6));
-        });
-
-        holder.deleteButton.setOnClickListener(view -> {
-            String currentId = activitiesList.get(position).get(0);
-            String day = activitiesList.get(position).get(4);
-
-            DA.deleteActivity(currentId, day);
-        });
-
     }
 
     /**
@@ -117,7 +104,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         CardView cardActivityDisplay;
         TextView startTimeDisplay, endTimeDisplay, activityNameDisplay, activityDescriptionDisplay;
         ConstraintLayout expandableLayout;
-        ImageButton editButton, deleteButton;
 
         /**
          * Constructora del ViewHolder
@@ -132,8 +118,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             activityNameDisplay = itemView.findViewById(R.id.activityNameDisplay);
             activityDescriptionDisplay = itemView.findViewById(R.id.activityDescriptionDisplay);
             expandableLayout = itemView.findViewById(R.id.expandableLayout);
-            editButton = itemView.findViewById(R.id.editButton);
-            deleteButton = itemView.findViewById(R.id.deleteButton);
 
             activityNameDisplay.setOnClickListener(view -> {
                 isExpanded[getAdapterPosition()] = !isExpanded[getAdapterPosition()];

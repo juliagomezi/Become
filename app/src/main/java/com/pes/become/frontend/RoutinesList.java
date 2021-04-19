@@ -1,9 +1,6 @@
 package com.pes.become.frontend;
 
-import android.app.TimePickerDialog;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -13,8 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -23,14 +18,8 @@ import android.widget.Toast;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapter;
-import com.pes.become.backend.exceptions.InvalidDayIntervalException;
-import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
-import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class RoutinesList extends Fragment {
 
@@ -83,7 +72,7 @@ public class RoutinesList extends Fragment {
     private void initRecyclerView() {
         RecyclerView recyclerView = view.findViewById(R.id.activityList);
         recyclerView.setLayoutManager((new LinearLayoutManager(global)));
-        RecyclerAdapterRoutinesList recyclerAdapter = new RecyclerAdapterRoutinesList(routinesList);
+        RoutinesListRecyclerAdapter recyclerAdapter = new RoutinesListRecyclerAdapter(routinesList);
         recyclerView.setAdapter(recyclerAdapter);
     }
 

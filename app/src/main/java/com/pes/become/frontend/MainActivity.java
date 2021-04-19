@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Fragment selectedFragment = null;
         switch (item.getItemId()) {
             case R.id.homeView:
-                selectedFragment = new RoutineEdit(); //aixo haura de ser el fragment del home
+                selectedFragment = new RoutineView(); //aixo haura de ser el fragment del home
                 break;
 
             case R.id.communityView:

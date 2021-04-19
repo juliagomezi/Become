@@ -10,6 +10,7 @@ import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
 import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 import com.pes.become.backend.persistence.ControllerPersistence;
 import com.pes.become.frontend.RoutineEdit;
+import com.pes.become.frontend.RoutineView;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -34,6 +35,10 @@ public class DomainAdapter {
      * Instancia de la classe routineEdit del frontend
      */
     private RoutineEdit routineEdit;
+    /**
+     * Instancia de la classe rotuineView del frontend
+     */
+    private RoutineView routineView;
 
     /**
      * Usuari autenticat que esta usant l'aplicació actualment
@@ -237,26 +242,62 @@ public class DomainAdapter {
     }
 
     /**
-     * Demanar les activitats d'un dia
+     * Demanar les activitats d'un dia per la routineView
      * @param dayString dia de les activitats
-     * @param re instància de RoutineEdit
+     * @param rv instància de RoutineView
      * @throws NoSuchMethodException el mètode no existeix
      */
-    public void getActivitiesByDay(String dayString, RoutineEdit re) throws NoSuchMethodException {
-        routineEdit = re;
+    public void getActivitiesByDayToView(String dayString, RoutineView rv) throws NoSuchMethodException {
+        routineView = rv;
         Class[] parameterTypes = new Class[1];
         parameterTypes[0] = ArrayList.class;
-        Method method1 = DomainAdapter.class.getMethod("setActivitiesByDay", parameterTypes);
+        Method method1 = DomainAdapter.class.getMethod("setActivitiesByDayToView", parameterTypes);
         controllerPersistence.getActivitiesByDay("RutinaDeProva", dayString, method1, DomainAdapter.getInstance());
     }
 
     /**
-     * Rebre la resposta de la DB amb les activitats d'una rutina
+     * Rebre la resposta de la DB amb les activitats d'una rutina per la routineView
      * @param acts activitats de la rutina
      * @throws InvalidTimeIntervalException l'interval de temps es incorrecte
      * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
      */
-    public void setActivitiesByDay(ArrayList<ArrayList<String>> acts) throws InvalidTimeIntervalException, OverlappingActivitiesException {
+    public void setActivitiesByDayToView(ArrayList<ArrayList<String>> acts) throws InvalidTimeIntervalException, OverlappingActivitiesException {
+        routineAdapter.clearActivities();
+        for(ArrayList<String> act : acts) {
+            String[] s = act.get(5).split(":");
+            String[] s2 = act.get(6).split(":");
+            int iniH = Integer.parseInt(s[0]);
+            int iniM = Integer.parseInt(s[1]);
+            int endH = Integer.parseInt(s2[0]);
+            int endM = Integer.parseInt(s2[1]);
+            Activity activity = new Activity(act.get(1), act.get(2),Theme.valueOf(act.get(3)), new TimeInterval(iniH, iniM, endH, endM), Day.valueOf(act.get(4)));
+            activity.setId(act.get(0));
+            routineAdapter.createActivity(activity);
+        }
+        routineView.getActivitiesCallback(routineAdapter.getActivitiesByDay("Monday"));
+    }
+
+    /**
+     * Demanar les activitats d'un dia per la routineEdit
+     * @param dayString dia de les activitats
+     * @param re instància de RoutineEdit
+     * @throws NoSuchMethodException el mètode no existeix
+     */
+    public void getActivitiesByDayToEdit(String dayString, RoutineEdit re) throws NoSuchMethodException {
+        routineEdit = re;
+        Class[] parameterTypes = new Class[1];
+        parameterTypes[0] = ArrayList.class;
+        Method method1 = DomainAdapter.class.getMethod("setActivitiesByDayToEdit", parameterTypes);
+        controllerPersistence.getActivitiesByDay("RutinaDeProva", dayString, method1, DomainAdapter.getInstance());
+    }
+
+    /**
+     * Rebre la resposta de la DB amb les activitats d'una rutina per la routineEdit
+     * @param acts activitats de la rutina
+     * @throws InvalidTimeIntervalException l'interval de temps es incorrecte
+     * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
+     */
+    public void setActivitiesByDayToEdit(ArrayList<ArrayList<String>> acts) throws InvalidTimeIntervalException, OverlappingActivitiesException {
         routineAdapter.clearActivities();
         for(ArrayList<String> act : acts) {
             String[] s = act.get(5).split(":");

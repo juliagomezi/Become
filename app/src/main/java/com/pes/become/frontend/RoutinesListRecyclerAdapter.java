@@ -15,7 +15,7 @@ import com.pes.become.backend.adapters.DomainAdapter;
 
 import java.util.ArrayList;
 
-public class RecyclerAdapterRoutinesList extends RecyclerView.Adapter<RecyclerAdapterRoutinesList.ViewHolder> {
+public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesListRecyclerAdapter.ViewHolder> {
 
     private final DomainAdapter DA = DomainAdapter.getInstance();
     private final ArrayList<ArrayList<String>> routinesList;
@@ -24,7 +24,7 @@ public class RecyclerAdapterRoutinesList extends RecyclerView.Adapter<RecyclerAd
      * Constructora del RecyclerAdapterRoutinesList
      * @param routinesList llistat d'activitats que es mostren al RecyclerView
      */
-    public RecyclerAdapterRoutinesList(ArrayList<ArrayList<String>> routinesList) {
+    public RoutinesListRecyclerAdapter(ArrayList<ArrayList<String>> routinesList) {
         this.routinesList = routinesList;
     }
 
