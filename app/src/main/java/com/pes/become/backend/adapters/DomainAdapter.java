@@ -163,33 +163,31 @@ public class DomainAdapter {
      * @param idRoutine identificador de la rutina
      */
     public void selectRoutine(String idRoutine) throws NoSuchMethodException {
-        Class[] parameterTypes = new Class[2];
+        Class[] parameterTypes = new Class[1];
         parameterTypes[0] = ArrayList.class;
-        parameterTypes[1] = ArrayList.class;
         Method method1 = DomainAdapter.class.getMethod("setSelectedRoutine", parameterTypes);
-        //controllerPersistence.getRoutine(idRoutine, method1, DomainAdapter.getInstance());
+        //controllerPersistence.getRoutine(idUser, idRoutine, method1, DomainAdapter.getInstance());
     }
 
     /**
      * Metode per seleccionar una rutina ja existent
      */
     public void selectRoutine() throws NoSuchMethodException {
-        Class[] parameterTypes = new Class[2];
+        Class[] parameterTypes = new Class[1];
         parameterTypes[0] = ArrayList.class;
-        parameterTypes[1] = ArrayList.class;
         Method method1 = DomainAdapter.class.getMethod("setSelectedRoutine", parameterTypes);
-        //controllerPersistence.getRoutine(idRoutine, method1, DomainAdapter.getInstance());
+        //controllerPersistence.getRoutineSelected(idUser, method1, DomainAdapter.getInstance());
     }
 
     /**
      * Metode per rebre la resposta de la DB a la consulta "getRoutine"
      * @param infoRoutine llista amb la informacio de la rutina
      */
-    public void setSelectedRoutine(ArrayList<String> infoRoutine, ArrayList<ArrayList<String>> activities) throws NoSuchMethodException {
+    public void setSelectedRoutine(ArrayList<String> infoRoutine) throws NoSuchMethodException {
         Routine routine = routineAdapter.createRoutine(infoRoutine.get(1));
         routine.setId(infoRoutine.get(0));
         currentUser.setSelectedRoutine(routine);
-        //controllerPersistence.setSelectedRoutine(idRoutine);
+        //controllerPersistence.setSelectedRoutine(idUser, idRoutine);
         routineAdapter.setCurrentRoutine(currentUser.getSelectedRoutine());
 
         Class[] parameterTypes = new Class[1];
