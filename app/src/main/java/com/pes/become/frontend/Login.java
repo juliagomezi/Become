@@ -15,7 +15,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -26,7 +25,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapter;
 
-public class login extends AppCompatActivity {
+public class Login extends AppCompatActivity {
 
 
     private final DomainAdapter DA = DomainAdapter.getInstance();
@@ -58,7 +57,7 @@ public class login extends AppCompatActivity {
         });
 
         signUp.setOnClickListener(v -> {
-            startActivity(new Intent(login.this, Signup.class));
+            startActivity(new Intent(Login.this, Signup.class));
         });
 
 
@@ -134,7 +133,7 @@ public class login extends AppCompatActivity {
                             startActivity(intent);
                         } else {
                             // If sign in fails, display a message to the user.
-                            Toast.makeText(login.this, "Failed", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Login.this, "Failed", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
