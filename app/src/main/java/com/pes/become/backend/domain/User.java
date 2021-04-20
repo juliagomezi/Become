@@ -8,6 +8,10 @@ import java.util.Set;
  */
 public class User {
     /**
+     * ID de l'usuari
+     */
+    private String id;
+    /**
      * Correu de l'usuari
      */
     private String mail;
@@ -53,6 +57,14 @@ public class User {
      *
      * @return
      */
+    public String getID() {
+        return id;
+    }
+
+    /**
+     *
+     * @return
+     */
     public String getMail() {
         return mail;
     }
@@ -63,6 +75,14 @@ public class User {
      */
     public String getName(){
         return name;
+    }
+
+    /**
+     * Setter del id de l'usuari
+     * @param id
+     */
+    public void setID(String id){
+        this.id = id;
     }
 
     /**

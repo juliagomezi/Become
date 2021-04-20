@@ -43,8 +43,6 @@ public class ControllerRoutineDB {
                 Log.w("LISTENER FAILED", "getRoutine failed.", e);
                 return;
             }
-
-
         });
     }
 

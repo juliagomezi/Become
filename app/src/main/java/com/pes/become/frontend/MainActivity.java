@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.pes.become.R;
+import com.pes.become.backend.adapters.DomainAdapter;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -20,12 +21,18 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
+        try {
+            DomainAdapter.getInstance().selectRoutine();
+        } catch (NoSuchMethodException ignore) { }
+
         BottomNavigationView navigation = findViewById(R.id.bottomNavigationView);
         navigation.setSelectedItemId(R.id.homeView);
         navigation.setOnNavigationItemSelectedListener(navListener);
 
         getSupportFragmentManager().beginTransaction()
                .replace(R.id.fragment_layout, new RoutineEdit()).commit(); //aquí es posa el fragment que vols que es vegi quan s'encén l'aplicació
+
+
     }
 
     /**
