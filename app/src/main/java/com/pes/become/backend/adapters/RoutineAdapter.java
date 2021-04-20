@@ -17,7 +17,7 @@ public class RoutineAdapter {
      */
     private static RoutineAdapter instance;
 
-    private final Routine routine = new Routine("RutinaDeProva"); //sample routine
+    private Routine routine;
 
     /**
      * Obtenir la instancia de la classe
@@ -30,13 +30,31 @@ public class RoutineAdapter {
         return instance;
     }
 
-    //tot aixo s'haura de canviar perque la clau de rutina es nom+correuUsuari
+    /**
+     *
+     * @param selectedRoutine
+     */
+    public void setCurrentRoutine(Routine selectedRoutine) {
+        routine = selectedRoutine;
+    }
+
+    /**
+     *
+     * @param id
+     * @param name
+     */
+    public void changeName(String id, String name){
+        if(routine.getId().equals(id))
+            routine.setName(name);
+    }
+
     /**
      * Crear una nova rutina
      * @param name nom de la rutina
+     * @return instancia de la rutina creada
      */
-    public void createRoutine(String name) {
-        new Routine(name);
+    public Routine createRoutine(String name) {
+        return new Routine(name);
     }
 
     /**
@@ -105,5 +123,4 @@ public class RoutineAdapter {
     public boolean checkOverlappings(Activity a) {
         return routine.checkOverlappings(a);
     }
-
 }

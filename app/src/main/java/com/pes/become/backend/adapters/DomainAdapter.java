@@ -2,6 +2,7 @@ package com.pes.become.backend.adapters;
 
 import com.pes.become.backend.domain.Activity;
 import com.pes.become.backend.domain.Day;
+import com.pes.become.backend.domain.Routine;
 import com.pes.become.backend.domain.Theme;
 import com.pes.become.backend.domain.TimeInterval;
 import com.pes.become.backend.domain.User;
@@ -32,14 +33,17 @@ public class DomainAdapter {
      */
     private static final RoutineAdapter routineAdapter = RoutineAdapter.getInstance();
     /**
+     * Unica instancia de l'adaptador de la classe Usuari
+     */
+    private static final UserAdapter userAdapter = UserAdapter.getInstance();
+    /**
      * Instancia de la classe routineEdit del frontend
      */
     private RoutineEdit routineEdit;
     /**
-     * Instancia de la classe rotuineView del frontend
+     * Instancia de la classe routineView del frontend
      */
     private RoutineView routineView;
-
     /**
      * Usuari autenticat que esta usant l'aplicació actualment
      */
@@ -64,6 +68,7 @@ public class DomainAdapter {
      */
     public void registerUser(String mail, String password, String name) {
         //controllerPersistence.registerUser(mail,password,name);
+        //currentUser = UserAdapter.createUser(mail, name);
     }
 
     /**
@@ -73,7 +78,8 @@ public class DomainAdapter {
      */
     public void loginUser(String mail, String password) {
         //ArrayList<String> info = controllerPersistence.getUser(mail,password);
-        //currentUser = new User(info.get(0),info.get(1),info.get(2),info.get(3));
+        //currentUser = UserAdapter.createUser(mail, name, routines);
+        //setSelectedRoutine(selectedRoutineID);
     }
 
     /**
@@ -96,7 +102,8 @@ public class DomainAdapter {
      * @param password contrassenya de l'usuari
      */
     public void deleteUser(String mail, String password) {
-
+        logoutUser();
+        //controllerPersistence.deleteUser(mail, password);
     }
 
     /**
@@ -105,7 +112,7 @@ public class DomainAdapter {
      * @param newPassword contrassenya nova
      */
     public void changePassword(String oldPassword, String newPassword) {
-
+        //controllerPersistence.changePassword(oldPassword, newPassword);
     }
 
     /**
@@ -113,7 +120,7 @@ public class DomainAdapter {
      * @param newname nou nom de l'usuari
      */
     public void changeUserName(String newname) {
-        //currentUser.setName(newname);
+        currentUser.setName(newname);
     }
 
     /**
@@ -121,16 +128,31 @@ public class DomainAdapter {
      * @param name nom de la rutina
      */
     public void createRoutine(String name) {
-        routineAdapter.createRoutine(name);
-        //controllerPersistence.createNewRoutine(name);
+        //String id = controllerPersistence.createNewRoutine(name);
+        //currentUser.addRoutine(id);
     }
 
     /**
      * Metode per seleccionar una rutina ja existent
      * @param idRoutine identificador de la rutina
      */
-    public void selectRoutine(String idRoutine) {
+    public void selectRoutine(String idRoutine) throws NoSuchMethodException {
+        Class[] parameterTypes = new Class[1];
+        parameterTypes[0] = ArrayList.class;
+        Method method1 = DomainAdapter.class.getMethod("setSelectedRoutine", parameterTypes);
+        //controllerPersistence.getRoutine(idRoutine, method1, DomainAdapter.getInstance());
+    }
 
+    /**
+     * Metode per rebre la resposta de la DB a la consulta "getRoutine"
+     * @param infoRoutine llista amb la informacio de la rutina
+     */
+    public void setSelectedRoutine(ArrayList<String> infoRoutine){
+        Routine routine = routineAdapter.createRoutine(infoRoutine.get(1));
+        routine.setId(infoRoutine.get(0));
+        currentUser.setSelectedRoutine(routine);
+        //controllerPersistence.setSelectedRoutine(idRoutine);
+        routineAdapter.setCurrentRoutine(currentUser.getSelectedRoutine());
     }
 
     /**
@@ -139,7 +161,8 @@ public class DomainAdapter {
      * @param name nou nom de la rutina
      */
     public void changeRoutineName(String id, String name) {
-
+        //controllerPersistence.changeName(id, name);
+        routineAdapter.changeName(id, name);
     }
 
     /**
@@ -147,7 +170,8 @@ public class DomainAdapter {
      * @param id identificador de la rutina
      */
     public void deleteRoutine(String id) {
-
+        currentUser.deleteRoutine(id);
+        //controllerPersistence.deleteRoutine(id);
     }
 
     /**
@@ -176,13 +200,13 @@ public class DomainAdapter {
             if(!routineAdapter.checkOverlappings(newActDay1) && !routineAdapter.checkOverlappings(newActDay2)) {
                 String beginTime = iniH + ":" + iniM;
                 String endTime = "23:59";
-                String id = controllerPersistence.createActivity("RutinaDeProva", name, Theme.values()[Integer.parseInt(theme)].toString(), description, startDay.toString(), beginTime, endTime);
+                String id = controllerPersistence.createActivity(currentUser.getSelectedRoutine().getId(), name, Theme.values()[Integer.parseInt(theme)].toString(), description, startDay.toString(), beginTime, endTime);
                 newActDay1.setId(id);
                 routineAdapter.createActivity(newActDay1);
                 // activitat dia 2
                 beginTime = "00:00";
                 endTime = endH + ":" + endM;
-                id = controllerPersistence.createActivity("RutinaDeProva", name, Theme.values()[Integer.parseInt(theme)].toString(), description, startDay.toString(), beginTime, endTime);
+                id = controllerPersistence.createActivity(currentUser.getSelectedRoutine().getId(), name, Theme.values()[Integer.parseInt(theme)].toString(), description, startDay.toString(), beginTime, endTime);
                 newActDay2.setId(id);
                 routineAdapter.createActivity(newActDay2);
             } else throw new OverlappingActivitiesException();
@@ -192,7 +216,7 @@ public class DomainAdapter {
             if(!routineAdapter.checkOverlappings(a)) {
                 String beginTime = iniH + ":" + iniM;
                 String endTime = endH + ":" + endM;
-                String id = controllerPersistence.createActivity("RutinaDeProva", name, Theme.values()[Integer.parseInt(theme)].toString(), description, startDay.toString(), beginTime, endTime);
+                String id = controllerPersistence.createActivity(currentUser.getSelectedRoutine().getId(), name, Theme.values()[Integer.parseInt(theme)].toString(), description, startDay.toString(), beginTime, endTime);
                 a.setId(id);
                 routineAdapter.createActivity(a);
             } else throw new OverlappingActivitiesException();
@@ -226,7 +250,7 @@ public class DomainAdapter {
             routineAdapter.updateActivity(updatedActivity1);
             String beginTime = iniH + ":" + iniM;
             String endTime = "23:59";
-            controllerPersistence.updateActivity("RutinaDeProva", name, description, Theme.values()[Integer.parseInt(theme)].toString(), beginTime, endTime, startDay.toString(), id);
+            controllerPersistence.updateActivity(currentUser.getSelectedRoutine().getId(), name, description, Theme.values()[Integer.parseInt(theme)].toString(), beginTime, endTime, startDay.toString(), id);
             // activitat dia 2
             createActivity(name, description, theme, endDayString, endDayString, "0","0", endH, endM);
         }
@@ -236,7 +260,7 @@ public class DomainAdapter {
             routineAdapter.updateActivity(updatedActivity);
             String beginTime = iniH + ":" + iniM;
             String endTime = endH + ":" + endM;
-            controllerPersistence.updateActivity("RutinaDeProva", name, description, Theme.values()[Integer.parseInt(theme)].toString(), beginTime, endTime, startDay.toString(), id);
+            controllerPersistence.updateActivity(currentUser.getSelectedRoutine().getId(), name, description, Theme.values()[Integer.parseInt(theme)].toString(), beginTime, endTime, startDay.toString(), id);
         }
         else throw new InvalidDayIntervalException();
     }
@@ -252,7 +276,7 @@ public class DomainAdapter {
         Class[] parameterTypes = new Class[1];
         parameterTypes[0] = ArrayList.class;
         Method method1 = DomainAdapter.class.getMethod("setActivitiesByDayToView", parameterTypes);
-        controllerPersistence.getActivitiesByDay("RutinaDeProva", dayString, method1, DomainAdapter.getInstance());
+        controllerPersistence.getActivitiesByDay(currentUser.getSelectedRoutine().getId(), dayString, method1, DomainAdapter.getInstance());
     }
 
     /**
@@ -294,7 +318,7 @@ public class DomainAdapter {
         Class[] parameterTypes = new Class[1];
         parameterTypes[0] = ArrayList.class;
         Method method1 = DomainAdapter.class.getMethod("setActivitiesByDayToEdit", parameterTypes);
-        controllerPersistence.getActivitiesByDay("RutinaDeProva", dayString, method1, DomainAdapter.getInstance());
+        controllerPersistence.getActivitiesByDay(currentUser.getSelectedRoutine().getId(), dayString, method1, DomainAdapter.getInstance());
     }
 
     /**
@@ -332,7 +356,7 @@ public class DomainAdapter {
      */
     public void deleteActivity(String id, String day) {
         routineAdapter.deleteActivity(id, Day.valueOf(day));
-        controllerPersistence.deleteActivity("RutinaDeProva", id);
+        controllerPersistence.deleteActivity(currentUser.getSelectedRoutine().getId(), id);
     }
 
     /**
