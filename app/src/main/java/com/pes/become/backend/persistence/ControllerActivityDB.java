@@ -28,19 +28,27 @@ public class ControllerActivityDB {
         db = FirebaseFirestore.getInstance();
     }
 
+
+    /***************CONSULTORES***************/
+
+
+
     /**
      * Obtenir les activitats d'una rutina i un dia indicats
-     * @param routineName nom de la rutina
+     * @param userId identificador de l'usuari
+     * @param idRoutine l'identificador de la rutina
      * @param day dia a consultar
      * @param method metode a cridar quan es retornin les dades
      * @param object classe que conté el mètode
      */
-    public void getActivitiesByDay(String routineName, String day, Method method, Object object) {
-        db.collection("routines").document(routineName).collection("activities").whereEqualTo("day", day).addSnapshotListener((value, e) -> {
+    public void getActivitiesByDay(String userId, String idRoutine, String day, Method method, Object object) {
+        db.collection("users").document(userId).collection("routines").document(idRoutine).
+                collection("activities").whereEqualTo("day", day).addSnapshotListener((value, e) -> {
             if (e != null) {
                 Log.w("LISTENER FAILED", "Listen failed.", e);
                 return;
             }
+
 
             ArrayList<ArrayList<String>> activitiesResult = new ArrayList<>();
             for (QueryDocumentSnapshot document : value) {
@@ -66,9 +74,12 @@ public class ControllerActivityDB {
         });
     }
 
+    /***************MODIFICADORES***************/
+
     /**
      * Crear una activitat en una rutina existent
-     * @param routineName es el nom de la rutina ja existent
+     * @param userId identificador de l'usuari
+     * @param idRoutine es l'identificador de la rutina ja existent
      * @param activityName es el nom de l'activitat que es vol crear
      * @param actTheme es el tema de l'activitat
      * @param actDescription es la descripcio del tema
@@ -77,8 +88,8 @@ public class ControllerActivityDB {
      * @param finishTime es l'hora d'acabament de l'activitat
      * @return el valor del id de l'activitat creada
      */
-    public String createActivity(String routineName, String activityName, String actTheme,String actDescription, String actDay, String beginTime, String finishTime) {
-        CollectionReference refToActivities = db.collection("routines").document(routineName).collection("activities");
+    public String createActivity( String userId, String idRoutine, String activityName, String actTheme,String actDescription, String actDay, String beginTime, String finishTime) {
+        CollectionReference refToActivities = db.collection("users").document(userId).collection("routines").document(idRoutine).collection("activities");
         Map<String,Object> dataInput = new HashMap<>();
         dataInput.put("name",activityName);
         dataInput.put("theme",actTheme);
@@ -97,19 +108,21 @@ public class ControllerActivityDB {
 
     /**
      * Eliminar una activitat existent d'una rutina existent
-     * @param routineName es el nom de la rutina ja existent
+     * @param userId identificador de l'usuari
+     * @param idRoutine es l'identificador de la rutina ja existent
      * @param idActivity es l'identificador de l'activitat
      */
-    public void deleteActivity(String routineName, String idActivity) {
+    public void deleteActivity(String userId, String idRoutine, String idActivity) {
         DocumentReference docRefToActivity;
-        docRefToActivity = db.collection("routines").document(routineName).collection("activities").document(idActivity);
+        docRefToActivity = db.collection("users").document(userId).collection("routines").document(idRoutine).collection("activities").document(idActivity);
 
         docRefToActivity.delete();
     }
 
     /**
      * Actualitzar una activitat existent d'una rutina existent
-     * @param routineName es el nom de la rutina ja existent
+     * @param userId identificador de l'usuari
+     * @param idRoutine es l'identificador de la rutina ja existent
      * @param actName es el nom de l'activitat que es vol modificar
      * @param description es la nova descripció que es vol afegir a l'activitat
      * @param theme es el tema que es vol afegir a l'activitat
@@ -118,8 +131,8 @@ public class ControllerActivityDB {
      * @param endT es l'hora d'acabament de l'activitat
      * @param idActivity és l'identificador de l'activitat
      */
-    public void updateActivity(String routineName, String actName, String description, String theme, String day, String iniT, String endT,  String idActivity) {
-        DocumentReference docRefToActivity = db.collection("routines").document(routineName).collection("activities").document(idActivity);
+    public void updateActivity(String userId, String idRoutine, String actName, String description, String theme, String day, String iniT, String endT,  String idActivity) {
+        DocumentReference docRefToActivity = db.collection("users").document(userId).collection("routines").document(idRoutine).collection("activities").document(idActivity);
 
         docRefToActivity.update("name", actName);
         docRefToActivity.update("description", description);
