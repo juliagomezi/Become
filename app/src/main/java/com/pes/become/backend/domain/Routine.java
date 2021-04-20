@@ -5,6 +5,7 @@ import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -32,7 +33,10 @@ public class Routine {
     public Routine(String name) {
         this.id = null;
         this.name = name;
-        clearActivities();
+        activities = new TreeMap<>();
+        for(int i=0; i<7; ++i){
+            activities.put(Day.values()[i], new ArrayList<>());
+        }
     }
 
     /**
@@ -69,13 +73,10 @@ public class Routine {
 
     /**
      * Métode per buidar les activitats d'una rutina
+     * @param day
      */
-    public void clearActivities() {
-        activities = new TreeMap<>();
-        for(int i=0; i<7; ++i) {
-            ArrayList<Activity> tmp = new ArrayList<>();
-            activities.put(Day.values()[i], tmp);
-        }
+    public void clearActivities(Day day) {
+        Objects.requireNonNull(activities.get(day)).clear();
     }
 
     /**

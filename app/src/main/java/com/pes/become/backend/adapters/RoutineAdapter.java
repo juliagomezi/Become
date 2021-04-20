@@ -84,9 +84,10 @@ public class RoutineAdapter {
 
     /**
      * Buidar les activitats d'una rutina
+     * @param day
      */
-    public void clearActivities() {
-        routine.clearActivities();
+    public void clearActivities(Day day) {
+        routine.clearActivities(day);
     }
 
     /**
