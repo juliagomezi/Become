@@ -353,6 +353,9 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
                 DA.createActivity(name, description, theme, startDay, endDay, String.format("%02d", startHour), String.format("%02d", startMinute), String.format("%02d", endHour), String.format("%02d",endMinute));
                 Toast.makeText(getContext(), getString(R.string.activityCreated), Toast.LENGTH_SHORT).show();
                 activitySheet.dismiss();
+                seeingDay = spinnerStartDay.getSelectedItemPosition();
+                setDay();
+                getActivitiesByDay(getWeekDay(seeingDay));
             } catch (InvalidTimeIntervalException e) {
                 Toast.makeText(getContext(), getString(R.string.errorTime), Toast.LENGTH_SHORT).show();
                 startTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
@@ -390,6 +393,9 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
             DA.updateActivity(id, name, description, theme, startDay, endDay, startHour, startMinute, endHour, endMinute);
             Toast.makeText(getContext(), getString(R.string.activityModified), Toast.LENGTH_SHORT).show();
             activitySheet.dismiss();
+            seeingDay = spinnerStartDay.getSelectedItemPosition();
+            setDay();
+            getActivitiesByDay(getWeekDay(seeingDay));
         } catch (InvalidTimeIntervalException e) {
             Toast.makeText(getContext(), getString(R.string.errorTime), Toast.LENGTH_SHORT).show();
             this.startTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
