@@ -3,6 +3,7 @@ package com.pes.become.frontend;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -19,13 +20,15 @@ public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesLi
 
     private final DomainAdapter DA = DomainAdapter.getInstance();
     private final ArrayList<ArrayList<String>> routinesList;
+    private String selectedRoutineID;
 
     /**
      * Constructora del RecyclerAdapterRoutinesList
      * @param routinesList llistat d'activitats que es mostren al RecyclerView
      */
-    public RoutinesListRecyclerAdapter(ArrayList<ArrayList<String>> routinesList) {
+    public RoutinesListRecyclerAdapter(ArrayList<ArrayList<String>> routinesList, String selectedRoutineID) {
         this.routinesList = routinesList;
+        this.selectedRoutineID = selectedRoutineID;
     }
 
     /**
@@ -55,6 +58,23 @@ public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesLi
             String currentId = routinesList.get(position).get(0);
             DA.deleteRoutine(currentId);
         });
+
+        if (routinesList.get(position).get(0).equals(selectedRoutineID)) {
+            holder.switchButton.setChecked(true);
+        }
+
+        holder.switchButton.setOnCheckedChangeListener( new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton toggleButton, boolean isChecked) {
+                if(isChecked) { // no estic segura si l'estat isChecked es l'estat abans o despres de fer click :)
+                    //
+                }
+                else {
+                    //
+                }
+            }
+        });
+
     }
 
     /**

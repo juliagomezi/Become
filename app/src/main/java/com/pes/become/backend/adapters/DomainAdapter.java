@@ -1,5 +1,7 @@
 package com.pes.become.backend.adapters;
 
+import android.util.Log;
+
 import com.pes.become.backend.domain.Activity;
 import com.pes.become.backend.domain.Day;
 import com.pes.become.backend.domain.Routine;
@@ -193,7 +195,7 @@ public class DomainAdapter {
         Class[] parameterTypes = new Class[1];
         parameterTypes[0] = ArrayList.class;
         Method method1 = DomainAdapter.class.getMethod("loadAllActivities", ArrayList.class);
-        for(int d = 0; d<7; ++d){
+        for(int d = 0; d < 7; ++d) {
             controllerPersistence.getActivitiesByDay(currentUser.getID(), currentUser.getSelectedRoutine().getId(), Day.values()[d].toString(), method1, DomainAdapter.getInstance());
         }
     }
@@ -235,8 +237,15 @@ public class DomainAdapter {
      * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
      */
     public void setUserRoutines(ArrayList<ArrayList<String>> routines) throws InvalidTimeIntervalException, OverlappingActivitiesException {
-        for(int i=0; i<routines.size(); ++i){
-            currentUser.addRoutine(routines.get(i).get(0));
+        if (!routines.isEmpty()) {
+            for (int i = 0; i < routines.size(); ++i) {
+                currentUser.addRoutine(routines.get(i).get(0));
+            }
+            Routine selectedRoutine = currentUser.getSelectedRoutine();
+            routinesList.getRoutinesCallback(routines, selectedRoutine.getId());
+        }
+        else {
+            routinesList.getRoutinesCallback(new ArrayList<>(0), null);
         }
     }
 

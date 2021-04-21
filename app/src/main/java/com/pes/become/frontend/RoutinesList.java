@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapter;
+import com.pes.become.backend.persistence.ControllerRoutineDB;
 
 import java.util.ArrayList;
 
@@ -31,6 +33,7 @@ public class RoutinesList extends Fragment {
     private final DomainAdapter DA = DomainAdapter.getInstance();
 
     private ArrayList<ArrayList<String>> routinesList;
+    private String selectedRoutineID;
 
     private BottomSheetDialog routineSheet;
     private String id;
@@ -72,7 +75,7 @@ public class RoutinesList extends Fragment {
     private void initRecyclerView() {
         RecyclerView recyclerView = view.findViewById(R.id.activityList);
         recyclerView.setLayoutManager((new LinearLayoutManager(global)));
-        RoutinesListRecyclerAdapter recyclerAdapter = new RoutinesListRecyclerAdapter(routinesList);
+        RoutinesListRecyclerAdapter recyclerAdapter = new RoutinesListRecyclerAdapter(routinesList, selectedRoutineID);
         recyclerView.setAdapter(recyclerAdapter);
     }
 
@@ -80,29 +83,24 @@ public class RoutinesList extends Fragment {
      * Funció per obtenir les rutines de l'usuari
      */
     public void getRoutines() {
-
-        //temporalment hardcodejat START
-        routinesList = new ArrayList<>();
-        for(int i=1; i<5;++i) {
-            ArrayList<String> routine = new ArrayList<>();
-            routine.add(String.valueOf(i));
-            routine.add("Rutina "+String.valueOf(i));
-            routinesList.add(routine);
-        }
-        initRecyclerView();
-        //temporalment hardcodejat END
-
-        //DA.getRoutines();
+        try {
+            Log.d("getRoutines", "getRoutines");
+            DA.getUserRoutines(this);
+        } catch (NoSuchMethodException ignore) { }
     }
 
     /**
      * Funció per inicialitzar l'element que mostra el llistat de rutines
      * @param routinesListCallback llistat de rutines que retorna la BD
+     * @param selectedRoutineID id de la rutina seleccionada de l'usuari que retorna la BD
      */
-    public void getRoutinesCallback(ArrayList<ArrayList<String>> routinesListCallback) {
-        routinesList = new ArrayList<>(routinesListCallback.size());
-        routinesList.addAll(routinesListCallback);
-        initRecyclerView();
+    public void getRoutinesCallback(ArrayList<ArrayList<String>> routinesListCallback, String selectedRoutineID) {
+        if (!routinesListCallback.isEmpty()) {
+            this.selectedRoutineID = selectedRoutineID;
+            routinesList = new ArrayList<>(routinesListCallback.size());
+            routinesList.addAll(routinesListCallback);
+            initRecyclerView();
+        }
     }
 
     public void createRoutineSheet() {

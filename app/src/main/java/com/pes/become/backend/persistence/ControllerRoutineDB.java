@@ -32,12 +32,8 @@ public class ControllerRoutineDB {
         db = FirebaseFirestore.getInstance();
     }
 
-
-
-
     /***************CONSULTORES***************/
-    public void getRoutine(String userId, String nameRoutine)
-    {
+    public void getRoutine(String userId, String nameRoutine) {
         db.collection("users").document(userId).collection("routines").whereEqualTo("name", nameRoutine).addSnapshotListener((value, e) -> {
             if (e != null) {
                 Log.w("LISTENER FAILED", "getRoutine failed.", e);
@@ -52,24 +48,18 @@ public class ControllerRoutineDB {
      * @param method metode a cridar quan es retornin les dades
      * @param object classe que conté el mètode
      */
-    public void getUserRoutines(String userId, Method method, Object object)
-    {
+    public void getUserRoutines(String userId, Method method, Object object) {
         db.collection("users").document(userId).collection("routines").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 ArrayList<ArrayList<String>> routinesResult = new ArrayList<>();
                 if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot  document : task.getResult()) {
-                            ArrayList<String> activity = new ArrayList<>();
-                            activity.add(document.getId());
-                            activity.add(document.get("name").toString());
-                            routinesResult.add(activity);
-                        }
-                } else {
-                    ArrayList<String> activity = new ArrayList<>();
-                    activity.add("0");
-                    activity.add("0");
-                    routinesResult.add(activity);
+                    for (QueryDocumentSnapshot  document : task.getResult()) {
+                        ArrayList<String> routine = new ArrayList<>();
+                        routine.add(document.getId());
+                        routine.add(document.get("name").toString());
+                        routinesResult.add(routine);
+                    }
                 }
                 Object[] params = new Object[1];
                 params[0] = routinesResult;
@@ -81,7 +71,6 @@ public class ControllerRoutineDB {
                     System.out.println("Target no vàlid");
                 }
             }
-
         });
     }
 
@@ -93,12 +82,10 @@ public class ControllerRoutineDB {
      * @param idRoutine l'identificador de la rutina.
      * @param newName el nom que se li vol posar a la rutina.
      */
-    public void changeName(String userId, String idRoutine, String newName){
+    public void changeName(String userId, String idRoutine, String newName) {
         DocumentReference docRefToRoutine = db.collection("users").document(userId).collection("routines").document(idRoutine);
         docRefToRoutine.update("name", newName);
     }
-
-
 
     /**
      * Crea una rutina nova.
@@ -151,8 +138,6 @@ public class ControllerRoutineDB {
 
         DocRefToRoutine.delete();
     }
-
-
 
 }
 

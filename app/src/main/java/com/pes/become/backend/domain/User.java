@@ -1,5 +1,7 @@
 package com.pes.become.backend.domain;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -26,7 +28,7 @@ public class User {
     /**
      * IDs de les rutines de l'usuari
      */
-    private Set<String> routines;
+    private ArrayList<String> routines;
 
     /**
      * Creadora de la classe per a un nou usuari (sense rutines)
@@ -37,7 +39,7 @@ public class User {
         this.mail = mail;
         this.name = name;
         this.selectedRoutine = null;
-        this.routines = null;
+        this.routines = new ArrayList<>();
     }
 
     /**
@@ -113,7 +115,7 @@ public class User {
      * Getter de les rutines
      * @return
      */
-    public Set<String> getRoutines() {
+    public ArrayList<String> getRoutines() {
         return routines;
     }
 
@@ -121,7 +123,7 @@ public class User {
      * Metode per afegir una rutina a la llista de rutines de l'usuari
      * @param id ID de la rutina a afegir
      */
-    public void addRoutine(String id){
+    public void addRoutine(String id) {
         routines.add(id);
     }
 

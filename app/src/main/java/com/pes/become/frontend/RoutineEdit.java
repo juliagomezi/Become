@@ -49,8 +49,8 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
     private int seeingDay;
     private ArrayList<ArrayList<String>> activitiesList;
 
-    RecyclerView recyclerView;
     RoutineEditRecyclerAdapter routineEditRecyclerAdapter;
+    RecyclerView recyclerView;
     TextView emptyView;
 
     private BottomSheetDialog activitySheet;
@@ -77,10 +77,11 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         instance = this;
         global = this.getActivity();
 
+        recyclerView = view.findViewById(R.id.activityList);
+        emptyView = view.findViewById(R.id.emptyView);
+
         seeingDay = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
-
         translateSeeingDay();
-
         setDay();
         getActivitiesByDay(getWeekDay(seeingDay));
 
@@ -165,7 +166,6 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
      * Funció per inicialitzar l'element que mostra el llistat d'activitats
      */
     private void initRecyclerView() {
-        recyclerView = view.findViewById(R.id.activityList);
         recyclerView.setLayoutManager((new LinearLayoutManager(global)));
         routineEditRecyclerAdapter = new RoutineEditRecyclerAdapter(activitiesList);
         recyclerView.setAdapter(routineEditRecyclerAdapter);
@@ -178,8 +178,6 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
      * Funció per inicialitzar l'element que es mostra quan no hi ha activitats
      */
     private void initEmptyView() {
-        emptyView = view.findViewById(R.id.emptyView);
-
         recyclerView.setVisibility(View.INVISIBLE);
         emptyView.setVisibility(View.VISIBLE);
     }
@@ -425,13 +423,11 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
      * @param activitiesListCallback llistat d'activitats que retorna la BD
      */
     public void getActivitiesCallback(ArrayList<ArrayList<String>> activitiesListCallback) {
-
         if (!activitiesListCallback.isEmpty()) {
             activitiesList = new ArrayList<>(activitiesListCallback.size());
             activitiesList.addAll(activitiesListCallback);
             initRecyclerView();
         }
-
         else {
             initEmptyView();
         }
