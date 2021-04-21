@@ -5,9 +5,9 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
+/*import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;*/
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -285,7 +285,7 @@ public class CtrlUsuari {
      * @param routineID identificador de la nova rutina seleccionada
      */
     public void setSelectedRoutine(String userID, String routineID){
-        DocumentReference docRefToUser = db.collection("users").document("userID");
+        DocumentReference docRefToUser = db.collection("users").document(userID);
         docRefToUser.update("selectedRoutine",routineID);
     }
 
