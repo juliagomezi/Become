@@ -1,7 +1,5 @@
 package com.pes.become.backend.adapters;
 
-import android.util.Log;
-
 import com.pes.become.backend.domain.Activity;
 import com.pes.become.backend.domain.Day;
 import com.pes.become.backend.domain.Routine;
