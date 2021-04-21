@@ -60,16 +60,11 @@ public class ControllerRoutineDB {
                 ArrayList<ArrayList<String>> routinesResult = new ArrayList<>();
                 if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot  document : task.getResult()) {
-                            ArrayList<String> activity = new ArrayList<>();
-                            activity.add(document.getId());
-                            activity.add(document.get("name").toString());
-                            routinesResult.add(activity);
+                            ArrayList<String> routine = new ArrayList<>();
+                            routine.add(document.getId());
+                            routine.add(document.get("name").toString());
+                            routinesResult.add(routine);
                         }
-                } else {
-                    ArrayList<String> activity = new ArrayList<>();
-                    activity.add("0");
-                    activity.add("0");
-                    routinesResult.add(activity);
                 }
                 Object[] params = new Object[1];
                 params[0] = routinesResult;
