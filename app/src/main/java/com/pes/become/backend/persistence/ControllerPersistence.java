@@ -1,12 +1,16 @@
 package com.pes.become.backend.persistence;
 
+import android.app.Activity;
+
+import com.google.firebase.firestore.DocumentReference;
+
 import java.lang.reflect.Method;
 
 public class ControllerPersistence{
 
     ControllerRoutineDB CR;
     ControllerActivityDB CA;
-
+    CtrlUsuari CU;
 
 
     /**
@@ -147,6 +151,79 @@ public class ControllerPersistence{
         CR.deleteRoutine(userId, idRoutine);
     }
 
+    /**FUNCIONS RELACIONADES AMB USUARI*********************************************************/
+    /***************CONSULTORES***************/
+    /***************MODIFICADORES***************/
+
+    /**
+     * Canvi de contrasenya de l'usuari actual
+     * @param newPassword nova contrasenya
+     * @param method mètode a executar de forma asíncrona un cop acabada la reautentificació (el paràmetre és un boolea que retorna true si la reautentificació ha anat bé o false si no)
+     * @param object instancia de la classe del mètode a executar
+     */
+    public void changePassword(String newPassword, Method method, Object object){
+        CU = CtrlUsuari.getInstance();
+        CU.changePassword(newPassword, method, object);
+    }
+
+    /**
+     * Esborrar l'usuari actual i les seves rutines i activitats
+     * @param method mètode a executar de forma asíncrona un cop acabada la reautentificació (el paràmetre és un boolea que retorna true si la reautentificació ha anat bé o false si no)
+     * @param object instancia de la classe del mètode a executar
+     */
+    public void deleteUser(Method method, Object object){
+        CU = CtrlUsuari.getInstance();
+        CU.deleteUser(method, object);
+    }
+
+    /**
+     * Inici de sessió d'usuari
+     * @param mail correu
+     * @param password contrasenya
+     * @param act Activity d'Android necessaria per la execucio del firebase
+     * @param method metode a cridar quan es retornin les dades
+     * @param object classe que conté el mètode
+     */
+    public void loginUser(String mail, String password, Activity act, Method method, Object object){
+        CU = CtrlUsuari.getInstance();
+        CU.loginUser(mail, password, act, method, object);
+    }
+
+    /**
+     * Reautenticació de l'usuari
+     * @param mail correu
+     * @param password contrasenya
+     * @param method mètode a executar de forma asíncrona un cop acabada la reautentificació (el paràmetre és un boolea que retorna true si la reautentificació ha anat bé o false si no)
+     * @param object instancia de la classe del mètode a executar
+     */
+    public void reauthenticate(String mail, String password, Method method, Object object){
+        CU = CtrlUsuari.getInstance();
+        CU.reauthenticate(mail, password, method, object);
+    }
+
+    /**
+     * Registre d'un nou usuari
+     * @param mail correu de l'usuari que es vol crear
+     * @param password contrasenya de l'usuari que es vol crear
+     * @param name nom de l'usuari que es vol crear
+     * @param act Activity d'Android necessaria per la execucio del firebase
+     * @param method metode a cridar quan es retornin les dades
+     * @param object classe que conté el mètode
+     */
+    public void registerUser(String mail, String password, String name, Activity act, Method method, Object object){
+        CU = CtrlUsuari.getInstance();
+        CU.registerUser(mail, password, name, act, method, object);
+    }
+
+    /**
+     * Canvia la rutina seleccionada d'un usuari
+     * @param userID identificador de l'usuari
+     * @param routineID identificador de la nova rutina seleccionada
+     */
+    public void setSelectedRoutine(String userID, String routineID){
+        CU = CtrlUsuari.getInstance();
+        CU.setSelectedRoutine(userID, routineID);
+    }
 
 
     /*

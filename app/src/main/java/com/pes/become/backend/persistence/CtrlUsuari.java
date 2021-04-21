@@ -14,6 +14,7 @@ import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -42,41 +43,72 @@ public class CtrlUsuari {
         }
         return instance;
     }
+
+    /***************CONSULTORES***************/
+    /***************MODIFICADORES***************/
+
     /**
-     * Registre d'un nou usuari
-     * @param mail correu de l'usuari que es vol crear
-     * @param password contrasenya de l'usuari que es vol crear
-     * @param name nom de l'usuari que es vol crear
-     * @param act Activity d'Android necessaria per la execucio del firebase
-     * @param method metode a cridar quan es retornin les dades
-     * @param object classe que conté el mètode
+     * Canvi de contrasenya de l'usuari actual
+     * @param newPassword nova contrasenya
+     * @param method mètode a executar de forma asíncrona un cop acabada la reautentificació (el paràmetre és un boolea que retorna true si la reautentificació ha anat bé o false si no)
+     * @param object instancia de la classe del mètode a executar
      */
-    public void registerUser(String mail, String password,String name, Activity act,Method method, Object object){
+    public void changePassword(String newPassword, Method method, Object object){
+        FirebaseUser user = mAuth.getCurrentUser();
 
-        mAuth.createUserWithEmailAndPassword(mail, password)
-                .addOnCompleteListener(act, new OnCompleteListener<AuthResult>() {
+        user.updatePassword(newPassword)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    Object[] params = new Object[1];
+
                     @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        boolean success;
+                    public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-
-                            Log.d("TAG", "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            String userID = user.getUid();
-
-                            DocumentReference docRefToUser =  db.collection("users").document(userID);
-                            HashMap<String, Object> mapa = new HashMap<>();
-                            mapa.put("Username", name);
-
-                            docRefToUser.set(mapa);
-                            success =true;
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            //Log.w("FirebaseUser", "createUserWithEmail:failure", task.getException());
-                            success=false;
+                            Log.d("FirebaseUser", "User password updated.");
+                            params[0] = true;
                         }
+                        else {
+                            params[0] = false;
+                        }
+
+                        try {
+                            method.invoke(object, params);
+                        } catch (IllegalAccessException e1) {
+                            System.out.println("Acces invàlid");
+                        } catch (InvocationTargetException e2) {
+                            System.out.println("Target no vàlid");
+                        }
+                    }
+                });
+    }
+
+    /**
+     * Esborrar l'usuari actual i les seves rutines i activitats
+     * @param method mètode a executar de forma asíncrona un cop acabada la reautentificació (el paràmetre és un boolea que retorna true si la reautentificació ha anat bé o false si no)
+     * @param object instancia de la classe del mètode a executar
+     */
+    public void deleteUser(Method method, Object object){
+        //reauthenticate(mail, oldPassword);
+        FirebaseUser user = mAuth.getCurrentUser();
+        String userID = user.getUid();
+        user.delete()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+
                         Object[] params = new Object[1];
-                        params[0] = success;
+                        //Això té 1 element
+                        // un bool que diu si hi ha hagut exit o no
+                        if (task.isSuccessful()) {
+                            Log.d("FirebaseUser", "User account deleted.");
+                            DocumentReference docRefToUser = db.collection("users").document(userID);
+                            deleteUserData(docRefToUser);
+                            params[0] = true;
+                        }
+                        else {
+                            params[0] = false;
+                        }
+
+
                         try {
                             method.invoke(object, params);
                         } catch (IllegalAccessException e1) {
@@ -102,99 +134,51 @@ public class CtrlUsuari {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         boolean success;
+                        Object[] params = new Object[4];
+                        //Això té 4 elements
+                        // un bool que diu si hi ha hagut exit o no
+                        // el ID de l'usuari
+                        //el nom de l'usuari
+                        //el id de la seva rutina seleccionada
+
+
                         if (task.isSuccessful()) {
                             Log.d("FirebaseUser", "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            String userID = user.getUid();
 
-                            success = true;
+                            DocumentReference docRefToUser = db.collection("users").document(userID);
+                            docRefToUser.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    params[0] = true;
+                                    params[1] = userID;
+                                    params[2] = documentSnapshot.get("name");
+                                    params[3] = documentSnapshot.get("selectedRoutine");
+                                    try {
+                                        method.invoke(object, params);
+                                    } catch (IllegalAccessException e1) {
+                                        System.out.println("Acces invàlid");
+                                    } catch (InvocationTargetException e2) {
+                                        System.out.println("Target no vàlid");
+                                    }
+                                }
+                            });
+
+
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("FirebaseUser", "signInWithEmail:failure", task.getException());
                             //Toast.makeText(EmailPasswordActivity.this, "Authentication failed.",
-                                    //Toast.LENGTH_SHORT).show();
-                            success = false;
+                            //Toast.LENGTH_SHORT).show();
+                            params[0] = false;
+                            params[1] = params[2] = params[3] = "";
                         }
-                        Object[] params = new Object[1];
-                        params[0] = success;
-                        try {
-                            method.invoke(object, params);
-                        } catch (IllegalAccessException e1) {
-                            System.out.println("Acces invàlid");
-                        } catch (InvocationTargetException e2) {
-                            System.out.println("Target no vàlid");
-                        }
+
+
                     }
                 });
-    }
-
-    /**
-     * Esborrar l'usuari actual i les seves rutines i activitats
-     * @param method mètode a executar de forma asíncrona un cop acabada la reautentificació (el paràmetre és un boolea que retorna true si la reautentificació ha anat bé o false si no)
-     * @param object instancia de la classe del mètode a executar
-     */
-    public void deleteUser(Method method, Object object){
-        //reauthenticate(mail, oldPassword);
-        FirebaseUser user = mAuth.getCurrentUser();
-        String id = user.getUid();
-        user.delete()
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        boolean success;
-                        if (task.isSuccessful()) {
-                            Log.d("FirebaseUser", "User account deleted.");
-                            //Cal borrar l'usuari, encaran no implementat
-                            success = true;
-                        }else{
-                            success = false;
-                        }
-                        Object[] params = new Object[1];
-                        params[0] = success;
-                        try {
-                            method.invoke(object, params);
-                        } catch (IllegalAccessException e1) {
-                            System.out.println("Acces invàlid");
-                        } catch (InvocationTargetException e2) {
-                            System.out.println("Target no vàlid");
-                        }
-                    }
-                });
-    }
-
-    /**
-     * Canvi de contrasenya de l'usuari actual
-     * @param newPassword nova contrasenya
-     * @param method mètode a executar de forma asíncrona un cop acabada la reautentificació (el paràmetre és un boolea que retorna true si la reautentificació ha anat bé o false si no)
-     * @param object instancia de la classe del mètode a executar
-     */
-    public void changePassword(String newPassword, Method method, Object object){
-        FirebaseUser user = mAuth.getCurrentUser();
-
-        user.updatePassword(newPassword)
-            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                boolean success = false;
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()) {
-                        Log.d("FirebaseUser", "User password updated.");
-                        success = true;
-                    }
-                    else {
-                        success = false;
-                    }
-
-                    Object[] params = new Object[1];
-                    params[0] = success;
-                    try {
-                        method.invoke(object, params);
-                    } catch (IllegalAccessException e1) {
-                        System.out.println("Acces invàlid");
-                    } catch (InvocationTargetException e2) {
-                        System.out.println("Target no vàlid");
-                    }
-                }
-            });
-
     }
 
     /**
@@ -235,6 +219,135 @@ public class CtrlUsuari {
                     }
                 });
     }
+
+    /**
+     * Registre d'un nou usuari
+     * @param mail correu de l'usuari que es vol crear
+     * @param password contrasenya de l'usuari que es vol crear
+     * @param name nom de l'usuari que es vol crear
+     * @param act Activity d'Android necessaria per la execucio del firebase
+     * @param method metode a cridar quan es retornin les dades
+     * @param object classe que conté el mètode
+     */
+    public void registerUser(String mail, String password,String name, Activity act,Method method, Object object){
+
+        mAuth.createUserWithEmailAndPassword(mail, password)
+                .addOnCompleteListener(act, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        boolean success;
+                        Object[] params = new Object[3];
+                        //Això té tres elements:
+                        // 1-un bool que diu si ha tingut exit o no
+                        // 2-el ID de l'usuari
+                        // 3-nom de l'usuari
+                        if (task.isSuccessful()) {
+
+                            Log.d("TAG", "createUserWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+
+                            String userID = user.getUid();
+
+                            DocumentReference docRefToUser =  db.collection("users").document(userID);
+                            HashMap<String, Object> mapa = new HashMap<>();
+                            mapa.put("Username", name);
+                            mapa.put("selectedRoutine", "none");
+                            docRefToUser.set(mapa);
+                            params[0] = true;
+                            params[1] = userID;
+                            params[2] = name;
+                        }
+                        else {
+                            // If sign in fails, display a message to the user.
+                            //Log.w("FirebaseUser", "createUserWithEmail:failure", task.getException());
+                            params[0] = false;
+                            params[1] = params[2] = "";
+                        }
+
+                        try {
+                            method.invoke(object, params);
+                        } catch (IllegalAccessException e1) {
+                            System.out.println("Acces invàlid");
+                        } catch (InvocationTargetException e2) {
+                            System.out.println("Target no vàlid");
+                        }
+                    }
+                });
+    }
+
+    /**
+     * Canvia la rutina seleccionada d'un usuari
+     * @param userID identificador de l'usuari
+     * @param routineID identificador de la nova rutina seleccionada
+     */
+    public void setSelectedRoutine(String userID, String routineID){
+        DocumentReference docRefToUser = db.collection("users").document("userID");
+        docRefToUser.update("selectedRoutine",routineID);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    /***************PRIVADES***************/
+
+
+    /**
+     * Esborra totes les dades de la BD de l'usuari (rutines i activitats).
+     * @param docRefToUser és el document de l'usuari que conté totes les altres subcol·leccions.
+     */
+    private void deleteUserData(DocumentReference docRefToUser){
+
+        docRefToUser.collection("routines").get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot documentSnap : task.getResult()) {
+                                DocumentReference docRefToRoutine = documentSnap.getReference();
+                                deleteRoutineData(docRefToRoutine);
+
+                            }
+                            docRefToUser.delete();
+                        }
+                        else {
+                            Log.d("TAG", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+    /**
+     * Esborra totes les dades d'una rutina i després esborra el document de la rutina.
+     * @param docRefToRoutine és el document de l'usuari que conté totes les altres subcol·leccions.
+     */
+    private void deleteRoutineData(DocumentReference docRefToRoutine){
+        docRefToRoutine.collection("activities").get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot documentSnap : task.getResult()) {
+                                DocumentReference docRefToActivity = documentSnap.getReference();
+                                docRefToActivity.delete();
+                            }
+                            docRefToRoutine.delete();
+                        }
+                        else {
+                            Log.d("TAG", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+
+
+
         /*
     //TUTORIAL
     public void tutorial(String routineName, String day)  {
