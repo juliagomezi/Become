@@ -78,6 +78,9 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         global = this.getActivity();
 
         seeingDay = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+
+        translateSeeingDay();
+
         setDay();
         getActivitiesByDay(getWeekDay(seeingDay));
 
@@ -90,6 +93,12 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         nextDayButton.setOnClickListener(v -> showNextDay());
 
         return view;
+    }
+
+    private void translateSeeingDay() {
+        seeingDay -= 2;
+        if(seeingDay == -1)
+            seeingDay = 6;
     }
 
     /**
@@ -113,19 +122,19 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
      */
     private String getWeekDay(int day) {
         switch (day) {
-            case Calendar.MONDAY:
+            case 0:
                 return "Monday";
-            case Calendar.TUESDAY:
+            case 1:
                 return "Tuesday";
-            case Calendar.WEDNESDAY:
+            case 2:
                 return "Wednesday";
-            case Calendar.THURSDAY:
+            case 3:
                 return "Thursday";
-            case Calendar.FRIDAY:
+            case 4:
                 return "Friday";
-            case Calendar.SATURDAY:
+            case 5:
                 return "Saturday";
-            case Calendar.SUNDAY:
+            case 6:
                 return "Sunday";
         }
         return "";
@@ -135,7 +144,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
      * Funcio per veure les activitats del dia anterior
      */
     private void showPreviousDay() {
-        if (seeingDay == 1) seeingDay = 7;
+        if (seeingDay == 0) seeingDay = 6;
         else seeingDay--;
         setDay();
         getActivitiesByDay(getWeekDay(seeingDay));
@@ -145,7 +154,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
      * Funcio per veure les activitats del seguent dia
      */
     private void showNextDay() {
-        if (seeingDay == 7) seeingDay = 1;
+        if (seeingDay == 6) seeingDay = 0;
         else seeingDay++;
         setDay();
         getActivitiesByDay(getWeekDay(seeingDay));
@@ -344,6 +353,9 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
                 DA.createActivity(name, description, theme, startDay, endDay, String.format("%02d", startHour), String.format("%02d", startMinute), String.format("%02d", endHour), String.format("%02d",endMinute));
                 Toast.makeText(getContext(), getString(R.string.activityCreated), Toast.LENGTH_SHORT).show();
                 activitySheet.dismiss();
+                seeingDay = spinnerStartDay.getSelectedItemPosition();
+                setDay();
+                getActivitiesByDay(getWeekDay(seeingDay));
             } catch (InvalidTimeIntervalException e) {
                 Toast.makeText(getContext(), getString(R.string.errorTime), Toast.LENGTH_SHORT).show();
                 startTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
@@ -381,6 +393,9 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
             DA.updateActivity(id, name, description, theme, startDay, endDay, startHour, startMinute, endHour, endMinute);
             Toast.makeText(getContext(), getString(R.string.activityModified), Toast.LENGTH_SHORT).show();
             activitySheet.dismiss();
+            seeingDay = spinnerStartDay.getSelectedItemPosition();
+            setDay();
+            getActivitiesByDay(getWeekDay(seeingDay));
         } catch (InvalidTimeIntervalException e) {
             Toast.makeText(getContext(), getString(R.string.errorTime), Toast.LENGTH_SHORT).show();
             this.startTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
