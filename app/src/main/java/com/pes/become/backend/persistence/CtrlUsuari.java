@@ -5,6 +5,9 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -35,6 +38,7 @@ public class CtrlUsuari {
     private CtrlUsuari(){
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+
     }
     public static CtrlUsuari getInstance()
     {
@@ -286,14 +290,9 @@ public class CtrlUsuari {
     }
 
 
-
-
-
-
-
-
-
-
+    public void signOut(){
+        mAuth.getInstance().signOut();
+    }
 
 
     /***************PRIVADES***************/
@@ -345,6 +344,7 @@ public class CtrlUsuari {
                     }
                 });
     }
+
 
 
 

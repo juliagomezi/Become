@@ -225,6 +225,14 @@ public class ControllerPersistence{
         CU.setSelectedRoutine(userID, routineID);
     }
 
+    /**
+     * Tanca la sessió
+     */
+    public void signOut(){
+        CU = CtrlUsuari.getInstance();
+        CU.signOut();
+    }
+
 
     /*
     //TUTORIAL
