@@ -66,10 +66,10 @@ public class DomainAdapter {
             instance = new DomainAdapter();
 
             //Usuari Hardcoded
-            currentUser = new User("usuari@usuari.com", "Usuari1");
+            currentUser = new User("usuari@usuari.com", "Usuari");
             currentUser.setID("UsuariIdProva");
-            Routine routine = new Routine("Rutina1");
-            routine.setId("Z43eSoYskWoYkviKXpEH");
+            Routine routine = new Routine("R1");
+            routine.setId("IzYZ83GAyhcMObQWOBso");
             currentUser.setSelectedRoutine(routine);
             routineAdapter.setCurrentRoutine(routine);
 
@@ -169,9 +169,11 @@ public class DomainAdapter {
      * Crear una rutina
      * @param name nom de la rutina
      */
-    public void createRoutine(String name) {
+    public String createRoutine(String name) throws NoSuchMethodException {
         String id = controllerPersistence.createRoutine(currentUser.getID(), name);
         currentUser.addRoutine(id);
+        selectRoutine(id);
+        return id;
     }
 
     /**
@@ -283,11 +285,11 @@ public class DomainAdapter {
 
     /**
      * Metode per esborrar una rutina existent
-     * @param id identificador de la rutina
+     * @param routineId identificador de la rutina
      */
-    public void deleteRoutine(String id) {
-        currentUser.deleteRoutine(id);
-        //controllerPersistence.deleteRoutine(id);
+    public void deleteRoutine(String routineId) {
+        currentUser.deleteRoutine(routineId);
+        controllerPersistence.deleteRoutine(currentUser.getID(), routineId);
     }
 
     /**

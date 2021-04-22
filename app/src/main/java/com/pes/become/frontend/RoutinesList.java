@@ -138,13 +138,24 @@ public class RoutinesList extends Fragment {
         if (name.isEmpty()) routineName.setError(getString(R.string.notNull));
         else {
             try {
-                //DA.createRoutine();
+                String id = DA.createRoutine(name);
+                ArrayList<String> routine = new ArrayList<>(2);
+                routine.add(id);
+                routine.add(name);
+                routinesList.add(routine);
+                routinesListRecyclerAdapter.notifyDataSetChanged();
                 Toast.makeText(getContext(), getString(R.string.routineCreated), Toast.LENGTH_SHORT).show();
                 routineSheet.dismiss();
             }
             catch (Exception e) {
                 routineName.setError(getString(R.string.notNull));
             }
+        }
+    }
+
+    private void createRoutineCallback(String id) {
+        if (id != "") {
+            getRoutines();
         }
     }
 
