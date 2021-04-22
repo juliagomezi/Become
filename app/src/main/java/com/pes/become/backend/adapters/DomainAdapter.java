@@ -252,10 +252,13 @@ public class DomainAdapter {
                 currentUser.addRoutine(routines.get(i).get(0));
             }
             Routine selectedRoutine = currentUser.getSelectedRoutine();
-            routinesList.getRoutinesCallback(routines, selectedRoutine.getId());
+            if(selectedRoutine != null)
+                routinesList.getRoutinesCallback(routines, selectedRoutine.getId());
+            else
+                routinesList.getRoutinesCallback(routines, "");
         }
         else {
-            routinesList.getRoutinesCallback(new ArrayList<>(0), null);
+            routinesList.getRoutinesCallback(new ArrayList<>(0), "");
         }
     }
 
