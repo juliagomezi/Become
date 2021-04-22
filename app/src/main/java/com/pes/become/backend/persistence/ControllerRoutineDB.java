@@ -131,12 +131,25 @@ public class ControllerRoutineDB {
      * @param idRoutine identificador de la rutina a eliminar.
      */
     public void deleteRoutine( String userId, String idRoutine) {
-        DocumentReference DocRefToRoutine = db.collection("users").document(userId).collection("routines").document(idRoutine);
-        CollectionReference colRefToActivities = DocRefToRoutine.collection("activities");
+        DocumentReference docRefToRoutine = db.collection("users").document(userId).collection("routines").document(idRoutine);
 
-        deleteActivities(colRefToActivities,10);
+        docRefToRoutine.collection("activities").get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot documentSnap : task.getResult()) {
+                                DocumentReference docRefToActivity = documentSnap.getReference();
+                                docRefToActivity.delete();
+                            }
+                            docRefToRoutine.delete();
+                        }
+                        else {
+                            Log.d("TAG", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
 
-        DocRefToRoutine.delete();
     }
 
 }
