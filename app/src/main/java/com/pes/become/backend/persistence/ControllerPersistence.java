@@ -158,7 +158,7 @@ public class ControllerPersistence{
         CU = CtrlUsuari.getInstance();
         CU.getInfoUser(userID, method, object);
     }
-    //RETORNA(nomUser,correuUser,idSeleccionada)
+
 
     public void getSelectedRoutine(String userID, Method method, Object object){
         CU = CtrlUsuari.getInstance();

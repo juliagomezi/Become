@@ -49,9 +49,44 @@ public class CtrlUsuari {
     }
 
     /***************CONSULTORES***************/
+    /**
+     * Funcio per obtenir el nom, el correu i la rutina seleccionada de l'usuari en aquest ordre
+     * @param userID l'identificador de l'usuari
+     * @param method el metode a cridar
+     * @param object l'objecte que conte el metode
+     */
+    public void getInfoUser(String userID, Method method, Object object){
+        DocumentReference docRefToUser = db.collection("users").document(userID);
+        Object[] params = new Object[3];
 
-    public void getInfoUser(String userID, Method method, Object object){}
+        docRefToUser.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        params[0] = document.get("name");
+                        params[1] = mAuth.getCurrentUser().getEmail();
+                        params[2] = document.get("selectedRoutine");
+                        try {
+                            method.invoke(object, params);
+                        } catch (IllegalAccessException e1) {
+                            System.out.println("Acces invàlid");
+                        } catch (InvocationTargetException e2) {
+                            System.out.println("Target no vàlid");
+                        }
+                    }
+                }
+            }
+        });
+    }
 
+    /**
+     * Metode utilizat per obtenir la rutina seleccionada de l'usuari
+     * @param userID l'identificador de l'usuari
+     * @param method el metode a cridar
+     * @param object l'objecte que conte el metode
+     */
     public void getSelectedRoutine(String userID, Method method, Object object){
 
         DocumentReference docRefToUser = db.collection("users").document(userID);
@@ -324,8 +359,8 @@ public class CtrlUsuari {
     /***************PRIVADES***************/
 
     /**
-     * Esborra totes les dades de la BD de l'usuari (rutines i activitats).
-     * @param docRefToUser és el document de l'usuari que conté totes les altres subcol·leccions.
+     * Esborra totes les dades de la BD de l'usuari (rutines i activitats)
+     * @param docRefToUser es el document de l'usuari que conte totes les altres subcol·leccions
      */
     private void deleteUserData(DocumentReference docRefToUser) {
 
