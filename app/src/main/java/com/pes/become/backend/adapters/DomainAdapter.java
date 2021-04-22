@@ -8,6 +8,7 @@ import com.pes.become.backend.domain.TimeInterval;
 import com.pes.become.backend.domain.User;
 import com.pes.become.backend.exceptions.InvalidDayIntervalException;
 import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
+import com.pes.become.backend.exceptions.NoSelectedRoutineException;
 import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 import com.pes.become.backend.persistence.ControllerPersistence;
 import com.pes.become.frontend.RoutineEdit;
@@ -132,6 +133,7 @@ public class DomainAdapter {
      */
     public void logoutUser() {
         currentUser = null;
+        controllerPersistence.signOut();
     }
 
     /**
@@ -175,10 +177,12 @@ public class DomainAdapter {
      * @param idRoutine identificador de la rutina
      */
     public void selectRoutine(String idRoutine) throws NoSuchMethodException {
-        Class[] parameterTypes = new Class[1];
-        parameterTypes[0] = ArrayList.class;
-        Method method1 = DomainAdapter.class.getMethod("setSelectedRoutine", parameterTypes);
-        controllerPersistence.getUserRoutine(currentUser.getID(), idRoutine, method1, DomainAdapter.getInstance());
+        if(!idRoutine.equals("")){
+            Class[] parameterTypes = new Class[1];
+            parameterTypes[0] = ArrayList.class;
+            Method method1 = DomainAdapter.class.getMethod("setSelectedRoutine", parameterTypes);
+            controllerPersistence.getUserRoutine(currentUser.getID(), idRoutine, method1, DomainAdapter.getInstance());
+        }
     }
 
     /**
@@ -214,7 +218,7 @@ public class DomainAdapter {
      * Metode per rebre la resposta de la DB a la consulta "getActivitiesByDay" i que les carrega a la instancia de rutina
      * @param activities activitats de la rutina
      */
-    public void loadAllActivities(ArrayList<ArrayList<String>> activities) throws InvalidTimeIntervalException, OverlappingActivitiesException {
+    public void loadAllActivities(ArrayList<ArrayList<String>> activities) throws InvalidTimeIntervalException, OverlappingActivitiesException, NoSelectedRoutineException {
         for(int i=0; i<activities.size(); ++i){
             String[] s = activities.get(i).get(5).split(":");
             String[] s2 = activities.get(i).get(6).split(":");
@@ -296,7 +300,7 @@ public class DomainAdapter {
      * @throws InvalidDayIntervalException es llença si el dia de fi es anterior al dia d'inici
      * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
      */
-    public void createActivity(String name, String description, String theme, String startDayString, String endDayString, String iniH, String iniM, String endH, String endM) throws InvalidTimeIntervalException, InvalidDayIntervalException, OverlappingActivitiesException {
+    public void createActivity(String name, String description, String theme, String startDayString, String endDayString, String iniH, String iniM, String endH, String endM) throws InvalidTimeIntervalException, InvalidDayIntervalException, OverlappingActivitiesException, NoSelectedRoutineException {
         Day startDay = Day.values()[Integer.parseInt(startDayString)];
         Day endDay = Day.values()[Integer.parseInt(endDayString)];
         int comparison = startDay.compareTo(endDay);
@@ -346,7 +350,7 @@ public class DomainAdapter {
      * @throws InvalidDayIntervalException es llença si el dia d'inici es posterior al dia de fi
      * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
      */
-    public void updateActivity(String id, String name, String description, String theme, String startDayString, String endDayString, String iniH, String iniM, String endH, String endM) throws InvalidDayIntervalException, InvalidTimeIntervalException, OverlappingActivitiesException {
+    public void updateActivity(String id, String name, String description, String theme, String startDayString, String endDayString, String iniH, String iniM, String endH, String endM) throws InvalidDayIntervalException, InvalidTimeIntervalException, OverlappingActivitiesException, NoSelectedRoutineException {
         Day startDay = Day.values()[Integer.parseInt(startDayString)];
         Day endDay = Day.values()[Integer.parseInt(endDayString)];
         int comparison = startDay.compareTo(endDay);
@@ -392,7 +396,7 @@ public class DomainAdapter {
      * @throws InvalidTimeIntervalException l'interval de temps es incorrecte
      * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
      */
-    public void setActivitiesByDayToView(ArrayList<ArrayList<String>> acts) throws InvalidTimeIntervalException, OverlappingActivitiesException {
+    public void setActivitiesByDayToView(ArrayList<ArrayList<String>> acts) throws InvalidTimeIntervalException, OverlappingActivitiesException, NoSelectedRoutineException {
         if (!acts.isEmpty()) {
             String day = acts.get(0).get(4);
             routineAdapter.clearActivities(Day.valueOf(day));
@@ -434,7 +438,7 @@ public class DomainAdapter {
      * @throws InvalidTimeIntervalException l'interval de temps es incorrecte
      * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
      */
-    public void setActivitiesByDayToEdit(ArrayList<ArrayList<String>> acts) throws InvalidTimeIntervalException, OverlappingActivitiesException {
+    public void setActivitiesByDayToEdit(ArrayList<ArrayList<String>> acts) throws InvalidTimeIntervalException, OverlappingActivitiesException, NoSelectedRoutineException {
         if (!acts.isEmpty()) {
             String day = acts.get(0).get(4);
             routineAdapter.clearActivities(Day.valueOf(day));
@@ -461,7 +465,7 @@ public class DomainAdapter {
      * @param id identificador de l'activitat
      * @param day dia de l'activitat
      */
-    public void deleteActivity(String id, String day) {
+    public void deleteActivity(String id, String day) throws NoSelectedRoutineException {
         routineAdapter.deleteActivity(id, Day.valueOf(day));
         controllerPersistence.deleteActivity(currentUser.getID(), currentUser.getSelectedRoutine().getId(), id);
     }
