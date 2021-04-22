@@ -101,12 +101,13 @@ public class DomainAdapter {
      * Metode per iniciar la sessio d'un usuari existent
      * @param mail correu de l'usuari
      * @param password contrassenya de l'usuari
+     * @param act Activity d'Android necessaria per la execucio del firebase
      */
-    public void loginUser(String mail, String password) {
-        //ArrayList<String> info = controllerPersistence.getUser(mail,password);
-        //currentUser = UserAdapter.createUser(mail, name, routines);
-        // cridar al controller de persistencia i demanar id usuari, mail usuari, nom usuari, id rutinaseleccionada, nom rutina seleccionada
-        //setSelectedRoutine(selectedRoutineID);
+    public void loginUser(String mail, String password, android.app.Activity act) throws NoSuchMethodException {
+        Class[] parameterTypes = new Class[1];
+        parameterTypes[0] = ArrayList.class;
+        Method method1 = DomainAdapter.class.getMethod("loginCallback", parameterTypes);
+        controllerPersistence.loginUser(mail, password, act, method1, DomainAdapter.getInstance());
     }
 
     /**
@@ -114,6 +115,16 @@ public class DomainAdapter {
      */
     public void loginGoogleUser() {
 
+    }
+
+    /**
+     * Metode que rep la resposta a la crida "loginUser" de la base de dades
+     * @param infoUser Array d'arrays, on la primera conte la ID, correu, nom de l'usuari i la ID de la rutina seleccionada
+     */
+    public void loginCallback(ArrayList<String> infoUser) throws NoSuchMethodException {
+        currentUser = userAdapter.createUser(infoUser.get(1), infoUser.get(2));
+        currentUser.setID(infoUser.get(0));
+        selectRoutine(infoUser.get(3));
     }
 
     /**
@@ -155,8 +166,8 @@ public class DomainAdapter {
      * @param name nom de la rutina
      */
     public void createRoutine(String name) {
-        //String id = controllerPersistence.createNewRoutine(name);
-        //currentUser.addRoutine(id);
+        String id = controllerPersistence.createRoutine(currentUser.getID(), name);
+        currentUser.addRoutine(id);
     }
 
     /**
