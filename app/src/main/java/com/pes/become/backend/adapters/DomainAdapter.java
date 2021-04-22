@@ -132,6 +132,7 @@ public class DomainAdapter {
      */
     public void logoutUser() {
         currentUser = null;
+        controllerPersistence.signOut();
     }
 
     /**
@@ -175,10 +176,12 @@ public class DomainAdapter {
      * @param idRoutine identificador de la rutina
      */
     public void selectRoutine(String idRoutine) throws NoSuchMethodException {
-        Class[] parameterTypes = new Class[1];
-        parameterTypes[0] = ArrayList.class;
-        Method method1 = DomainAdapter.class.getMethod("setSelectedRoutine", parameterTypes);
-        controllerPersistence.getUserRoutine(currentUser.getID(), idRoutine, method1, DomainAdapter.getInstance());
+        if(!idRoutine.equals("")){
+            Class[] parameterTypes = new Class[1];
+            parameterTypes[0] = ArrayList.class;
+            Method method1 = DomainAdapter.class.getMethod("setSelectedRoutine", parameterTypes);
+            controllerPersistence.getUserRoutine(currentUser.getID(), idRoutine, method1, DomainAdapter.getInstance());
+        }
     }
 
     /**
