@@ -318,7 +318,7 @@ public class CtrlUsuari {
                             DocumentReference docRefToUser =  db.collection("users").document(userID);
                             HashMap<String, Object> mapa = new HashMap<>();
                             mapa.put("Username", name);
-                            mapa.put("selectedRoutine", "none");
+                            mapa.put("selectedRoutine", "");
                             docRefToUser.set(mapa);
                             params[0] = true;
                             params[1] = userID;
