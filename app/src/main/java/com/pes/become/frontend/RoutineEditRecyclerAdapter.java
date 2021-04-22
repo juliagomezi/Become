@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapter;
+import com.pes.become.backend.exceptions.NoSelectedRoutineException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -95,7 +96,11 @@ public class RoutineEditRecyclerAdapter extends RecyclerView.Adapter<RoutineEdit
             String currentId = activitiesList.get(position).get(0);
             String day = activitiesList.get(position).get(4);
 
-            DA.deleteActivity(currentId, day);
+            try {
+                DA.deleteActivity(currentId, day);
+            } catch (NoSelectedRoutineException e) {
+                e.printStackTrace();
+            }
         });
 
     }

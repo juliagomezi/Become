@@ -1,5 +1,6 @@
 package com.pes.become.frontend;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,11 +67,13 @@ public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesLi
         holder.switchButton.setOnCheckedChangeListener( new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton toggleButton, boolean isChecked) {
-                if(isChecked) { // no estic segura si l'estat isChecked es l'estat abans o despres de fer click :)
-                    //
+                if(isChecked) {
+                    try {
+                        DA.selectRoutine(routinesList.get(position).get(0));
+                    } catch (NoSuchMethodException ignore) { }
                 }
-                else {
-                    //
+                else { // passa a estar unchecked
+                    Log.d("unchecked", "unchecked");
                 }
             }
         });

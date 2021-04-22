@@ -1,5 +1,7 @@
 package com.pes.become.backend.adapters;
 
+import android.util.Log;
+
 import com.pes.become.backend.domain.Activity;
 import com.pes.become.backend.domain.Day;
 import com.pes.become.backend.domain.Routine;
@@ -177,6 +179,7 @@ public class DomainAdapter {
      * @param idRoutine identificador de la rutina
      */
     public void selectRoutine(String idRoutine) throws NoSuchMethodException {
+        Log.d("selectRoutineDA", "selectRoutineDA");
         if(!idRoutine.equals("")){
             Class[] parameterTypes = new Class[1];
             parameterTypes[0] = ArrayList.class;
@@ -200,7 +203,9 @@ public class DomainAdapter {
      * @param infoRoutine llista amb la informacio de la rutina
      */
     public void setSelectedRoutine(ArrayList<String> infoRoutine) throws NoSuchMethodException {
+        Log.d("setSelectedRoutineDA", "setSelectedRoutineDA");
         Routine routine = routineAdapter.createRoutine(infoRoutine.get(1));
+        Log.d("arriba", "arriba");
         routine.setId(infoRoutine.get(0));
         currentUser.setSelectedRoutine(routine);
         routineAdapter.setCurrentRoutine(currentUser.getSelectedRoutine());

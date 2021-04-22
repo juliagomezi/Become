@@ -1,6 +1,7 @@
 package com.pes.become.backend.persistence;
 
 import android.app.Activity;
+import android.util.Log;
 
 import com.google.firebase.firestore.DocumentReference;
 
@@ -115,7 +116,7 @@ public class ControllerPersistence{
      */
     public void getUserRoutine(String userId, String routineId, Method method, Object object) {
         createCtrlRoutine();
-        //CR.getUserRoutine(userId, routineId, method, object);
+        CR.getUserRoutine(userId, routineId, method, object);
     }
 
     /***************MODIFICADORES***************/
@@ -233,6 +234,8 @@ public class ControllerPersistence{
      * @param routineID identificador de la nova rutina seleccionada
      */
     public void setSelectedRoutine(String userID, String routineID) {
+        Log.d("setSelectedRoutineCP", "setSelectedRoutineCP");
+        Log.d("setSelectedRoutineCP", routineID);
         CU = CtrlUsuari.getInstance();
         CU.setSelectedRoutine(userID, routineID);
     }

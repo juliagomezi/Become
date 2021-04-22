@@ -22,7 +22,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 public class ControllerRoutineDB {
 
-
+    /**
+     * Instància de la bd
+     */
     final FirebaseFirestore db;
 
     /**
@@ -33,8 +35,8 @@ public class ControllerRoutineDB {
     }
 
     /***************CONSULTORES***************/
-    public void getRoutine(String userId, String nameRoutine)
-    {
+
+    public void getRoutine(String userId, String nameRoutine) {
         db.collection("users").document(userId).collection("routines").whereEqualTo("name", nameRoutine).addSnapshotListener((value, e) -> {
             if (e != null) {
                 Log.w("LISTENER FAILED", "getRoutine failed.", e);
@@ -73,6 +75,38 @@ public class ControllerRoutineDB {
                 }
             }
 
+        });
+    }
+
+    /**
+     * Funció per obtenir el nom i el id de la rutina d'un usuari
+     * @param userId Id de l'usuari
+     * @param routineId Id de l'usuari
+     * @param method metode a cridar quan es retornin les dades
+     * @param object classe que conté el mètode
+     */
+    public void getUserRoutine(String userId, String routineId, Method method, Object object) {
+        db.collection("users").document(userId).collection("routines").document(routineId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                ArrayList<String> routine = new ArrayList<>();
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        routine.add(document.getId());
+                        routine.add(document.get("name").toString());
+                    }
+                }
+                Object[] params = new Object[1];
+                params[0] = routine;
+                try {
+                    method.invoke(object, params);
+                } catch (IllegalAccessException e1) {
+                    System.out.println("Acces invàlid");
+                } catch (InvocationTargetException e2) {
+                    System.out.println("Target no vàlid");
+                }
+            }
         });
     }
 

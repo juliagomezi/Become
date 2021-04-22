@@ -34,28 +34,30 @@ public class CtrlUsuari {
     private FirebaseAuth mAuth;
     private final FirebaseFirestore db;
 
-
+    /**
+     * Creadora per defecte.
+     */
     private CtrlUsuari(){
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
-
     }
-    public static CtrlUsuari getInstance()
-    {
-        if(instance ==null) {
+
+    public static CtrlUsuari getInstance() {
+        if (instance == null) {
             instance = new CtrlUsuari();
         }
         return instance;
     }
 
     /***************CONSULTORES***************/
+
     /**
      * Funcio per obtenir el nom, el correu i la rutina seleccionada de l'usuari en aquest ordre
      * @param userID l'identificador de l'usuari
      * @param method el metode a cridar
      * @param object l'objecte que conte el metode
      */
-    public void getInfoUser(String userID, Method method, Object object){
+    public void getInfoUser(String userID, Method method, Object object) {
         DocumentReference docRefToUser = db.collection("users").document(userID);
         Object[] params = new Object[3];
 
@@ -87,7 +89,7 @@ public class CtrlUsuari {
      * @param method el metode a cridar
      * @param object l'objecte que conte el metode
      */
-    public void getSelectedRoutine(String userID, Method method, Object object){
+    public void getSelectedRoutine(String userID, Method method, Object object) {
 
         DocumentReference docRefToUser = db.collection("users").document(userID);
         Object[] params = new Object[1];
@@ -113,7 +115,6 @@ public class CtrlUsuari {
 
     }
 
-
     /***************MODIFICADORES***************/
 
     /**
@@ -122,7 +123,7 @@ public class CtrlUsuari {
      * @param method mètode a executar de forma asíncrona un cop acabada la reautentificació (el paràmetre és un boolea que retorna true si la reautentificació ha anat bé o false si no)
      * @param object instancia de la classe del mètode a executar
      */
-    public void changePassword(String newPassword, Method method, Object object){
+    public void changePassword(String newPassword, Method method, Object object) {
         FirebaseUser user = mAuth.getCurrentUser();
 
         user.updatePassword(newPassword)
@@ -155,7 +156,7 @@ public class CtrlUsuari {
      * @param method mètode a executar de forma asíncrona un cop acabada la reautentificació (el paràmetre és un boolea que retorna true si la reautentificació ha anat bé o false si no)
      * @param object instancia de la classe del mètode a executar
      */
-    public void deleteUser(Method method, Object object){
+    public void deleteUser(Method method, Object object) {
         //reauthenticate(mail, oldPassword);
         FirebaseUser user = mAuth.getCurrentUser();
         String userID = user.getUid();
@@ -232,10 +233,8 @@ public class CtrlUsuari {
                                     }
                                 }
                             });
-
-
-
-                        } else {
+                        }
+                        else {
                             // If sign in fails, display a message to the user.
                             Log.w("FirebaseUser", "signInWithEmail:failure", task.getException());
                             //Toast.makeText(EmailPasswordActivity.this, "Authentication failed.",
@@ -330,7 +329,6 @@ public class CtrlUsuari {
                             params[0] = false;
                             params[1] = params[2] = "";
                         }
-
                         try {
                             method.invoke(object, params);
                         } catch (IllegalAccessException e1) {
@@ -352,7 +350,7 @@ public class CtrlUsuari {
         docRefToUser.update("selectedRoutine",routineID);
     }
 
-    public void signOut(){
+    public void signOut() {
         mAuth.getInstance().signOut();
     }
 
@@ -405,10 +403,6 @@ public class CtrlUsuari {
                     }
                 });
     }
-
-
-
-
         /*
     //TUTORIAL
     public void tutorial(String routineName, String day)  {

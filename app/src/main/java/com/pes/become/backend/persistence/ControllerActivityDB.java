@@ -39,8 +39,7 @@ public class ControllerActivityDB {
      * @param object classe que conté el mètode
      */
     public void getActivitiesByDay(String userId, String idRoutine, String day, Method method, Object object) {
-        db.collection("users").document(userId).collection("routines").document(idRoutine).
-                collection("activities").whereEqualTo("day", day).addSnapshotListener((value, e) -> {
+        db.collection("users").document(userId).collection("routines").document(idRoutine).collection("activities").whereEqualTo("day", day).addSnapshotListener((value, e) -> {
             if (e != null) {
                 Log.w("LISTENER FAILED", "Listen failed.", e);
                 return;

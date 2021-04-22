@@ -35,6 +35,10 @@ public class RoutinesList extends Fragment {
     private ArrayList<ArrayList<String>> routinesList;
     private String selectedRoutineID;
 
+    RoutinesListRecyclerAdapter routinesListRecyclerAdapter;
+    RecyclerView recyclerView;
+    TextView emptyView;
+
     private BottomSheetDialog routineSheet;
     private String id;
     private EditText routineName;
@@ -61,6 +65,9 @@ public class RoutinesList extends Fragment {
         global = this.getActivity();
         instance = this;
 
+        recyclerView = view.findViewById(R.id.activityList);
+        emptyView = view.findViewById(R.id.emptyView);
+
         TextView addRoutine = view.findViewById(R.id.addRoutine);
         addRoutine.setOnClickListener(v -> createRoutineSheet());
 
@@ -73,10 +80,17 @@ public class RoutinesList extends Fragment {
      * Funció per inicialitzar l'element que mostra el llistat d'activitats
      */
     private void initRecyclerView() {
-        RecyclerView recyclerView = view.findViewById(R.id.activityList);
         recyclerView.setLayoutManager((new LinearLayoutManager(global)));
-        RoutinesListRecyclerAdapter recyclerAdapter = new RoutinesListRecyclerAdapter(routinesList, selectedRoutineID);
-        recyclerView.setAdapter(recyclerAdapter);
+        routinesListRecyclerAdapter = new RoutinesListRecyclerAdapter(routinesList, selectedRoutineID);
+        recyclerView.setAdapter(routinesListRecyclerAdapter);
+    }
+
+    /**
+     * Funció per inicialitzar l'element que es mostra quan no hi ha activitats
+     */
+    private void initEmptyView() {
+        recyclerView.setVisibility(View.INVISIBLE);
+        emptyView.setVisibility(View.VISIBLE);
     }
 
     /**
@@ -84,7 +98,6 @@ public class RoutinesList extends Fragment {
      */
     public void getRoutines() {
         try {
-            Log.d("getRoutines", "getRoutines");
             DA.getUserRoutines(this);
         } catch (NoSuchMethodException ignore) { }
     }
@@ -100,6 +113,9 @@ public class RoutinesList extends Fragment {
             routinesList = new ArrayList<>(routinesListCallback.size());
             routinesList.addAll(routinesListCallback);
             initRecyclerView();
+        }
+        else {
+            initEmptyView();
         }
     }
 
