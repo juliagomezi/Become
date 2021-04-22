@@ -382,7 +382,9 @@ public class DomainAdapter {
      * @param rv instància de RoutineView
      * @throws NoSuchMethodException el mètode no existeix
      */
-    public void getActivitiesByDayToView(String dayString, RoutineView rv) throws NoSuchMethodException {
+    public void getActivitiesByDayToView(String dayString, RoutineView rv) throws NoSuchMethodException, NoSelectedRoutineException {
+        if(currentUser.getSelectedRoutine() == null)
+            throw new NoSelectedRoutineException();
         routineView = rv;
         Class[] parameterTypes = new Class[1];
         parameterTypes[0] = ArrayList.class;
@@ -424,7 +426,9 @@ public class DomainAdapter {
      * @param re instància de RoutineEdit
      * @throws NoSuchMethodException el mètode no existeix
      */
-    public void getActivitiesByDayToEdit(String dayString, RoutineEdit re) throws NoSuchMethodException {
+    public void getActivitiesByDayToEdit(String dayString, RoutineEdit re) throws NoSuchMethodException, NoSelectedRoutineException {
+        if(currentUser.getSelectedRoutine() == null)
+            throw new NoSelectedRoutineException();
         routineEdit = re;
         Class[] parameterTypes = new Class[1];
         parameterTypes[0] = ArrayList.class;
