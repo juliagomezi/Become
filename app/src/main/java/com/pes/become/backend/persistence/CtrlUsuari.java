@@ -49,6 +49,36 @@ public class CtrlUsuari {
     }
 
     /***************CONSULTORES***************/
+
+    public void getInfoUser(String userID, Method method, Object object){}
+
+    public void getSelectedRoutine(String userID, Method method, Object object){
+
+        DocumentReference docRefToUser = db.collection("users").document(userID);
+        Object[] params = new Object[1];
+
+        docRefToUser.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        params[0] = document.get("selectedRoutine");
+                        try {
+                            method.invoke(object, params);
+                        } catch (IllegalAccessException e1) {
+                            System.out.println("Acces invàlid");
+                        } catch (InvocationTargetException e2) {
+                            System.out.println("Target no vàlid");
+                        }
+                    }
+                }
+            }
+        });
+
+    }
+
+
     /***************MODIFICADORES***************/
 
     /**

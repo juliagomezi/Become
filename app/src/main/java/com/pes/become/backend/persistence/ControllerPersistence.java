@@ -154,6 +154,17 @@ public class ControllerPersistence{
 
     /**FUNCIONS RELACIONADES AMB USUARI*********************************************************/
     /***************CONSULTORES***************/
+    public void getInfoUser(String userID, Method method, Object object){
+        CU = CtrlUsuari.getInstance();
+        CU.getInfoUser(userID, method, object);
+    }
+    //RETORNA(nomUser,correuUser,idSeleccionada)
+
+    public void getSelectedRoutine(String userID, Method method, Object object){
+        CU = CtrlUsuari.getInstance();
+        CU.getSelectedRoutine(userID, method, object);
+    }
+
     /***************MODIFICADORES***************/
 
     /**
