@@ -32,9 +32,6 @@ public class ControllerRoutineDB {
         db = FirebaseFirestore.getInstance();
     }
 
-
-
-
     /***************CONSULTORES***************/
     public void getRoutine(String userId, String nameRoutine)
     {
@@ -52,8 +49,7 @@ public class ControllerRoutineDB {
      * @param method metode a cridar quan es retornin les dades
      * @param object classe que conté el mètode
      */
-    public void getUserRoutines(String userId, Method method, Object object)
-    {
+    public void getUserRoutines(String userId, Method method, Object object) {
         db.collection("users").document(userId).collection("routines").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -88,12 +84,10 @@ public class ControllerRoutineDB {
      * @param idRoutine l'identificador de la rutina.
      * @param newName el nom que se li vol posar a la rutina.
      */
-    public void changeName(String userId, String idRoutine, String newName){
+    public void changeName(String userId, String idRoutine, String newName) {
         DocumentReference docRefToRoutine = db.collection("users").document(userId).collection("routines").document(idRoutine);
         docRefToRoutine.update("name", newName);
     }
-
-
 
     /**
      * Crea una rutina nova.
@@ -157,8 +151,6 @@ public class ControllerRoutineDB {
                     }
                 });
     }
-
-
 
 }
 

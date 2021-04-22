@@ -105,6 +105,7 @@ public class DomainAdapter {
     public void loginUser(String mail, String password) {
         //ArrayList<String> info = controllerPersistence.getUser(mail,password);
         //currentUser = UserAdapter.createUser(mail, name, routines);
+        // cridar al controller de persistencia i demanar id usuari, mail usuari, nom usuari, id rutinaseleccionada, nom rutina seleccionada
         //setSelectedRoutine(selectedRoutineID);
     }
 
@@ -166,7 +167,7 @@ public class DomainAdapter {
         Class[] parameterTypes = new Class[1];
         parameterTypes[0] = ArrayList.class;
         Method method1 = DomainAdapter.class.getMethod("setSelectedRoutine", parameterTypes);
-        //controllerPersistence.getRoutine(idUser, idRoutine, method1, DomainAdapter.getInstance());
+        controllerPersistence.getUserRoutine(currentUser.getID(), idRoutine, method1, DomainAdapter.getInstance());
     }
 
     /**
@@ -176,7 +177,7 @@ public class DomainAdapter {
         Class[] parameterTypes = new Class[1];
         parameterTypes[0] = ArrayList.class;
         Method method1 = DomainAdapter.class.getMethod("setSelectedRoutine", parameterTypes);
-        //controllerPersistence.getRoutineSelected(idUser, method1, DomainAdapter.getInstance());
+        controllerPersistence.getUserRoutine(currentUser.getID(), currentUser.getSelectedRoutine().getId(), method1, DomainAdapter.getInstance());
     }
 
     /**
@@ -187,8 +188,8 @@ public class DomainAdapter {
         Routine routine = routineAdapter.createRoutine(infoRoutine.get(1));
         routine.setId(infoRoutine.get(0));
         currentUser.setSelectedRoutine(routine);
-        //controllerPersistence.setSelectedRoutine(idUser, idRoutine);
         routineAdapter.setCurrentRoutine(currentUser.getSelectedRoutine());
+        controllerPersistence.setSelectedRoutine(currentUser.getID(), currentUser.getSelectedRoutine().getId());
 
         Class[] parameterTypes = new Class[1];
         parameterTypes[0] = ArrayList.class;

@@ -28,10 +28,7 @@ public class ControllerActivityDB {
         db = FirebaseFirestore.getInstance();
     }
 
-
     /***************CONSULTORES***************/
-
-
 
     /**
      * Obtenir les activitats d'una rutina i un dia indicats

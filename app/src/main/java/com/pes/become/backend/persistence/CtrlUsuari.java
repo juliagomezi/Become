@@ -112,7 +112,6 @@ public class CtrlUsuari {
                             params[0] = false;
                         }
 
-
                         try {
                             method.invoke(object, params);
                         } catch (IllegalAccessException e1) {
@@ -132,7 +131,7 @@ public class CtrlUsuari {
      * @param method metode a cridar quan es retornin les dades
      * @param object classe que conté el mètode
      */
-    public void loginUser(String mail, String password, Activity act,Method method, Object object){
+    public void loginUser(String mail, String password, Activity act,Method method, Object object) {
         mAuth.signInWithEmailAndPassword(mail, password)
                 .addOnCompleteListener(act, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -179,7 +178,6 @@ public class CtrlUsuari {
                             params[0] = false;
                             params[1] = params[2] = params[3] = "";
                         }
-
 
                     }
                 });
@@ -233,7 +231,7 @@ public class CtrlUsuari {
      * @param method metode a cridar quan es retornin les dades
      * @param object classe que conté el mètode
      */
-    public void registerUser(String mail, String password,String name, Activity act,Method method, Object object){
+    public void registerUser(String mail, String password,String name, Activity act,Method method, Object object) {
 
         mAuth.createUserWithEmailAndPassword(mail, password)
                 .addOnCompleteListener(act, new OnCompleteListener<AuthResult>() {
@@ -284,25 +282,22 @@ public class CtrlUsuari {
      * @param userID identificador de l'usuari
      * @param routineID identificador de la nova rutina seleccionada
      */
-    public void setSelectedRoutine(String userID, String routineID){
+    public void setSelectedRoutine(String userID, String routineID) {
         DocumentReference docRefToUser = db.collection("users").document(userID);
         docRefToUser.update("selectedRoutine",routineID);
     }
-
 
     public void signOut(){
         mAuth.getInstance().signOut();
     }
 
-
     /***************PRIVADES***************/
-
 
     /**
      * Esborra totes les dades de la BD de l'usuari (rutines i activitats).
      * @param docRefToUser és el document de l'usuari que conté totes les altres subcol·leccions.
      */
-    private void deleteUserData(DocumentReference docRefToUser){
+    private void deleteUserData(DocumentReference docRefToUser) {
 
         docRefToUser.collection("routines").get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -322,11 +317,12 @@ public class CtrlUsuari {
                     }
                 });
     }
+
     /**
      * Esborra totes les dades d'una rutina i després esborra el document de la rutina.
      * @param docRefToRoutine és el document de l'usuari que conté totes les altres subcol·leccions.
      */
-    private void deleteRoutineData(DocumentReference docRefToRoutine){
+    private void deleteRoutineData(DocumentReference docRefToRoutine) {
         docRefToRoutine.collection("activities").get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
