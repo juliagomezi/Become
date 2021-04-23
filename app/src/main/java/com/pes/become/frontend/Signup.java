@@ -2,6 +2,7 @@ package com.pes.become.frontend;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -45,12 +46,17 @@ public class Signup extends AppCompatActivity {
         }
         else {
              /*try {
-                DA.signUp(email, user, password);
+                DA.registerUser(email, password, user);
                 startActivity(new Intent(Signup.this, MainActivity.class));
                 finish();
             } catch (UserExists e) {
                     emailText.setError(getString(R.string.emailExists));
             }*/
         }
+    }
+
+    public void registerCallback(){
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
     }
 }

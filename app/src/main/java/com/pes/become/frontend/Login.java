@@ -83,9 +83,7 @@ public class Login extends AppCompatActivity {
 
         else {
             /*try {
-                DA.loginUser(user, password);
-                startActivity(new Intent(login.this, MainActivity.class));
-                finish();
+                DA.loginUser(user, password, this);
             } catch (UserNotExists e) {
                     userText.setError(getString(R.string.userNotMatch));
                     passwordText.setError(getString(R.string.userNotMatch));
@@ -111,8 +109,8 @@ public class Login extends AppCompatActivity {
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                firebaseAuthWithGoogle(account.getIdToken()); //aquesta funció és la que es pasa a la firebase
-                //DA.loginWithGoogle(account.getIdToken());
+                //firebaseAuthWithGoogle(account.getIdToken()); //aquesta funció és la que es pasa a la firebase
+                DA.loginGoogleUser(account.getIdToken());
             } catch (ApiException e) {
                 Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
@@ -147,5 +145,13 @@ public class Login extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
         }
+    }
+
+    /**
+     * Funció de callback per loguejar l'usuari
+     */
+    public void loginCallback() {
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
     }
 }
