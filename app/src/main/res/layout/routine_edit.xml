@@ -70,6 +70,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="10dp"
+            android:layout_marginBottom="70dp"
             android:animationCache="true"
             android:background="@color/coldwhite"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -95,16 +96,31 @@
         <TextView
             android:id="@+id/addActivity"
             style="@style/Widget.AppCompat.Button"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="12dp"
             android:background="@drawable/round_button"
             app:iconPadding="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.954"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.976" />
+            app:layout_constraintHorizontal_bias="0.044"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/doneButton"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="15dp"
+            android:layout_weight="1"
+            android:background="@drawable/custom_button"
+            android:fontFamily="@font/sourcesanspro_regular"
+            android:text="@string/doneButton"
+            android:textAllCaps="false"
+            android:textSize="18dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.95"
+            app:layout_constraintStart_toStartOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,6 +13,13 @@ import com.pes.become.backend.adapters.DomainAdapter;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
+    private static MainActivity instance;
+
+    /**
+     * Funció obtenir la instancia de la MainActivity actual
+     * */
+    public static MainActivity getInstance() { return instance; }
+
     /**
      * Funcio del MaincActivity que s'executa al crear-lo
      */
@@ -20,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        instance=this;
 
         try {
             DomainAdapter.getInstance().selectRoutine();
@@ -30,8 +38,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         navigation.setOnNavigationItemSelectedListener(navListener);
 
         getSupportFragmentManager().beginTransaction()
-               .replace(R.id.fragment_layout, new RoutineEdit()).commit(); //aquí es posa el fragment que vols que es vegi quan s'encén l'aplicació
-
+               .replace(R.id.fragment_layout, new RoutineView()).commit(); //aquí es posa el fragment que vols que es vegi quan s'encén l'aplicació
 
     }
 
@@ -42,18 +49,16 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Fragment selectedFragment = null;
         switch (item.getItemId()) {
             case R.id.homeView:
-                selectedFragment = new RoutineView(); //aixo haura de ser el fragment del home
+                selectedFragment = new RoutineView();
                 break;
-
             case R.id.communityView:
-                selectedFragment = new RoutineEdit(); //aixo haura de ser el fragment de community
+                selectedFragment = new RoutineEdit();
                 break;
-
             case R.id.profileView:
-                selectedFragment = new Profile(); //aixo haura de ser el fragment del perfil
+                selectedFragment = new Profile();
                 break;
             default:
-                selectedFragment = new RoutineEdit(); //aixo haura de ser el fragment de de la pantalla incial
+                selectedFragment = new RoutineView();
         }
 
         getSupportFragmentManager().beginTransaction()
@@ -73,4 +78,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void onNothingSelected(AdapterView<?> parent) { }
 
+    public void setEditRoutineScreen() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_layout, new RoutineEdit()).commit();
+    }
+
+    public void setProfileScreen() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_layout, new Profile()).commit();
+    }
 }

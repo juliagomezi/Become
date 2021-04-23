@@ -53,8 +53,10 @@ public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesLi
         holder.routineName.setText(routinesList.get(position).get(1));
 
         holder.editButton.setOnClickListener(view -> {
-            //go to editing/deleting activities view
-
+            try {
+                DA.selectRoutine(routinesList.get(position).get(0));
+            } catch (NoSuchMethodException ignore) {}
+            MainActivity.getInstance().setEditRoutineScreen();
         });
 
         holder.deleteButton.setOnClickListener(view -> {
@@ -74,7 +76,7 @@ public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesLi
                 if (isChecked) {
                     try {
                         DA.selectRoutine(routinesList.get(position).get(0));
-                    } catch (NoSuchMethodException ignore) { }
+                    } catch (NoSuchMethodException ignore) {}
                 }
                 else {
                     // deseleccionar rutina

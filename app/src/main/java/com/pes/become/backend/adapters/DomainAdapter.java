@@ -172,7 +172,6 @@ public class DomainAdapter {
     public String createRoutine(String name) throws NoSuchMethodException {
         String id = controllerPersistence.createRoutine(currentUser.getID(), name);
         currentUser.addRoutine(id);
-        selectRoutine(id);
         return id;
     }
 
@@ -181,7 +180,6 @@ public class DomainAdapter {
      * @param idRoutine identificador de la rutina
      */
     public void selectRoutine(String idRoutine) throws NoSuchMethodException {
-        Log.d("selectRoutineDA", "selectRoutineDA");
         if(!idRoutine.equals("")){
             Class[] parameterTypes = new Class[1];
             parameterTypes[0] = ArrayList.class;

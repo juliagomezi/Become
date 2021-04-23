@@ -108,13 +108,12 @@ public class RoutinesList extends Fragment {
      * @param selectedRoutineID id de la rutina seleccionada de l'usuari que retorna la BD
      */
     public void getRoutinesCallback(ArrayList<ArrayList<String>> routinesListCallback, String selectedRoutineID) {
-        if (!routinesListCallback.isEmpty()) {
-            this.selectedRoutineID = selectedRoutineID;
-            routinesList = new ArrayList<>(routinesListCallback.size());
-            routinesList.addAll(routinesListCallback);
-            initRecyclerView();
-        }
-        else {
+        this.selectedRoutineID = selectedRoutineID;
+        routinesList = new ArrayList<>(routinesListCallback.size());
+        routinesList.addAll(routinesListCallback);
+        initRecyclerView();
+
+        if(routinesList.isEmpty()) {
             initEmptyView();
         }
     }
@@ -142,29 +141,15 @@ public class RoutinesList extends Fragment {
                 ArrayList<String> routine = new ArrayList<>(2);
                 routine.add(id);
                 routine.add(name);
-                routinesList.add(routine);
+                routinesList.add(0,routine);
                 routinesListRecyclerAdapter.notifyDataSetChanged();
                 Toast.makeText(getContext(), getString(R.string.routineCreated), Toast.LENGTH_SHORT).show();
                 routineSheet.dismiss();
             }
             catch (Exception e) {
+                e.printStackTrace(); // provisional!!!
                 routineName.setError(getString(R.string.notNull));
             }
         }
-    }
-
-    private void createRoutineCallback(String id) {
-        if (id != "") {
-            getRoutines();
-        }
-    }
-
-    /**
-     * Funció per posar els valors a la pestanya de modificació d'activitat
-     * @param name nom de l'activitat
-     */
-    public void fillRoutineSheet(String id, String name) {
-        this.id = id;
-        this.routineName.setText(name);
     }
 }

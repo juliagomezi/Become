@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +17,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -52,7 +55,7 @@ public class ControllerRoutineDB {
      * @param object classe que conté el mètode
      */
     public void getUserRoutines(String userId, Method method, Object object) {
-        db.collection("users").document(userId).collection("routines").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collection("users").document(userId).collection("routines").orderBy("timestamp", Query.Direction.DESCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 ArrayList<ArrayList<String>> routinesResult = new ArrayList<>();
@@ -129,8 +132,9 @@ public class ControllerRoutineDB {
      * @param routineName nom de la rutina a crear.
      */
     public String createRoutine(String userId, String routineName) {
-        Map<String,String> dataInput = new HashMap<>();
+        Map<String,Object> dataInput = new HashMap<>();
         dataInput.put("name", routineName);
+        dataInput.put("timestamp", FieldValue.serverTimestamp());
         DocumentReference docRefToRoutine= db.collection("users").document(userId).collection("routines").document();
         docRefToRoutine.set(dataInput);
         return docRefToRoutine.getId();

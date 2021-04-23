@@ -87,6 +87,9 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         TextView addActivity = view.findViewById(R.id.addActivity);
         addActivity.setOnClickListener(v -> createActivitySheet(false));
 
+        Button done = view.findViewById(R.id.doneButton);
+        done.setOnClickListener(v -> MainActivity.getInstance().setProfileScreen());
+
         ImageButton previousDayButton = view.findViewById(R.id.previousDayButton);
         previousDayButton.setOnClickListener(v -> showPreviousDay());
         ImageButton nextDayButton = view.findViewById(R.id.nextDayButton);
