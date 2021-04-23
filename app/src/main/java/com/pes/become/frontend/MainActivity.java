@@ -3,6 +3,7 @@ package com.pes.become.frontend;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -86,5 +87,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public void setProfileScreen() {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_layout, new Profile()).commit();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

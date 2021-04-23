@@ -2,6 +2,7 @@ package com.pes.become.backend.persistence;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;*/
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -25,6 +27,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.pes.become.frontend.Login;
 import com.pes.become.frontend.MainActivity;
 
@@ -32,11 +37,15 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CtrlUsuari {
     private static CtrlUsuari instance;
     private FirebaseAuth mAuth;
     private final FirebaseFirestore db;
+    private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
 
     /**
      * Creadora per defecte.
@@ -151,6 +160,29 @@ public class CtrlUsuari {
                         } catch (InvocationTargetException e2) {
                             System.out.println("Target no vàlid");
                         }
+                    }
+                });
+    }
+
+    /**
+     * Metode per penjar una foto de perfil des de la galeria de l'usuari
+     * @param userId nom de l'usuari que penja la foto
+     * @param imageUri uri de la imatge a penjar
+     */
+    public void updateProfilePic(String userId, Uri imageUri) {
+        StorageReference imageRef = storageRef.child(userId);
+
+        imageRef.putFile(imageUri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Log.d("PROFILE PIC","UPLOADED :)");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        Log.d("PROFILE PIC","NOT UPLOADED :(");
                     }
                 });
     }

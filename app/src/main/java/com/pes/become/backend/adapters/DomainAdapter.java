@@ -1,5 +1,6 @@
 package com.pes.become.backend.adapters;
 
+import android.net.Uri;
 import android.util.Log;
 
 import com.pes.become.backend.domain.Activity;
@@ -501,5 +502,13 @@ public class DomainAdapter {
             if (element.equals(Day.values()[i].toString())) return i;
         }
         return 0;
+    }
+
+    /**
+     * Metode per penjar una foto de perfil des de la galeria de l'usuari
+     * @param imageUri uri de la imatge a penjar
+     */
+    public void updateProfilePic(Uri imageUri) {
+        controllerPersistence.updateProfilePic(currentUser.getID(), imageUri);
     }
 }

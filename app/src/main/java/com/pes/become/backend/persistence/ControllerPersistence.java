@@ -1,6 +1,7 @@
 package com.pes.become.backend.persistence;
 
 import android.app.Activity;
+import android.net.Uri;
 import android.util.Log;
 
 import com.google.firebase.firestore.DocumentReference;
@@ -177,6 +178,15 @@ public class ControllerPersistence{
     public void changePassword(String newPassword, Method method, Object object) {
         CU = CtrlUsuari.getInstance();
         CU.changePassword(newPassword, method, object);
+    }
+
+    /**
+     * Metode per penjar una foto de perfil des de la galeria de l'usuari
+     * @param userId id de l'usuari que penja la foto
+     * @param imageUri uri de la imatge a penjar
+     */
+    public void updateProfilePic(String userId, Uri imageUri) {
+        CU.updateProfilePic(userId, imageUri);
     }
 
     /**
