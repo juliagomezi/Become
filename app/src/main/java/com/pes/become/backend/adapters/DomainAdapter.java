@@ -128,7 +128,7 @@ public class DomainAdapter {
         currentUser = userAdapter.createUser(infoUser.get(1), infoUser.get(2));
         currentUser.setID(infoUser.get(0));
         selectRoutine(infoUser.get(3));
-
+    }
 
     /**
      * Metode per tancar la sessio d'un usuari que previament havia iniciat sessio
