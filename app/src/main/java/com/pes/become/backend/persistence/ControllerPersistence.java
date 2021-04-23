@@ -190,6 +190,16 @@ public class ControllerPersistence{
     }
 
     /**
+     * Inici de sessió d'usuari amb google
+     * @param idToken token d'inici de sessió de Google
+     * @param method metode a cridar quan es retornin les dades
+     * @param object classe que conté el mètode
+     */
+    public void loginUserGoogle(String idToken, Method method, Object object ){
+        CU = CtrlUsuari.getInstance();
+        CU.loginUserGoogle(idToken, method, object);
+    }
+    /**
      * Reautenticació de l'usuari
      * @param mail correu
      * @param password contrasenya

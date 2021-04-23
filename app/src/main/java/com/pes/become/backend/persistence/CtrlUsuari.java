@@ -1,7 +1,9 @@
 package com.pes.become.backend.persistence;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -16,12 +18,14 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.pes.become.frontend.Login;
 import com.pes.become.frontend.MainActivity;
 
 import java.lang.reflect.InvocationTargetException;
@@ -184,7 +188,37 @@ public class CtrlUsuari {
                     }
                 });
     }
-
+    /**
+     * Inici de sessió d'usuari amb google
+     * @param idToken token d'inici de sessió de Google
+     * @param method metode a cridar quan es retornin les dades
+     * @param object classe que conté el mètode
+     */
+    public void loginUserGoogle(String idToken, Method method, Object object)
+    {
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        boolean successful;
+                        if (task.isSuccessful()) {
+                            successful = true;
+                        } else {
+                            successful = false;
+                        }
+                        Object[] params = new Object[1];
+                        params[0] = successful;
+                        try {
+                            method.invoke(object, params);
+                        } catch (IllegalAccessException e1) {
+                            System.out.println("Acces invàlid");
+                        } catch (InvocationTargetException e2) {
+                            System.out.println("Target no vàlid");
+                        }
+                    }
+                });
+    }
     /**
      * Reautenticació de l'usuari
      * @param mail correu

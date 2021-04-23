@@ -111,8 +111,8 @@ public class DomainAdapter {
     /**
      * Metode per iniciar sessio amb un compte de Google
      */
-    public void loginGoogleUser() {
-
+    public void loginGoogleUser(String idToken, Method method, Object object) {
+        controllerPersistence.loginUserGoogle(idToken, method, object);
     }
 
     /**

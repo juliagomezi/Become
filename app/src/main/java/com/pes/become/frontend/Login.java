@@ -25,6 +25,8 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapter;
 
+import java.lang.reflect.Method;
+
 public class Login extends AppCompatActivity {
 
 
@@ -121,24 +123,27 @@ public class Login extends AppCompatActivity {
 
     //aquesta funcio es la que ha d'estar en el backend
     private void firebaseAuthWithGoogle(String idToken) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                            startActivity(intent);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Toast.makeText(Login.this, "Failed", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-    }
+        Class[] parameterTypes = new Class[1];
+        parameterTypes[0] = boolean.class;
+        try {
+            Method method1 = Login.class.getMethod("firebaseAuthCallback", parameterTypes);
+            DA.loginGoogleUser(idToken, method1, this);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+            //No hauria de passar mai, ja que el mètode està en aquesta classe i per aixo ho poso aqui
+        }
 
+    }
+    public void firebaseAuthCallback(boolean successful)
+    {
+        if (successful) {
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+        } else {
+            // If sign in fails, display a message to the user.
+            Toast.makeText(Login.this, "Failed", Toast.LENGTH_SHORT).show();
+        }
+    }
     @Override
     protected void onStart() {
         super.onStart();
