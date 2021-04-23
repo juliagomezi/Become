@@ -28,6 +28,7 @@ import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapter;
 import com.pes.become.backend.exceptions.InvalidDayIntervalException;
 import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
+import com.pes.become.backend.exceptions.NoSelectedRoutineException;
 import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 
 import java.text.ParseException;
@@ -45,13 +46,11 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
 
     private final DomainAdapter DA = DomainAdapter.getInstance();
 
-    private TextView routineDay;
     private int seeingDay;
     private ArrayList<ArrayList<String>> activitiesList;
 
-    RoutineEditRecyclerAdapter routineEditRecyclerAdapter;
-    RecyclerView recyclerView;
-    TextView emptyView;
+    private RecyclerView recyclerView;
+    private TextView emptyView;
 
     private BottomSheetDialog activitySheet;
     private Spinner spinnerTheme, spinnerStartDay, spinnerEndDay;
@@ -88,18 +87,15 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         TextView addActivity = view.findViewById(R.id.addActivity);
         addActivity.setOnClickListener(v -> createActivitySheet(false));
 
+        Button done = view.findViewById(R.id.doneButton);
+        done.setOnClickListener(v -> MainActivity.getInstance().setProfileScreen());
+
         ImageButton previousDayButton = view.findViewById(R.id.previousDayButton);
         previousDayButton.setOnClickListener(v -> showPreviousDay());
         ImageButton nextDayButton = view.findViewById(R.id.nextDayButton);
         nextDayButton.setOnClickListener(v -> showNextDay());
 
         return view;
-    }
-
-    private void translateSeeingDay() {
-        seeingDay -= 2;
-        if(seeingDay == -1)
-            seeingDay = 6;
     }
 
     /**
@@ -110,10 +106,19 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
     }
 
     /**
+     * Funcio per transformar el numero del dia
+     */
+    private void translateSeeingDay() {
+        seeingDay -= 2;
+        if(seeingDay == -1)
+            seeingDay = 6;
+    }
+
+    /**
      * Funcio per posar el dia actual a la vista
      */
     private void setDay() {
-        routineDay = view.findViewById(R.id.routineDay);
+        TextView routineDay = view.findViewById(R.id.routineDay);
         routineDay.setText(getWeekDay(seeingDay));
     }
 
@@ -167,7 +172,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
      */
     private void initRecyclerView() {
         recyclerView.setLayoutManager((new LinearLayoutManager(global)));
-        routineEditRecyclerAdapter = new RoutineEditRecyclerAdapter(activitiesList);
+        RoutineEditRecyclerAdapter routineEditRecyclerAdapter = new RoutineEditRecyclerAdapter(activitiesList);
         recyclerView.setAdapter(routineEditRecyclerAdapter);
 
         recyclerView.setVisibility(View.VISIBLE);
@@ -176,8 +181,11 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
 
     /**
      * Funció per inicialitzar l'element que es mostra quan no hi ha activitats
+     * @param text text que mostrara la vista
      */
-    private void initEmptyView() {
+    private void initEmptyView(String text) {
+        emptyView.setText(text);
+
         recyclerView.setVisibility(View.INVISIBLE);
         emptyView.setVisibility(View.VISIBLE);
     }
@@ -366,6 +374,8 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
                 Toast.makeText(getContext(), getString(R.string.overlapping), Toast.LENGTH_SHORT).show();
                 startTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
                 endTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
+            } catch (NoSelectedRoutineException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -406,6 +416,8 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
             Toast.makeText(getContext(), getString(R.string.overlapping), Toast.LENGTH_SHORT).show();
             this.startTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
             this.endTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
+        } catch (NoSelectedRoutineException e) {
+            e.printStackTrace();
         }
     }
 
@@ -415,7 +427,10 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
     public void getActivitiesByDay(String day) {
         try {
             DA.getActivitiesByDayToEdit(day, this);
-        } catch (NoSuchMethodException ignored) { }
+        } catch (NoSuchMethodException ignored) {
+        } catch (NoSelectedRoutineException e) {
+            initEmptyView("You don't have any routine selected!");
+        }
     }
 
     /**
@@ -429,7 +444,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
             initRecyclerView();
         }
         else {
-            initEmptyView();
+            initEmptyView("You don't have any ativities programmed today!");
         }
     }
 

@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapter;
+import com.pes.become.backend.exceptions.NoSelectedRoutineException;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -31,13 +32,11 @@ public class RoutineView extends Fragment implements AdapterView.OnItemSelectedL
 
     private final DomainAdapter DA = DomainAdapter.getInstance();
 
-    private TextView routineDay;
     private int seeingDay;
     private ArrayList<ArrayList<String>> activitiesList;
 
-    RecyclerView recyclerView;
-    RoutineViewRecyclerAdapter routineViewRecyclerAdapter;
-    TextView emptyView;
+    private RecyclerView recyclerView;
+    private TextView emptyView;
 
     /**
      * Constructora del RoutineView
@@ -54,7 +53,11 @@ public class RoutineView extends Fragment implements AdapterView.OnItemSelectedL
         instance = this;
         global = this.getActivity();
 
+        recyclerView = view.findViewById(R.id.activityList);
+        emptyView = view.findViewById(R.id.emptyView);
+
         seeingDay = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+        translateSeeingDay();
         setDay();
         getActivitiesByDay(getWeekDay(seeingDay));
 
@@ -74,10 +77,19 @@ public class RoutineView extends Fragment implements AdapterView.OnItemSelectedL
     }
 
     /**
+     * Funcio per transformar el numero del dia
+     */
+    private void translateSeeingDay() {
+        seeingDay -= 2;
+        if(seeingDay == -1)
+            seeingDay = 6;
+    }
+
+    /**
      * Funcio per posar el dia actual a la vista
      */
     private void setDay() {
-        routineDay = view.findViewById(R.id.routineDay);
+        TextView routineDay = view.findViewById(R.id.routineDay);
         routineDay.setText(getWeekDay(seeingDay));
     }
 
@@ -87,19 +99,19 @@ public class RoutineView extends Fragment implements AdapterView.OnItemSelectedL
      */
     private String getWeekDay(int day) {
         switch (day) {
-            case Calendar.MONDAY:
+            case 0:
                 return "Monday";
-            case Calendar.TUESDAY:
+            case 1:
                 return "Tuesday";
-            case Calendar.WEDNESDAY:
+            case 2:
                 return "Wednesday";
-            case Calendar.THURSDAY:
+            case 3:
                 return "Thursday";
-            case Calendar.FRIDAY:
+            case 4:
                 return "Friday";
-            case Calendar.SATURDAY:
+            case 5:
                 return "Saturday";
-            case Calendar.SUNDAY:
+            case 6:
                 return "Sunday";
         }
         return "";
@@ -109,31 +121,28 @@ public class RoutineView extends Fragment implements AdapterView.OnItemSelectedL
      * Funcio per veure les activitats del dia anterior
      */
     private void showPreviousDay() {
-        if (seeingDay > 1) {
-            seeingDay--;
-            setDay();
-            getActivitiesByDay(getWeekDay(seeingDay));
-        }
+        if (seeingDay == 0) seeingDay = 6;
+        else seeingDay--;
+        setDay();
+        getActivitiesByDay(getWeekDay(seeingDay));
     }
 
     /**
      * Funcio per veure les activitats del seguent dia
      */
     private void showNextDay() {
-        if (seeingDay < 7) {
-            seeingDay++;
-            setDay();
-            getActivitiesByDay(getWeekDay(seeingDay));
-        }
+        if (seeingDay == 6) seeingDay = 0;
+        else seeingDay++;
+        setDay();
+        getActivitiesByDay(getWeekDay(seeingDay));
     }
 
     /**
      * Funció per inicialitzar l'element que mostra el llistat d'activitats
      */
     private void initRecyclerView() {
-        recyclerView = view.findViewById(R.id.activityList);
         recyclerView.setLayoutManager((new LinearLayoutManager(global)));
-        routineViewRecyclerAdapter = new RoutineViewRecyclerAdapter(activitiesList);
+        RoutineViewRecyclerAdapter routineViewRecyclerAdapter = new RoutineViewRecyclerAdapter(activitiesList);
         recyclerView.setAdapter(routineViewRecyclerAdapter);
 
         recyclerView.setVisibility(View.VISIBLE);
@@ -146,9 +155,10 @@ public class RoutineView extends Fragment implements AdapterView.OnItemSelectedL
 
     /**
      * Funció per inicialitzar l'element que es mostra quan no hi ha activitats
+     * @param text text que mostrara la vista
      */
-    private void initEmptyView() {
-        emptyView = view.findViewById(R.id.emptyView);
+    private void initEmptyView(String text) {
+        emptyView.setText(text);
 
         recyclerView.setVisibility(View.INVISIBLE);
         emptyView.setVisibility(View.VISIBLE);
@@ -185,7 +195,10 @@ public class RoutineView extends Fragment implements AdapterView.OnItemSelectedL
     public void getActivitiesByDay(String day) {
         try {
             DA.getActivitiesByDayToView(day, this);
-        } catch (NoSuchMethodException ignored) { }
+        } catch (NoSuchMethodException ignored) {
+        } catch (NoSelectedRoutineException e) {
+            initEmptyView("You don't have any routine selected!");
+        }
     }
 
     /**
@@ -198,9 +211,8 @@ public class RoutineView extends Fragment implements AdapterView.OnItemSelectedL
             activitiesList.addAll(activitiesListCallback);
             initRecyclerView();
         }
-
         else {
-            initEmptyView();
+            initEmptyView("You don't have any activity programmed today!");
         }
     }
 

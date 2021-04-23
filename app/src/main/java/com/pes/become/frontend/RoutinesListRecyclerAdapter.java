@@ -1,5 +1,6 @@
 package com.pes.become.frontend;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapter;
+import com.pes.become.backend.exceptions.NoSelectedRoutineException;
 
 import java.util.ArrayList;
 
@@ -51,12 +53,18 @@ public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesLi
         holder.routineName.setText(routinesList.get(position).get(1));
 
         holder.editButton.setOnClickListener(view -> {
-            //go to editing/deleting activities view
+            try {
+                DA.selectRoutine(routinesList.get(position).get(0));
+            } catch (NoSuchMethodException ignore) {}
+            MainActivity.getInstance().setEditRoutineScreen();
         });
 
         holder.deleteButton.setOnClickListener(view -> {
             String currentId = routinesList.get(position).get(0);
             DA.deleteRoutine(currentId);
+            routinesList.remove(position);
+            notifyDataSetChanged();
+            if (routinesList.isEmpty()) RoutinesList.getInstance().initEmptyView();
         });
 
         if (routinesList.get(position).get(0).equals(selectedRoutineID)) {
@@ -66,16 +74,19 @@ public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesLi
         holder.switchButton.setOnCheckedChangeListener( new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton toggleButton, boolean isChecked) {
-                if(isChecked) { // no estic segura si l'estat isChecked es l'estat abans o despres de fer click :)
-                    //
+                if (isChecked) {
+                    try {
+                        DA.selectRoutine(routinesList.get(position).get(0));
+                    } catch (NoSuchMethodException ignore) {}
                 }
                 else {
-                    //
+                    // deseleccionar rutina
                 }
             }
         });
 
     }
+
 
     /**
      * Funcio del RecyclerAdapterRoutinesList per obtenir la mida del RecyclerView
@@ -106,5 +117,6 @@ public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesLi
             switchButton = itemView.findViewById(R.id.switchButton);
         }
     }
+
 
 }

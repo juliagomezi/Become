@@ -38,21 +38,87 @@ public class CtrlUsuari {
     private FirebaseAuth mAuth;
     private final FirebaseFirestore db;
 
-
+    /**
+     * Creadora per defecte.
+     */
     private CtrlUsuari(){
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
-
     }
-    public static CtrlUsuari getInstance()
-    {
-        if(instance ==null) {
+
+    public static CtrlUsuari getInstance() {
+        if (instance == null) {
             instance = new CtrlUsuari();
         }
         return instance;
     }
 
     /***************CONSULTORES***************/
+
+    /**
+     * Funcio per obtenir el nom, el correu i la rutina seleccionada de l'usuari en aquest ordre
+     * @param userID l'identificador de l'usuari
+     * @param method el metode a cridar
+     * @param object l'objecte que conte el metode
+     */
+    public void getInfoUser(String userID, Method method, Object object) {
+        DocumentReference docRefToUser = db.collection("users").document(userID);
+        Object[] params = new Object[3];
+
+        docRefToUser.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        params[0] = document.get("name");
+                        params[1] = mAuth.getCurrentUser().getEmail();
+                        params[2] = document.get("selectedRoutine");
+                        try {
+                            method.invoke(object, params);
+                        } catch (IllegalAccessException e1) {
+                            System.out.println("Acces invàlid");
+                        } catch (InvocationTargetException e2) {
+                            System.out.println("Target no vàlid");
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    /**
+     * Metode utilizat per obtenir la rutina seleccionada de l'usuari
+     * @param userID l'identificador de l'usuari
+     * @param method el metode a cridar
+     * @param object l'objecte que conte el metode
+     */
+    public void getSelectedRoutine(String userID, Method method, Object object) {
+
+        DocumentReference docRefToUser = db.collection("users").document(userID);
+        Object[] params = new Object[1];
+
+        docRefToUser.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        params[0] = document.get("selectedRoutine");
+                        try {
+                            method.invoke(object, params);
+                        } catch (IllegalAccessException e1) {
+                            System.out.println("Acces invàlid");
+                        } catch (InvocationTargetException e2) {
+                            System.out.println("Target no vàlid");
+                        }
+                    }
+                }
+            }
+        });
+
+    }
+
     /***************MODIFICADORES***************/
 
     /**
@@ -61,7 +127,7 @@ public class CtrlUsuari {
      * @param method mètode a executar de forma asíncrona un cop acabada la reautentificació (el paràmetre és un boolea que retorna true si la reautentificació ha anat bé o false si no)
      * @param object instancia de la classe del mètode a executar
      */
-    public void changePassword(String newPassword, Method method, Object object){
+    public void changePassword(String newPassword, Method method, Object object) {
         FirebaseUser user = mAuth.getCurrentUser();
 
         user.updatePassword(newPassword)
@@ -94,7 +160,7 @@ public class CtrlUsuari {
      * @param method mètode a executar de forma asíncrona un cop acabada la reautentificació (el paràmetre és un boolea que retorna true si la reautentificació ha anat bé o false si no)
      * @param object instancia de la classe del mètode a executar
      */
-    public void deleteUser(Method method, Object object){
+    public void deleteUser(Method method, Object object) {
         //reauthenticate(mail, oldPassword);
         FirebaseUser user = mAuth.getCurrentUser();
         String userID = user.getUid();
@@ -116,7 +182,6 @@ public class CtrlUsuari {
                             params[0] = false;
                         }
 
-
                         try {
                             method.invoke(object, params);
                         } catch (IllegalAccessException e1) {
@@ -136,7 +201,7 @@ public class CtrlUsuari {
      * @param method metode a cridar quan es retornin les dades
      * @param object classe que conté el mètode
      */
-    public void loginUser(String mail, String password, Activity act,Method method, Object object){
+    public void loginUser(String mail, String password, Activity act,Method method, Object object) {
         mAuth.signInWithEmailAndPassword(mail, password)
                 .addOnCompleteListener(act, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -172,10 +237,8 @@ public class CtrlUsuari {
                                     }
                                 }
                             });
-
-
-
-                        } else {
+                        }
+                        else {
                             // If sign in fails, display a message to the user.
                             Log.w("FirebaseUser", "signInWithEmail:failure", task.getException());
                             //Toast.makeText(EmailPasswordActivity.this, "Authentication failed.",
@@ -183,7 +246,6 @@ public class CtrlUsuari {
                             params[0] = false;
                             params[1] = params[2] = params[3] = "";
                         }
-
 
                     }
                 });
@@ -267,7 +329,7 @@ public class CtrlUsuari {
      * @param method metode a cridar quan es retornin les dades
      * @param object classe que conté el mètode
      */
-    public void registerUser(String mail, String password,String name, Activity act,Method method, Object object){
+    public void registerUser(String mail, String password,String name, Activity act,Method method, Object object) {
 
         mAuth.createUserWithEmailAndPassword(mail, password)
                 .addOnCompleteListener(act, new OnCompleteListener<AuthResult>() {
@@ -289,7 +351,7 @@ public class CtrlUsuari {
                             DocumentReference docRefToUser =  db.collection("users").document(userID);
                             HashMap<String, Object> mapa = new HashMap<>();
                             mapa.put("Username", name);
-                            mapa.put("selectedRoutine", "none");
+                            mapa.put("selectedRoutine", "");
                             docRefToUser.set(mapa);
                             params[0] = true;
                             params[1] = userID;
@@ -301,7 +363,6 @@ public class CtrlUsuari {
                             params[0] = false;
                             params[1] = params[2] = "";
                         }
-
                         try {
                             method.invoke(object, params);
                         } catch (IllegalAccessException e1) {
@@ -318,25 +379,22 @@ public class CtrlUsuari {
      * @param userID identificador de l'usuari
      * @param routineID identificador de la nova rutina seleccionada
      */
-    public void setSelectedRoutine(String userID, String routineID){
+    public void setSelectedRoutine(String userID, String routineID) {
         DocumentReference docRefToUser = db.collection("users").document(userID);
         docRefToUser.update("selectedRoutine",routineID);
     }
 
-
-    public void signOut(){
+    public void signOut() {
         mAuth.getInstance().signOut();
     }
 
-
     /***************PRIVADES***************/
 
-
     /**
-     * Esborra totes les dades de la BD de l'usuari (rutines i activitats).
-     * @param docRefToUser és el document de l'usuari que conté totes les altres subcol·leccions.
+     * Esborra totes les dades de la BD de l'usuari (rutines i activitats)
+     * @param docRefToUser es el document de l'usuari que conte totes les altres subcol·leccions
      */
-    private void deleteUserData(DocumentReference docRefToUser){
+    private void deleteUserData(DocumentReference docRefToUser) {
 
         docRefToUser.collection("routines").get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -356,11 +414,12 @@ public class CtrlUsuari {
                     }
                 });
     }
+
     /**
      * Esborra totes les dades d'una rutina i després esborra el document de la rutina.
      * @param docRefToRoutine és el document de l'usuari que conté totes les altres subcol·leccions.
      */
-    private void deleteRoutineData(DocumentReference docRefToRoutine){
+    private void deleteRoutineData(DocumentReference docRefToRoutine) {
         docRefToRoutine.collection("activities").get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -378,10 +437,6 @@ public class CtrlUsuari {
                     }
                 });
     }
-
-
-
-
         /*
     //TUTORIAL
     public void tutorial(String routineName, String day)  {

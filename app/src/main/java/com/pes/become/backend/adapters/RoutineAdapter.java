@@ -3,6 +3,7 @@ package com.pes.become.backend.adapters;
 import com.pes.become.backend.domain.Activity;
 import com.pes.become.backend.domain.Day;
 import com.pes.become.backend.domain.Routine;
+import com.pes.become.backend.exceptions.NoSelectedRoutineException;
 import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 
 import java.util.ArrayList;
@@ -60,8 +61,12 @@ public class RoutineAdapter {
     /**
      * Consultar les activitats d'un dia
      * @param day nom del dia
+     * @throws NoSelectedRoutineException
      */
-    public ArrayList<ArrayList<String>> getActivitiesByDay(String day) {
+    public ArrayList<ArrayList<String>> getActivitiesByDay(String day) throws NoSelectedRoutineException {
+        if(routine == null){
+            throw new NoSelectedRoutineException();
+        }
         ArrayList<Activity> activities = routine.getActivitiesByDay(Day.valueOf(day));
         ArrayList<ArrayList<String>> res = new ArrayList<>();
         for(Activity activity : activities) {
@@ -85,8 +90,12 @@ public class RoutineAdapter {
     /**
      * Buidar les activitats d'una rutina
      * @param day
+     * @throws NoSelectedRoutineException
      */
-    public void clearActivities(Day day) {
+    public void clearActivities(Day day) throws NoSelectedRoutineException {
+        if(routine == null){
+            throw new NoSelectedRoutineException();
+        }
         routine.clearActivities(day);
     }
 
@@ -94,16 +103,24 @@ public class RoutineAdapter {
      * Afegir una activitat a una rutina
      * @param activity nova activitat
      * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
+     * @throws NoSelectedRoutineException
      */
-    public void createActivity(Activity activity) throws OverlappingActivitiesException {
+    public void createActivity(Activity activity) throws OverlappingActivitiesException, NoSelectedRoutineException {
+        if(routine == null){
+            throw new NoSelectedRoutineException();
+        }
         routine.createActivity(activity);
     }
 
     /**
      * Actualitzar els parametres d'una activitat d'una rutina
      * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
+     * @throws NoSelectedRoutineException
      */
-    public void updateActivity(Activity a) throws OverlappingActivitiesException {
+    public void updateActivity(Activity a) throws OverlappingActivitiesException, NoSelectedRoutineException {
+        if(routine == null){
+            throw new NoSelectedRoutineException();
+        }
         routine.updateActivity(a);
     }
 
@@ -111,8 +128,12 @@ public class RoutineAdapter {
      * Eliminar una activitat de la rutina
      * @param id identificador de l'activitat
      * @param day dia de l'activitat
+     * @throws NoSelectedRoutineException
      */
-    public void deleteActivity(String id, Day day) {
+    public void deleteActivity(String id, Day day) throws NoSelectedRoutineException {
+        if(routine == null){
+            throw new NoSelectedRoutineException();
+        }
         routine.deleteActivity(id, day);
     }
 

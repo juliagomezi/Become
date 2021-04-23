@@ -1,6 +1,7 @@
 package com.pes.become.backend.persistence;
 
 import android.app.Activity;
+import android.util.Log;
 
 import com.google.firebase.firestore.DocumentReference;
 
@@ -11,7 +12,6 @@ public class ControllerPersistence{
     ControllerRoutineDB CR;
     ControllerActivityDB CA;
     CtrlUsuari CU;
-
 
     /**
      * Crear el controlador d'activitats de la BD
@@ -31,9 +31,6 @@ public class ControllerPersistence{
         }
     }
 
-
-
-
     /**FUNCIONS RELACIONADES AMB ACTIVITAT*********************************************************/
     /***************CONSULTORES***************/
 
@@ -50,9 +47,7 @@ public class ControllerPersistence{
         CA.getActivitiesByDay(userId, idRoutine,day,method,object);
     }
 
-
     /***************MODIFICADORES***************/
-
 
     /**
      * Afegir una nova activitat a una certa rutina de la base de dades
@@ -99,10 +94,6 @@ public class ControllerPersistence{
         CA.updateActivity(userId, idRoutine, actName, description, theme, day, iniT, endT, idActivity);
     }
 
-
-
-
-
     /**FUNCIONS RELACIONADES AMB RUTINA************************************************************/
     /***************CONSULTORES***************/
     /**
@@ -111,11 +102,23 @@ public class ControllerPersistence{
      * @param method metode a cridar quan es retornin les dades
      * @param object classe que conté el mètode
      */
-    public void getUserRoutines(String userId, Method method, Object object)
-    {
+    public void getUserRoutines(String userId, Method method, Object object) {
         createCtrlRoutine();
         CR.getUserRoutines(userId, method, object);
     }
+
+    /**
+     * Funció per obtenir el nom de la rutina amb routineId
+     * @param userId Id de l'usuari
+     * @param routineId Id de l'usuari
+     * @param method metode a cridar quan es retornin les dades
+     * @param object classe que conté el mètode
+     */
+    public void getUserRoutine(String userId, String routineId, Method method, Object object) {
+        createCtrlRoutine();
+        CR.getUserRoutine(userId, routineId, method, object);
+    }
+
     /***************MODIFICADORES***************/
 
     /**
@@ -124,7 +127,7 @@ public class ControllerPersistence{
      * @param idRoutine l'identificador de la rutina.
      * @param newName el nom que se li vol posar a la rutina.
      */
-    public void changeRoutineName(String userId, String idRoutine, String newName){
+    public void changeRoutineName(String userId, String idRoutine, String newName) {
         createCtrlRoutine();
         CR.changeName(userId, idRoutine, newName);
     }
@@ -139,20 +142,30 @@ public class ControllerPersistence{
         return CR.createRoutine(userId, routineName);
     }
 
-
     /**
      * Esborra la rutina indicada i les seves activitats
      * @param userId identificador de l'usuari
      * @param idRoutine és l'identificador de la rutina que es vol esborrar
      */
 
-    public void deleteRoutine(String userId, String idRoutine){
+    public void deleteRoutine(String userId, String idRoutine) {
         createCtrlRoutine();
         CR.deleteRoutine(userId, idRoutine);
     }
 
     /**FUNCIONS RELACIONADES AMB USUARI*********************************************************/
     /***************CONSULTORES***************/
+    public void getInfoUser(String userID, Method method, Object object){
+        CU = CtrlUsuari.getInstance();
+        CU.getInfoUser(userID, method, object);
+    }
+
+
+    public void getSelectedRoutine(String userID, Method method, Object object){
+        CU = CtrlUsuari.getInstance();
+        CU.getSelectedRoutine(userID, method, object);
+    }
+
     /***************MODIFICADORES***************/
 
     /**
@@ -161,7 +174,7 @@ public class ControllerPersistence{
      * @param method mètode a executar de forma asíncrona un cop acabada la reautentificació (el paràmetre és un boolea que retorna true si la reautentificació ha anat bé o false si no)
      * @param object instancia de la classe del mètode a executar
      */
-    public void changePassword(String newPassword, Method method, Object object){
+    public void changePassword(String newPassword, Method method, Object object) {
         CU = CtrlUsuari.getInstance();
         CU.changePassword(newPassword, method, object);
     }
@@ -171,7 +184,7 @@ public class ControllerPersistence{
      * @param method mètode a executar de forma asíncrona un cop acabada la reautentificació (el paràmetre és un boolea que retorna true si la reautentificació ha anat bé o false si no)
      * @param object instancia de la classe del mètode a executar
      */
-    public void deleteUser(Method method, Object object){
+    public void deleteUser(Method method, Object object) {
         CU = CtrlUsuari.getInstance();
         CU.deleteUser(method, object);
     }
@@ -184,7 +197,7 @@ public class ControllerPersistence{
      * @param method metode a cridar quan es retornin les dades
      * @param object classe que conté el mètode
      */
-    public void loginUser(String mail, String password, Activity act, Method method, Object object){
+    public void loginUser(String mail, String password, Activity act, Method method, Object object) {
         CU = CtrlUsuari.getInstance();
         CU.loginUser(mail, password, act, method, object);
     }
@@ -206,7 +219,7 @@ public class ControllerPersistence{
      * @param method mètode a executar de forma asíncrona un cop acabada la reautentificació (el paràmetre és un boolea que retorna true si la reautentificació ha anat bé o false si no)
      * @param object instancia de la classe del mètode a executar
      */
-    public void reauthenticate(String mail, String password, Method method, Object object){
+    public void reauthenticate(String mail, String password, Method method, Object object) {
         CU = CtrlUsuari.getInstance();
         CU.reauthenticate(mail, password, method, object);
     }
@@ -220,7 +233,7 @@ public class ControllerPersistence{
      * @param method metode a cridar quan es retornin les dades
      * @param object classe que conté el mètode
      */
-    public void registerUser(String mail, String password, String name, Activity act, Method method, Object object){
+    public void registerUser(String mail, String password, String name, Activity act, Method method, Object object) {
         CU = CtrlUsuari.getInstance();
         CU.registerUser(mail, password, name, act, method, object);
     }
@@ -230,7 +243,9 @@ public class ControllerPersistence{
      * @param userID identificador de l'usuari
      * @param routineID identificador de la nova rutina seleccionada
      */
-    public void setSelectedRoutine(String userID, String routineID){
+    public void setSelectedRoutine(String userID, String routineID) {
+        Log.d("setSelectedRoutineCP", "setSelectedRoutineCP");
+        Log.d("setSelectedRoutineCP", routineID);
         CU = CtrlUsuari.getInstance();
         CU.setSelectedRoutine(userID, routineID);
     }
@@ -238,7 +253,7 @@ public class ControllerPersistence{
     /**
      * Tanca la sessió
      */
-    public void signOut(){
+    public void signOut() {
         CU = CtrlUsuari.getInstance();
         CU.signOut();
     }

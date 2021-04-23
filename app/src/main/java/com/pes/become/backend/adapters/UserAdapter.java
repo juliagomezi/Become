@@ -27,10 +27,6 @@ public class UserAdapter {
         return new User(mail, name);
     }
 
-    public User createUser(String mail, String name, ArrayList<String> routines){
-        return new User(mail, name, routines);
-    }
-
     /**
      * Metode per encriptar contrassenyes
      * @param pswd

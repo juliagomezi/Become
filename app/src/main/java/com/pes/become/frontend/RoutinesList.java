@@ -35,6 +35,10 @@ public class RoutinesList extends Fragment {
     private ArrayList<ArrayList<String>> routinesList;
     private String selectedRoutineID;
 
+    RoutinesListRecyclerAdapter routinesListRecyclerAdapter;
+    RecyclerView recyclerView;
+    TextView emptyView;
+
     private BottomSheetDialog routineSheet;
     private String id;
     private EditText routineName;
@@ -61,6 +65,9 @@ public class RoutinesList extends Fragment {
         global = this.getActivity();
         instance = this;
 
+        recyclerView = view.findViewById(R.id.activityList);
+        emptyView = view.findViewById(R.id.emptyView);
+
         TextView addRoutine = view.findViewById(R.id.addRoutine);
         addRoutine.setOnClickListener(v -> createRoutineSheet());
 
@@ -73,10 +80,19 @@ public class RoutinesList extends Fragment {
      * Funció per inicialitzar l'element que mostra el llistat d'activitats
      */
     private void initRecyclerView() {
-        RecyclerView recyclerView = view.findViewById(R.id.activityList);
+        recyclerView.setVisibility(View.VISIBLE);
+        emptyView.setVisibility(View.INVISIBLE);
         recyclerView.setLayoutManager((new LinearLayoutManager(global)));
-        RoutinesListRecyclerAdapter recyclerAdapter = new RoutinesListRecyclerAdapter(routinesList, selectedRoutineID);
-        recyclerView.setAdapter(recyclerAdapter);
+        routinesListRecyclerAdapter = new RoutinesListRecyclerAdapter(routinesList, selectedRoutineID);
+        recyclerView.setAdapter(routinesListRecyclerAdapter);
+    }
+
+    /**
+     * Funció per inicialitzar l'element que es mostra quan no hi ha activitats
+     */
+    public void initEmptyView() {
+        recyclerView.setVisibility(View.INVISIBLE);
+        emptyView.setVisibility(View.VISIBLE);
     }
 
     /**
@@ -84,7 +100,6 @@ public class RoutinesList extends Fragment {
      */
     public void getRoutines() {
         try {
-            Log.d("getRoutines", "getRoutines");
             DA.getUserRoutines(this);
         } catch (NoSuchMethodException ignore) { }
     }
@@ -95,11 +110,13 @@ public class RoutinesList extends Fragment {
      * @param selectedRoutineID id de la rutina seleccionada de l'usuari que retorna la BD
      */
     public void getRoutinesCallback(ArrayList<ArrayList<String>> routinesListCallback, String selectedRoutineID) {
-        if (!routinesListCallback.isEmpty()) {
-            this.selectedRoutineID = selectedRoutineID;
-            routinesList = new ArrayList<>(routinesListCallback.size());
-            routinesList.addAll(routinesListCallback);
-            initRecyclerView();
+        this.selectedRoutineID = selectedRoutineID;
+        routinesList = new ArrayList<>(routinesListCallback.size());
+        routinesList.addAll(routinesListCallback);
+        initRecyclerView();
+
+        if(routinesList.isEmpty()) {
+            initEmptyView();
         }
     }
 
@@ -122,22 +139,20 @@ public class RoutinesList extends Fragment {
         if (name.isEmpty()) routineName.setError(getString(R.string.notNull));
         else {
             try {
-                //DA.createRoutine();
+                String id = DA.createRoutine(name);
+                ArrayList<String> routine = new ArrayList<>(2);
+                routine.add(id);
+                routine.add(name);
+                if(routinesList.isEmpty()) initRecyclerView();
+                routinesList.add(0,routine);
+                routinesListRecyclerAdapter.notifyDataSetChanged();
                 Toast.makeText(getContext(), getString(R.string.routineCreated), Toast.LENGTH_SHORT).show();
                 routineSheet.dismiss();
             }
             catch (Exception e) {
+                e.printStackTrace(); // provisional!!!
                 routineName.setError(getString(R.string.notNull));
             }
         }
-    }
-
-    /**
-     * Funció per posar els valors a la pestanya de modificació d'activitat
-     * @param name nom de l'activitat
-     */
-    public void fillRoutineSheet(String id, String name) {
-        this.id = id;
-        this.routineName.setText(name);
     }
 }
