@@ -112,7 +112,7 @@ public class Login extends AppCompatActivity {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 //firebaseAuthWithGoogle(account.getIdToken()); //aquesta funció és la que es pasa a la firebase
-                DA.loginGoogleUser(account.getIdToken());
+                //DA.loginGoogleUser(account.getIdToken());
             } catch (ApiException e) {
                 Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }

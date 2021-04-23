@@ -90,7 +90,7 @@ public class RoutineView extends Fragment implements AdapterView.OnItemSelectedL
      */
     private void setDay() {
         TextView routineDay = view.findViewById(R.id.routineDay);
-        routineDay.setText(getWeekDay(seeingDay));
+        routineDay.setText(getResources().getStringArray(R.array.dayValues)[seeingDay]);
     }
 
     /**

@@ -1,10 +1,8 @@
 package com.pes.become.frontend;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -14,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapter;
-import com.pes.become.backend.exceptions.NoSelectedRoutineException;
 
 import java.util.ArrayList;
 
@@ -71,17 +68,14 @@ public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesLi
             holder.switchButton.setChecked(true);
         }
 
-        holder.switchButton.setOnCheckedChangeListener( new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton toggleButton, boolean isChecked) {
-                if (isChecked) {
-                    try {
-                        DA.selectRoutine(routinesList.get(position).get(0));
-                    } catch (NoSuchMethodException ignore) {}
-                }
-                else {
-                    // deseleccionar rutina
-                }
+        holder.switchButton.setOnCheckedChangeListener((toggleButton, isChecked) -> {
+            if (isChecked) {
+                try {
+                    DA.selectRoutine(routinesList.get(position).get(0));
+                } catch (NoSuchMethodException ignore) {}
+            }
+            else {
+                // deseleccionar rutina
             }
         });
 
