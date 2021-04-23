@@ -63,7 +63,8 @@ public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesLi
             String currentId = routinesList.get(position).get(0);
             DA.deleteRoutine(currentId);
             routinesList.remove(position);
-            notifyItemRemoved(position);
+            notifyDataSetChanged();
+            if (routinesList.isEmpty()) RoutinesList.getInstance().initEmptyView();
         });
 
         if (routinesList.get(position).get(0).equals(selectedRoutineID)) {

@@ -80,6 +80,8 @@ public class RoutinesList extends Fragment {
      * Funció per inicialitzar l'element que mostra el llistat d'activitats
      */
     private void initRecyclerView() {
+        recyclerView.setVisibility(View.VISIBLE);
+        emptyView.setVisibility(View.INVISIBLE);
         recyclerView.setLayoutManager((new LinearLayoutManager(global)));
         routinesListRecyclerAdapter = new RoutinesListRecyclerAdapter(routinesList, selectedRoutineID);
         recyclerView.setAdapter(routinesListRecyclerAdapter);
@@ -88,7 +90,7 @@ public class RoutinesList extends Fragment {
     /**
      * Funció per inicialitzar l'element que es mostra quan no hi ha activitats
      */
-    private void initEmptyView() {
+    public void initEmptyView() {
         recyclerView.setVisibility(View.INVISIBLE);
         emptyView.setVisibility(View.VISIBLE);
     }
@@ -141,6 +143,7 @@ public class RoutinesList extends Fragment {
                 ArrayList<String> routine = new ArrayList<>(2);
                 routine.add(id);
                 routine.add(name);
+                if(routinesList.isEmpty()) initRecyclerView();
                 routinesList.add(0,routine);
                 routinesListRecyclerAdapter.notifyDataSetChanged();
                 Toast.makeText(getContext(), getString(R.string.routineCreated), Toast.LENGTH_SHORT).show();
