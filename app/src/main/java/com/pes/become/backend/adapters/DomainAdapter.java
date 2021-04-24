@@ -160,7 +160,7 @@ public class DomainAdapter {
      */
     public void loginCallback(boolean success, String userId, String username, String selectedRoutineId) throws NoSuchMethodException {
         if (success) {
-            currentUser = userAdapter.createUser("", username);
+            currentUser = userAdapter.createUser(username);
             currentUser.setID(userId);
             if (!selectedRoutineId.equals("")) selectRoutine(selectedRoutineId);
             login.loginCallback();
