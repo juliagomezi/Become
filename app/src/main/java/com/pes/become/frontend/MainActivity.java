@@ -30,10 +30,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         setContentView(R.layout.main);
         instance=this;
 
-        try {
-            DomainAdapter.getInstance().selectRoutine();
-        } catch (NoSuchMethodException ignore) { }
-
         BottomNavigationView navigation = findViewById(R.id.bottomNavigationView);
         navigation.setSelectedItemId(R.id.homeView);
         navigation.setOnNavigationItemSelectedListener(navListener);

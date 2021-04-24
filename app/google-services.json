@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "364384690021",
+    "firebase_url": "https://become-767d4-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "become-767d4",
     "storage_bucket": "become-767d4.appspot.com"
   },
@@ -13,6 +14,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "364384690021-tvttln8k3b54btg0b7m86j7qnc4p5dic.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pes.become",
+            "certificate_hash": "389db4473031ebda67d68a42a1696438006a9c86"
+          }
+        },
         {
           "client_id": "364384690021-vk16s0fu055l2v97te0fdu1l9aiic36r.apps.googleusercontent.com",
           "client_type": 1,

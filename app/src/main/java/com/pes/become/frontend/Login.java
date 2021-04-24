@@ -83,15 +83,7 @@ public class Login extends AppCompatActivity {
         if (user.isEmpty()) userText.setError(getString(R.string.notNull));
         else if (password.isEmpty()) userText.setError(getString(R.string.notNull));
 
-        else {
-            /*try {
-                DA.loginUser(user, password, this);
-            } catch (UserNotExists e) {
-                    userText.setError(getString(R.string.userNotMatch));
-                    passwordText.setError(getString(R.string.userNotMatch));
-            }*/
-
-        }
+        DA.loginUser(user, password, this);
 
     }
 
@@ -111,37 +103,15 @@ public class Login extends AppCompatActivity {
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                //firebaseAuthWithGoogle(account.getIdToken()); //aquesta funció és la que es pasa a la firebase
-                //DA.loginGoogleUser(account.getIdToken());
+                DA.loginGoogleUser(account.getIdToken(), this);
+
             } catch (ApiException e) {
                 Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    //aquesta funcio es la que ha d'estar en el backend
-    private void firebaseAuthWithGoogle(String idToken) {
-        Class[] parameterTypes = new Class[1];
-        parameterTypes[0] = boolean.class;
-        try {
-            Method method1 = Login.class.getMethod("firebaseAuthCallback", parameterTypes);
-            DA.loginGoogleUser(idToken, method1, this);
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-            //No hauria de passar mai, ja que el mètode està en aquesta classe i per aixo ho poso aqui
-        }
-
-    }
-    public void firebaseAuthCallback(boolean successful)
-    {
-        if (successful) {
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(intent);
-        } else {
-            // If sign in fails, display a message to the user.
-            Toast.makeText(Login.this, "Failed", Toast.LENGTH_SHORT).show();
-        }
-    }
+    /*
     @Override
     protected void onStart() {
         super.onStart();
@@ -150,6 +120,10 @@ public class Login extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
         }
+    }*/
+
+    public void loginCallbackFailed(){
+        Toast.makeText(Login.this, "Login failed", Toast.LENGTH_SHORT).show();
     }
 
     /**

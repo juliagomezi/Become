@@ -11,14 +11,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Become">
         <activity android:name=".frontend.Signup"/>
-        <activity android:name=".frontend.Login" />
-        <activity android:name=".frontend.MainActivity">
+        <activity android:name=".frontend.Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".frontend.MainActivity"/>
+
     </application>
 
 </manifest>

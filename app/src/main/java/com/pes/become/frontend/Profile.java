@@ -133,7 +133,8 @@ public class Profile extends Fragment {
      * Métode per obtenir la imatge de perfil i el nom d'usuari
      */
     private void loadUserInfo() {
-        //DA.loadUserInfo();
+        String name = DA.loadUsername();
+        username.setText(name);
     }
 
     /**

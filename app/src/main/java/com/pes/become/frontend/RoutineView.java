@@ -197,7 +197,7 @@ public class RoutineView extends Fragment implements AdapterView.OnItemSelectedL
             DA.getActivitiesByDayToView(day, this);
         } catch (NoSuchMethodException ignored) {
         } catch (NoSelectedRoutineException e) {
-            initEmptyView("You don't have any routine selected!");
+            initEmptyView(getString(R.string.noRoutineSelected));
         }
     }
 

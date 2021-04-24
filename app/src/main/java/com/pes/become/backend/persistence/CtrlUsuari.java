@@ -46,7 +46,7 @@ public class CtrlUsuari {
     private static CtrlUsuari instance;
     private FirebaseAuth mAuth;
     private final FirebaseFirestore db;
-    private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+   // private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
 
     /**
      * Creadora per defecte.
@@ -120,7 +120,7 @@ public class CtrlUsuari {
                         } catch (IllegalAccessException e1) {
                             System.out.println("Acces invàlid");
                         } catch (InvocationTargetException e2) {
-                            System.out.println("Target no vàlid");
+                            System.out.println("Routine");
                         }
                     }
                 }
@@ -159,17 +159,17 @@ public class CtrlUsuari {
                         } catch (IllegalAccessException e1) {
                             System.out.println("Acces invàlid");
                         } catch (InvocationTargetException e2) {
-                            System.out.println("Target no vàlid");
+                            System.out.println("Password");
                         }
                     }
                 });
     }
-
+/*
     /**
      * Metode per penjar una foto de perfil des de la galeria de l'usuari
      * @param userId nom de l'usuari que penja la foto
      * @param imageUri uri de la imatge a penjar
-     */
+     *//*
     public void updateProfilePic(String userId, Uri imageUri) {
         StorageReference imageRef = storageRef.child("images/"+userId);
         imageRef.putFile(imageUri)
@@ -183,7 +183,7 @@ public class CtrlUsuari {
                     public void onFailure(@NonNull Exception exception) {
                     }
                 });
-    }
+    }*/
 
     /**
      * Esborrar l'usuari actual i les seves rutines i activitats
@@ -217,7 +217,7 @@ public class CtrlUsuari {
                         } catch (IllegalAccessException e1) {
                             System.out.println("Acces invàlid");
                         } catch (InvocationTargetException e2) {
-                            System.out.println("Target no vàlid");
+                            System.out.println("delete");
                         }
                     }
                 });
@@ -256,14 +256,18 @@ public class CtrlUsuari {
                                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                                     params[0] = true;
                                     params[1] = userID;
-                                    params[2] = documentSnapshot.get("name");
+                                    params[2] = documentSnapshot.get("Username").toString();
                                     params[3] = documentSnapshot.get("selectedRoutine");
+
+                                    if (params[3] == null) params[3]="";
+                                    else params[3] = params[3].toString();
+
                                     try {
                                         method.invoke(object, params);
                                     } catch (IllegalAccessException e1) {
                                         System.out.println("Acces invàlid");
                                     } catch (InvocationTargetException e2) {
-                                        System.out.println("Target no vàlid");
+                                        System.out.println("login");
                                     }
                                 }
                             });
@@ -275,6 +279,13 @@ public class CtrlUsuari {
                             //Toast.LENGTH_SHORT).show();
                             params[0] = false;
                             params[1] = params[2] = params[3] = "";
+                            try {
+                                method.invoke(object, params);
+                            } catch (IllegalAccessException e1) {
+                                System.out.println("Acces invàlid");
+                            } catch (InvocationTargetException e2) {
+                                System.out.println("login F");
+                            }
                         }
 
                     }
@@ -293,21 +304,68 @@ public class CtrlUsuari {
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        boolean successful;
+                        boolean success;
+                        Object[] params = new Object[4];
+                        //Això té 4 elements
+                        // un bool que diu si hi ha hagut exit o no
+                        // el ID de l'usuari
+                        //el nom de l'usuari
+                        //el id de la seva rutina seleccionada
+
+
                         if (task.isSuccessful()) {
-                            successful = true;
-                        } else {
-                            successful = false;
+                            Log.d("FirebaseUser", "signInWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            String userID = user.getUid();
+
+                            DocumentReference docRefToUser = db.collection("users").document(userID);
+                            docRefToUser.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                                    if(!documentSnapshot.exists()) {
+                                        DocumentReference docRefToUser =  db.collection("users").document(userID);
+                                        HashMap<String, Object> mapa = new HashMap<>();
+                                        mapa.put("Username", user.getDisplayName());
+                                        mapa.put("selectedRoutine", "");
+                                        docRefToUser.set(mapa);
+                                    }
+
+                                    params[0] = true;
+                                    params[1] = userID;
+                                    params[2] = documentSnapshot.get("Username").toString();
+                                    params[3] = documentSnapshot.get("selectedRoutine");
+
+
+                                    if (params[3] == null) params[3]="";
+                                    else params[3] = params[3].toString();
+
+                                    try {
+                                        method.invoke(object, params);
+                                    } catch (IllegalAccessException e1) {
+                                        System.out.println("Acces invàlid");
+                                    } catch (InvocationTargetException e2) {
+                                        System.out.println("login");
+                                    }
+                                }
+                            });
                         }
-                        Object[] params = new Object[1];
-                        params[0] = successful;
-                        try {
-                            method.invoke(object, params);
-                        } catch (IllegalAccessException e1) {
-                            System.out.println("Acces invàlid");
-                        } catch (InvocationTargetException e2) {
-                            System.out.println("Target no vàlid");
+                        else {
+                            // If sign in fails, display a message to the user.
+                            Log.w("FirebaseUser", "signInWithGoogle:failure", task.getException());
+                            //Toast.makeText(EmailPasswordActivity.this, "Authentication failed.",
+                            //Toast.LENGTH_SHORT).show();
+                            params[0] = false;
+                            params[1] = params[2] = params[3] = "";
+                            try {
+                                method.invoke(object, params);
+                            } catch (IllegalAccessException e1) {
+                                System.out.println("Acces invàlid");
+                            } catch (InvocationTargetException e2) {
+                                System.out.println("login F");
+                            }
                         }
+
                     }
                 });
     }
@@ -344,7 +402,7 @@ public class CtrlUsuari {
                         } catch (IllegalAccessException e1) {
                             System.out.println("Acces invàlid");
                         } catch (InvocationTargetException e2) {
-                            System.out.println("Target no vàlid");
+                            System.out.println("reauth");
                         }
                     }
                 });
@@ -398,7 +456,7 @@ public class CtrlUsuari {
                         } catch (IllegalAccessException e1) {
                             System.out.println("Acces invàlid");
                         } catch (InvocationTargetException e2) {
-                            System.out.println("Target no vàlid");
+                            System.out.println("register");
                         }
                     }
                 });
