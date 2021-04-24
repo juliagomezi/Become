@@ -1,11 +1,17 @@
 package com.pes.become.frontend;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -14,6 +20,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
 import com.pes.become.R;
@@ -29,11 +37,14 @@ public class Profile extends Fragment {
 
     private DomainAdapter DA;
 
+    private Context global;
+
     private View view;
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private CircleImageView profilePic;
     private ImageButton settingsButton;
+    private TextView username;
 
     private Uri imageUri;
 
@@ -55,15 +66,27 @@ public class Profile extends Fragment {
         view = inflater.inflate(R.layout.profile, container, false);
         super.onCreate(savedInstanceState);
 
+        global = this.getActivity();
+
         DA = DomainAdapter.getInstance();
 
         tabs = new ArrayList<>();
         tabs.add(new RoutinesList());
         tabs.add(new Stats());
 
+        username = view.findViewById(R.id.usernameText);
         profilePic = view.findViewById(R.id.profilePic);
+        loadUserInfo();
+
         settingsButton = view.findViewById(R.id.settingsButton);
-        settingsButton.setOnClickListener(v -> changeProfilePic());
+        settingsButton.setOnClickListener(v -> {
+            if(ContextCompat.checkSelfPermission(global, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                changeProfilePic();
+            } else {
+                ActivityCompat.requestPermissions((Activity) global,new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, 10);
+            }
+        });
+
         tabLayout = view.findViewById(R.id.tabLayout);
         viewPager = view.findViewById(R.id.viewPager);
         viewPager.setAdapter(new MainAdapter(getChildFragmentManager()));
@@ -72,6 +95,16 @@ public class Profile extends Fragment {
         tabLayout.getTabAt(1).setIcon(R.drawable.stats_icon);
 
         return view;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode==10) {
+            if(grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                changeProfilePic(); //no s'obre la galeria quan li dones a permetre, has de tornar a clicar l'engranatge
+            }
+        }
     }
 
     /**
@@ -96,6 +129,16 @@ public class Profile extends Fragment {
 
     }
 
+    /**
+     * Métode per obtenir la imatge de perfil i el nom d'usuari
+     */
+    private void loadUserInfo() {
+        //DA.loadUserInfo();
+    }
+
+    /**
+     * Métode per obrir la galeria per tal que l'usuari seleccioni una imatge de perfil
+     */
     private void changeProfilePic() {
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -103,6 +146,12 @@ public class Profile extends Fragment {
         startActivityForResult(intent, 1);
     }
 
+    /**
+     * Métode que recull el resultat de la selecció que l'usuari ha fet a la galeria
+     * @param requestCode codi que ha de coincidir amb el de la crida startActivityForResult
+     * @param resultCode resultat de la operació
+     * @param data imatge seleccionada
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
