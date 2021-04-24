@@ -154,11 +154,12 @@ public class DomainAdapter {
      * @param act Activity d'Android necessaria per la execucio del firebase
      */
     public void loginUser(String mail, String password, android.app.Activity act) {
-        Class[] parameterTypes = new Class[4];
+        Class[] parameterTypes = new Class[5];
         parameterTypes[0] = boolean.class;
         parameterTypes[1] = String.class;
         parameterTypes[2] = String.class;
         parameterTypes[3] = String.class;
+        parameterTypes[4] = Bitmap.class;
         Method method1 = null;
         login = (Login)act;
         try {
@@ -172,11 +173,12 @@ public class DomainAdapter {
      * Metode per iniciar sessio amb un compte de Google
      */
     public void loginGoogleUser(String idToken, android.app.Activity act) {
-        Class[] parameterTypes = new Class[4];
+        Class[] parameterTypes = new Class[5];
         parameterTypes[0] = boolean.class;
         parameterTypes[1] = String.class;
         parameterTypes[2] = String.class;
         parameterTypes[3] = String.class;
+        parameterTypes[4] = Bitmap.class;
         Method method1 = null;
         login = (Login)act;
 
