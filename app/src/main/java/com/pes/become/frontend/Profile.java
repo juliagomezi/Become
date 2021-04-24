@@ -24,7 +24,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
 import com.pes.become.R;
@@ -44,14 +43,8 @@ public class Profile extends Fragment {
 
     private Context global;
 
-    private View view;
-    private TabLayout tabLayout;
-    private ViewPager viewPager;
     private CircleImageView profilePic;
-    private ImageButton settingsButton, logoutButton;
     private TextView username;
-
-    private Uri imageUri;
 
     /**
      * Pestanyes del TabLayout
@@ -68,7 +61,7 @@ public class Profile extends Fragment {
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.profile, container, false);
+        View view = inflater.inflate(R.layout.profile, container, false);
         super.onCreate(savedInstanceState);
 
         global = this.getActivity();
@@ -83,7 +76,7 @@ public class Profile extends Fragment {
         profilePic = view.findViewById(R.id.profilePic);
         loadUserInfo();
 
-        settingsButton = view.findViewById(R.id.settingsButton);
+        ImageButton settingsButton = view.findViewById(R.id.settingsButton);
         settingsButton.setOnClickListener(v -> {
             if(ContextCompat.checkSelfPermission(global, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 changeProfilePic();
@@ -92,15 +85,15 @@ public class Profile extends Fragment {
             }
         });
 
-        logoutButton = view.findViewById(R.id.logoutButton);
+        ImageButton logoutButton = view.findViewById(R.id.logoutButton);
         logoutButton.setOnClickListener(v -> {
             DA.logoutUser();
             startActivity(new Intent(global, Login.class));
             Objects.requireNonNull(getActivity()).finish();
         });
 
-        tabLayout = view.findViewById(R.id.tabLayout);
-        viewPager = view.findViewById(R.id.viewPager);
+        TabLayout tabLayout = view.findViewById(R.id.tabLayout);
+        ViewPager viewPager = view.findViewById(R.id.viewPager);
         viewPager.setAdapter(new MainAdapter(getChildFragmentManager()));
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.getTabAt(0).setIcon(R.drawable.bookmark_icon);
@@ -171,7 +164,7 @@ public class Profile extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==1 && resultCode==RESULT_OK && data!=null && data.getData()!=null) {
-            imageUri = data.getData();
+            Uri imageUri = data.getData();
             profilePic.setImageURI(imageUri);
             DA.updateProfilePic(imageUri);
             try {

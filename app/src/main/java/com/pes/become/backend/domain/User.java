@@ -28,7 +28,7 @@ public class User {
 
     /**
      * Creadora de la classe per a un nou usuari
-     * @param name
+     * @param name nom de l'usuari
      */
     public User(String name){
         this.name = name;
@@ -37,16 +37,16 @@ public class User {
     }
 
     /**
-     *
-     * @return
+     * Getter de l'identificador de l'usuari
+     * @return identificador de l'usuari
      */
     public String getID() {
         return id;
     }
 
     /**
-     *
-     * @return
+     * Getter del nom de l'usuari
+     * @return el nom de l'usuari
      */
     public String getName(){
         return name;
@@ -54,7 +54,7 @@ public class User {
 
     /**
      * Setter del id de l'usuari
-     * @param id
+     * @param id identificador de l'usuari
      */
     public void setID(String id){
         this.id = id;
@@ -62,27 +62,31 @@ public class User {
 
     /**
      * Setter del nom de l'usuari
-     * @param name
+     * @param name nom de l'usuari
      */
     public void setName(String name){
         this.name = name;
     }
 
     /**
-     *
-     * @param pfp
+     * Setter de la foto de perfil de l'usuari
+     * @param pfp foto de perfil de l'usuari
      */
     public void setPFP(Bitmap pfp) {
         this.profilePic = pfp;
     }
 
+    /**
+     * Getter de la foto de perfil de l'usuari
+     * @return la foto de perfil de l'usuari
+     */
     public Bitmap getProfilePic() {
         return profilePic;
     }
 
     /**
      * Getter de la rutina seleccionada
-     * @return
+     * @return la rutina seleccionada
      */
     public Routine getSelectedRoutine(){
         return selectedRoutine;
@@ -90,7 +94,7 @@ public class User {
 
     /**
      * Setter de la rutina seleccionada
-     * @param selectedRoutine
+     * @param selectedRoutine rutina seleccionada
      */
     public void setSelectedRoutine(Routine selectedRoutine){
         this.selectedRoutine = selectedRoutine;
@@ -98,7 +102,7 @@ public class User {
 
     /**
      * Getter de les rutines
-     * @return
+     * @return les rutines de l'usuari
      */
     public ArrayList<String> getRoutines() {
         return routines;

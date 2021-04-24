@@ -1,7 +1,6 @@
 package com.pes.become.backend.adapters;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.util.Log;
 
@@ -23,7 +22,6 @@ import com.pes.become.frontend.RoutinesList;
 import com.pes.become.frontend.Login;
 import com.pes.become.frontend.Signup;
 
-import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
@@ -125,7 +123,7 @@ public class DomainAdapter {
         parameterTypes[1] = String.class;
         parameterTypes[2] = String.class;
         parameterTypes[3] = String.class;
-        Method method1= null;
+        Method method1;
         signup = (Signup) act;
         try {
             method1 = DomainAdapter.class.getMethod("registerCallback", parameterTypes);
@@ -140,7 +138,7 @@ public class DomainAdapter {
         parameterTypes[2] = String.class;
         parameterTypes[3] = String.class;
         parameterTypes[4] = Bitmap.class;
-        Method method1 = null;
+        Method method1;
         logoScreen = (LogoScreen)act;
         try {
             method1 = DomainAdapter.class.getMethod("authUser", parameterTypes);
@@ -161,7 +159,7 @@ public class DomainAdapter {
         parameterTypes[2] = String.class;
         parameterTypes[3] = String.class;
         parameterTypes[4] = Bitmap.class;
-        Method method1 = null;
+        Method method1;
         login = (Login)act;
         try {
             method1 = DomainAdapter.class.getMethod("loginCallback", parameterTypes);
@@ -180,7 +178,7 @@ public class DomainAdapter {
         parameterTypes[2] = String.class;
         parameterTypes[3] = String.class;
         parameterTypes[4] = Bitmap.class;
-        Method method1 = null;
+        Method method1;
         login = (Login)act;
 
         try {
@@ -270,7 +268,7 @@ public class DomainAdapter {
      * Crear una rutina
      * @param name nom de la rutina
      */
-    public String createRoutine(String name) throws NoSuchMethodException {
+    public String createRoutine(String name) {
         String id = controllerPersistence.createRoutine(currentUser.getID(), name);
         currentUser.addRoutine(id);
         return id;
@@ -312,8 +310,6 @@ public class DomainAdapter {
         routineAdapter.setCurrentRoutine(currentUser.getSelectedRoutine());
         controllerPersistence.setSelectedRoutine(currentUser.getID(), currentUser.getSelectedRoutine().getId());
 
-        Class[] parameterTypes = new Class[1];
-        parameterTypes[0] = ArrayList.class;
         Method method1 = DomainAdapter.class.getMethod("loadAllActivities", ArrayList.class);
         for(int d = 0; d < 7; ++d) {
             controllerPersistence.getActivitiesByDay(currentUser.getID(), currentUser.getSelectedRoutine().getId(), Day.values()[d].toString(), method1, DomainAdapter.getInstance());
@@ -353,10 +349,8 @@ public class DomainAdapter {
     /**
      * Rebre la resposta de la DB amb les rutines de l'usuari per la routineView
      * @param routines rutines
-     * @throws InvalidTimeIntervalException l'interval de temps es incorrecte
-     * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
      */
-    public void setUserRoutines(ArrayList<ArrayList<String>> routines) throws InvalidTimeIntervalException, OverlappingActivitiesException {
+    public void setUserRoutines(ArrayList<ArrayList<String>> routines) {
         if (!routines.isEmpty()) {
             for (int i = 0; i < routines.size(); ++i) {
                 currentUser.addRoutine(routines.get(i).get(0));

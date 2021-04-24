@@ -2,38 +2,22 @@ package com.pes.become.backend.persistence;
 
 import android.app.Activity;
 import android.net.Uri;
-import android.util.Log;
-
-import com.google.firebase.firestore.DocumentReference;
 
 import java.lang.reflect.Method;
 
-public class ControllerPersistence{
+public class ControllerPersistence {
 
     ControllerRoutineDB CR;
     ControllerActivityDB CA;
-    CtrlUsuari CU;
+    ControllerUserDB CU;
 
     /**
-     * Crear el controlador d'activitats de la BD
+     * Creadora per defecte de la classe ControllerPersistence
      */
-    private void createCtrlActivity() {
-        if (CA == null) {
-            CA = new ControllerActivityDB();
-        }
+    public ControllerPersistence() {
+        CA = new ControllerActivityDB();
+        CR = new ControllerRoutineDB();
     }
-
-    /**
-     * Crear el controlador de rutines de la BD
-     */
-    private void createCtrlRoutine() {
-        if (CR == null) {
-            CR = new ControllerRoutineDB();
-        }
-    }
-
-    /**FUNCIONS RELACIONADES AMB ACTIVITAT*********************************************************/
-    /***************CONSULTORES***************/
 
     /**
      * Obtenir les activitats d'una rutina i un dia indicats
@@ -44,11 +28,8 @@ public class ControllerPersistence{
      * @param object classe que conté el mètode
      */
     public void getActivitiesByDay(String userId, String idRoutine, String day, Method method, Object object) {
-        createCtrlActivity();
         CA.getActivitiesByDay(userId, idRoutine,day,method,object);
     }
-
-    /***************MODIFICADORES***************/
 
     /**
      * Afegir una nova activitat a una certa rutina de la base de dades
@@ -63,7 +44,6 @@ public class ControllerPersistence{
      * @return el valor del id de l'activitat creada
      */
     public String createActivity(String userId, String idRoutine, String activityName, String actTheme,String actDescription, String actDay, String beginTime, String finishTime) {
-        createCtrlActivity();
         return CA.createActivity(userId, idRoutine, activityName,actTheme,actDescription, actDay, beginTime, finishTime);
     }
 
@@ -74,7 +54,6 @@ public class ControllerPersistence{
      * @param idActivity és l'identificador de l'activitat
      */
     public void deleteActivity(String userId, String idRoutine, String idActivity) {
-        createCtrlActivity();
         CA.deleteActivity(userId, idRoutine, idActivity);
     }
 
@@ -91,12 +70,9 @@ public class ControllerPersistence{
      * @param idActivity és l'identificador de l'activitat
      */
     public void updateActivity(String userId, String idRoutine, String actName, String description, String theme,  String iniT, String endT, String day,String idActivity) {
-        createCtrlActivity();
         CA.updateActivity(userId, idRoutine, actName, description, theme, day, iniT, endT, idActivity);
     }
 
-    /**FUNCIONS RELACIONADES AMB RUTINA************************************************************/
-    /***************CONSULTORES***************/
     /**
      * Funció per obtenir els noms i els ids de totes les rutines d'un usuari
      * @param userId Id de l'usuari
@@ -104,7 +80,6 @@ public class ControllerPersistence{
      * @param object classe que conté el mètode
      */
     public void getUserRoutines(String userId, Method method, Object object) {
-        createCtrlRoutine();
         CR.getUserRoutines(userId, method, object);
     }
 
@@ -116,11 +91,8 @@ public class ControllerPersistence{
      * @param object classe que conté el mètode
      */
     public void getUserRoutine(String userId, String routineId, Method method, Object object) {
-        createCtrlRoutine();
         CR.getUserRoutine(userId, routineId, method, object);
     }
-
-    /***************MODIFICADORES***************/
 
     /**
      * Canvia el nom d'una rutina.
@@ -129,7 +101,6 @@ public class ControllerPersistence{
      * @param newName el nom que se li vol posar a la rutina.
      */
     public void changeRoutineName(String userId, String idRoutine, String newName) {
-        createCtrlRoutine();
         CR.changeName(userId, idRoutine, newName);
     }
 
@@ -139,7 +110,6 @@ public class ControllerPersistence{
      * @param routineName és el nom que es vol que tingui la rutina
      */
     public String createRoutine(String userId, String routineName) {
-        createCtrlRoutine();
         return CR.createRoutine(userId, routineName);
     }
 
@@ -148,26 +118,31 @@ public class ControllerPersistence{
      * @param userId identificador de l'usuari
      * @param idRoutine és l'identificador de la rutina que es vol esborrar
      */
-
     public void deleteRoutine(String userId, String idRoutine) {
-        createCtrlRoutine();
         CR.deleteRoutine(userId, idRoutine);
     }
 
-    /**FUNCIONS RELACIONADES AMB USUARI*********************************************************/
-    /***************CONSULTORES***************/
+    /**
+     * Metode per obtenir la informació de l'usuari
+     * @param userID identificador de l'usuari
+     * @param method metode a cridar quan s'obtingui la resposta
+     * @param object classe que conte el metode
+     */
     public void getInfoUser(String userID, Method method, Object object){
-        CU = CtrlUsuari.getInstance();
+        CU = ControllerUserDB.getInstance();
         CU.getInfoUser(userID, method, object);
     }
 
-
+    /**
+     * Metode per obtenir la rutina seleccionada de l'usuari
+     * @param userID identificador de l'usuari
+     * @param method metode a cridar quan s'obtingui la resposta
+     * @param object classe que conte el metode
+     */
     public void getSelectedRoutine(String userID, Method method, Object object){
-        CU = CtrlUsuari.getInstance();
+        CU = ControllerUserDB.getInstance();
         CU.getSelectedRoutine(userID, method, object);
     }
-
-    /***************MODIFICADORES***************/
 
     /**
      * Canvi de contrasenya de l'usuari actual
@@ -176,7 +151,7 @@ public class ControllerPersistence{
      * @param object instancia de la classe del mètode a executar
      */
     public void changePassword(String newPassword, Method method, Object object) {
-        CU = CtrlUsuari.getInstance();
+        CU = ControllerUserDB.getInstance();
         CU.changePassword(newPassword, method, object);
     }
 
@@ -186,7 +161,7 @@ public class ControllerPersistence{
      * @param imageUri uri de la imatge a penjar
      */
     public void updateProfilePic(String userId, Uri imageUri) {
-        CU = CtrlUsuari.getInstance();
+        CU = ControllerUserDB.getInstance();
         CU.updateProfilePic(userId, imageUri);
     }
 
@@ -196,7 +171,7 @@ public class ControllerPersistence{
      * @param object instancia de la classe del mètode a executar
      */
     public void deleteUser(Method method, Object object) {
-        CU = CtrlUsuari.getInstance();
+        CU = ControllerUserDB.getInstance();
         CU.deleteUser(method, object);
     }
 
@@ -209,7 +184,7 @@ public class ControllerPersistence{
      * @param object classe que conté el mètode
      */
     public void loginUser(String mail, String password, Activity act, Method method, Object object) {
-        CU = CtrlUsuari.getInstance();
+        CU = ControllerUserDB.getInstance();
         CU.loginUser(mail, password, act, method, object);
     }
 
@@ -220,9 +195,10 @@ public class ControllerPersistence{
      * @param object classe que conté el mètode
      */
     public void loginUserGoogle(String idToken, Method method, Object object ){
-        CU = CtrlUsuari.getInstance();
+        CU = ControllerUserDB.getInstance();
         CU.loginUserGoogle(idToken, method, object);
     }
+
     /**
      * Reautenticació de l'usuari
      * @param mail correu
@@ -231,7 +207,7 @@ public class ControllerPersistence{
      * @param object instancia de la classe del mètode a executar
      */
     public void reauthenticate(String mail, String password, Method method, Object object) {
-        CU = CtrlUsuari.getInstance();
+        CU = ControllerUserDB.getInstance();
         CU.reauthenticate(mail, password, method, object);
     }
 
@@ -245,7 +221,7 @@ public class ControllerPersistence{
      * @param object classe que conté el mètode
      */
     public void registerUser(String mail, String password, String name, Activity act, Method method, Object object) {
-        CU = CtrlUsuari.getInstance();
+        CU = ControllerUserDB.getInstance();
         CU.registerUser(mail, password, name, act, method, object);
     }
 
@@ -255,39 +231,25 @@ public class ControllerPersistence{
      * @param routineID identificador de la nova rutina seleccionada
      */
     public void setSelectedRoutine(String userID, String routineID) {
-        Log.d("setSelectedRoutineCP", "setSelectedRoutineCP");
-        Log.d("setSelectedRoutineCP", routineID);
-        CU = CtrlUsuari.getInstance();
+        CU = ControllerUserDB.getInstance();
         CU.setSelectedRoutine(userID, routineID);
     }
 
     /**
-     * Tanca la sessió
+     * Metode per tancar la sessió
      */
     public void signOut() {
-        CU = CtrlUsuari.getInstance();
+        CU = ControllerUserDB.getInstance();
         CU.signOut();
     }
 
+    /**
+     * Metode per carregar un usuari
+     * @param method metode a cridar quan es retornin les dades
+     * @param object classe que conté el mètode
+     */
     public void loadUser(Method method, Object object) {
-        CU = CtrlUsuari.getInstance();
+        CU = ControllerUserDB.getInstance();
         CU.loadUser(method, object);
     }
-
-
-    /*
-    //TUTORIAL
-    public void tutorial(String routineName, String day) throws InterruptedException, NoSuchMethodException {
-
-        Class[] parameterTypes = new Class[1];
-        parameterTypes[0] = ArrayList.class;
-        Method method1 = ControllerPersistence.class.getMethod("dothingsWithActivity", parameterTypes);
-        this.getActivitiesByDay(routineName,day,method1,this);
-    }
-
-    public void dothingsWithActivity(ArrayList<String> message)
-    {
-        for(String a: message) Log.d("DoThingsWithActivity", a);
-    }
-    //FI TUTORIAL*/
 }

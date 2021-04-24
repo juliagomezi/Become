@@ -64,8 +64,8 @@ public class Routine {
     }
 
     /**
-     *
-     * @param name
+     * Setter del nom de la rutina
+     * @param name nom de la rutina
      */
     public void setName(String name){
         this.name = name;
@@ -73,7 +73,7 @@ public class Routine {
 
     /**
      * Métode per buidar les activitats d'una rutina
-     * @param day
+     * @param day dia de les activitats
      */
     public void clearActivities(Day day) {
         Objects.requireNonNull(activities.get(day)).clear();

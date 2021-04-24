@@ -3,14 +3,12 @@ package com.pes.become.frontend;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.pes.become.R;
-import com.pes.become.backend.adapters.DomainAdapter;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -43,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
      * Listener del navigation view
      */
     private final BottomNavigationView.OnNavigationItemSelectedListener navListener = item -> {
-        Fragment selectedFragment = null;
+        Fragment selectedFragment;
         switch (item.getItemId()) {
             case R.id.homeView:
                 selectedFragment = new RoutineView();
