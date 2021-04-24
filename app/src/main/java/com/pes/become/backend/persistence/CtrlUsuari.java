@@ -39,8 +39,10 @@ import com.pes.become.frontend.MainActivity;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -243,11 +245,12 @@ public class CtrlUsuari {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         boolean success;
                         Object[] params = new Object[5];
-                        //Això té 4 elements
+                        //Això té 5 elements
                         // un bool que diu si hi ha hagut exit o no
                         // el ID de l'usuari
                         //el nom de l'usuari
                         //el id de la seva rutina seleccionada
+                        //la foto de perfil de l'usuari
 
 
                         if (task.isSuccessful()) {
@@ -404,11 +407,12 @@ public class CtrlUsuari {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         boolean success;
                         Object[] params = new Object[5];
-                        //Això té 4 elements
+                        //Això té 5 elements
                         // un bool que diu si hi ha hagut exit o no
                         // el ID de l'usuari
                         //el nom de l'usuari
                         //el id de la seva rutina seleccionada
+                        //la foto de perfil de l'usuari
 
 
                         if (task.isSuccessful()) {
@@ -434,20 +438,45 @@ public class CtrlUsuari {
                                     params[2] = documentSnapshot.get("Username").toString();
                                     params[3] = documentSnapshot.get("selectedRoutine");
 
-                                    Uri pfpUri = user.getPhotoUrl();
-                                    File tmp = new File(pfpUri.getPath());
-                                    Bitmap bm = BitmapFactory.decodeFile(tmp.getPath());
-                                    params[4] = bm;
-
-                                    if (params[3] == null) params[3]="";
-                                    else params[3] = params[3].toString();
-
                                     try {
-                                        method.invoke(object, params);
-                                    } catch (IllegalAccessException e1) {
-                                        System.out.println("Acces invàlid");
-                                    } catch (InvocationTargetException e2) {
-                                        System.out.println("login");
+                                        File localFile = File.createTempFile("images", "jpeg");
+                                        StorageReference imageRef = storageRef.child("images/"+userID);
+                                        imageRef.getFile(localFile)
+                                                .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                                                    @Override
+                                                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                                                        params[4] = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+
+                                                        if (params[3] == null) params[3]="";
+                                                        else params[3] = params[3].toString();
+
+                                                        try {
+                                                            method.invoke(object, params);
+                                                        } catch (IllegalAccessException e1) {
+                                                            System.out.println("Acces invàlid");
+                                                        } catch (InvocationTargetException e2) {
+                                                            System.out.println("login");
+                                                        }
+                                                    }
+                                                }).addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception exception) {
+                                                params[4] = null;
+
+                                                if (params[3] == null) params[3]="";
+                                                else params[3] = params[3].toString();
+
+                                                try {
+                                                    method.invoke(object, params);
+                                                } catch (IllegalAccessException e1) {
+                                                    System.out.println("Acces invàlid");
+                                                } catch (InvocationTargetException e2) {
+                                                    System.out.println("login");
+                                                }
+                                            }
+                                        });
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
                                     }
                                 }
                             });
