@@ -1,6 +1,7 @@
 package com.pes.become.backend.persistence;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
@@ -175,13 +176,11 @@ public class CtrlUsuari {
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Log.d("PROFILE PIC","UPLOADED :)");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception exception) {
-                        Log.d("PROFILE PIC","NOT UPLOADED :(");
                     }
                 });
     }
