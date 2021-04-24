@@ -35,8 +35,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 
-import static android.app.DownloadManager.ACTION_DOWNLOAD_COMPLETE;
-
 public class ControllerUserDB {
 
     private static ControllerUserDB instance;
