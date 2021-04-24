@@ -1,9 +1,8 @@
 package com.pes.become.backend.domain;
 
-import android.util.Log;
+import android.graphics.Bitmap;
 
 import java.util.ArrayList;
-import java.util.Set;
 
 /**
  * Classe que defineix els usuaris de l'aplicacio
@@ -17,6 +16,7 @@ public class User {
      * Nom de l'usuari
      */
     private String name;
+    private Bitmap profilePic;
     /**
      * Instancia de la rutina activada per l'usuari
      */
@@ -66,6 +66,18 @@ public class User {
      */
     public void setName(String name){
         this.name = name;
+    }
+
+    /**
+     *
+     * @param pfp
+     */
+    public void setPFP(Bitmap pfp) {
+        this.profilePic = pfp;
+    }
+
+    public Bitmap getProfilePic() {
+        return profilePic;
     }
 
     /**

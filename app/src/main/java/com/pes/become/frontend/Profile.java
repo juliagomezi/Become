@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -141,8 +142,10 @@ public class Profile extends Fragment {
      * Métode per obtenir la imatge de perfil i el nom d'usuari
      */
     private void loadUserInfo() {
-        String name = DA.loadUsername();
-        username.setText(name);
+        ArrayList<Object> userInfo = DA.loadUserInfo();
+        username.setText((String) userInfo.get(0));
+        if(userInfo.get(1) != null)
+            profilePic.setImageBitmap((Bitmap) userInfo.get(1));
     }
 
     /**

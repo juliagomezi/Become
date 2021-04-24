@@ -3,15 +3,16 @@ package com.pes.become.backend.persistence;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-/*import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;*/
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -28,12 +29,15 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.pes.become.frontend.Login;
 import com.pes.become.frontend.MainActivity;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -46,7 +50,7 @@ public class CtrlUsuari {
     private static CtrlUsuari instance;
     private FirebaseAuth mAuth;
     private final FirebaseFirestore db;
-   // private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+   private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
 
     /**
      * Creadora per defecte.
@@ -164,12 +168,12 @@ public class CtrlUsuari {
                     }
                 });
     }
-/*
+
     /**
      * Metode per penjar una foto de perfil des de la galeria de l'usuari
      * @param userId nom de l'usuari que penja la foto
      * @param imageUri uri de la imatge a penjar
-     *//*
+     */
     public void updateProfilePic(String userId, Uri imageUri) {
         StorageReference imageRef = storageRef.child("images/"+userId);
         imageRef.putFile(imageUri)
@@ -183,7 +187,7 @@ public class CtrlUsuari {
                     public void onFailure(@NonNull Exception exception) {
                     }
                 });
-    }*/
+    }
 
     /**
      * Esborrar l'usuari actual i les seves rutines i activitats
@@ -237,7 +241,7 @@ public class CtrlUsuari {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         boolean success;
-                        Object[] params = new Object[4];
+                        Object[] params = new Object[5];
                         //Això té 4 elements
                         // un bool que diu si hi ha hagut exit o no
                         // el ID de l'usuari
@@ -258,6 +262,25 @@ public class CtrlUsuari {
                                     params[1] = userID;
                                     params[2] = documentSnapshot.get("Username").toString();
                                     params[3] = documentSnapshot.get("selectedRoutine");
+
+                                    try {
+                                        File localFile = File.createTempFile("images", "jpg");
+                                        StorageReference imageRef = storageRef.child("images/"+userID);
+                                        imageRef.getFile(localFile)
+                                                .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                                                    @Override
+                                                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                                                        params[4] = BitmapFactory.decodeFile(localFile.getPath());
+                                                    }
+                                                }).addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception exception) {
+                                                params[4] = null;
+                                            }
+                                        });
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
 
                                     if (params[3] == null) params[3]="";
                                     else params[3] = params[3].toString();
@@ -338,7 +361,7 @@ public class CtrlUsuari {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         boolean success;
-                        Object[] params = new Object[4];
+                        Object[] params = new Object[5];
                         //Això té 4 elements
                         // un bool que diu si hi ha hagut exit o no
                         // el ID de l'usuari
@@ -368,6 +391,25 @@ public class CtrlUsuari {
                                     params[1] = userID;
                                     params[2] = documentSnapshot.get("Username").toString();
                                     params[3] = documentSnapshot.get("selectedRoutine");
+
+                                    try {
+                                        File localFile = File.createTempFile("images", "jpeg");
+                                        StorageReference imageRef = storageRef.child("images/"+userID);
+                                        imageRef.getFile(localFile)
+                                                .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                                                    @Override
+                                                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                                                        params[4] = BitmapFactory.decodeFile(localFile.getPath());
+                                                    }
+                                                }).addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception exception) {
+                                                params[4] = null;
+                                            }
+                                        });
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
 
 
                                     if (params[3] == null) params[3]="";

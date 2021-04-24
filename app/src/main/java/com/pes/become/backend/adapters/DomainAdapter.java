@@ -1,5 +1,7 @@
 package com.pes.become.backend.adapters;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.util.Log;
 
@@ -21,6 +23,7 @@ import com.pes.become.frontend.RoutinesList;
 import com.pes.become.frontend.Login;
 import com.pes.become.frontend.Signup;
 
+import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
@@ -187,10 +190,11 @@ public class DomainAdapter {
      * Metode que rep la resposta a la crida "loginUser" de la base de dades
      *
      */
-    public void loginCallback(boolean success, String userId, String username, String selectedRoutineId) throws NoSuchMethodException {
+    public void loginCallback(boolean success, String userId, String username, String selectedRoutineId, Bitmap pfp) throws NoSuchMethodException {
         if (success) {
             currentUser = userAdapter.createUser(username);
             currentUser.setID(userId);
+            currentUser.setPFP(pfp);
             if (!selectedRoutineId.equals("")) selectRoutine(selectedRoutineId);
             login.loginCallback();
         }
@@ -601,10 +605,15 @@ public class DomainAdapter {
      * @param imageUri uri de la imatge a penjar
      */
     public void updateProfilePic(Uri imageUri) {
+        //currentUser.setPFP(new File(imageUri.getPath()));
         controllerPersistence.updateProfilePic(currentUser.getID(), imageUri);
     }
 
-    public String loadUsername() {
-        return currentUser.getName();
+    public ArrayList<Object> loadUserInfo() {
+        ArrayList<Object> res = new ArrayList<>();
+        res.add(currentUser.getName());
+        Bitmap pfp = currentUser.getProfilePic();
+        res.add(pfp);
+        return res;
     }
 }

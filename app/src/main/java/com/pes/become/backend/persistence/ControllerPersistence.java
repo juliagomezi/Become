@@ -187,7 +187,7 @@ public class ControllerPersistence{
      */
     public void updateProfilePic(String userId, Uri imageUri) {
         CU = CtrlUsuari.getInstance();
-        //CU.updateProfilePic(userId, imageUri);
+        CU.updateProfilePic(userId, imageUri);
     }
 
     /**
