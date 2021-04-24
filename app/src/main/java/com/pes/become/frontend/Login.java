@@ -35,14 +35,12 @@ public class Login extends AppCompatActivity {
     private Button login, googleLogin;
     private GoogleSignInClient mGoogleSignInClient;
     private final static int RC_SIGN_IN = 123; //el valor es indiferent
-    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         createRequest();
-        mAuth = FirebaseAuth.getInstance();
 
         userText = findViewById(R.id.userText);
         passwordText = findViewById(R.id.passText);
@@ -110,17 +108,6 @@ public class Login extends AppCompatActivity {
             }
         }
     }
-
-    /*
-    @Override
-    protected void onStart() {
-        super.onStart();
-        FirebaseUser user = mAuth.getCurrentUser();
-        if(user !=null) {
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(intent);
-        }
-    }*/
 
     /**
      * Funcio de callback per loguejar l'usuari sense exit

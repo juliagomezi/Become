@@ -291,6 +291,39 @@ public class CtrlUsuari {
                     }
                 });
     }
+
+
+    /**
+     * Funcio per carregar un usuari que ja te la sessio inciada
+     */
+    public void loadUser(Method method, Object object) {
+        FirebaseUser user = mAuth.getCurrentUser();
+        String userID = user.getUid();
+        Object[] params = new Object[4];
+
+        DocumentReference docRefToUser = db.collection("users").document(userID);
+        docRefToUser.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                params[0] = true;
+                params[1] = userID;
+                params[2] = documentSnapshot.get("Username").toString();
+                params[3] = documentSnapshot.get("selectedRoutine");
+
+                if (params[3] == null) params[3]="";
+                else params[3] = params[3].toString();
+
+                try {
+                    method.invoke(object, params);
+                } catch (IllegalAccessException e1) {
+                    System.out.println("Acces invàlid");
+                } catch (InvocationTargetException e2) {
+                    System.out.println("login");
+                }
+            }
+        });
+    }
+
     /**
      * Inici de sessió d'usuari amb google
      * @param idToken token d'inici de sessió de Google
@@ -523,6 +556,8 @@ public class CtrlUsuari {
                     }
                 });
     }
+
+
         /*
     //TUTORIAL
     public void tutorial(String routineName, String day)  {

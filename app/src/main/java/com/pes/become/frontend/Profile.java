@@ -28,6 +28,7 @@ import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapter;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -43,7 +44,7 @@ public class Profile extends Fragment {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private CircleImageView profilePic;
-    private ImageButton settingsButton;
+    private ImageButton settingsButton, logoutButton;
     private TextView username;
 
     private Uri imageUri;
@@ -85,6 +86,13 @@ public class Profile extends Fragment {
             } else {
                 ActivityCompat.requestPermissions((Activity) global,new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, 10);
             }
+        });
+
+        logoutButton = view.findViewById(R.id.logoutButton);
+        logoutButton.setOnClickListener(v -> {
+            DA.logoutUser();
+            startActivity(new Intent(global, Login.class));
+            Objects.requireNonNull(getActivity()).finish();
         });
 
         tabLayout = view.findViewById(R.id.tabLayout);

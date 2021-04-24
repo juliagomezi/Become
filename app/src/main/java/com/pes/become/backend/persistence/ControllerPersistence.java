@@ -269,6 +269,11 @@ public class ControllerPersistence{
         CU.signOut();
     }
 
+    public void loadUser(Method method, Object object) {
+        CU = CtrlUsuari.getInstance();
+        CU.loadUser(method, object);
+    }
+
 
     /*
     //TUTORIAL

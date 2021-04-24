@@ -60,5 +60,6 @@
     <string name="overlapping">Error: Another activity belongs to that time interval</string>
     <string name="new_routine">New routine</string>
     <string name="noRoutineSelected">You don\'t have any routine selected!</string>
+    <string name="adopt_new_habits">Adopt new habits!</string>
 
 </resources>

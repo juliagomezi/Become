@@ -20,7 +20,8 @@
             android:layout_height="57dp"
             android:layout_marginTop="100dp"
             android:layout_marginBottom="50dp"
-            tools:srcCompat="@drawable/logo_title" />
+            app:srcCompat="@drawable/logo_title"
+            tools:ignore="VectorDrawableCompat" />
 
         <EditText
             android:id="@+id/userText"

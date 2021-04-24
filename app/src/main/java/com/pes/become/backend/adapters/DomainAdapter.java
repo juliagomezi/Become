@@ -14,6 +14,7 @@ import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
 import com.pes.become.backend.exceptions.NoSelectedRoutineException;
 import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 import com.pes.become.backend.persistence.ControllerPersistence;
+import com.pes.become.frontend.LogoScreen;
 import com.pes.become.frontend.RoutineEdit;
 import com.pes.become.frontend.RoutineView;
 import com.pes.become.frontend.RoutinesList;
@@ -60,6 +61,11 @@ public class DomainAdapter {
      * Instancia de la classe login del frontend
      */
     private Login login;
+
+    /**
+     * Instancia de la classe login del frontend
+     */
+    private LogoScreen logoScreen;
 
     /**
      * Instancia de la classe signup del frontend
@@ -124,7 +130,19 @@ public class DomainAdapter {
         } catch (NoSuchMethodException ignore) {}
     }
 
-
+    public void loadUser (android.app.Activity act) {
+        Class[] parameterTypes = new Class[4];
+        parameterTypes[0] = boolean.class;
+        parameterTypes[1] = String.class;
+        parameterTypes[2] = String.class;
+        parameterTypes[3] = String.class;
+        Method method1 = null;
+        logoScreen = (LogoScreen)act;
+        try {
+            method1 = DomainAdapter.class.getMethod("authUser", parameterTypes);
+            controllerPersistence.loadUser(method1, DomainAdapter.getInstance());
+        }catch(NoSuchMethodException ignore){}
+    }
 
     /**
      * Metode per iniciar la sessio d'un usuari existent
@@ -181,9 +199,21 @@ public class DomainAdapter {
         }
     }
 
+    public void authUser(boolean success, String userId, String username, String selectedRoutineId) throws NoSuchMethodException {
+        if (success) {
+            currentUser = userAdapter.createUser(username);
+            currentUser.setID(userId);
+            if (!selectedRoutineId.equals("")) selectRoutine(selectedRoutineId);
+            logoScreen.loginCallback();
+        }
+        else {
+            logoScreen.loginCallbackFailed();
+        }
+    }
+
     public void registerCallback(boolean success, String userId, String username, String selectedRoutineId) throws NoSuchMethodException {
         if (success) {
-            currentUser = userAdapter.createUser("", username);
+            currentUser = userAdapter.createUser(username);
             currentUser.setID(userId);
             if (!selectedRoutineId.equals("")) selectRoutine(selectedRoutineId);
             signup.registerCallback();
