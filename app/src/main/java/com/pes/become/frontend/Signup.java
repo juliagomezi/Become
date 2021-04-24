@@ -44,17 +44,19 @@ public class Signup extends AppCompatActivity {
             passwordText.setError(getString(R.string.passwords));
             passwordConfirm.setError(getString(R.string.passwords));
         }
-        else {
-             /*try {
-                DA.registerUser(email, password, user);
-                startActivity(new Intent(Signup.this, MainActivity.class));
-                finish();
-            } catch (UserExists e) {
-                    emailText.setError(getString(R.string.emailExists));
-            }*/
-        }
+        DA.registerUser(email, password, user, this);
     }
 
+    /**
+     * Funcio per registrar un usuari i retorna error
+     */
+    public void registerCallbackFailed(){
+        emailText.setError(getString(R.string.emailExists));
+    }
+
+    /**
+     * Funcio a executar despres de crear un usuari amb exit
+     */
     public void registerCallback(){
         startActivity(new Intent(this, MainActivity.class));
         finish();

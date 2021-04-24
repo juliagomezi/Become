@@ -423,17 +423,15 @@ public class CtrlUsuari {
                 .addOnCompleteListener(act, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        boolean success;
-                        Object[] params = new Object[3];
+                        Object[] params = new Object[4];
                         //Això té tres elements:
                         // 1-un bool que diu si ha tingut exit o no
                         // 2-el ID de l'usuari
                         // 3-nom de l'usuari
+                        // 4- una rutina seleccionada null
                         if (task.isSuccessful()) {
 
-                            Log.d("TAG", "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-
                             String userID = user.getUid();
 
                             DocumentReference docRefToUser =  db.collection("users").document(userID);
@@ -444,12 +442,12 @@ public class CtrlUsuari {
                             params[0] = true;
                             params[1] = userID;
                             params[2] = name;
+                            params[3] = "";
                         }
                         else {
                             // If sign in fails, display a message to the user.
-                            //Log.w("FirebaseUser", "createUserWithEmail:failure", task.getException());
                             params[0] = false;
-                            params[1] = params[2] = "";
+                            params[1] = params[2] = params[3]= "";
                         }
                         try {
                             method.invoke(object, params);

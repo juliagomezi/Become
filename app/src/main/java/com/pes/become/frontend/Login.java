@@ -122,12 +122,15 @@ public class Login extends AppCompatActivity {
         }
     }*/
 
+    /**
+     * Funcio de callback per loguejar l'usuari sense exit
+     */
     public void loginCallbackFailed(){
         Toast.makeText(Login.this, "Login failed", Toast.LENGTH_SHORT).show();
     }
 
     /**
-     * Funció de callback per loguejar l'usuari
+     * Funcio de callback per loguejar l'usuari amb exit
      */
     public void loginCallback() {
         startActivity(new Intent(this, MainActivity.class));

@@ -110,10 +110,21 @@ public class DomainAdapter {
      * @param password contrassenya de l'usuari
      * @param name nom de l'usuari
      */
-    public void registerUser(String mail, String password, String name) {
-        //controllerPersistence.registerUser(mail,password,name);
-        //currentUser = UserAdapter.createUser(mail, name);
+    public void registerUser(String mail, String password, String name, android.app.Activity act ) {
+        Class[] parameterTypes = new Class[4];
+        parameterTypes[0] = boolean.class;
+        parameterTypes[1] = String.class;
+        parameterTypes[2] = String.class;
+        parameterTypes[3] = String.class;
+        Method method1= null;
+        signup = (Signup) act;
+        try {
+            method1 = DomainAdapter.class.getMethod("registerCallback", parameterTypes);
+            controllerPersistence.registerUser(mail, password, name, act, method1, DomainAdapter.getInstance());
+        } catch (NoSuchMethodException ignore) {}
     }
+
+
 
     /**
      * Metode per iniciar la sessio d'un usuari existent
@@ -168,8 +179,18 @@ public class DomainAdapter {
         else {
             login.loginCallbackFailed();
         }
+    }
 
-
+    public void registerCallback(boolean success, String userId, String username, String selectedRoutineId) throws NoSuchMethodException {
+        if (success) {
+            currentUser = userAdapter.createUser("", username);
+            currentUser.setID(userId);
+            if (!selectedRoutineId.equals("")) selectRoutine(selectedRoutineId);
+            signup.registerCallback();
+        }
+        else {
+            signup.registerCallbackFailed();
+        }
     }
 
     /**
