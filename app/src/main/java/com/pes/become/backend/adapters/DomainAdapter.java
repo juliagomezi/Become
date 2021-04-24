@@ -134,11 +134,12 @@ public class DomainAdapter {
     }
 
     public void loadUser (android.app.Activity act) {
-        Class[] parameterTypes = new Class[4];
+        Class[] parameterTypes = new Class[5];
         parameterTypes[0] = boolean.class;
         parameterTypes[1] = String.class;
         parameterTypes[2] = String.class;
         parameterTypes[3] = String.class;
+        parameterTypes[4] = Bitmap.class;
         Method method1 = null;
         logoScreen = (LogoScreen)act;
         try {
@@ -205,10 +206,11 @@ public class DomainAdapter {
         }
     }
 
-    public void authUser(boolean success, String userId, String username, String selectedRoutineId) throws NoSuchMethodException {
+    public void authUser(boolean success, String userId, String username, String selectedRoutineId, Bitmap pfp) throws NoSuchMethodException {
         if (success) {
             currentUser = userAdapter.createUser(username);
             currentUser.setID(userId);
+            currentUser.setPFP(pfp);
             if (!selectedRoutineId.equals("")) selectRoutine(selectedRoutineId);
             logoScreen.loginCallback();
         }

@@ -3,6 +3,7 @@ package com.pes.become.backend.persistence;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.util.Log;
@@ -264,33 +265,44 @@ public class CtrlUsuari {
                                     params[3] = documentSnapshot.get("selectedRoutine");
 
                                     try {
-                                        File localFile = File.createTempFile("images", "jpg");
+                                        File localFile = File.createTempFile("images", "jpeg");
                                         StorageReference imageRef = storageRef.child("images/"+userID);
                                         imageRef.getFile(localFile)
                                                 .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                                                     @Override
                                                     public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                                                        params[4] = BitmapFactory.decodeFile(localFile.getPath());
+                                                        params[4] = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+
+                                                        if (params[3] == null) params[3]="";
+                                                        else params[3] = params[3].toString();
+
+                                                        try {
+                                                            method.invoke(object, params);
+                                                        } catch (IllegalAccessException e1) {
+                                                            System.out.println("Acces invàlid");
+                                                        } catch (InvocationTargetException e2) {
+                                                            System.out.println("login");
+                                                        }
                                                     }
                                                 }).addOnFailureListener(new OnFailureListener() {
                                             @Override
                                             public void onFailure(@NonNull Exception exception) {
                                                 params[4] = null;
+
+                                                if (params[3] == null) params[3]="";
+                                                else params[3] = params[3].toString();
+
+                                                try {
+                                                    method.invoke(object, params);
+                                                } catch (IllegalAccessException e1) {
+                                                    System.out.println("Acces invàlid");
+                                                } catch (InvocationTargetException e2) {
+                                                    System.out.println("login");
+                                                }
                                             }
                                         });
                                     } catch (IOException e) {
                                         e.printStackTrace();
-                                    }
-
-                                    if (params[3] == null) params[3]="";
-                                    else params[3] = params[3].toString();
-
-                                    try {
-                                        method.invoke(object, params);
-                                    } catch (IllegalAccessException e1) {
-                                        System.out.println("Acces invàlid");
-                                    } catch (InvocationTargetException e2) {
-                                        System.out.println("login");
                                     }
                                 }
                             });
@@ -322,7 +334,7 @@ public class CtrlUsuari {
     public void loadUser(Method method, Object object) {
         FirebaseUser user = mAuth.getCurrentUser();
         String userID = user.getUid();
-        Object[] params = new Object[4];
+        Object[] params = new Object[5];
 
         DocumentReference docRefToUser = db.collection("users").document(userID);
         docRefToUser.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -333,15 +345,45 @@ public class CtrlUsuari {
                 params[2] = documentSnapshot.get("Username").toString();
                 params[3] = documentSnapshot.get("selectedRoutine");
 
-                if (params[3] == null) params[3]="";
-                else params[3] = params[3].toString();
-
                 try {
-                    method.invoke(object, params);
-                } catch (IllegalAccessException e1) {
-                    System.out.println("Acces invàlid");
-                } catch (InvocationTargetException e2) {
-                    System.out.println("login");
+                    File localFile = File.createTempFile("images", "jpeg");
+                    StorageReference imageRef = storageRef.child("images/"+userID);
+                    imageRef.getFile(localFile)
+                            .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                                    params[4] = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+
+                                    if (params[3] == null) params[3]="";
+                                    else params[3] = params[3].toString();
+
+                                    try {
+                                        method.invoke(object, params);
+                                    } catch (IllegalAccessException e1) {
+                                        System.out.println("Acces invàlid");
+                                    } catch (InvocationTargetException e2) {
+                                        System.out.println("login");
+                                    }
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            params[4] = null;
+
+                            if (params[3] == null) params[3]="";
+                            else params[3] = params[3].toString();
+
+                            try {
+                                method.invoke(object, params);
+                            } catch (IllegalAccessException e1) {
+                                System.out.println("Acces invàlid");
+                            } catch (InvocationTargetException e2) {
+                                System.out.println("login");
+                            }
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -392,25 +434,10 @@ public class CtrlUsuari {
                                     params[2] = documentSnapshot.get("Username").toString();
                                     params[3] = documentSnapshot.get("selectedRoutine");
 
-                                    try {
-                                        File localFile = File.createTempFile("images", "jpeg");
-                                        StorageReference imageRef = storageRef.child("images/"+userID);
-                                        imageRef.getFile(localFile)
-                                                .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                                                    @Override
-                                                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                                                        params[4] = BitmapFactory.decodeFile(localFile.getPath());
-                                                    }
-                                                }).addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception exception) {
-                                                params[4] = null;
-                                            }
-                                        });
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-
+                                    Uri pfpUri = user.getPhotoUrl();
+                                    File tmp = new File(pfpUri.getPath());
+                                    Bitmap bm = BitmapFactory.decodeFile(tmp.getPath());
+                                    params[4] = bm;
 
                                     if (params[3] == null) params[3]="";
                                     else params[3] = params[3].toString();
