@@ -14,10 +14,6 @@ public class User {
      */
     private String id;
     /**
-     * Correu de l'usuari
-     */
-    private String mail;
-    /**
      * Nom de l'usuari
      */
     private String name;
@@ -31,28 +27,13 @@ public class User {
     private ArrayList<String> routines;
 
     /**
-     * Creadora de la classe per a un nou usuari (sense rutines)
-     * @param mail
+     * Creadora de la classe per a un nou usuari
      * @param name
      */
-    public User(String mail, String name){
-        this.mail = mail;
+    public User(String name){
         this.name = name;
         this.selectedRoutine = null;
         this.routines = new ArrayList<>();
-    }
-
-    /**
-     * Creadora de la classe per a un usuari preexistent (amb rutines)
-     * @param mail
-     * @param name
-     * @param routines
-     */
-    public User(String mail, String name, ArrayList<String> routines) {
-        this.mail = mail;
-        this.name = name;
-        this.selectedRoutine = null;
-        this.routines.addAll(routines);
     }
 
     /**
@@ -61,14 +42,6 @@ public class User {
      */
     public String getID() {
         return id;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public String getMail() {
-        return mail;
     }
 
     /**

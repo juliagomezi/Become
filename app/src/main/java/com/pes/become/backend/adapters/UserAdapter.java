@@ -23,8 +23,8 @@ public class UserAdapter {
         return instance;
     }
 
-    public User createUser(String mail, String name){
-        return new User(mail, name);
+    public User createUser(String name){
+        return new User(name);
     }
 
     /**
