@@ -2,10 +2,16 @@ package com.pes.become.backend.persistence;
 
 import android.app.Activity;
 import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -22,6 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.pes.become.backend.adapters.DomainAdapter;
 import com.pes.become.frontend.MainActivity;
 
 import java.io.File;
@@ -29,6 +36,8 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+
+import static android.app.DownloadManager.ACTION_DOWNLOAD_COMPLETE;
 
 public class ControllerUserDB {
 
@@ -337,12 +346,40 @@ public class ControllerUserDB {
                             params[2] = documentSnapshot.get("Username").toString();
                             params[3] = documentSnapshot.get("selectedRoutine");
 
-                            //Codi que descarrega la foto de perfil de l'usuari de Google
+                            //Codi que descarrega la foto de perfil de l'usuari de Google i la fica de perfil
+
+                            //Descarreguem la imatge
                             DownloadManager.Request request = new DownloadManager.Request(user.getPhotoUrl());
                             request.setTitle(userID);
                             request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, userID+".jpg");
                             DownloadManager manager = (DownloadManager) MainActivity.getInstance().getSystemService(Context.DOWNLOAD_SERVICE);
                             manager.enqueue(request);
+
+                            //Quan acabem de descarregar:
+                            BroadcastReceiver onComplete = new BroadcastReceiver() {
+                                @Override
+                                public void onReceive(Context context, Intent intent) {
+                                    String action = intent.getAction();
+                                    if(DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)){
+                                        //Anem a la carpeta descarregues (potser no funciona en un idioma que no sigui angles)
+                                        String path = Environment.getExternalStorageDirectory().toString()+"/Download";
+                                        File directory = new File(path);
+                                        File[] files = directory.listFiles();
+                                        for (int i = 0; i < files.length; i++)
+                                        {
+                                            if(files[i].getName().equals(userID+".jpg")){ //quan trobem l'arxiu amb la id de l'usuari com a nom
+                                                Bitmap bm = BitmapFactory.decodeFile(files[i].getAbsolutePath()); //el convertim a bitmap
+                                                DomainAdapter.getInstance().updateProfilePic(bm); //el passem a domini
+                                                files[i].delete(); //i l'eliminem
+                                            }
+                                        }
+                                    }
+                                }
+                            };
+                            //Crec que aixo s'ha de fer pero ni idea
+                            MainActivity.getInstance().registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+
+                            //Fi del codi que carrega la imatge de Google
 
                             try {
                                 File localFile = File.createTempFile("images", "jpeg");
