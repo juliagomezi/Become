@@ -2,7 +2,6 @@ package com.pes.become.frontend;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -175,9 +174,6 @@ public class RoutineView extends Fragment implements AdapterView.OnItemSelectedL
 
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-
-            int position = viewHolder.getAdapterPosition();
-
             switch (direction) {
                 case ItemTouchHelper.LEFT: // <-
 
@@ -212,7 +208,7 @@ public class RoutineView extends Fragment implements AdapterView.OnItemSelectedL
             initRecyclerView();
         }
         else {
-            initEmptyView("You don't have any activity programmed today!");
+            initEmptyView(getString(R.string.noActivities));
         }
     }
 

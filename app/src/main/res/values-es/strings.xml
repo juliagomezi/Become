@@ -58,4 +58,7 @@
     <string name="routineCreated">Rutina creada</string>
     <string name="new_routine">Nueva rutina</string>
     <string name="noRoutineSelected">No tienes ninguna rutina seleccionada</string>
+    <string name="adopt_new_habits">Adopta nuevos hábitos y marca la diferencia!</string>
+    <string name="noActivities">No tienes ninguna actividad programada para hoy.</string>
+    <string name="noRoutines">No tienes ninguna rutina, crea una nueva!</string>
 </resources>

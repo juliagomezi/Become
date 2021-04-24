@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +18,6 @@ import android.widget.Toast;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapter;
-import com.pes.become.backend.persistence.ControllerRoutineDB;
 
 import java.util.ArrayList;
 
@@ -40,7 +38,6 @@ public class RoutinesList extends Fragment {
     TextView emptyView;
 
     private BottomSheetDialog routineSheet;
-    private String id;
     private EditText routineName;
 
     /**

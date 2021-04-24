@@ -1,9 +1,6 @@
 package com.pes.become.backend.adapters;
 
-import com.pes.become.backend.domain.Routine;
 import com.pes.become.backend.domain.User;
-
-import java.util.ArrayList;
 
 public class UserAdapter {
 
@@ -26,14 +23,5 @@ public class UserAdapter {
     public User createUser(String name){
         return new User(name);
     }
-
-    /**
-     * Metode per encriptar contrassenyes
-     * @param pswd
-     * @return
-     */
-    /*private String encryptPassword(String pswd) {
-
-    }*/
 
 }

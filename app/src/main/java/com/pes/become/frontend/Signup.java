@@ -14,7 +14,6 @@ public class Signup extends AppCompatActivity {
 
     private final DomainAdapter DA = DomainAdapter.getInstance();
     private EditText emailText, userText, passwordText, passwordConfirm;
-    private Button signUp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,11 +24,9 @@ public class Signup extends AppCompatActivity {
         userText = findViewById(R.id.usernameText);
         passwordText = findViewById(R.id.passwordText);
         passwordConfirm = findViewById(R.id.passwordconfirmText);
-        signUp = findViewById(R.id.signupButton);
+        Button signUp = findViewById(R.id.signupButton);
 
-        signUp.setOnClickListener(v -> {
-            signUpUser();
-        });
+        signUp.setOnClickListener(v -> signUpUser());
     }
 
     private void signUpUser() {

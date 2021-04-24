@@ -11,14 +11,11 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.pes.become.R;
-import com.pes.become.backend.adapters.DomainAdapter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class RoutineViewRecyclerAdapter extends RecyclerView.Adapter<RoutineViewRecyclerAdapter.ViewHolder> {
-
-    private final DomainAdapter DA = DomainAdapter.getInstance();
 
     private final ArrayList<ArrayList<String>> activitiesList;
     private final Boolean[] isExpanded;

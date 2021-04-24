@@ -28,8 +28,6 @@ public class ControllerActivityDB {
         db = FirebaseFirestore.getInstance();
     }
 
-    /***************CONSULTORES***************/
-
     /**
      * Obtenir les activitats d'una rutina i un dia indicats
      * @param userId identificador de l'usuari
@@ -68,8 +66,6 @@ public class ControllerActivityDB {
             }
         });
     }
-
-    /***************MODIFICADORES***************/
 
     /**
      * Crear una activitat en una rutina existent
@@ -110,7 +106,6 @@ public class ControllerActivityDB {
     public void deleteActivity(String userId, String idRoutine, String idActivity) {
         DocumentReference docRefToActivity;
         docRefToActivity = db.collection("users").document(userId).collection("routines").document(idRoutine).collection("activities").document(idActivity);
-
         docRefToActivity.delete();
     }
 
@@ -128,7 +123,6 @@ public class ControllerActivityDB {
      */
     public void updateActivity(String userId, String idRoutine, String actName, String description, String theme, String day, String iniT, String endT,  String idActivity) {
         DocumentReference docRefToActivity = db.collection("users").document(userId).collection("routines").document(idRoutine).collection("activities").document(idActivity);
-
         docRefToActivity.update("name", actName);
         docRefToActivity.update("description", description);
         docRefToActivity.update("theme", theme);
