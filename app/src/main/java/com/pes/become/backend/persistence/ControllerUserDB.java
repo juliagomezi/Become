@@ -357,9 +357,8 @@ public class ControllerUserDB {
                                 public void onReceive(Context context, Intent intent) {
                                     String action = intent.getAction();
                                     if(DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)){
-                                        //Anem a la carpeta descarregues (potser no funciona en un idioma que no sigui angles)
-                                        String path = Environment.getExternalStorageDirectory().toString()+"/Download";
-                                        File directory = new File(path);
+                                        //Anem a la carpeta descarregues
+                                        File directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
                                         File[] files = directory.listFiles();
                                         for (int i = 0; i < files.length; i++)
                                         {
