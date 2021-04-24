@@ -57,4 +57,5 @@
     <string name="overlapping">Error: Another activity belongs to that time interval</string>
     <string name="routineCreated">Routine created</string>
     <string name="new_routine">New routine</string>
+    <string name="noRoutineSelected">You don\'t have any routine selected</string>
 </resources>

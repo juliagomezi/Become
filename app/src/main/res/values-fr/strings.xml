@@ -57,4 +57,5 @@
     <string name="activityCreated">Activité créée avec succès</string>
     <string name="new_routine">Nouvelle rutine</string>
     <string name="routineCreated">Routine créée</string>
+    <string name="noRoutineSelected">Vous n\'avez pas de routine sélectionnée</string>
 </resources>

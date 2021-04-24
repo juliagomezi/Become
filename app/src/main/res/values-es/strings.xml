@@ -57,4 +57,5 @@
     <string name="overlapping">Error: Otra actividad ya està programada en este horario</string>
     <string name="routineCreated">Rutina creada</string>
     <string name="new_routine">Nueva rutina</string>
+    <string name="noRoutineSelected">No tienes ninguna rutina seleccionada</string>
 </resources>
