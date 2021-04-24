@@ -88,9 +88,4 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_layout, new Profile()).commit();
     }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
 }

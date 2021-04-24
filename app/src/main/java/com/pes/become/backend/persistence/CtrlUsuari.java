@@ -170,8 +170,7 @@ public class CtrlUsuari {
      * @param imageUri uri de la imatge a penjar
      */
     public void updateProfilePic(String userId, Uri imageUri) {
-        StorageReference imageRef = storageRef.child(userId);
-
+        StorageReference imageRef = storageRef.child("images/"+userId);
         imageRef.putFile(imageUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override

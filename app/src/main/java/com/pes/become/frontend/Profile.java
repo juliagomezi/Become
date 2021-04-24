@@ -1,6 +1,5 @@
 package com.pes.become.frontend;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,13 +14,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 
 import com.google.android.material.tabs.TabLayout;
 import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapter;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;

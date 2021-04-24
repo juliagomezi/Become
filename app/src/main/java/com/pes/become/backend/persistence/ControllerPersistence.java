@@ -186,6 +186,7 @@ public class ControllerPersistence{
      * @param imageUri uri de la imatge a penjar
      */
     public void updateProfilePic(String userId, Uri imageUri) {
+        CU = CtrlUsuari.getInstance();
         CU.updateProfilePic(userId, imageUri);
     }
 
