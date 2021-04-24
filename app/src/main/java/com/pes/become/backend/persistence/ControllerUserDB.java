@@ -1,8 +1,11 @@
 package com.pes.become.backend.persistence;
 
 import android.app.Activity;
+import android.app.DownloadManager;
+import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Environment;
 
 import androidx.annotation.NonNull;
 
@@ -19,6 +22,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.pes.become.frontend.MainActivity;
 
 import java.io.File;
 import java.io.IOException;
@@ -332,6 +336,13 @@ public class ControllerUserDB {
                             params[1] = userID;
                             params[2] = documentSnapshot.get("Username").toString();
                             params[3] = documentSnapshot.get("selectedRoutine");
+
+                            //Codi que descarrega la foto de perfil de l'usuari de Google
+                            DownloadManager.Request request = new DownloadManager.Request(user.getPhotoUrl());
+                            request.setTitle(userID);
+                            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, userID+".jpg");
+                            DownloadManager manager = (DownloadManager) MainActivity.getInstance().getSystemService(Context.DOWNLOAD_SERVICE);
+                            manager.enqueue(request);
 
                             try {
                                 File localFile = File.createTempFile("images", "jpeg");
