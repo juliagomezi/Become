@@ -609,8 +609,11 @@ public class DomainAdapter {
      * @param imageUri uri de la imatge a penjar
      */
     public void updateProfilePic(Uri imageUri) {
-        //currentUser.setPFP(new File(imageUri.getPath()));
         controllerPersistence.updateProfilePic(currentUser.getID(), imageUri);
+    }
+
+    public void updateProfilePic(Bitmap imageBm){
+        currentUser.setPFP(imageBm);
     }
 
     public ArrayList<Object> loadUserInfo() {

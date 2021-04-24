@@ -17,6 +17,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
+
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +30,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapter;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -171,6 +174,11 @@ public class Profile extends Fragment {
             imageUri = data.getData();
             profilePic.setImageURI(imageUri);
             DA.updateProfilePic(imageUri);
+            try {
+                DA.updateProfilePic(MediaStore.Images.Media.getBitmap(MainActivity.getInstance().getContentResolver(), imageUri));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
