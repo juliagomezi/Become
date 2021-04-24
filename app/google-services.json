@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "364384690021",
+    "firebase_url": "https://become-767d4-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "become-767d4",
     "storage_bucket": "become-767d4.appspot.com"
   },
@@ -13,6 +14,54 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "364384690021-24vlo1k8bkbil81089p46amn27b2mddj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pes.become",
+            "certificate_hash": "57c274fa6b8eb7d62f7fe641004b1d972fedf03b"
+          }
+        },
+        {
+          "client_id": "364384690021-2g28gsp4stgcbsdhd7t51u159q7ljdos.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pes.become",
+            "certificate_hash": "fc6d6cae438f726dd173c36fc4fac26d2080c728"
+          }
+        },
+        {
+          "client_id": "364384690021-9lh9s3mbvkdbln1qo26g4ajhin39b5s6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pes.become",
+            "certificate_hash": "a37c931d7401e2edeee09547eb830dded3fb8818"
+          }
+        },
+        {
+          "client_id": "364384690021-ig0aphg2taa7lgr35igjj5j3tueeq87q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pes.become",
+            "certificate_hash": "25936697b839c2f1c4a0df767ca3af62732553f5"
+          }
+        },
+        {
+          "client_id": "364384690021-nikv3lkar55vn1acrd8krdcb10ljsjl9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pes.become",
+            "certificate_hash": "a1b01504e406eabd7b5d50a8740df7d39c9b32f6"
+          }
+        },
+        {
+          "client_id": "364384690021-tvttln8k3b54btg0b7m86j7qnc4p5dic.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pes.become",
+            "certificate_hash": "389db4473031ebda67d68a42a1696438006a9c86"
+          }
+        },
         {
           "client_id": "364384690021-vk16s0fu055l2v97te0fdu1l9aiic36r.apps.googleusercontent.com",
           "client_type": 1,

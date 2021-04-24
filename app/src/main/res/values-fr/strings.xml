@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Become</string>
     <string name="activity_nameLabel">Nom</string>
     <string name="new_activityLabel">Nouvelle activité</string>
     <string name="descriptionLabel">Description (optionnel)</string>
@@ -18,10 +17,10 @@
         <item >Musique</item>
         <item >Sport</item>
         <item >Dormir</item>
-        <item >Étudier</item>
         <item >Cuisine</item>
-        <item >Travail</item>
+        <item >Travail et étude</item>
         <item >Divertissement</item>
+        <item>Plantes et jardinage</item>
         <item >Autre</item>
     </string-array>
 
@@ -36,4 +35,30 @@
     </string-array>
     <string name="theme">Sujet:</string>
     <string name="modifytext">Modifier l\'activité</string>
+    <string name="email">Courrier</string>
+    <string name="signup">S\'inscrire!</string>
+    <string name="password">Le mot de passe</string>
+    <string name="not_registered_yet">Pas encore inscrit?</string>
+    <string name="log_in">Commencer</string>
+    <string name="community">Communauté</string>
+    <string name="home">Début</string>
+    <string name="profile">Profil</string>
+    <string name="username">Nom d\'utilisateur</string>
+    <string name="confirm_password">Confirmer mot de passe</string>
+    <string name="sign_up">S\'inscrire</string>
+    <string name="notNull">Ce champ ne peut être vide</string>
+    <string name="emailExists">Cet e-mail est déjà enregistré</string>
+    <string name="userNotMatch">Utilisateur et mot de passe ne correspondent pas</string>
+    <string name="passwords">Les mots de passe ne correspondent pas</string>
+    <string name="activityModified">Activité modifiée avec succès</string>
+    <string name="errorTime">"Erreur: l'heure de début doit être antérieure à la fin "</string>
+    <string name="errorDay">Erreur: le jour de début doit être avant la fin</string>
+    <string name="overlapping">Erreur: une autre activité est déjà planifiée à ce moment</string>
+    <string name="activityCreated">Activité créée avec succès</string>
+    <string name="new_routine">Nouvelle rutine</string>
+    <string name="routineCreated">Routine créée</string>
+    <string name="noRoutineSelected">Vous n\'avez pas de routine sélectionnée</string>
+    <string name="adopt_new_habits">Adopter de nouvelles habitudes et faire un changement!</string>
+    <string name="noActivities">Vous n\'avez aucune activité programmée pour aujourd\'hui.</string>
+    <string name="noRoutines">Tu n\'as aucune routine, créez-en un nouveau!</string>
 </resources>

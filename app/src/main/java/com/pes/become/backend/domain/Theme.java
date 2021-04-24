@@ -7,9 +7,9 @@ public enum Theme {
     Music,
     Sport,
     Sleeping,
-    Studying,
     Cooking,
     Working,
     Entertainment,
+    Plants,
     Other
 }

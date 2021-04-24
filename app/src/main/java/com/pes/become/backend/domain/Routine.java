@@ -5,6 +5,7 @@ import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -12,6 +13,10 @@ import java.util.TreeMap;
  * Classe que defineix una rutina
  */
 public class Routine {
+    /**
+     * Identificador de la rutina
+     */
+    private String id;
     /**
      * Nom de la rutina
      */
@@ -26,8 +31,28 @@ public class Routine {
      * @param name nom de la rutina
      */
     public Routine(String name) {
+        this.id = null;
         this.name = name;
-        clearActivities();
+        activities = new TreeMap<>();
+        for(int i=0; i<7; ++i){
+            activities.put(Day.values()[i], new ArrayList<>());
+        }
+    }
+
+    /**
+     * Getter de la id
+     * @return id de la rutina
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * Setter de la id
+     * @param id nova id de la rutina
+     */
+    public void setId(String id) {
+        this.id = id;
     }
 
     /**
@@ -39,14 +64,19 @@ public class Routine {
     }
 
     /**
-     * Métode per buidar les activitats d'una rutina
+     * Setter del nom de la rutina
+     * @param name nom de la rutina
      */
-    public void clearActivities() {
-        activities = new TreeMap<>();
-        for(int i=0; i<7; ++i) {
-            ArrayList<Activity> tmp = new ArrayList<>();
-            activities.put(Day.values()[i], tmp);
-        }
+    public void setName(String name){
+        this.name = name;
+    }
+
+    /**
+     * Métode per buidar les activitats d'una rutina
+     * @param day dia de les activitats
+     */
+    public void clearActivities(Day day) {
+        Objects.requireNonNull(activities.get(day)).clear();
     }
 
     /**

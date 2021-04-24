@@ -1,8 +1,11 @@
 package com.pes.become.backend.adapters;
 
+import android.annotation.SuppressLint;
+
 import com.pes.become.backend.domain.Activity;
 import com.pes.become.backend.domain.Day;
 import com.pes.become.backend.domain.Routine;
+import com.pes.become.backend.exceptions.NoSelectedRoutineException;
 import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 
 import java.util.ArrayList;
@@ -17,7 +20,7 @@ public class RoutineAdapter {
      */
     private static RoutineAdapter instance;
 
-    private final Routine routine = new Routine("RutinaDeProva"); //sample routine
+    private Routine routine;
 
     /**
      * Obtenir la instancia de la classe
@@ -30,20 +33,43 @@ public class RoutineAdapter {
         return instance;
     }
 
-    //tot aixo s'haura de canviar perque la clau de rutina es nom+correuUsuari
+    /**
+     * Metode per establir la rutina seleccionada
+     * @param selectedRoutine rutina activa de l'usuari
+     */
+    public void setCurrentRoutine(Routine selectedRoutine) {
+        routine = selectedRoutine;
+    }
+
+    /**
+     * Metode per canviar el nom de la rutina
+     * @param id identificador de la rutina
+     * @param name nou nom de la rutina
+     */
+    public void changeName(String id, String name){
+        if(routine.getId().equals(id))
+            routine.setName(name);
+    }
+
     /**
      * Crear una nova rutina
      * @param name nom de la rutina
+     * @return instancia de la rutina creada
      */
-    public void createRoutine(String name) {
-        new Routine(name);
+    public Routine createRoutine(String name) {
+        return new Routine(name);
     }
 
     /**
      * Consultar les activitats d'un dia
      * @param day nom del dia
+     * @throws NoSelectedRoutineException si l'usuari no te cap rutina seleccionada
      */
-    public ArrayList<ArrayList<String>> getActivitiesByDay(String day) {
+    @SuppressLint("DefaultLocale")
+    public ArrayList<ArrayList<String>> getActivitiesByDay(String day) throws NoSelectedRoutineException {
+        if(routine == null){
+            throw new NoSelectedRoutineException();
+        }
         ArrayList<Activity> activities = routine.getActivitiesByDay(Day.valueOf(day));
         ArrayList<ArrayList<String>> res = new ArrayList<>();
         for(Activity activity : activities) {
@@ -66,25 +92,38 @@ public class RoutineAdapter {
 
     /**
      * Buidar les activitats d'una rutina
+     * @param day dia de les activitats
+     * @throws NoSelectedRoutineException si l'usuari no te cap rutina seleccionada
      */
-    public void clearActivities() {
-        routine.clearActivities();
+    public void clearActivities(Day day) throws NoSelectedRoutineException {
+        if(routine == null){
+            throw new NoSelectedRoutineException();
+        }
+        routine.clearActivities(day);
     }
 
     /**
      * Afegir una activitat a una rutina
      * @param activity nova activitat
      * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
+     * @throws NoSelectedRoutineException si l'usuari no te cap rutina seleccionada
      */
-    public void createActivity(Activity activity) throws OverlappingActivitiesException {
+    public void createActivity(Activity activity) throws OverlappingActivitiesException, NoSelectedRoutineException {
+        if(routine == null){
+            throw new NoSelectedRoutineException();
+        }
         routine.createActivity(activity);
     }
 
     /**
      * Actualitzar els parametres d'una activitat d'una rutina
      * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
+     * @throws NoSelectedRoutineException si l'usuari no te cap rutina seleccionada
      */
-    public void updateActivity(Activity a) throws OverlappingActivitiesException {
+    public void updateActivity(Activity a) throws OverlappingActivitiesException, NoSelectedRoutineException {
+        if(routine == null){
+            throw new NoSelectedRoutineException();
+        }
         routine.updateActivity(a);
     }
 
@@ -92,8 +131,12 @@ public class RoutineAdapter {
      * Eliminar una activitat de la rutina
      * @param id identificador de l'activitat
      * @param day dia de l'activitat
+     * @throws NoSelectedRoutineException si l'usuari no te cap rutina seleccionada
      */
-    public void deleteActivity(String id, Day day) {
+    public void deleteActivity(String id, Day day) throws NoSelectedRoutineException {
+        if(routine == null){
+            throw new NoSelectedRoutineException();
+        }
         routine.deleteActivity(id, day);
     }
 
@@ -105,5 +148,4 @@ public class RoutineAdapter {
     public boolean checkOverlappings(Activity a) {
         return routine.checkOverlappings(a);
     }
-
 }

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Become</string>
     <string name="new_activityLabel">New Activity</string>
     <string name="descriptionLabel">Description (optional)</string>
     <string name="activity_nameLabel">Name</string>
@@ -18,10 +17,10 @@
         <item >Music</item>
         <item >Sport</item>
         <item >Sleeping</item>
-        <item >Studying</item>
         <item >Cooking</item>
-        <item >Working</item>
+        <item >Working and studying</item>
         <item >Entertainment</item>
+        <item>Plants and gardening</item>
         <item >Other</item>
     </string-array>
 
@@ -36,4 +35,30 @@
     </string-array>
     <string name="theme">Theme:</string>
     <string name="modifytext">Modify activity</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="log_in">Log in</string>
+    <string name="not_registered_yet">Not registered yet?</string>
+    <string name="signup">Sign up!</string>
+    <string name="community">Community</string>
+    <string name="home">Home</string>
+    <string name="profile">Profile</string>
+    <string name="sign_up">Sign up</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="username">Username</string>
+    <string name="notNull">This field cannot be null</string>
+    <string name="emailExists">This email is already logged</string>
+    <string name="userNotMatch">Username and password do not match</string>
+    <string name="passwords">Passwords not match</string>
+    <string name="activityCreated">Activity created</string>
+    <string name="activityModified">Activity modified</string>
+    <string name="errorTime">Error: Start time cannot be subsequent to end time</string>
+    <string name="errorDay">Error: Start day cannot be subsequent to end day</string>
+    <string name="overlapping">Error: Another activity belongs to that time interval</string>
+    <string name="routineCreated">Routine created</string>
+    <string name="new_routine">New routine</string>
+    <string name="noRoutineSelected">You don\'t have any routine selected</string>
+    <string name="adopt_new_habits">Adopt new habits and make a change!</string>
+    <string name="noActivities">You don\'t have any activities programmed for today.</string>
+    <string name="noRoutines">You don\'t have any routine, create a new one!</string>
 </resources>

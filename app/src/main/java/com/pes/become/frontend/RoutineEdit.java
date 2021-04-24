@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,11 +27,13 @@ import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapter;
 import com.pes.become.backend.exceptions.InvalidDayIntervalException;
 import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
+import com.pes.become.backend.exceptions.NoSelectedRoutineException;
 import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedListener{
@@ -42,7 +45,11 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
 
     private final DomainAdapter DA = DomainAdapter.getInstance();
 
+    private int seeingDay;
     private ArrayList<ArrayList<String>> activitiesList;
+
+    private RecyclerView recyclerView;
+    private TextView emptyView;
 
     private BottomSheetDialog activitySheet;
     private Spinner spinnerTheme, spinnerStartDay, spinnerEndDay;
@@ -68,29 +75,118 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         instance = this;
         global = this.getActivity();
 
-        getActivities();
+        recyclerView = view.findViewById(R.id.activityList);
+        emptyView = view.findViewById(R.id.emptyView);
+
+        seeingDay = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+        translateSeeingDay();
+        setDay();
+        getActivitiesByDay(getWeekDay(seeingDay));
 
         TextView addActivity = view.findViewById(R.id.addActivity);
         addActivity.setOnClickListener(v -> createActivitySheet(false));
+
+        Button done = view.findViewById(R.id.doneButton);
+        done.setOnClickListener(v -> MainActivity.getInstance().setProfileScreen());
+
+        ImageButton previousDayButton = view.findViewById(R.id.previousDayButton);
+        previousDayButton.setOnClickListener(v -> showPreviousDay());
+        ImageButton nextDayButton = view.findViewById(R.id.nextDayButton);
+        nextDayButton.setOnClickListener(v -> showNextDay());
 
         return view;
     }
 
     /**
-     * Funció obtenir la instancia de la MainActivity actual
+     * Funció obtenir la instancia de la RoutineEdit actual
      * */
     public static RoutineEdit getInstance() {
         return instance;
     }
 
     /**
+     * Funcio per transformar el numero del dia
+     */
+    private void translateSeeingDay() {
+        seeingDay -= 2;
+        if(seeingDay == -1)
+            seeingDay = 6;
+    }
+
+    /**
+     * Funcio per posar el dia actual a la vista
+     */
+    private void setDay() {
+        TextView routineDay = view.findViewById(R.id.routineDay);
+        routineDay.setText(getResources().getStringArray(R.array.dayValues)[seeingDay]);
+    }
+
+    /**
+     * Funcio per obtenir el string del dia
+     * @param day int del dia
+     */
+    private String getWeekDay(int day) {
+        switch (day) {
+            case 0:
+                return "Monday";
+            case 1:
+                return "Tuesday";
+            case 2:
+                return "Wednesday";
+            case 3:
+                return "Thursday";
+            case 4:
+                return "Friday";
+            case 5:
+                return "Saturday";
+            case 6:
+                return "Sunday";
+        }
+        return "";
+    }
+
+    /**
+     * Funcio per veure les activitats del dia anterior
+     */
+    private void showPreviousDay() {
+        if (seeingDay == 0) seeingDay = 6;
+        else seeingDay--;
+        setDay();
+        getActivitiesByDay(getWeekDay(seeingDay));
+    }
+
+    /**
+     * Funcio per veure les activitats del seguent dia
+     */
+    private void showNextDay() {
+        if (seeingDay == 6) seeingDay = 0;
+        else seeingDay++;
+        setDay();
+        getActivitiesByDay(getWeekDay(seeingDay));
+
+    }
+
+    /**
      * Funció per inicialitzar l'element que mostra el llistat d'activitats
      */
     private void initRecyclerView() {
-        RecyclerView recyclerView = view.findViewById(R.id.activityList);
         recyclerView.setLayoutManager((new LinearLayoutManager(global)));
-        RecyclerAdapter recyclerAdapter = new RecyclerAdapter(activitiesList);
-        recyclerView.setAdapter(recyclerAdapter);
+        RoutineEditRecyclerAdapter routineEditRecyclerAdapter = new RoutineEditRecyclerAdapter(activitiesList);
+        recyclerView.setAdapter(routineEditRecyclerAdapter);
+
+        recyclerView.setVisibility(View.VISIBLE);
+        emptyView.setVisibility(View.INVISIBLE);
+    }
+
+    /**
+     * Funció per inicialitzar l'element que es mostra quan no hi ha activitats
+     * @param text text que mostrara la vista
+     */
+    private void initEmptyView(String text) {
+        emptyView.setText(text);
+
+        recyclerView.setVisibility(View.INVISIBLE);
+        emptyView.setVisibility(View.VISIBLE);
     }
 
     /**
@@ -121,6 +217,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         ArrayAdapter<CharSequence> adapterStartDay = ArrayAdapter.createFromResource(global, R.array.dayValues, R.layout.spinner_selected_item);
         adapterStartDay.setDropDownViewResource(R.layout.spinner_item_dropdown);
         spinnerStartDay.setAdapter(adapterStartDay);
+        spinnerStartDay.setSelection(seeingDay);
         spinnerStartDay.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
@@ -195,6 +292,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
 
     /**
      * Funció per posar els valors a la pestanya de modificació d'activitat
+     * @param id identificador de l'activitat
      * @param name nom de l'activitat
      * @param description descripció de l'activitat
      * @param theme tema de l'activitat
@@ -254,24 +352,29 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         String startDay = String.valueOf(spinnerStartDay.getSelectedItemPosition());
         String endDay = String.valueOf(spinnerEndDay.getSelectedItemPosition());
 
-        if (name.isEmpty()) activityName.setError("This field cannot be null");
+        if (name.isEmpty()) activityName.setError(getString(R.string.notNull));
         else {
             try {
                 DA.createActivity(name, description, theme, startDay, endDay, String.format("%02d", startHour), String.format("%02d", startMinute), String.format("%02d", endHour), String.format("%02d",endMinute));
-                Toast.makeText(getContext(), "Activity created", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getString(R.string.activityCreated), Toast.LENGTH_SHORT).show();
                 activitySheet.dismiss();
+                seeingDay = spinnerStartDay.getSelectedItemPosition();
+                setDay();
+                getActivitiesByDay(getWeekDay(seeingDay));
             } catch (InvalidTimeIntervalException e) {
-                Toast.makeText(getContext(), "Error: Start time cannot be subsequent to end time", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getString(R.string.errorTime), Toast.LENGTH_SHORT).show();
                 startTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
                 endTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
             } catch (InvalidDayIntervalException e) {
-                Toast.makeText(getContext(), "Error: Start day cannot be subsequent to end day", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getString(R.string.errorDay), Toast.LENGTH_SHORT).show();
                 spinnerStartDay.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
                 spinnerEndDay.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
             } catch (OverlappingActivitiesException e) {
-                Toast.makeText(getContext(), "Error: Another activity belongs to that time interval", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getString(R.string.overlapping), Toast.LENGTH_SHORT).show();
                 startTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
                 endTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
+            } catch (NoSelectedRoutineException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -295,58 +398,38 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
 
         try {
             DA.updateActivity(id, name, description, theme, startDay, endDay, startHour, startMinute, endHour, endMinute);
-            Toast.makeText(getContext(), "Activity created", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), getString(R.string.activityModified), Toast.LENGTH_SHORT).show();
             activitySheet.dismiss();
+            seeingDay = spinnerStartDay.getSelectedItemPosition();
+            setDay();
+            getActivitiesByDay(getWeekDay(seeingDay));
         } catch (InvalidTimeIntervalException e) {
-            Toast.makeText(getContext(), "Error: Start time cannot be subsequent to end time", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), getString(R.string.errorTime), Toast.LENGTH_SHORT).show();
             this.startTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
             this.endTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
         } catch (InvalidDayIntervalException e) {
-            Toast.makeText(getContext(), "Error: Start day cannot be subsequent to end day", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), getString(R.string.errorDay), Toast.LENGTH_SHORT).show();
             spinnerStartDay.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
             spinnerEndDay.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
         } catch (OverlappingActivitiesException e) {
-            Toast.makeText(getContext(), "Error: Another activity belongs to that time interval", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), getString(R.string.overlapping), Toast.LENGTH_SHORT).show();
             this.startTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
             this.endTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
+        } catch (NoSelectedRoutineException e) {
+            e.printStackTrace();
         }
     }
 
     /**
      * Funció per obtenir les activitats de dia de la rutina
      */
-    public void getActivities() {
-        /*
-        int today = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
-        String day = "";
-        switch (today) {
-            case Calendar.MONDAY:
-                day = "Monday";
-                break;
-            case Calendar.TUESDAY:
-                day = "Tuesday";
-                break;
-            case Calendar.WEDNESDAY:
-                day = "Wednesday";
-                break;
-            case Calendar.THURSDAY:
-                day = "Thursday";
-                break;
-            case Calendar.FRIDAY:
-                day = "Friday";
-                break;
-            case Calendar.SATURDAY:
-                day = "Saturday";
-                break;
-            case Calendar.SUNDAY:
-                day = "Sunday";
-                break;
-        }*/
-
-        activitiesList = new ArrayList<>(); //temporal
+    public void getActivitiesByDay(String day) {
         try {
-            DA.getActivitiesByDay("Monday", this);
-        } catch (NoSuchMethodException ignored) { }
+            DA.getActivitiesByDayToEdit(day, this);
+        } catch (NoSuchMethodException ignored) {
+        } catch (NoSelectedRoutineException e) {
+            initEmptyView("You don't have any routine selected!");
+        }
     }
 
     /**
@@ -354,9 +437,14 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
      * @param activitiesListCallback llistat d'activitats que retorna la BD
      */
     public void getActivitiesCallback(ArrayList<ArrayList<String>> activitiesListCallback) {
-        activitiesList = new ArrayList<>(activitiesListCallback.size());
-        activitiesList.addAll(activitiesListCallback);
-        initRecyclerView();
+        if (!activitiesListCallback.isEmpty()) {
+            activitiesList = new ArrayList<>(activitiesListCallback.size());
+            activitiesList.addAll(activitiesListCallback);
+            initRecyclerView();
+        }
+        else {
+            initEmptyView("You don't have any ativities programmed today!");
+        }
     }
 
 }
