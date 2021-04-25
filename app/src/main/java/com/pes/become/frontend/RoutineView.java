@@ -58,7 +58,14 @@ public class RoutineView extends Fragment implements AdapterView.OnItemSelectedL
         seeingDay = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
         translateSeeingDay();
         setDay();
-        getActivitiesByDay(getWeekDay(seeingDay));
+
+        try {
+            activitiesList = DA.getActivitiesByDay(getWeekDay(seeingDay));
+            initRecyclerView();
+            if(activitiesList.isEmpty()) initEmptyView(getString(R.string.noActivities));
+        } catch (NoSelectedRoutineException e) {
+            initEmptyView(getString(R.string.noRoutineSelected));
+        }
 
         ImageButton previousDayButton = view.findViewById(R.id.previousDayButton);
         previousDayButton.setOnClickListener(v -> showPreviousDay());
@@ -123,7 +130,13 @@ public class RoutineView extends Fragment implements AdapterView.OnItemSelectedL
         if (seeingDay == 0) seeingDay = 6;
         else seeingDay--;
         setDay();
-        getActivitiesByDay(getWeekDay(seeingDay));
+        try {
+            activitiesList = DA.getActivitiesByDay(getWeekDay(seeingDay));
+            initRecyclerView();
+            if(activitiesList.isEmpty()) initEmptyView(getString(R.string.noActivities));
+        } catch (NoSelectedRoutineException e) {
+            initEmptyView(getString(R.string.noRoutineSelected));
+        }
     }
 
     /**
@@ -133,7 +146,13 @@ public class RoutineView extends Fragment implements AdapterView.OnItemSelectedL
         if (seeingDay == 6) seeingDay = 0;
         else seeingDay++;
         setDay();
-        getActivitiesByDay(getWeekDay(seeingDay));
+        try {
+            activitiesList = DA.getActivitiesByDay(getWeekDay(seeingDay));
+            initRecyclerView();
+            if(activitiesList.isEmpty()) initEmptyView(getString(R.string.noActivities));
+        } catch (NoSelectedRoutineException e) {
+            initEmptyView(getString(R.string.noRoutineSelected));
+        }
     }
 
     /**
@@ -147,7 +166,6 @@ public class RoutineView extends Fragment implements AdapterView.OnItemSelectedL
         recyclerView.setVisibility(View.VISIBLE);
         emptyView.setVisibility(View.INVISIBLE);
 
-        // Swipe right i left
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
@@ -186,33 +204,6 @@ public class RoutineView extends Fragment implements AdapterView.OnItemSelectedL
     };
 
     /**
-     * Funció per obtenir les activitats de dia de la rutina
-     */
-    public void getActivitiesByDay(String day) {
-        try {
-            DA.getActivitiesByDayToView(day, this);
-        } catch (NoSuchMethodException ignored) {
-        } catch (NoSelectedRoutineException e) {
-            initEmptyView(getString(R.string.noRoutineSelected));
-        }
-    }
-
-    /**
-     * Funció per inicialitzar l'element que mostra el llistat d'activitats
-     * @param activitiesListCallback llistat d'activitats que retorna la BD
-     */
-    public void getActivitiesCallback(ArrayList<ArrayList<String>> activitiesListCallback) {
-        if (!activitiesListCallback.isEmpty()) {
-            activitiesList = new ArrayList<>(activitiesListCallback.size());
-            activitiesList.addAll(activitiesListCallback);
-            initRecyclerView();
-        }
-        else {
-            initEmptyView(getString(R.string.noActivities));
-        }
-    }
-
-    /**
      * Funció necessària pel correcte funcionament de l'app
      */
     @Override
@@ -223,7 +214,5 @@ public class RoutineView extends Fragment implements AdapterView.OnItemSelectedL
      */
     @Override
     public void onNothingSelected(AdapterView<?> parent) { }
-
-
 
 }

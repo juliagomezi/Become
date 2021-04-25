@@ -51,7 +51,7 @@ public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesLi
 
         holder.editButton.setOnClickListener(view -> {
             try {
-                DA.selectRoutine(routinesList.get(position).get(0));
+                DA.selectRoutine(routinesList.get(position));
             } catch (NoSuchMethodException ignore) {}
             MainActivity.getInstance().setEditRoutineScreen();
         });
@@ -71,7 +71,7 @@ public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesLi
         holder.switchButton.setOnCheckedChangeListener((toggleButton, isChecked) -> {
             if (isChecked) {
                 try {
-                    DA.selectRoutine(routinesList.get(position).get(0));
+                    DA.selectRoutine(routinesList.get(position));
                 } catch (NoSuchMethodException ignore) {}
             }
             else {

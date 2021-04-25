@@ -74,17 +74,6 @@ public class ControllerPersistence {
     }
 
     /**
-     * Funció per obtenir el nom de la rutina amb routineId
-     * @param userId Id de l'usuari
-     * @param routineId Id de l'usuari
-     * @param method metode a cridar quan es retornin les dades
-     * @param object classe que conté el mètode
-     */
-    public void getUserRoutine(String userId, String routineId, Method method, Object object) {
-        CR.getUserRoutine(userId, routineId, method, object);
-    }
-
-    /**
      * Canvia el nom d'una rutina.
      * @param userId identificador de l'usuari
      * @param idRoutine l'identificador de la rutina.

@@ -81,7 +81,12 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         seeingDay = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
         translateSeeingDay();
         setDay();
-        getActivitiesByDay(getWeekDay(seeingDay));
+        try {
+            activitiesList = DA.getActivitiesByDay(getWeekDay(seeingDay));
+            if(activitiesList.isEmpty()) initEmptyView(getString(R.string.noActivities));
+        } catch (NoSelectedRoutineException e) {
+            initEmptyView(getString(R.string.noRoutineSelected));
+        }
 
         TextView addActivity = view.findViewById(R.id.addActivity);
         addActivity.setOnClickListener(v -> createActivitySheet(false));
@@ -152,7 +157,12 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         if (seeingDay == 0) seeingDay = 6;
         else seeingDay--;
         setDay();
-        getActivitiesByDay(getWeekDay(seeingDay));
+        try {
+            activitiesList = DA.getActivitiesByDay(getWeekDay(seeingDay));
+            if(activitiesList.isEmpty()) initEmptyView(getString(R.string.noActivities));
+        } catch (NoSelectedRoutineException e) {
+            initEmptyView(getString(R.string.noRoutineSelected));
+        }
     }
 
     /**
@@ -162,8 +172,12 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         if (seeingDay == 6) seeingDay = 0;
         else seeingDay++;
         setDay();
-        getActivitiesByDay(getWeekDay(seeingDay));
-
+        try {
+            activitiesList = DA.getActivitiesByDay(getWeekDay(seeingDay));
+            if(activitiesList.isEmpty()) initEmptyView(getString(R.string.noActivities));
+        } catch (NoSelectedRoutineException e) {
+            initEmptyView(getString(R.string.noRoutineSelected));
+        }
     }
 
     /**
@@ -359,7 +373,8 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
                 activitySheet.dismiss();
                 seeingDay = spinnerStartDay.getSelectedItemPosition();
                 setDay();
-                getActivitiesByDay(getWeekDay(seeingDay));
+                activitiesList = DA.getActivitiesByDay(getWeekDay(seeingDay));
+                if(activitiesList.isEmpty()) initEmptyView(getString(R.string.noActivities));
             } catch (InvalidTimeIntervalException e) {
                 Toast.makeText(getContext(), getString(R.string.errorTime), Toast.LENGTH_SHORT).show();
                 startTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
@@ -373,7 +388,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
                 startTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
                 endTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
             } catch (NoSelectedRoutineException e) {
-                e.printStackTrace();
+                initEmptyView(getString(R.string.noRoutineSelected));
             }
         }
     }
@@ -401,7 +416,8 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
             activitySheet.dismiss();
             seeingDay = spinnerStartDay.getSelectedItemPosition();
             setDay();
-            getActivitiesByDay(getWeekDay(seeingDay));
+            activitiesList = DA.getActivitiesByDay(getWeekDay(seeingDay));
+            if(activitiesList.isEmpty()) initEmptyView(getString(R.string.noActivities));
         } catch (InvalidTimeIntervalException e) {
             Toast.makeText(getContext(), getString(R.string.errorTime), Toast.LENGTH_SHORT).show();
             this.startTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
@@ -415,19 +431,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
             this.startTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
             this.endTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
         } catch (NoSelectedRoutineException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Funció per obtenir les activitats de dia de la rutina
-     */
-    public void getActivitiesByDay(String day) {
-        try {
-            DA.getActivitiesByDayToEdit(day, this);
-        } catch (NoSuchMethodException ignored) {
-        } catch (NoSelectedRoutineException e) {
-            initEmptyView("You don't have any routine selected!");
+            initEmptyView(getString(R.string.noRoutineSelected));
         }
     }
 

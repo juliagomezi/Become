@@ -15,8 +15,6 @@ import com.pes.become.backend.exceptions.NoSelectedRoutineException;
 import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 import com.pes.become.backend.persistence.ControllerPersistence;
 import com.pes.become.frontend.LogoScreen;
-import com.pes.become.frontend.RoutineEdit;
-import com.pes.become.frontend.RoutineView;
 import com.pes.become.frontend.Login;
 import com.pes.become.frontend.Signup;
 
@@ -43,14 +41,6 @@ public class DomainAdapter {
      * Unica instancia de l'adaptador de la classe Usuari
      */
     private static final UserAdapter userAdapter = UserAdapter.getInstance();
-    /**
-     * Instancia de la classe routineEdit del frontend
-     */
-    private RoutineEdit routineEdit;
-    /**
-     * Instancia de la classe routineView del frontend
-     */
-    private RoutineView routineView;
     /**
      * Instancia de la classe login del frontend
      */
@@ -116,7 +106,7 @@ public class DomainAdapter {
         try {
             method1 = DomainAdapter.class.getMethod("authUser", parameterTypes);
             controllerPersistence.loadUser(method1, DomainAdapter.getInstance());
-        }catch(NoSuchMethodException ignore){}
+        } catch(NoSuchMethodException ignore) {}
     }
 
     /**
@@ -179,7 +169,14 @@ public class DomainAdapter {
             currentUser.setID(userId);
             currentUser.setPFP(pfp);
             if(!routineInfo.isEmpty()) currentUser.setRoutines(routineInfo);
-            if (!selectedRoutineId.equals("")) selectRoutine(selectedRoutineId);
+            ArrayList<String> routine = new ArrayList<>();
+            for(ArrayList<String> r : routineInfo) {
+                if(r.get(0).equals(selectedRoutineId)) {
+                    routine = r;
+                    break;
+                }
+            }
+            if(!selectedRoutineId.equals("")) selectRoutine(routine);
             login.loginCallback();
         }
         else {
@@ -202,7 +199,14 @@ public class DomainAdapter {
             currentUser.setID(userId);
             currentUser.setPFP(pfp);
             if(!routineInfo.isEmpty()) currentUser.setRoutines(routineInfo);
-            if (!selectedRoutineId.equals("")) selectRoutine(selectedRoutineId);
+            ArrayList<String> routine = new ArrayList<>();
+            for(ArrayList<String> r : routineInfo) {
+                if(r.get(0).equals(selectedRoutineId)) {
+                    routine = r;
+                    break;
+                }
+            }
+            if(!selectedRoutineId.equals("")) selectRoutine(routine);
             logoScreen.loginCallback();
         }
         else {
@@ -222,7 +226,7 @@ public class DomainAdapter {
         if (success) {
             currentUser = userAdapter.createUser(username);
             currentUser.setID(userId);
-            if (!selectedRoutineId.equals("")) selectRoutine(selectedRoutineId);
+            if (!selectedRoutineId.equals("")) loadSelectedRoutine(); //això és impossible que passi!!!
             signup.registerCallback();
         }
         else {
@@ -283,45 +287,40 @@ public class DomainAdapter {
 
     /**
      * Metode per seleccionar una rutina ja existent
-     * @param idRoutine identificador de la rutina
+     * @param infoRoutine llista amb la informacio de la rutina a seleccionar
      * @throws NoSuchMethodException si el metode no existeix
      */
-    public void selectRoutine(String idRoutine) throws NoSuchMethodException {
-        if(!idRoutine.equals("")){
-            Class[] parameterTypes = new Class[1];
-            parameterTypes[0] = ArrayList.class;
-            Method method1 = DomainAdapter.class.getMethod("setSelectedRoutine", parameterTypes);
-            controllerPersistence.getUserRoutine(currentUser.getID(), idRoutine, method1, DomainAdapter.getInstance());
-        }
-    }
-
-    /**
-     * Metode per rebre la resposta de la DB a la consulta "getRoutine"
-     * @param infoRoutine llista amb la informacio de la rutina
-     * @throws NoSuchMethodException si el metode no existeix
-     */
-    public void setSelectedRoutine(ArrayList<String> infoRoutine) throws NoSuchMethodException {
+    public void selectRoutine(ArrayList<String> infoRoutine) throws NoSuchMethodException {
         Routine routine = routineAdapter.createRoutine(infoRoutine.get(1));
         routine.setId(infoRoutine.get(0));
         currentUser.setSelectedRoutine(routine);
         routineAdapter.setCurrentRoutine(currentUser.getSelectedRoutine());
         controllerPersistence.setSelectedRoutine(currentUser.getID(), currentUser.getSelectedRoutine().getId());
+        loadSelectedRoutine();
+    }
 
-        Method method1 = DomainAdapter.class.getMethod("loadAllActivities", ArrayList.class);
+    /**
+     * Metode per carregar la rutina seleccionada
+     * @throws NoSuchMethodException si el metode no existeix
+     */
+    public void loadSelectedRoutine() throws NoSuchMethodException {
+        Class[] parameterTypes = new Class[1];
+        parameterTypes[0] = ArrayList.class;
+        Method method1 = DomainAdapter.class.getMethod("loadSelectedRoutineCallback", parameterTypes);
         for(int d = 0; d < 7; ++d) {
             controllerPersistence.getActivitiesByDay(currentUser.getID(), currentUser.getSelectedRoutine().getId(), Day.values()[d].toString(), method1, DomainAdapter.getInstance());
         }
     }
 
     /**
-     * Metode per rebre la resposta de la DB a la consulta "getActivitiesByDay" i que les carrega a la instancia de rutina
+     * Metode per rebre les activitats de la rutina seleccionada
      * @param activities activitats de la rutina
      * @throws InvalidTimeIntervalException si l'interval de temps no és valid
      * @throws OverlappingActivitiesException si alguna activitat es solapa amb altres
      * @throws NoSelectedRoutineException si l'usuari no té cap rutina seleccionada
      */
-    public void loadAllActivities(ArrayList<ArrayList<String>> activities) throws InvalidTimeIntervalException, OverlappingActivitiesException, NoSelectedRoutineException {
-        for(int i=0; i<activities.size(); ++i){
+    public void loadSelectedRoutineCallback(ArrayList<ArrayList<String>> activities) throws InvalidTimeIntervalException, OverlappingActivitiesException, NoSelectedRoutineException {
+        for(int i=0; i<activities.size(); ++i) {
             String[] s = activities.get(i).get(5).split(":");
             String[] s2 = activities.get(i).get(6).split(":");
             int iniH = Integer.parseInt(s[0]);
@@ -443,98 +442,6 @@ public class DomainAdapter {
     }
 
     /**
-     * Demanar les activitats d'un dia per la routineView
-     * @param dayString dia de les activitats
-     * @param rv instància de RoutineView
-     * @throws NoSuchMethodException el mètode no existeix
-     * @throws NoSelectedRoutineException si l'usuari no té cap rutina seleccionada
-     */
-    public void getActivitiesByDayToView(String dayString, RoutineView rv) throws NoSuchMethodException, NoSelectedRoutineException {
-        if(currentUser.getSelectedRoutine() == null)
-            throw new NoSelectedRoutineException();
-        routineView = rv;
-        Class[] parameterTypes = new Class[1];
-        parameterTypes[0] = ArrayList.class;
-        Method method1 = DomainAdapter.class.getMethod("setActivitiesByDayToView", parameterTypes);
-        controllerPersistence.getActivitiesByDay(currentUser.getID(), currentUser.getSelectedRoutine().getId(), dayString, method1, DomainAdapter.getInstance());
-    }
-
-    /**
-     * Rebre la resposta de la DB amb les activitats d'una rutina per la routineView
-     * @param acts activitats de la rutina
-     * @throws InvalidTimeIntervalException l'interval de temps es incorrecte
-     * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
-     * @throws NoSelectedRoutineException si l'usuari no té cap rutina seleccionada
-     */
-    public void setActivitiesByDayToView(ArrayList<ArrayList<String>> acts) throws InvalidTimeIntervalException, OverlappingActivitiesException, NoSelectedRoutineException {
-        if (!acts.isEmpty()) {
-            String day = acts.get(0).get(4);
-            routineAdapter.clearActivities(Day.valueOf(day));
-            for (ArrayList<String> act : acts) {
-                String[] s = act.get(5).split(":");
-                String[] s2 = act.get(6).split(":");
-                int iniH = Integer.parseInt(s[0]);
-                int iniM = Integer.parseInt(s[1]);
-                int endH = Integer.parseInt(s2[0]);
-                int endM = Integer.parseInt(s2[1]);
-                Activity activity = new Activity(act.get(1), act.get(2), Theme.valueOf(act.get(3)), new TimeInterval(iniH, iniM, endH, endM), Day.valueOf(act.get(4)));
-                activity.setId(act.get(0));
-                routineAdapter.createActivity(activity);
-            }
-            routineView.getActivitiesCallback(routineAdapter.getActivitiesByDay(day));
-        }
-        else {
-            routineView.getActivitiesCallback(new ArrayList<>(0));
-        }
-    }
-
-    /**
-     * Demanar les activitats d'un dia per la routineEdit
-     * @param dayString dia de les activitats
-     * @param re instància de RoutineEdit
-     * @throws NoSuchMethodException el mètode no existeix
-     * @throws NoSelectedRoutineException si l'usuari no té cap rutina seleccionada
-     */
-    public void getActivitiesByDayToEdit(String dayString, RoutineEdit re) throws NoSuchMethodException, NoSelectedRoutineException {
-        if(currentUser.getSelectedRoutine() == null)
-            throw new NoSelectedRoutineException();
-        routineEdit = re;
-        Class[] parameterTypes = new Class[1];
-        parameterTypes[0] = ArrayList.class;
-        Method method1 = DomainAdapter.class.getMethod("setActivitiesByDayToEdit", parameterTypes);
-        controllerPersistence.getActivitiesByDay(currentUser.getID(), currentUser.getSelectedRoutine().getId(), dayString, method1, DomainAdapter.getInstance());
-    }
-
-    /**
-     * Rebre la resposta de la DB amb les activitats d'una rutina per la routineEdit
-     * @param acts activitats de la rutina
-     * @throws InvalidTimeIntervalException l'interval de temps es incorrecte
-     * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
-     * @throws NoSelectedRoutineException si l'usuari no té cap rutina seleccionada
-     */
-    public void setActivitiesByDayToEdit(ArrayList<ArrayList<String>> acts) throws InvalidTimeIntervalException, OverlappingActivitiesException, NoSelectedRoutineException {
-        if (!acts.isEmpty()) {
-            String day = acts.get(0).get(4);
-            routineAdapter.clearActivities(Day.valueOf(day));
-            for (ArrayList<String> act : acts) {
-                String[] s = act.get(5).split(":");
-                String[] s2 = act.get(6).split(":");
-                int iniH = Integer.parseInt(s[0]);
-                int iniM = Integer.parseInt(s[1]);
-                int endH = Integer.parseInt(s2[0]);
-                int endM = Integer.parseInt(s2[1]);
-                Activity activity = new Activity(act.get(1), act.get(2), Theme.valueOf(act.get(3)), new TimeInterval(iniH, iniM, endH, endM), Day.valueOf(act.get(4)));
-                activity.setId(act.get(0));
-                routineAdapter.createActivity(activity);
-            }
-            routineEdit.getActivitiesCallback(routineAdapter.getActivitiesByDay(day));
-        }
-        else {
-            routineEdit.getActivitiesCallback(new ArrayList<>(0));
-        }
-    }
-
-    /**
      * Eliminar una activitat
      * @param id identificador de l'activitat
      * @param day dia de l'activitat
@@ -607,5 +514,15 @@ public class DomainAdapter {
      */
     public String getSelectedRoutineId() {
         return currentUser.getSelectedRoutine().getId();
+    }
+
+    /**
+     * Metode per obtenir les activitats d'un dia de la rutina seleccionada
+     * @param weekDay dia de la setmana
+     * @return activitats del dia
+     * @throws NoSelectedRoutineException
+     */
+    public ArrayList<ArrayList<String>> getActivitiesByDay(String weekDay) throws NoSelectedRoutineException {
+        return routineAdapter.getActivitiesByDay(weekDay);
     }
 }

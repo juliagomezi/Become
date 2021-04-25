@@ -39,7 +39,6 @@ public class ControllerActivityDB {
     public void getActivitiesByDay(String userId, String idRoutine, String day, Method method, Object object) {
         db.collection("users").document(userId).collection("routines").document(idRoutine).collection("activities").whereEqualTo("day", day).addSnapshotListener((value, e) -> {
             if (e != null) {
-                Log.w("LISTENER FAILED", "Listen failed.", e);
                 return;
             }
 
@@ -55,10 +54,8 @@ public class ControllerActivityDB {
                 activity.add(document.get("finishTime").toString());
                 activitiesResult.add(activity);
             }
-            Object[] params = new Object[1];
-            params[0] = activitiesResult;
             try {
-                method.invoke(object, params);
+                method.invoke(object, activitiesResult);
             } catch (IllegalAccessException ignore) {
             } catch (InvocationTargetException ignore) {
             }
