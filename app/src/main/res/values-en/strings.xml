@@ -61,4 +61,7 @@
     <string name="adopt_new_habits">Adopt new habits and make a change!</string>
     <string name="noActivities">You don\'t have any activities programmed for today.</string>
     <string name="noRoutines">You don\'t have any routine, create a new one!</string>
+    <string name="change_profile_photo">Change profile photo</string>
+    <string name="log_out">Log out</string>
+    <string name="change_password">Change password</string>
 </resources>

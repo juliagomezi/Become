@@ -22,9 +22,11 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.tabs.TabLayout;
 import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapter;
@@ -43,8 +45,12 @@ public class Profile extends Fragment {
 
     private Context global;
 
+    private View view;
+
     private CircleImageView profilePic;
     private TextView username;
+
+    private BottomSheetDialog optionsSheet;
 
     /**
      * Pestanyes del TabLayout
@@ -61,7 +67,7 @@ public class Profile extends Fragment {
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.profile, container, false);
+        view = inflater.inflate(R.layout.profile, container, false);
         super.onCreate(savedInstanceState);
 
         global = this.getActivity();
@@ -77,20 +83,7 @@ public class Profile extends Fragment {
         loadUserInfo();
 
         ImageButton settingsButton = view.findViewById(R.id.settingsButton);
-        settingsButton.setOnClickListener(v -> {
-            if(ContextCompat.checkSelfPermission(global, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                changeProfilePic();
-            } else {
-                ActivityCompat.requestPermissions((Activity) global,new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, 10);
-            }
-        });
-
-        ImageButton logoutButton = view.findViewById(R.id.logoutButton);
-        logoutButton.setOnClickListener(v -> {
-            DA.logoutUser();
-            startActivity(new Intent(global, Login.class));
-            Objects.requireNonNull(getActivity()).finish();
-        });
+        settingsButton.setOnClickListener(v -> createOptionsSheet());
 
         TabLayout tabLayout = view.findViewById(R.id.tabLayout);
         ViewPager viewPager = view.findViewById(R.id.viewPager);
@@ -107,7 +100,7 @@ public class Profile extends Fragment {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if(requestCode==10) {
             if(grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                changeProfilePic(); //no s'obre la galeria quan li dones a permetre, has de tornar a clicar l'engranatge
+                changeProfilePic(); // no s'obre la galeria quan li dones a permetre, has de tornar a clicar
             }
         }
     }
@@ -145,13 +138,56 @@ public class Profile extends Fragment {
     }
 
     /**
+     * Metode que obre el menú d'opcions
+     */
+    private void createOptionsSheet() {
+        optionsSheet = new BottomSheetDialog(global,R.style.BottomSheetTheme);
+        View sheetView = LayoutInflater.from(getContext()).inflate(R.layout.profile_settings_menu, view.findViewById(R.id.bottom_sheet));
+
+        TextView updateProfilePic = sheetView.findViewById(R.id.updateProfilePic);
+        updateProfilePic.setOnClickListener(v -> changeProfilePic());
+
+        TextView changePassword = sheetView.findViewById(R.id.changePassword);
+        changePassword.setOnClickListener(v -> changePassword());
+
+        TextView logout = sheetView.findViewById(R.id.logout);
+        logout.setOnClickListener(v -> logOut());
+
+        optionsSheet.setContentView(sheetView);
+        optionsSheet.show();
+    }
+
+    /**
+     * Metode per canviar la contrasenya d'un usuari
+     */
+    private void changePassword() {
+
+        //do something
+
+        optionsSheet.dismiss();
+    }
+
+    /**
+     * Metode per fer log out de l'usuari actual
+     */
+    private void logOut() {
+        DA.logoutUser();
+        startActivity(new Intent(global, Login.class));
+        Objects.requireNonNull(getActivity()).finish();
+    }
+
+    /**
      * Métode per obrir la galeria per tal que l'usuari seleccioni una imatge de perfil
      */
     private void changeProfilePic() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, 1);
+        if(ContextCompat.checkSelfPermission(global, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(intent, 1);
+        } else {
+            ActivityCompat.requestPermissions((Activity) global,new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, 10);
+        }
     }
 
     /**
@@ -172,6 +208,7 @@ public class Profile extends Fragment {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            optionsSheet.dismiss();
         }
     }
 }

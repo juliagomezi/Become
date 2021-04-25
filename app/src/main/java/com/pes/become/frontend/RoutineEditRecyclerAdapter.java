@@ -89,7 +89,7 @@ public class RoutineEditRecyclerAdapter extends RecyclerView.Adapter<RoutineEdit
 
         holder.editButton.setOnClickListener(view -> {
             RoutineEdit.getInstance().createActivitySheet(true);
-            RoutineEdit.getInstance().fillActivitySheet(activitiesList.get(position).get(0), activitiesList.get(position).get(1), activitiesList.get(position).get(2), activitiesList.get(position).get(3), activitiesList.get(position).get(4), activitiesList.get(position).get(5), activitiesList.get(position).get(6));
+            RoutineEdit.getInstance().fillActivitySheet(activitiesList.get(position).get(0), activitiesList.get(position).get(1), activitiesList.get(position).get(2), activitiesList.get(position).get(3), activitiesList.get(position).get(4), activitiesList.get(position).get(4), activitiesList.get(position).get(5), activitiesList.get(position).get(6));
         });
 
         holder.deleteButton.setOnClickListener(view -> {

@@ -208,7 +208,6 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         endTime = sheetView.findViewById(R.id.endTime);
         sheetLabel = sheetView.findViewById(R.id.newTitle);
 
-        // desplegable nova activitat
         ArrayAdapter<CharSequence> adapterTheme = ArrayAdapter.createFromResource(global, R.array.themesValues, R.layout.spinner_selected_item);
         adapterTheme.setDropDownViewResource(R.layout.spinner_item_dropdown);
         spinnerTheme.setAdapter(adapterTheme);
@@ -227,13 +226,13 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                //no es necessari reescriure el mètode
             }
         });
 
         ArrayAdapter<CharSequence> adapterEndDay = ArrayAdapter.createFromResource(global, R.array.dayValues, R.layout.spinner_selected_item);
         adapterEndDay.setDropDownViewResource(R.layout.spinner_item_dropdown);
         spinnerEndDay.setAdapter(adapterEndDay);
+        spinnerEndDay.setSelection(seeingDay);
         spinnerEndDay.setOnItemSelectedListener((AdapterView.OnItemSelectedListener) global);
 
         doneButton.setOnClickListener(v -> {
@@ -300,14 +299,14 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
      * @param startTime temps d'inici de l'activitat
      * @param endTime temps de fi de l'activitat
      */
-    public void fillActivitySheet(String id, String name, String description, String theme, String startDay, String startTime, String endTime) {
+    public void fillActivitySheet(String id, String name, String description, String theme, String startDay, String endDay, String startTime, String endTime) {
         this.id = id;
         this.sheetLabel.setText(R.string.modifytext);
         this.activityName.setText(name);
         this.activityDescr.setText(description);
         this.spinnerTheme.setSelection(findPositionInAdapterTheme(theme));
         this.spinnerStartDay.setSelection(findPositionInAdapterDay(startDay));
-        //this.spinnerEndDay.setSelection(findPositionInAdapter(adapterEndDay, endDay));
+        this.spinnerEndDay.setSelection(findPositionInAdapterDay(endDay));
         this.startTime.setText(startTime);
         this.endTime.setText(endTime);
     }

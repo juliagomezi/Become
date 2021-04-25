@@ -61,4 +61,7 @@
     <string name="adopt_new_habits">"Adopta nous hàbits i marca la diferència! "</string>
     <string name="noActivities">No tens cap activitat programada avui.</string>
     <string name="noRoutines">No tens cap rutina, crea\'n una de nova!</string>
+    <string name="change_profile_photo">Canviar foto de perfil</string>
+    <string name="log_out">Sortir</string>
+    <string name="change_password">Canviar clau de pas</string>
 </resources>
