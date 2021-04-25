@@ -39,7 +39,18 @@ public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesLi
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View view = layoutInflater.inflate(R.layout.routines_list_element, parent, false);
-        return new ViewHolder(view);
+        ViewHolder viewHolder = new ViewHolder(view);
+
+        viewHolder.switchButton.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    selectRoutine(viewHolder.getAdapterPosition());
+                } catch (NoSuchMethodException ignore) { }
+            }
+        });
+
+        return viewHolder;
     }
 
     /**
@@ -64,20 +75,8 @@ public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesLi
             if (routinesList.isEmpty()) RoutinesList.getInstance().initEmptyView();
         });
 
-        if (routinesList.get(position).get(0).equals(selectedRoutineID)) {
-            holder.switchButton.setChecked(true);
-        }
-
-        holder.switchButton.setOnCheckedChangeListener((toggleButton, isChecked) -> {
-            if (isChecked) {
-                try {
-                    DA.selectRoutine(routinesList.get(position));
-                } catch (NoSuchMethodException ignore) {}
-            }
-            else {
-                // deseleccionar rutina
-            }
-        });
+        boolean isSelected = routinesList.get(position).get(0).equals(selectedRoutineID);
+        holder.switchButton.setChecked(isSelected);
 
     }
 
@@ -113,4 +112,9 @@ public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesLi
     }
 
 
+    private void selectRoutine(int position) throws NoSuchMethodException {
+        DA.selectRoutine(routinesList.get(position));
+        selectedRoutineID = routinesList.get(position).get(0);
+        notifyDataSetChanged();
+    }
 }

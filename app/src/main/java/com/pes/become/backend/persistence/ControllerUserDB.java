@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -529,7 +530,6 @@ public class ControllerUserDB {
                     Object[] params = new Object[4];
 
                     if (task.isSuccessful()) {
-
                         FirebaseUser user = mAuth.getCurrentUser();
                         String userID = user.getUid();
 

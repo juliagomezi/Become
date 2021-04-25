@@ -127,7 +127,7 @@ public class RoutinesList extends Fragment {
                 ArrayList<String> routine = new ArrayList<>(2);
                 routine.add(id);
                 routine.add(name);
-                if(routinesList.isEmpty()) initRecyclerView();
+                if (routinesList.isEmpty()) initRecyclerView();
                 routinesList.add(0,routine);
                 routinesListRecyclerAdapter.notifyDataSetChanged();
                 Toast.makeText(getContext(), getString(R.string.routineCreated), Toast.LENGTH_SHORT).show();

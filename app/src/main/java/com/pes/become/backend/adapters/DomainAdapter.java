@@ -399,6 +399,7 @@ public class DomainAdapter {
             } else throw new OverlappingActivitiesException();
         }
         else throw new InvalidDayIntervalException();
+
     }
 
     /**

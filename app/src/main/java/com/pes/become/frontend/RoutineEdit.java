@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,12 +82,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         seeingDay = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
         translateSeeingDay();
         setDay();
-        try {
-            activitiesList = DA.getActivitiesByDay(getWeekDay(seeingDay));
-            if(activitiesList.isEmpty()) initEmptyView(getString(R.string.noActivities));
-        } catch (NoSelectedRoutineException e) {
-            initEmptyView(getString(R.string.noRoutineSelected));
-        }
+        updateActivitiesList();
 
         TextView addActivity = view.findViewById(R.id.addActivity);
         addActivity.setOnClickListener(v -> createActivitySheet(false));
@@ -157,12 +153,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         if (seeingDay == 0) seeingDay = 6;
         else seeingDay--;
         setDay();
-        try {
-            activitiesList = DA.getActivitiesByDay(getWeekDay(seeingDay));
-            if(activitiesList.isEmpty()) initEmptyView(getString(R.string.noActivities));
-        } catch (NoSelectedRoutineException e) {
-            initEmptyView(getString(R.string.noRoutineSelected));
-        }
+        updateActivitiesList();
     }
 
     /**
@@ -172,12 +163,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         if (seeingDay == 6) seeingDay = 0;
         else seeingDay++;
         setDay();
-        try {
-            activitiesList = DA.getActivitiesByDay(getWeekDay(seeingDay));
-            if(activitiesList.isEmpty()) initEmptyView(getString(R.string.noActivities));
-        } catch (NoSelectedRoutineException e) {
-            initEmptyView(getString(R.string.noRoutineSelected));
-        }
+        updateActivitiesList();
     }
 
     /**
@@ -186,6 +172,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
     private void initRecyclerView() {
         recyclerView.setLayoutManager((new LinearLayoutManager(global)));
         RoutineEditRecyclerAdapter routineEditRecyclerAdapter = new RoutineEditRecyclerAdapter(activitiesList);
+        Log.d("sizeerecycler", String.valueOf(routineEditRecyclerAdapter.getItemCount()));
         recyclerView.setAdapter(routineEditRecyclerAdapter);
 
         recyclerView.setVisibility(View.VISIBLE);
@@ -373,8 +360,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
                 activitySheet.dismiss();
                 seeingDay = spinnerStartDay.getSelectedItemPosition();
                 setDay();
-                activitiesList = DA.getActivitiesByDay(getWeekDay(seeingDay));
-                if(activitiesList.isEmpty()) initEmptyView(getString(R.string.noActivities));
+                updateActivitiesList();
             } catch (InvalidTimeIntervalException e) {
                 Toast.makeText(getContext(), getString(R.string.errorTime), Toast.LENGTH_SHORT).show();
                 startTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
@@ -387,9 +373,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
                 Toast.makeText(getContext(), getString(R.string.overlapping), Toast.LENGTH_SHORT).show();
                 startTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
                 endTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
-            } catch (NoSelectedRoutineException e) {
-                initEmptyView(getString(R.string.noRoutineSelected));
-            }
+            } catch (NoSelectedRoutineException ignore) { }
         }
     }
 
@@ -416,8 +400,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
             activitySheet.dismiss();
             seeingDay = spinnerStartDay.getSelectedItemPosition();
             setDay();
-            activitiesList = DA.getActivitiesByDay(getWeekDay(seeingDay));
-            if(activitiesList.isEmpty()) initEmptyView(getString(R.string.noActivities));
+            updateActivitiesList();
         } catch (InvalidTimeIntervalException e) {
             Toast.makeText(getContext(), getString(R.string.errorTime), Toast.LENGTH_SHORT).show();
             this.startTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
@@ -430,24 +413,16 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
             Toast.makeText(getContext(), getString(R.string.overlapping), Toast.LENGTH_SHORT).show();
             this.startTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
             this.endTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
+        } catch (NoSelectedRoutineException ignore) { }
+    }
+
+    private void updateActivitiesList() {
+        try {
+            activitiesList = DA.getActivitiesByDay(getWeekDay(seeingDay));
+            initRecyclerView();
+            if (activitiesList.isEmpty()) initEmptyView(getString(R.string.noActivities));
         } catch (NoSelectedRoutineException e) {
             initEmptyView(getString(R.string.noRoutineSelected));
         }
     }
-
-    /**
-     * Funció per inicialitzar l'element que mostra el llistat d'activitats
-     * @param activitiesListCallback llistat d'activitats que retorna la BD
-     */
-    public void getActivitiesCallback(ArrayList<ArrayList<String>> activitiesListCallback) {
-        if (!activitiesListCallback.isEmpty()) {
-            activitiesList = new ArrayList<>(activitiesListCallback.size());
-            activitiesList.addAll(activitiesListCallback);
-            initRecyclerView();
-        }
-        else {
-            initEmptyView("You don't have any ativities programmed today!");
-        }
-    }
-
 }
