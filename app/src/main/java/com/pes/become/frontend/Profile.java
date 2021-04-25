@@ -171,6 +171,7 @@ public class Profile extends Fragment {
      * Metode per fer log out de l'usuari actual
      */
     private void logOut() {
+        optionsSheet.dismiss();
         DA.logoutUser();
         startActivity(new Intent(global, Login.class));
         Objects.requireNonNull(getActivity()).finish();

@@ -16,15 +16,18 @@ public class User {
      * Nom de l'usuari
      */
     private String name;
+    /**
+     * Foto de perfil de l'usuari
+     */
     private Bitmap profilePic;
     /**
      * Instancia de la rutina activada per l'usuari
      */
     private Routine selectedRoutine;
     /**
-     * IDs de les rutines de l'usuari
+     * ID i nom de les rutines de l'usuari
      */
-    private ArrayList<String> routines;
+    private ArrayList<ArrayList<String>> routines;
 
     /**
      * Creadora de la classe per a un nou usuari
@@ -104,16 +107,27 @@ public class User {
      * Getter de les rutines
      * @return les rutines de l'usuari
      */
-    public ArrayList<String> getRoutines() {
+    public ArrayList<ArrayList<String>> getRoutines() {
         return routines;
     }
 
     /**
-     * Metode per afegir una rutina a la llista de rutines de l'usuari
-     * @param id ID de la rutina a afegir
+     * Setter de les rutines de l'usuari
+     * @param routinesInfo identificador i nom de les rutines de l'usuari
      */
-    public void addRoutine(String id) {
-        routines.add(id);
+    public void setRoutines(ArrayList<ArrayList<String>> routinesInfo) {
+        this.routines = new ArrayList<>();
+        for(ArrayList<String> r : routinesInfo) {
+            addRoutine(r);
+        }
+    }
+
+    /**
+     * Metode per afegir una rutina a la llista de rutines de l'usuari
+     * @param r rutina a afegir
+     */
+    public void addRoutine(ArrayList<String> r) {
+        routines.add(r);
     }
 
     /**

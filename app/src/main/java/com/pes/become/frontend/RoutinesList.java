@@ -96,22 +96,9 @@ public class RoutinesList extends Fragment {
      * Funció per obtenir les rutines de l'usuari
      */
     public void getRoutines() {
-        try {
-            DA.getUserRoutines(this);
-        } catch (NoSuchMethodException ignore) { }
-    }
-
-    /**
-     * Funció per inicialitzar l'element que mostra el llistat de rutines
-     * @param routinesListCallback llistat de rutines que retorna la BD
-     * @param selectedRoutineID id de la rutina seleccionada de l'usuari que retorna la BD
-     */
-    public void getRoutinesCallback(ArrayList<ArrayList<String>> routinesListCallback, String selectedRoutineID) {
-        this.selectedRoutineID = selectedRoutineID;
-        routinesList = new ArrayList<>(routinesListCallback.size());
-        routinesList.addAll(routinesListCallback);
+        routinesList = DA.getUserRoutines();
+        selectedRoutineID = DA.getSelectedRoutineId();
         initRecyclerView();
-
         if(routinesList.isEmpty()) {
             initEmptyView();
         }
@@ -147,7 +134,6 @@ public class RoutinesList extends Fragment {
                 routineSheet.dismiss();
             }
             catch (Exception e) {
-                e.printStackTrace(); // provisional!!!
                 routineName.setError(getString(R.string.notNull));
             }
         }

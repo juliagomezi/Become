@@ -59,10 +59,8 @@ public class ControllerActivityDB {
             params[0] = activitiesResult;
             try {
                 method.invoke(object, params);
-            } catch (IllegalAccessException e1) {
-                System.out.println("Acces invàlid");
-            } catch (InvocationTargetException e2) {
-                System.out.println("Target no vàlid");
+            } catch (IllegalAccessException ignore) {
+            } catch (InvocationTargetException ignore) {
             }
         });
     }

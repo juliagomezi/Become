@@ -1,7 +1,5 @@
 package com.pes.become.backend.persistence;
 
-import android.util.Log;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -12,7 +10,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 public class ControllerRoutineDB {
@@ -27,35 +24,6 @@ public class ControllerRoutineDB {
      */
     public ControllerRoutineDB() {
         db = FirebaseFirestore.getInstance();
-    }
-
-    /**
-     * Funció per obtenir els noms i els ids de totes les rutines d'un usuari
-     * @param userId Id de l'usuari
-     * @param method metode a cridar quan es retornin les dades
-     * @param object classe que conté el mètode
-     */
-    public void getUserRoutines(String userId, Method method, Object object) {
-        db.collection("users").document(userId).collection("routines").orderBy("timestamp", Query.Direction.DESCENDING).get().addOnCompleteListener(task -> {
-            ArrayList<ArrayList<String>> routinesResult = new ArrayList<>();
-            if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot  document : task.getResult()) {
-                        ArrayList<String> routine = new ArrayList<>();
-                        routine.add(document.getId());
-                        routine.add(document.get("name").toString());
-                        routinesResult.add(routine);
-                    }
-            }
-            Object[] params = new Object[1];
-            params[0] = routinesResult;
-            try {
-                method.invoke(object, params);
-            } catch (IllegalAccessException e1) {
-                System.out.println("Acces invàlid");
-            } catch (InvocationTargetException e2) {
-                System.out.println("Target no vàlid");
-            }
-        });
     }
 
     /**
@@ -79,10 +47,8 @@ public class ControllerRoutineDB {
             params[0] = routine;
             try {
                 method.invoke(object, params);
-            } catch (IllegalAccessException e1) {
-                System.out.println("Acces invàlid");
-            } catch (InvocationTargetException e2) {
-                System.out.println("Target no vàlid");
+            } catch (IllegalAccessException ignore) {
+            } catch (InvocationTargetException ignore) {
             }
         });
     }
@@ -127,9 +93,6 @@ public class ControllerRoutineDB {
                             docRefToActivity.delete();
                         }
                         routineReference.delete();
-                    }
-                    else {
-                        Log.d("TAG", "Error getting documents: ", task.getException());
                     }
                 });
     }

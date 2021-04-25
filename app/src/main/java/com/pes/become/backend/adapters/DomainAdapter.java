@@ -2,7 +2,6 @@ package com.pes.become.backend.adapters;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.util.Log;
 
 import com.pes.become.backend.domain.Activity;
 import com.pes.become.backend.domain.Day;
@@ -18,7 +17,6 @@ import com.pes.become.backend.persistence.ControllerPersistence;
 import com.pes.become.frontend.LogoScreen;
 import com.pes.become.frontend.RoutineEdit;
 import com.pes.become.frontend.RoutineView;
-import com.pes.become.frontend.RoutinesList;
 import com.pes.become.frontend.Login;
 import com.pes.become.frontend.Signup;
 
@@ -54,20 +52,13 @@ public class DomainAdapter {
      */
     private RoutineView routineView;
     /**
-     * Instancia de la classe routinesList del frontend
-     */
-    private RoutinesList routinesList;
-
-    /**
      * Instancia de la classe login del frontend
      */
     private Login login;
-
     /**
      * Instancia de la classe login del frontend
      */
     private LogoScreen logoScreen;
-
     /**
      * Instancia de la classe signup del frontend
      */
@@ -94,7 +85,7 @@ public class DomainAdapter {
      * @param password contrassenya de l'usuari
      * @param name nom de l'usuari
      */
-    public void registerUser(String mail, String password, String name, android.app.Activity act ) {
+    public void registerUser(String mail, String password, String name, android.app.Activity act) {
         Class[] parameterTypes = new Class[4];
         parameterTypes[0] = boolean.class;
         parameterTypes[1] = String.class;
@@ -113,12 +104,13 @@ public class DomainAdapter {
      * @param act activitat
      */
     public void loadUser (android.app.Activity act) {
-        Class[] parameterTypes = new Class[5];
+        Class[] parameterTypes = new Class[6];
         parameterTypes[0] = boolean.class;
         parameterTypes[1] = String.class;
         parameterTypes[2] = String.class;
         parameterTypes[3] = String.class;
         parameterTypes[4] = Bitmap.class;
+        parameterTypes[5] = ArrayList.class;
         Method method1;
         logoScreen = (LogoScreen)act;
         try {
@@ -134,12 +126,13 @@ public class DomainAdapter {
      * @param act Activity d'Android necessaria per la execucio del firebase
      */
     public void loginUser(String mail, String password, android.app.Activity act) {
-        Class[] parameterTypes = new Class[5];
+        Class[] parameterTypes = new Class[6];
         parameterTypes[0] = boolean.class;
         parameterTypes[1] = String.class;
         parameterTypes[2] = String.class;
         parameterTypes[3] = String.class;
         parameterTypes[4] = Bitmap.class;
+        parameterTypes[5] = ArrayList.class;
         Method method1;
         login = (Login)act;
         try {
@@ -155,12 +148,13 @@ public class DomainAdapter {
      * @param act activitat
      */
     public void loginGoogleUser(String idToken, android.app.Activity act) {
-        Class[] parameterTypes = new Class[5];
+        Class[] parameterTypes = new Class[6];
         parameterTypes[0] = boolean.class;
         parameterTypes[1] = String.class;
         parameterTypes[2] = String.class;
         parameterTypes[3] = String.class;
         parameterTypes[4] = Bitmap.class;
+        parameterTypes[5] = ArrayList.class;
         Method method1;
         login = (Login)act;
 
@@ -179,11 +173,12 @@ public class DomainAdapter {
      * @param pfp imatge de perfil de l'usuari
      * @throws NoSuchMethodException si el metode passat no existeix
      */
-    public void loginCallback(boolean success, String userId, String username, String selectedRoutineId, Bitmap pfp) throws NoSuchMethodException {
+    public void loginCallback(boolean success, String userId, String username, String selectedRoutineId, Bitmap pfp, ArrayList<ArrayList<String>> routineInfo) throws NoSuchMethodException {
         if (success) {
             currentUser = userAdapter.createUser(username);
             currentUser.setID(userId);
             currentUser.setPFP(pfp);
+            if(!routineInfo.isEmpty()) currentUser.setRoutines(routineInfo);
             if (!selectedRoutineId.equals("")) selectRoutine(selectedRoutineId);
             login.loginCallback();
         }
@@ -201,11 +196,12 @@ public class DomainAdapter {
      * @param pfp imatge de perfil de l'usuari
      * @throws NoSuchMethodException si el metode passat no existeix
      */
-    public void authUser(boolean success, String userId, String username, String selectedRoutineId, Bitmap pfp) throws NoSuchMethodException {
+    public void authUser(boolean success, String userId, String username, String selectedRoutineId, Bitmap pfp, ArrayList<ArrayList<String>> routineInfo) throws NoSuchMethodException {
         if (success) {
             currentUser = userAdapter.createUser(username);
             currentUser.setID(userId);
             currentUser.setPFP(pfp);
+            if(!routineInfo.isEmpty()) currentUser.setRoutines(routineInfo);
             if (!selectedRoutineId.equals("")) selectRoutine(selectedRoutineId);
             logoScreen.loginCallback();
         }
@@ -275,10 +271,13 @@ public class DomainAdapter {
      */
     public String createRoutine(String name) {
 
-        //check name not existing
+        //check name not existing!!!
 
         String id = controllerPersistence.createRoutine(currentUser.getID(), name);
-        currentUser.addRoutine(id);
+        ArrayList<String> routine = new ArrayList<>();
+        routine.add(id);
+        routine.add(name);
+        currentUser.addRoutine(routine);
         return id;
     }
 
@@ -332,39 +331,6 @@ public class DomainAdapter {
             Activity activity = new Activity(activities.get(i).get(1), activities.get(i).get(2), Theme.valueOf(activities.get(i).get(3)), new TimeInterval(iniH, iniM, endH, endM), Day.valueOf(activities.get(i).get(4)));
             activity.setId(activities.get(i).get(0));
             routineAdapter.createActivity(activity);
-        }
-    }
-
-    /**
-     * Metode per obtenir totes les rutines de l'usuari
-     * @param rl instància de RoutinesList
-     * @throws NoSuchMethodException si el metode passat no existeix
-     */
-    public void getUserRoutines(RoutinesList rl) throws NoSuchMethodException {
-        routinesList = rl;
-        Class[] parameterTypes = new Class[1];
-        parameterTypes[0] = ArrayList.class;
-        Method method1 = DomainAdapter.class.getMethod("setUserRoutines", parameterTypes);
-        controllerPersistence.getUserRoutines(currentUser.getID(), method1, DomainAdapter.getInstance());
-    }
-
-    /**
-     * Rebre la resposta de la DB amb les rutines de l'usuari per la routineView
-     * @param routines rutines
-     */
-    public void setUserRoutines(ArrayList<ArrayList<String>> routines) {
-        if (!routines.isEmpty()) {
-            for (int i = 0; i < routines.size(); ++i) {
-                currentUser.addRoutine(routines.get(i).get(0));
-            }
-            Routine selectedRoutine = currentUser.getSelectedRoutine();
-            if(selectedRoutine != null)
-                routinesList.getRoutinesCallback(routines, selectedRoutine.getId());
-            else
-                routinesList.getRoutinesCallback(routines, "");
-        }
-        else {
-            routinesList.getRoutinesCallback(new ArrayList<>(0), "");
         }
     }
 
@@ -627,4 +593,19 @@ public class DomainAdapter {
         return res;
     }
 
+    /**
+     * Metode per obtenir la llista de rutines de l'usuari
+     * @return identificador i nom de les rutines de l'usuari
+     */
+    public ArrayList<ArrayList<String>> getUserRoutines() {
+        return currentUser.getRoutines();
+    }
+
+    /**
+     * Metode per obtenir l'identificador rutina seleccionada de l'usuari
+     * @return identificador de la rutina
+     */
+    public String getSelectedRoutineId() {
+        return currentUser.getSelectedRoutine().getId();
+    }
 }
