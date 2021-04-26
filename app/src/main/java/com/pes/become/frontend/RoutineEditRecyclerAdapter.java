@@ -95,9 +95,9 @@ public class RoutineEditRecyclerAdapter extends RecyclerView.Adapter<RoutineEdit
         holder.deleteButton.setOnClickListener(view -> {
             String currentId = activitiesList.get(position).get(0);
             String day = activitiesList.get(position).get(4);
-
             try {
                 DA.deleteActivity(currentId, day);
+                RoutineEdit.getInstance().updateActivitiesList();
             } catch (NoSelectedRoutineException e) {
                 e.printStackTrace();
             }

@@ -1,14 +1,10 @@
 package com.pes.become.backend.domain;
 
-import android.util.Log;
-
 import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
-import java.util.Objects;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -82,7 +78,6 @@ public class Routine {
             ArrayList<Activity> actDay = getActivitiesByDay(activity.getDay());
             actDay.add(activity);
             Collections.sort(actDay);
-            Log.d("ACTIVITIES_SIZE_1",String.valueOf(actDay.size()));
         } else throw new OverlappingActivitiesException();
     }
 
