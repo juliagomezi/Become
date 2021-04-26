@@ -173,7 +173,6 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
     private void initRecyclerView() {
         recyclerView.setLayoutManager((new LinearLayoutManager(global)));
         routineEditRecyclerAdapter = new RoutineEditRecyclerAdapter(activitiesList);
-        Log.d("sizeerecycler", String.valueOf(routineEditRecyclerAdapter.getItemCount()));
         recyclerView.setAdapter(routineEditRecyclerAdapter);
 
         recyclerView.setVisibility(View.VISIBLE);
@@ -421,9 +420,11 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
     private void updateActivitiesList() {
         try {
             activitiesList = DA.getActivitiesByDay(getWeekDay(seeingDay));
+            initRecyclerView();
             if (activitiesList.isEmpty()) initEmptyView(getString(R.string.noActivities));
         } catch (NoSelectedRoutineException e) {
             initEmptyView(getString(R.string.noRoutineSelected));
         }
+        routineEditRecyclerAdapter.notifyDataSetChanged();
     }
 }

@@ -1,7 +1,10 @@
 package com.pes.become.backend.domain;
 
+import android.util.Log;
+
 import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
@@ -34,9 +37,7 @@ public class Routine {
         this.id = null;
         this.name = name;
         activities = new TreeMap<>();
-        for(int i=0; i<7; ++i){
-            activities.put(Day.values()[i], new ArrayList<>());
-        }
+        clearActivities();
     }
 
     /**
@@ -72,14 +73,6 @@ public class Routine {
     }
 
     /**
-     * Métode per buidar les activitats d'una rutina
-     * @param day dia de les activitats
-     */
-    public void clearActivities(Day day) {
-        Objects.requireNonNull(activities.get(day)).clear();
-    }
-
-    /**
      * Metode que afegeix una activitat a la rutina
      * @param activity activitat a afegir
      * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
@@ -89,6 +82,7 @@ public class Routine {
             ArrayList<Activity> actDay = getActivitiesByDay(activity.getDay());
             actDay.add(activity);
             Collections.sort(actDay);
+            Log.d("ACTIVITIES_SIZE_1",String.valueOf(actDay.size()));
         } else throw new OverlappingActivitiesException();
     }
 
@@ -134,6 +128,23 @@ public class Routine {
                 break;
             }
         }
+    }
+
+    /**
+     * Métode per buidar les activitats d'una rutina
+     */
+    public void clearActivities() {
+        for(int i=0; i<7; ++i){
+            activities.put(Day.values()[i], new ArrayList<>());
+        }
+    }
+
+    /**
+     * Setter de totes les activitats d'un dia d'una rutina
+     */
+    public void setActivitiesByDay(ArrayList<Activity> acts, Day day) {
+        Collections.sort(acts);
+        activities.put(day, acts);
     }
 
     /**

@@ -304,6 +304,7 @@ public class DomainAdapter {
      * @throws NoSuchMethodException si el metode no existeix
      */
     public void loadSelectedRoutine() throws NoSuchMethodException {
+        routineAdapter.clearActivities();
         Class[] parameterTypes = new Class[1];
         parameterTypes[0] = ArrayList.class;
         Method method1 = DomainAdapter.class.getMethod("loadSelectedRoutineCallback", parameterTypes);
@@ -320,16 +321,20 @@ public class DomainAdapter {
      * @throws NoSelectedRoutineException si l'usuari no té cap rutina seleccionada
      */
     public void loadSelectedRoutineCallback(ArrayList<ArrayList<String>> activities) throws InvalidTimeIntervalException, OverlappingActivitiesException, NoSelectedRoutineException {
-        for(int i=0; i<activities.size(); ++i) {
-            String[] s = activities.get(i).get(5).split(":");
-            String[] s2 = activities.get(i).get(6).split(":");
-            int iniH = Integer.parseInt(s[0]);
-            int iniM = Integer.parseInt(s[1]);
-            int endH = Integer.parseInt(s2[0]);
-            int endM = Integer.parseInt(s2[1]);
-            Activity activity = new Activity(activities.get(i).get(1), activities.get(i).get(2), Theme.valueOf(activities.get(i).get(3)), new TimeInterval(iniH, iniM, endH, endM), Day.valueOf(activities.get(i).get(4)));
-            activity.setId(activities.get(i).get(0));
-            routineAdapter.createActivity(activity);
+        if(!activities.isEmpty()) {
+            ArrayList<Activity> acts = new ArrayList<>();
+            for (int i = 0; i < activities.size(); ++i) {
+                String[] s = activities.get(i).get(5).split(":");
+                String[] s2 = activities.get(i).get(6).split(":");
+                int iniH = Integer.parseInt(s[0]);
+                int iniM = Integer.parseInt(s[1]);
+                int endH = Integer.parseInt(s2[0]);
+                int endM = Integer.parseInt(s2[1]);
+                Activity activity = new Activity(activities.get(i).get(1), activities.get(i).get(2), Theme.valueOf(activities.get(i).get(3)), new TimeInterval(iniH, iniM, endH, endM), Day.valueOf(activities.get(i).get(4)));
+                activity.setId(activities.get(i).get(0));
+                acts.add(activity);
+            }
+            routineAdapter.setActivitiesByDay(acts, acts.get(0).getDay());
         }
     }
 

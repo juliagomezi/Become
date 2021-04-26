@@ -1,7 +1,5 @@
 package com.pes.become.backend.persistence;
 
-import android.util.Log;
-
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
