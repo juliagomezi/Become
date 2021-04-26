@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -99,9 +100,7 @@ public class RoutinesList extends Fragment {
         routinesList = DA.getUserRoutines();
         selectedRoutineID = DA.getSelectedRoutineId();
         initRecyclerView();
-        if(routinesList.isEmpty()) {
-            initEmptyView();
-        }
+        if(routinesList.isEmpty()) initEmptyView();
     }
 
     public void createRoutineSheet() {
@@ -123,12 +122,8 @@ public class RoutinesList extends Fragment {
         if (name.isEmpty()) routineName.setError(getString(R.string.notNull));
         else {
             try {
-                String id = DA.createRoutine(name);
-                ArrayList<String> routine = new ArrayList<>(2);
-                routine.add(id);
-                routine.add(name);
                 if (routinesList.isEmpty()) initRecyclerView();
-                routinesList.add(0,routine);
+                DA.createRoutine(name);
                 routinesListRecyclerAdapter.notifyDataSetChanged();
                 Toast.makeText(getContext(), getString(R.string.routineCreated), Toast.LENGTH_SHORT).show();
                 routineSheet.dismiss();

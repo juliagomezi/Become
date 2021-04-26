@@ -72,8 +72,6 @@ public class RoutineView extends Fragment implements AdapterView.OnItemSelectedL
         return view;
     }
 
-
-
     /**
      * Funció obtenir la instancia de la RoutineView actual
      * */

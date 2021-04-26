@@ -109,7 +109,7 @@ public class RoutineAdapter {
      * @throws NoSelectedRoutineException si l'usuari no te cap rutina seleccionada
      */
     public void createActivity(Activity activity) throws OverlappingActivitiesException, NoSelectedRoutineException {
-        if(routine == null){
+        if(routine == null) {
             throw new NoSelectedRoutineException();
         }
         routine.createActivity(activity);

@@ -514,7 +514,8 @@ public class DomainAdapter {
      * @return identificador de la rutina
      */
     public String getSelectedRoutineId() {
-        return currentUser.getSelectedRoutine().getId();
+        if (currentUser.getSelectedRoutine() != null) return currentUser.getSelectedRoutine().getId();
+        else return "";
     }
 
     /**

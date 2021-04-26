@@ -49,6 +49,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
     private int seeingDay;
     private ArrayList<ArrayList<String>> activitiesList;
 
+    private RoutineEditRecyclerAdapter routineEditRecyclerAdapter;
     private RecyclerView recyclerView;
     private TextView emptyView;
 
@@ -171,7 +172,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
      */
     private void initRecyclerView() {
         recyclerView.setLayoutManager((new LinearLayoutManager(global)));
-        RoutineEditRecyclerAdapter routineEditRecyclerAdapter = new RoutineEditRecyclerAdapter(activitiesList);
+        routineEditRecyclerAdapter = new RoutineEditRecyclerAdapter(activitiesList);
         Log.d("sizeerecycler", String.valueOf(routineEditRecyclerAdapter.getItemCount()));
         recyclerView.setAdapter(routineEditRecyclerAdapter);
 
@@ -355,12 +356,13 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         if (name.isEmpty()) activityName.setError(getString(R.string.notNull));
         else {
             try {
+                if (activitiesList.isEmpty()) initRecyclerView();
                 DA.createActivity(name, description, theme, startDay, endDay, String.format("%02d", startHour), String.format("%02d", startMinute), String.format("%02d", endHour), String.format("%02d",endMinute));
+                updateActivitiesList();
                 Toast.makeText(getContext(), getString(R.string.activityCreated), Toast.LENGTH_SHORT).show();
                 activitySheet.dismiss();
                 seeingDay = spinnerStartDay.getSelectedItemPosition();
                 setDay();
-                updateActivitiesList();
             } catch (InvalidTimeIntervalException e) {
                 Toast.makeText(getContext(), getString(R.string.errorTime), Toast.LENGTH_SHORT).show();
                 startTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
@@ -419,7 +421,6 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
     private void updateActivitiesList() {
         try {
             activitiesList = DA.getActivitiesByDay(getWeekDay(seeingDay));
-            initRecyclerView();
             if (activitiesList.isEmpty()) initEmptyView(getString(R.string.noActivities));
         } catch (NoSelectedRoutineException e) {
             initEmptyView(getString(R.string.noRoutineSelected));

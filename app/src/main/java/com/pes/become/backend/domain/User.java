@@ -33,7 +33,7 @@ public class User {
      * Creadora de la classe per a un nou usuari
      * @param name nom de l'usuari
      */
-    public User(String name){
+    public User(String name) {
         this.name = name;
         this.selectedRoutine = null;
         this.routines = new ArrayList<>();
@@ -118,7 +118,7 @@ public class User {
     public void setRoutines(ArrayList<ArrayList<String>> routinesInfo) {
         this.routines = new ArrayList<>();
         for(ArrayList<String> r : routinesInfo) {
-            addRoutine(r);
+            routines.add(r);
         }
     }
 
@@ -127,7 +127,7 @@ public class User {
      * @param r rutina a afegir
      */
     public void addRoutine(ArrayList<String> r) {
-        routines.add(r);
+        routines.add(0, r);
     }
 
     /**
