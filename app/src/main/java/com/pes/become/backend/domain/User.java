@@ -135,6 +135,24 @@ public class User {
      * @param id ID de la rutina a eliminar
      */
     public void deleteRoutine(String id){
-        routines.remove(id);
+        for(int i = 0; i < routines.size(); ++i) {
+            if(routines.get(i).get(0).equals(id)) {
+                routines.remove(i);
+                break;
+            }
+        }
     }
+
+    /**
+     * Metode per saber si l'usuari ja te una rutina amb aquest nom existent
+     * @param name nom a comprovar si ja exiteix
+     * @return true si existeix, false altrament
+     */
+    public boolean existsRoutine(String name) {
+        for(ArrayList<String> routine : routines) {
+            if(routine.get(1).equals(name)) return true;
+        }
+        return false;
+    }
+
 }

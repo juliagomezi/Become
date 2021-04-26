@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapter;
+import com.pes.become.backend.exceptions.ExistingRoutineException;
 
 import java.util.ArrayList;
 
@@ -126,9 +127,8 @@ public class RoutinesList extends Fragment {
                 routinesListRecyclerAdapter.notifyDataSetChanged();
                 Toast.makeText(getContext(), getString(R.string.routineCreated), Toast.LENGTH_SHORT).show();
                 routineSheet.dismiss();
-            }
-            catch (Exception e) {
-                routineName.setError(getString(R.string.notNull));
+            } catch (ExistingRoutineException e) {
+                routineName.setError(getString(R.string.existingRoutineName));
             }
         }
     }

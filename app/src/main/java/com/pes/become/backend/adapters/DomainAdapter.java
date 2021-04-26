@@ -9,6 +9,7 @@ import com.pes.become.backend.domain.Routine;
 import com.pes.become.backend.domain.Theme;
 import com.pes.become.backend.domain.TimeInterval;
 import com.pes.become.backend.domain.User;
+import com.pes.become.backend.exceptions.ExistingRoutineException;
 import com.pes.become.backend.exceptions.InvalidDayIntervalException;
 import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
 import com.pes.become.backend.exceptions.NoSelectedRoutineException;
@@ -272,17 +273,19 @@ public class DomainAdapter {
     /**
      * Crear una rutina
      * @param name nom de la rutina
+     * @throws ExistingRoutineException si l'usuari ja té una altra rutina amb aquest nom
      */
-    public String createRoutine(String name) {
-
-        //check name not existing!!!
-
-        String id = controllerPersistence.createRoutine(currentUser.getID(), name);
-        ArrayList<String> routine = new ArrayList<>();
-        routine.add(id);
-        routine.add(name);
-        currentUser.addRoutine(routine);
-        return id;
+    public String createRoutine(String name) throws ExistingRoutineException {
+        if(!currentUser.existsRoutine(name)) {
+            String id = controllerPersistence.createRoutine(currentUser.getID(), name);
+            ArrayList<String> routine = new ArrayList<>();
+            routine.add(id);
+            routine.add(name);
+            currentUser.addRoutine(routine);
+            return id;
+        } else {
+            throw new ExistingRoutineException();
+        }
     }
 
     /**
@@ -342,10 +345,15 @@ public class DomainAdapter {
      * Metode per canviar el nom d'una rutina existent
      * @param id identificador de la rutina
      * @param name nou nom de la rutina
+     * @throws ExistingRoutineException si l'usuari ja té una altra rutina amb aquest nom
      */
-    public void changeRoutineName(String id, String name) {
-        //controllerPersistence.changeName(id, name);
-        routineAdapter.changeName(id, name);
+    public void changeRoutineName(String id, String name) throws ExistingRoutineException {
+        if(!currentUser.existsRoutine(name)) {
+            controllerPersistence.changeRoutineName(currentUser.getID(), id, name);
+            routineAdapter.changeName(id, name);
+        } else {
+            throw new ExistingRoutineException();
+        }
     }
 
     /**

@@ -64,13 +64,12 @@ public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesLi
             try {
                 DA.selectRoutine(routinesList.get(position));
             } catch (NoSuchMethodException ignore) {}
-            MainActivity.getInstance().setEditRoutineScreen();
+            MainActivity.getInstance().setEditRoutineScreen(routinesList.get(position).get(0),routinesList.get(position).get(1));
         });
 
         holder.deleteButton.setOnClickListener(view -> {
             String currentId = routinesList.get(position).get(0);
             DA.deleteRoutine(currentId);
-            routinesList.remove(position);
             notifyDataSetChanged();
             if (routinesList.isEmpty()) RoutinesList.getInstance().initEmptyView();
         });

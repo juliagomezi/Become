@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapter;
+import com.pes.become.backend.exceptions.ExistingRoutineException;
 import com.pes.become.backend.exceptions.InvalidDayIntervalException;
 import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
 import com.pes.become.backend.exceptions.NoSelectedRoutineException;
@@ -58,13 +59,18 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
     private TextView startTime;
     private TextView endTime;
     private TextView sheetLabel;
+    private EditText routineName;
+
     private int startHour, startMinute, endHour, endMinute;
-    private String id;
+    private String id, name, routineId;
 
     /**
      * Constructora del RoutineEdit
      */
-    public RoutineEdit() { }
+    public RoutineEdit(String id, String name) {
+        this.routineId = id;
+        this.name = name;
+    }
 
     /**
      * Funcio del RoutineEdit que s'executa al crear-la
@@ -87,8 +93,23 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         TextView addActivity = view.findViewById(R.id.addActivity);
         addActivity.setOnClickListener(v -> createActivitySheet(false));
 
+        routineName = view.findViewById(R.id.nameText);
+        routineName.setText(name);
+
         Button done = view.findViewById(R.id.doneButton);
-        done.setOnClickListener(v -> MainActivity.getInstance().setProfileScreen());
+        done.setOnClickListener(v -> {
+
+            String newName = routineName.getText().toString();
+            if (newName.isEmpty()) routineName.setError(getString(R.string.notNull));
+            else {
+                try {
+                    DA.changeRoutineName(routineId, newName);
+                    MainActivity.getInstance().setProfileScreen();
+                } catch (ExistingRoutineException e) {
+                    routineName.setError(getString(R.string.existingRoutineName));
+                }
+            }
+        });
 
         ImageButton previousDayButton = view.findViewById(R.id.previousDayButton);
         previousDayButton.setOnClickListener(v -> showPreviousDay());
