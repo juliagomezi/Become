@@ -210,6 +210,7 @@ public class RoutineView extends Fragment implements AdapterView.OnItemSelectedL
         else {
             initEmptyView(getString(R.string.noActivities));
         }
+
     }
 
     /**

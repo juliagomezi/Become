@@ -61,4 +61,6 @@
     <string name="adopt_new_habits">Adopta nuevos hábitos y marca la diferencia!</string>
     <string name="noActivities">No tienes ninguna actividad programada para hoy.</string>
     <string name="noRoutines">No tienes ninguna rutina, crea una nueva!</string>
+    <string name="shortPassword">La contraseña debe tener como mínimo 6 carácteres</string>
+    <string name="notAValidEmail">Introduce un email válido</string>
 </resources>

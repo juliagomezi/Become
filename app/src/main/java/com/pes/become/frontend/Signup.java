@@ -10,6 +10,9 @@ import android.widget.EditText;
 import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapter;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class Signup extends AppCompatActivity {
 
     private final DomainAdapter DA = DomainAdapter.getInstance();
@@ -35,13 +38,15 @@ public class Signup extends AppCompatActivity {
         String password = passwordText.getText().toString();
 
         if (email.isEmpty()) emailText.setError(getString(R.string.notNull));
+        else if(!isEmailValid(email)) emailText.setError(getString(R.string.notAValidEmail));
         else if (user.isEmpty()) userText.setError(getString(R.string.notNull));
-        else if (password.isEmpty()) userText.setError(getString(R.string.notNull));
+        else if (password.length() < 6) passwordText.setError(getString(R.string.shortPassword));
+        else if (password.isEmpty()) passwordText.setError(getString(R.string.notNull));
         else if (!password.equals(passwordConfirm.getText().toString())) {
             passwordText.setError(getString(R.string.passwords));
             passwordConfirm.setError(getString(R.string.passwords));
         }
-        DA.registerUser(email, password, user, this);
+        else DA.registerUser(email, password, user, this);
     }
 
     /**
@@ -57,5 +62,12 @@ public class Signup extends AppCompatActivity {
     public void registerCallback(){
         startActivity(new Intent(this, MainActivity.class));
         finish();
+    }
+
+    public static boolean isEmailValid(String email) {
+        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 }
