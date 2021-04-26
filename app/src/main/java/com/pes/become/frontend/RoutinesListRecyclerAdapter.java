@@ -41,13 +41,10 @@ public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesLi
         View view = layoutInflater.inflate(R.layout.routines_list_element, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
 
-        viewHolder.switchButton.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    selectRoutine(viewHolder.getAdapterPosition());
-                } catch (NoSuchMethodException ignore) { }
-            }
+        viewHolder.switchButton.setOnClickListener(view1 -> {
+            try {
+                selectRoutine(viewHolder.getAdapterPosition());
+            } catch (NoSuchMethodException ignore) { }
         });
 
         return viewHolder;

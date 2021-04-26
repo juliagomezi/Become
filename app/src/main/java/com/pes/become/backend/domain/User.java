@@ -117,9 +117,7 @@ public class User {
      */
     public void setRoutines(ArrayList<ArrayList<String>> routinesInfo) {
         this.routines = new ArrayList<>();
-        for(ArrayList<String> r : routinesInfo) {
-            routines.add(r);
-        }
+        routines.addAll(routinesInfo);
     }
 
     /**

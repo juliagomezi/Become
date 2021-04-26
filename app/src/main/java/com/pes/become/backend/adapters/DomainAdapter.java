@@ -320,10 +320,8 @@ public class DomainAdapter {
      * Metode per rebre les activitats de la rutina seleccionada
      * @param activities activitats de la rutina
      * @throws InvalidTimeIntervalException si l'interval de temps no és valid
-     * @throws OverlappingActivitiesException si alguna activitat es solapa amb altres
-     * @throws NoSelectedRoutineException si l'usuari no té cap rutina seleccionada
      */
-    public void loadSelectedRoutineCallback(ArrayList<ArrayList<String>> activities) throws InvalidTimeIntervalException, OverlappingActivitiesException, NoSelectedRoutineException {
+    public void loadSelectedRoutineCallback(ArrayList<ArrayList<String>> activities) throws InvalidTimeIntervalException {
         if(!activities.isEmpty()) {
             ArrayList<Activity> acts = new ArrayList<>();
             for (int i = 0; i < activities.size(); ++i) {
@@ -535,7 +533,7 @@ public class DomainAdapter {
      * Metode per obtenir les activitats d'un dia de la rutina seleccionada
      * @param weekDay dia de la setmana
      * @return activitats del dia
-     * @throws NoSelectedRoutineException
+     * @throws NoSelectedRoutineException si l'usuari no té cap rutina seleccionada
      */
     public ArrayList<ArrayList<String>> getActivitiesByDay(String weekDay) throws NoSelectedRoutineException {
         return routineAdapter.getActivitiesByDay(weekDay);
