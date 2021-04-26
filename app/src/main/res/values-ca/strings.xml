@@ -66,4 +66,6 @@
     <string name="change_profile_photo">Canviar foto de perfil</string>
     <string name="log_out">Sortir</string>
     <string name="change_password">Canviar clau de pas</string>
+    <string name="permissionDenied">Has denegat a Become poder accedir a les teves fotos, actualitza els permisos a configuració per poder usar aquesta funcionalitat.</string>
+    <string name="permissionDeniedTitle">Permís denegat</string>
 </resources>
