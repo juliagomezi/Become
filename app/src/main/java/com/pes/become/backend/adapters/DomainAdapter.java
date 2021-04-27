@@ -294,12 +294,18 @@ public class DomainAdapter {
      * @throws NoSuchMethodException si el metode no existeix
      */
     public void selectRoutine(ArrayList<String> infoRoutine) throws NoSuchMethodException {
-        Routine routine = routineAdapter.createRoutine(infoRoutine.get(1));
-        routine.setId(infoRoutine.get(0));
-        currentUser.setSelectedRoutine(routine);
-        routineAdapter.setCurrentRoutine(currentUser.getSelectedRoutine());
-        controllerPersistence.setSelectedRoutine(currentUser.getID(), currentUser.getSelectedRoutine().getId());
-        loadSelectedRoutine();
+        if(infoRoutine!=null) {
+            Routine routine = routineAdapter.createRoutine(infoRoutine.get(1));
+            routine.setId(infoRoutine.get(0));
+            currentUser.setSelectedRoutine(routine);
+            routineAdapter.setCurrentRoutine(currentUser.getSelectedRoutine());
+            controllerPersistence.setSelectedRoutine(currentUser.getID(), currentUser.getSelectedRoutine().getId());
+            loadSelectedRoutine();
+        } else {
+            routineAdapter.setCurrentRoutine(null);
+            currentUser.setSelectedRoutine(null);
+            controllerPersistence.setSelectedRoutine(currentUser.getID(),"");
+        }
     }
 
     /**

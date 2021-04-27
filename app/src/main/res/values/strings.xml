@@ -71,5 +71,6 @@
     <string name="permissionDenied">You have previously denied Become to access your photos, go to settings and change permissions to access this feature.</string>
     <string name="permissionDeniedTitle">Permission denied</string>
     <string name="existingRoutineName">Another routine with same name already exists</string>
+    <string name="noDeleteRoutineSelected">Routine can\'t be deleted because it is currently selected</string>
 
 </resources>
