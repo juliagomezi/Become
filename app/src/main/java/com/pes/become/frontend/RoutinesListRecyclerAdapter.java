@@ -41,10 +41,13 @@ public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesLi
         View view = layoutInflater.inflate(R.layout.routines_list_element, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
 
-        viewHolder.switchButton.setOnClickListener(view1 -> {
-            try {
-                selectRoutine(viewHolder.getAdapterPosition());
-            } catch (NoSuchMethodException ignore) { }
+        viewHolder.switchButton.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    selectRoutine(viewHolder.getAdapterPosition());
+                } catch (NoSuchMethodException ignore) { }
+            }
         });
 
         return viewHolder;
@@ -73,7 +76,6 @@ public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesLi
 
         boolean isSelected = routinesList.get(position).get(0).equals(selectedRoutineID);
         holder.switchButton.setChecked(isSelected);
-
     }
 
 
@@ -105,6 +107,12 @@ public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesLi
             deleteButton = itemView.findViewById(R.id.deleteButton);
             switchButton = itemView.findViewById(R.id.switchButton);
         }
+    }
+
+    private void selectRoutine(int position) throws NoSuchMethodException {
+        DA.selectRoutine(routinesList.get(position).get(0));
+        selectedRoutineID = routinesList.get(position).get(0);
+        notifyDataSetChanged();
     }
 
 

@@ -69,4 +69,5 @@
     <string name="permissionDenied">Vous avez précédemment refusé à Become d\'accéder à vos photos, accédez aux paramètres et modifiez les autorisations pour accéder à cette fonctionnalité.</string>
     <string name="permissionDeniedTitle">Permission refusée</string>
     <string name="existingRoutineName">Il y a une autre routine avec le même nom</string>
+
 </resources>

@@ -69,4 +69,5 @@
     <string name="permissionDenied">Has denegado a Become acceder a tus fotos, actualiza los permisos en configuración para poder usar esta funcionalidad.</string>
     <string name="permissionDeniedTitle">Permiso denegado</string>
     <string name="existingRoutineName">Hay otra rutina con el mismo nombre</string>
+
 </resources>
