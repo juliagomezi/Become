@@ -91,25 +91,13 @@ public class RoutineAdapter {
     }
 
     /**
-     * Buidar les activitats d'una rutina
-     * @param day dia de les activitats
-     * @throws NoSelectedRoutineException si l'usuari no te cap rutina seleccionada
-     */
-    public void clearActivities(Day day) throws NoSelectedRoutineException {
-        if(routine == null){
-            throw new NoSelectedRoutineException();
-        }
-        routine.clearActivities(day);
-    }
-
-    /**
      * Afegir una activitat a una rutina
      * @param activity nova activitat
      * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
      * @throws NoSelectedRoutineException si l'usuari no te cap rutina seleccionada
      */
     public void createActivity(Activity activity) throws OverlappingActivitiesException, NoSelectedRoutineException {
-        if(routine == null){
+        if(routine == null) {
             throw new NoSelectedRoutineException();
         }
         routine.createActivity(activity);
@@ -138,6 +126,20 @@ public class RoutineAdapter {
             throw new NoSelectedRoutineException();
         }
         routine.deleteActivity(id, day);
+    }
+
+    /**
+     * Métode per buidar les activitats d'una rutina
+     */
+    public void clearActivities() {
+        routine.clearActivities();
+    }
+
+    /**
+     * Setter de totes les activitats d'un dia d'una rutina
+     */
+    public void setActivitiesByDay(ArrayList<Activity> acts, Day day) {
+        routine.setActivitiesByDay(acts,day);
     }
 
     /**

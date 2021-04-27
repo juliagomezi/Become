@@ -43,8 +43,6 @@ public class Login extends AppCompatActivity {
         googleLogin.setOnClickListener(v -> googleLoginUser());
 
         signUp.setOnClickListener(v -> startActivity(new Intent(Login.this, Signup.class)));
-
-
     }
 
     private void createRequest() {

@@ -61,6 +61,13 @@
     <string name="adopt_new_habits">Adopta nuevos hábitos y marca la diferencia!</string>
     <string name="noActivities">No tienes ninguna actividad programada para hoy.</string>
     <string name="noRoutines">No tienes ninguna rutina, crea una nueva!</string>
-    <string name="shortPassword">La contraseña debe tener como mínimo 6 carácteres</string>
+    <string name="shortPassword">La contraseña debe tener como m</string>
     <string name="notAValidEmail">Introduce un email válido</string>
+    <string name="change_profile_photo">Cambiar foto de perfil</string>
+    <string name="log_out">Salir</string>
+    <string name="change_password">Cambiar contraseña</string>
+    <string name="permissionDenied">Has denegado a Become acceder a tus fotos, actualiza los permisos en configuración para poder usar esta funcionalidad.</string>
+    <string name="permissionDeniedTitle">Permiso denegado</string>
+    <string name="existingRoutineName">Hay otra rutina con el mismo nombre</string>
+
 </resources>

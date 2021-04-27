@@ -52,7 +52,7 @@ public class Signup extends AppCompatActivity {
     /**
      * Funcio per registrar un usuari i retorna error
      */
-    public void registerCallbackFailed(){
+    public void registerCallbackFailed() {
         emailText.setError(getString(R.string.emailExists));
     }
 

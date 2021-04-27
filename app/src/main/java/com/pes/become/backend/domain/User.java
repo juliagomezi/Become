@@ -16,21 +16,24 @@ public class User {
      * Nom de l'usuari
      */
     private String name;
+    /**
+     * Foto de perfil de l'usuari
+     */
     private Bitmap profilePic;
     /**
      * Instancia de la rutina activada per l'usuari
      */
     private Routine selectedRoutine;
     /**
-     * IDs de les rutines de l'usuari
+     * ID i nom de les rutines de l'usuari
      */
-    private ArrayList<String> routines;
+    private ArrayList<ArrayList<String>> routines;
 
     /**
      * Creadora de la classe per a un nou usuari
      * @param name nom de l'usuari
      */
-    public User(String name){
+    public User(String name) {
         this.name = name;
         this.selectedRoutine = null;
         this.routines = new ArrayList<>();
@@ -104,16 +107,25 @@ public class User {
      * Getter de les rutines
      * @return les rutines de l'usuari
      */
-    public ArrayList<String> getRoutines() {
+    public ArrayList<ArrayList<String>> getRoutines() {
         return routines;
     }
 
     /**
-     * Metode per afegir una rutina a la llista de rutines de l'usuari
-     * @param id ID de la rutina a afegir
+     * Setter de les rutines de l'usuari
+     * @param routinesInfo identificador i nom de les rutines de l'usuari
      */
-    public void addRoutine(String id) {
-        routines.add(id);
+    public void setRoutines(ArrayList<ArrayList<String>> routinesInfo) {
+        this.routines = new ArrayList<>();
+        routines.addAll(routinesInfo);
+    }
+
+    /**
+     * Metode per afegir una rutina a la llista de rutines de l'usuari
+     * @param r rutina a afegir
+     */
+    public void addRoutine(ArrayList<String> r) {
+        routines.add(0, r);
     }
 
     /**
@@ -121,6 +133,24 @@ public class User {
      * @param id ID de la rutina a eliminar
      */
     public void deleteRoutine(String id){
-        routines.remove(id);
+        for(int i = 0; i < routines.size(); ++i) {
+            if(routines.get(i).get(0).equals(id)) {
+                routines.remove(i);
+                break;
+            }
+        }
     }
+
+    /**
+     * Metode per saber si l'usuari ja te una rutina amb aquest nom existent
+     * @param name nom a comprovar si ja exiteix
+     * @return true si existeix, false altrament
+     */
+    public boolean existsRoutine(String name) {
+        for(ArrayList<String> routine : routines) {
+            if(routine.get(1).equals(name)) return true;
+        }
+        return false;
+    }
+
 }

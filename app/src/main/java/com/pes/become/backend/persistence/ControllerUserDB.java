@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -23,6 +24,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -33,6 +35,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ControllerUserDB {
@@ -168,21 +171,14 @@ public class ControllerUserDB {
         String userID = user.getUid();
         user.delete()
                 .addOnCompleteListener(task -> {
-
-                    Object[] params = new Object[1];
-                    //Això té 1 element
-                    // un bool que diu si hi ha hagut exit o no
+                    boolean success = false;
                     if (task.isSuccessful()) {
                         DocumentReference docRefToUser = db.collection("users").document(userID);
                         deleteUserData(docRefToUser);
-                        params[0] = true;
+                        success = true;
                     }
-                    else {
-                        params[0] = false;
-                    }
-
                     try {
-                        method.invoke(object, params);
+                        method.invoke(object, success);
                     } catch (IllegalAccessException ignore) {
                     } catch (InvocationTargetException ignore) {
                     }
@@ -197,10 +193,10 @@ public class ControllerUserDB {
      * @param method metode a cridar quan es retornin les dades
      * @param object classe que conté el mètode
      */
-    public void loginUser(String mail, String password, Activity act,Method method, Object object) {
+    public void loginUser(String mail, String password, Activity act, Method method, Object object) {
         mAuth.signInWithEmailAndPassword(mail, password)
                 .addOnCompleteListener(act, task -> {
-                    Object[] params = new Object[5];
+                    Object[] params = new Object[6];
 
                     if (task.isSuccessful()) {
                         FirebaseUser user = mAuth.getCurrentUser();
@@ -223,22 +219,46 @@ public class ControllerUserDB {
                                             if (params[3] == null) params[3]="";
                                             else params[3] = params[3].toString();
 
-                                            try {
-                                                method.invoke(object, params);
-                                            } catch (IllegalAccessException ignore) {
-                                            } catch (InvocationTargetException ignore) {
-                                            }
+                                            ArrayList<ArrayList<String>> routineIds = new ArrayList();
+                                            docRefToUser.collection("routines").orderBy("timestamp", Query.Direction.DESCENDING).get().addOnCompleteListener(task2 -> {
+                                                if (task2.isSuccessful()) {
+                                                    for (QueryDocumentSnapshot  document : task2.getResult()) {
+                                                        ArrayList<String> routinesResult = new ArrayList<>();
+                                                        routinesResult.add(document.getId());
+                                                        routinesResult.add(document.get("name").toString());
+                                                        routineIds.add(routinesResult);
+                                                    }
+                                                }
+                                                params[5] = routineIds;
+                                                try {
+                                                    method.invoke(object, params);
+                                                } catch (IllegalAccessException ignore) {
+                                                } catch (InvocationTargetException ignore) {
+                                                }
+                                            });
                                         }).addOnFailureListener(exception -> {
                                             params[4] = null;
 
                                             if (params[3] == null) params[3]="";
                                             else params[3] = params[3].toString();
 
-                                            try {
-                                                method.invoke(object, params);
-                                            } catch (IllegalAccessException ignore) {
-                                            } catch (InvocationTargetException ignore) {
-                                            }
+                                            ArrayList<ArrayList<String>> routineIds = new ArrayList();
+                                            docRefToUser.collection("routines").orderBy("timestamp", Query.Direction.DESCENDING).get().addOnCompleteListener(task3 -> {
+                                                if (task3.isSuccessful()) {
+                                                    for (QueryDocumentSnapshot  document : task3.getResult()) {
+                                                        ArrayList<String> routinesResult = new ArrayList<>();
+                                                        routinesResult.add(document.getId());
+                                                        routinesResult.add(document.get("name").toString());
+                                                        routineIds.add(routinesResult);
+                                                    }
+                                                }
+                                                params[5] = routineIds;
+                                                try {
+                                                    method.invoke(object, params);
+                                                } catch (IllegalAccessException ignore) {
+                                                } catch (InvocationTargetException ignore) {
+                                                }
+                                            });
                                         });
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -267,7 +287,7 @@ public class ControllerUserDB {
     public void loadUser(Method method, Object object) {
         FirebaseUser user = mAuth.getCurrentUser();
         String userID = user.getUid();
-        Object[] params = new Object[5];
+        Object[] params = new Object[6];
 
         DocumentReference docRefToUser = db.collection("users").document(userID);
         docRefToUser.get().addOnSuccessListener(documentSnapshot -> {
@@ -286,22 +306,46 @@ public class ControllerUserDB {
                             if (params[3] == null) params[3]="";
                             else params[3] = params[3].toString();
 
-                            try {
-                                method.invoke(object, params);
-                            } catch (IllegalAccessException ignore) {
-                            } catch (InvocationTargetException ignore) {
-                            }
+                            ArrayList<ArrayList<String>> routineIds = new ArrayList();
+                            docRefToUser.collection("routines").orderBy("timestamp", Query.Direction.DESCENDING).get().addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    for (QueryDocumentSnapshot  document : task.getResult()) {
+                                        ArrayList<String> routinesResult = new ArrayList<>();
+                                        routinesResult.add(document.getId());
+                                        routinesResult.add(document.get("name").toString());
+                                        routineIds.add(routinesResult);
+                                    }
+                                }
+                                params[5] = routineIds;
+                                try {
+                                    method.invoke(object, params);
+                                } catch (IllegalAccessException ignore) {
+                                } catch (InvocationTargetException ignore) {
+                                }
+                            });
                         }).addOnFailureListener(exception -> {
                             params[4] = null;
 
                             if (params[3] == null) params[3]="";
                             else params[3] = params[3].toString();
 
-                            try {
-                                method.invoke(object, params);
-                            } catch (IllegalAccessException ignore) {
-                            } catch (InvocationTargetException ignore) {
-                            }
+                            ArrayList<ArrayList<String>> routineIds = new ArrayList();
+                            docRefToUser.collection("routines").orderBy("timestamp", Query.Direction.DESCENDING).get().addOnCompleteListener(task2 -> {
+                                if (task2.isSuccessful()) {
+                                    for (QueryDocumentSnapshot  document : task2.getResult()) {
+                                        ArrayList<String> routinesResult = new ArrayList<>();
+                                        routinesResult.add(document.getId());
+                                        routinesResult.add(document.get("name").toString());
+                                        routineIds.add(routinesResult);
+                                    }
+                                }
+                                params[5] = routineIds;
+                                try {
+                                    method.invoke(object, params);
+                                } catch (IllegalAccessException ignore) {
+                                } catch (InvocationTargetException ignore) {
+                                }
+                            });
                         });
             } catch (IOException e) {
                 e.printStackTrace();
@@ -320,7 +364,7 @@ public class ControllerUserDB {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(task -> {
-                    Object[] params = new Object[5];
+                    Object[] params = new Object[6];
 
                     if (task.isSuccessful()) {
                         FirebaseUser user = mAuth.getCurrentUser();
@@ -371,9 +415,9 @@ public class ControllerUserDB {
                                     }
                                 }
                             };
+
                             //Crec que aixo s'ha de fer pero ni idea
                             MainActivity.getInstance().registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
-
                             //Fi del codi que carrega la imatge de Google
 
                             try {
@@ -386,22 +430,46 @@ public class ControllerUserDB {
                                             if (params[3] == null) params[3]="";
                                             else params[3] = params[3].toString();
 
-                                            try {
-                                                method.invoke(object, params);
-                                            } catch (IllegalAccessException ignore) {
-                                            } catch (InvocationTargetException ignore) {
-                                            }
+                                            ArrayList<ArrayList<String>> routineIds = new ArrayList();
+                                            docRefToUser.collection("routines").orderBy("timestamp", Query.Direction.DESCENDING).get().addOnCompleteListener(task2 -> {
+                                                if (task2.isSuccessful()) {
+                                                    for (QueryDocumentSnapshot  document : task2.getResult()) {
+                                                        ArrayList<String> routinesResult = new ArrayList<>();
+                                                        routinesResult.add(document.getId());
+                                                        routinesResult.add(document.get("name").toString());
+                                                        routineIds.add(routinesResult);
+                                                    }
+                                                }
+                                                params[5] = routineIds;
+                                                try {
+                                                    method.invoke(object, params);
+                                                } catch (IllegalAccessException ignore) {
+                                                } catch (InvocationTargetException ignore) {
+                                                }
+                                            });
                                         }).addOnFailureListener(exception -> {
                                             params[4] = null;
 
                                             if (params[3] == null) params[3]="";
                                             else params[3] = params[3].toString();
 
-                                            try {
-                                                method.invoke(object, params);
-                                            } catch (IllegalAccessException ignore) {
-                                            } catch (InvocationTargetException ignore) {
-                                            }
+                                            ArrayList<ArrayList<String>> routineIds = new ArrayList();
+                                            docRefToUser.collection("routines").orderBy("timestamp", Query.Direction.DESCENDING).get().addOnCompleteListener(task3 -> {
+                                                if (task3.isSuccessful()) {
+                                                    for (QueryDocumentSnapshot  document : task3.getResult()) {
+                                                        ArrayList<String> routinesResult = new ArrayList<>();
+                                                        routinesResult.add(document.getId());
+                                                        routinesResult.add(document.get("name").toString());
+                                                        routineIds.add(routinesResult);
+                                                    }
+                                                }
+                                                params[5] = routineIds;
+                                                try {
+                                                    method.invoke(object, params);
+                                                } catch (IllegalAccessException ignore) {
+                                                } catch (InvocationTargetException ignore) {
+                                                }
+                                            });
                                         });
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -462,7 +530,6 @@ public class ControllerUserDB {
                     Object[] params = new Object[4];
 
                     if (task.isSuccessful()) {
-
                         FirebaseUser user = mAuth.getCurrentUser();
                         String userID = user.getUid();
 

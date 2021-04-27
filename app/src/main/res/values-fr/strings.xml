@@ -63,4 +63,11 @@
     <string name="noRoutines">Tu n\'as aucune routine, créez-en un nouveau!</string>
     <string name="shortPassword">Le mot de passe doit comporter au moins 6 caractères</string>
     <string name="notAValidEmail">Entrer un email valide</string>
+    <string name="change_password">Changer le mot de passe</string>
+    <string name="log_out">Se déconnecter</string>
+    <string name="change_profile_photo">Changer la photo de profil</string>
+    <string name="permissionDenied">Vous avez précédemment refusé à Become d\'accéder à vos photos, accédez aux paramètres et modifiez les autorisations pour accéder à cette fonctionnalité.</string>
+    <string name="permissionDeniedTitle">Permission refusée</string>
+    <string name="existingRoutineName">Il y a une autre routine avec le même nom</string>
+
 </resources>

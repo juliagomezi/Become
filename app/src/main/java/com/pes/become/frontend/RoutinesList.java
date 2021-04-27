@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapter;
+import com.pes.become.backend.exceptions.ExistingRoutineException;
 
 import java.util.ArrayList;
 
@@ -96,25 +97,10 @@ public class RoutinesList extends Fragment {
      * Funció per obtenir les rutines de l'usuari
      */
     public void getRoutines() {
-        try {
-            DA.getUserRoutines(this);
-        } catch (NoSuchMethodException ignore) { }
-    }
-
-    /**
-     * Funció per inicialitzar l'element que mostra el llistat de rutines
-     * @param routinesListCallback llistat de rutines que retorna la BD
-     * @param selectedRoutineID id de la rutina seleccionada de l'usuari que retorna la BD
-     */
-    public void getRoutinesCallback(ArrayList<ArrayList<String>> routinesListCallback, String selectedRoutineID) {
-        this.selectedRoutineID = selectedRoutineID;
-        routinesList = new ArrayList<>(routinesListCallback.size());
-        routinesList.addAll(routinesListCallback);
+        routinesList = DA.getUserRoutines();
+        selectedRoutineID = DA.getSelectedRoutineId();
         initRecyclerView();
-
-        if(routinesList.isEmpty()) {
-            initEmptyView();
-        }
+        if(routinesList.isEmpty()) initEmptyView();
     }
 
     public void createRoutineSheet() {
@@ -136,19 +122,13 @@ public class RoutinesList extends Fragment {
         if (name.isEmpty()) routineName.setError(getString(R.string.notNull));
         else {
             try {
-                String id = DA.createRoutine(name);
-                ArrayList<String> routine = new ArrayList<>(2);
-                routine.add(id);
-                routine.add(name);
-                if(routinesList.isEmpty()) initRecyclerView();
-                routinesList.add(0,routine);
+                if (routinesList.isEmpty()) initRecyclerView();
+                DA.createRoutine(name);
                 routinesListRecyclerAdapter.notifyDataSetChanged();
                 Toast.makeText(getContext(), getString(R.string.routineCreated), Toast.LENGTH_SHORT).show();
                 routineSheet.dismiss();
-            }
-            catch (Exception e) {
-                e.printStackTrace(); // provisional!!!
-                routineName.setError(getString(R.string.notNull));
+            } catch (ExistingRoutineException e) {
+                routineName.setError(getString(R.string.existingRoutineName));
             }
         }
     }

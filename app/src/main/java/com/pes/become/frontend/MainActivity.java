@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 selectedFragment = new RoutineView();
                 break;
             case R.id.communityView:
-                selectedFragment = new RoutineEdit();
+                selectedFragment = new RoutineView();
                 break;
             case R.id.profileView:
                 selectedFragment = new Profile();
@@ -73,9 +73,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void onNothingSelected(AdapterView<?> parent) { }
 
-    public void setEditRoutineScreen() {
+    public void setEditRoutineScreen(String id, String routineName) {
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_layout, new RoutineEdit()).commit();
+                .replace(R.id.fragment_layout, new RoutineEdit(id, routineName)).commit();
     }
 
     public void setProfileScreen() {

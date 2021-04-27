@@ -1,7 +1,5 @@
 package com.pes.become.backend.persistence;
 
-import android.util.Log;
-
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -39,7 +37,6 @@ public class ControllerActivityDB {
     public void getActivitiesByDay(String userId, String idRoutine, String day, Method method, Object object) {
         db.collection("users").document(userId).collection("routines").document(idRoutine).collection("activities").whereEqualTo("day", day).addSnapshotListener((value, e) -> {
             if (e != null) {
-                Log.w("LISTENER FAILED", "Listen failed.", e);
                 return;
             }
 
@@ -55,14 +52,10 @@ public class ControllerActivityDB {
                 activity.add(document.get("finishTime").toString());
                 activitiesResult.add(activity);
             }
-            Object[] params = new Object[1];
-            params[0] = activitiesResult;
             try {
-                method.invoke(object, params);
-            } catch (IllegalAccessException e1) {
-                System.out.println("Acces invàlid");
-            } catch (InvocationTargetException e2) {
-                System.out.println("Target no vàlid");
+                method.invoke(object, activitiesResult);
+            } catch (IllegalAccessException ignore) {
+            } catch (InvocationTargetException ignore) {
             }
         });
     }

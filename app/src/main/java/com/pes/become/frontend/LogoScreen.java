@@ -26,7 +26,7 @@ public class LogoScreen extends AppCompatActivity {
         super.onStart();
         FirebaseUser user = mAuth.getCurrentUser();
 
-        if(user !=null) {
+        if(user != null) {
             DA.loadUser(this);
         }
         else {

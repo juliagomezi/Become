@@ -103,12 +103,30 @@
             app:iconPadding="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.044"
+            app:layout_constraintHorizontal_bias="0.027"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <EditText
+            android:id="@+id/nameText"
+            android:layout_width="240dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="15dp"
+            android:autofillHints=""
+            android:background="@drawable/edittext_background"
+            android:ems="10"
+            android:fontFamily="@font/sourcesanspro_regular"
+            android:inputType="textPersonName"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.406"
             app:layout_constraintStart_toStartOf="parent" />
 
         <Button
             android:id="@+id/doneButton"
-            android:layout_width="100dp"
+            android:layout_width="80dp"
             android:layout_height="40dp"
             android:layout_marginBottom="15dp"
             android:layout_weight="1"
@@ -119,9 +137,8 @@
             android:textSize="18dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.95"
+            app:layout_constraintHorizontal_bias="0.967"
             app:layout_constraintStart_toStartOf="parent" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
