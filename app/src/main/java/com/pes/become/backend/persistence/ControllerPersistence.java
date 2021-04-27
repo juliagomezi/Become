@@ -18,6 +18,19 @@ public class ControllerPersistence {
         CA = new ControllerActivityDB();
         CR = new ControllerRoutineDB();
     }
+    /********************FUNCIONS RELACIONADES AMB ACTIVITATS**************************************/
+    /***************************CONSULTORES D'ACTIVITATS***********************/
+
+    /**
+     * Obtenir les activitats d'una rutina
+     * @param userId identificador de l'usuari
+     * @param idRoutine l'identificador de la rutina
+     * @param method metode a cridar quan es retornin les dades
+     * @param object classe que conté el mètode
+     */
+    public void getActivitiesRoutine(String userId, String idRoutine, Method method, Object object) {
+        CA.getActivities(userId, idRoutine, method, object);
+    }
 
     /**
      * Obtenir les activitats d'una rutina i un dia indicats
@@ -31,6 +44,7 @@ public class ControllerPersistence {
         CA.getActivitiesByDay(userId, idRoutine,day,method,object);
     }
 
+    /****************************MODIFICADORES D'ACTIVITATS**************************/
     /**
      * Afegir una nova activitat a una certa rutina de la base de dades
      * @param userId identificador de l'usuari
@@ -73,6 +87,10 @@ public class ControllerPersistence {
         CA.updateActivity(userId, idRoutine, actName, description, theme, day, iniT, endT, idActivity);
     }
 
+
+    /***********************FUNCIONS RELACIONADES AMB RUTINES**************************************/
+    /*****************************MODIFICADORES DE RUTINES**************************/
+
     /**
      * Canvia el nom d'una rutina.
      * @param userId identificador de l'usuari
@@ -101,6 +119,9 @@ public class ControllerPersistence {
         CR.deleteRoutine(userId, idRoutine);
     }
 
+    /***********************FUNCIONS RELACIONADES AMB USUARIS**************************************/
+    /***********************CONSULTORES D'USUARIS**************************************/
+
     /**
      * Metode per obtenir la informació de l'usuari
      * @param userID identificador de l'usuari
@@ -123,6 +144,8 @@ public class ControllerPersistence {
         CU.getSelectedRoutine(userID, method, object);
     }
 
+    /***********************MODIFICADORES D'USUARIS**************************************/
+
     /**
      * Canvi de contrasenya de l'usuari actual
      * @param newPassword nova contrasenya
@@ -135,16 +158,6 @@ public class ControllerPersistence {
     }
 
     /**
-     * Metode per penjar una foto de perfil des de la galeria de l'usuari
-     * @param userId id de l'usuari que penja la foto
-     * @param imageUri uri de la imatge a penjar
-     */
-    public void updateProfilePic(String userId, Uri imageUri) {
-        CU = ControllerUserDB.getInstance();
-        CU.updateProfilePic(userId, imageUri);
-    }
-
-    /**
      * Esborrar l'usuari actual i les seves rutines i activitats
      * @param method mètode a executar de forma asíncrona un cop acabada la reautentificació (el paràmetre és un boolea que retorna true si la reautentificació ha anat bé o false si no)
      * @param object instancia de la classe del mètode a executar
@@ -153,6 +166,18 @@ public class ControllerPersistence {
         CU = ControllerUserDB.getInstance();
         CU.deleteUser(method, object);
     }
+
+    /**
+     * Metode per carregar un usuari
+     * @param method metode a cridar quan es retornin les dades
+     * @param object classe que conté el mètode
+     */
+    public void loadUser(Method method, Object object) {
+        CU = ControllerUserDB.getInstance();
+        CU.loadUser(method, object);
+    }
+
+
 
     /**
      * Inici de sessió d'usuari
@@ -223,12 +248,14 @@ public class ControllerPersistence {
     }
 
     /**
-     * Metode per carregar un usuari
-     * @param method metode a cridar quan es retornin les dades
-     * @param object classe que conté el mètode
+     * Metode per penjar una foto de perfil des de la galeria de l'usuari
+     * @param userId id de l'usuari que penja la foto
+     * @param imageUri uri de la imatge a penjar
      */
-    public void loadUser(Method method, Object object) {
+    public void updateProfilePic(String userId, Uri imageUri) {
         CU = ControllerUserDB.getInstance();
-        CU.loadUser(method, object);
+        CU.updateProfilePic(userId, imageUri);
     }
+
+
 }

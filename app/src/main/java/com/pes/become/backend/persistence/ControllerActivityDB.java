@@ -40,6 +40,14 @@ public class ControllerActivityDB {
                 return;
             }
             HashMap <String, ArrayList<ArrayList<String>> > routineActivities = new HashMap<>();
+            ArrayList<ArrayList<String>> activitiesMonday = new ArrayList<ArrayList<String>>();
+            ArrayList<ArrayList<String>> activitiesTuesday = new ArrayList<ArrayList<String>>();
+            ArrayList<ArrayList<String>> activitiesWednesday = new ArrayList<ArrayList<String>>();
+            ArrayList<ArrayList<String>> activitiesThursday = new ArrayList<ArrayList<String>>();
+            ArrayList<ArrayList<String>> activitiesFriday = new ArrayList<ArrayList<String>>();
+            ArrayList<ArrayList<String>> activitiesSaturday = new ArrayList<ArrayList<String>>();
+            ArrayList<ArrayList<String>> activitiesSunday = new ArrayList<ArrayList<String>>();
+
 
             for (QueryDocumentSnapshot document : value) {
                 ArrayList<String> activity = new ArrayList<>();
@@ -52,10 +60,29 @@ public class ControllerActivityDB {
                 activity.add(document.get("beginTime").toString());
                 activity.add(document.get("finishTime").toString());
 
-                ArrayList<ArrayList<String>> aux = routineActivities.get(activityDay);
-                aux.add(activity);
-                routineActivities.put(activityDay,aux);
+                //ArrayList<ArrayList<String>> aux = routineActivities.get(activityDay);
+                //aux.add(activity);
+                //routineActivities.put(activityDay,aux);
+
+                if (activityDay.equals("Monday")) { activitiesMonday.add(activity); }
+                else if (activityDay.equals("Tuesday")) { activitiesTuesday.add(activity); }
+                else if (activityDay.equals("Wednesday")) { activitiesWednesday.add(activity); }
+                else if (activityDay.equals("Thursday")) { activitiesThursday.add(activity); }
+                else if (activityDay.equals("Friday")) { activitiesFriday.add(activity); }
+                else if (activityDay.equals("Saturday")) { activitiesSaturday.add(activity); }
+                else { activitiesSunday.add(activity); }
+
+
             }
+            routineActivities.put("Monday",activitiesMonday);
+            routineActivities.put("Tuesday",activitiesTuesday);
+            routineActivities.put("Wednesday",activitiesWednesday);
+            routineActivities.put("Thursday",activitiesThursday);
+            routineActivities.put("Friday",activitiesFriday);
+            routineActivities.put("Saturday",activitiesSaturday);
+            routineActivities.put("Sunday",activitiesSunday);
+
+
             try {
                 method.invoke(object, routineActivities);
             } catch (IllegalAccessException ignore) {
