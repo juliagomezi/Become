@@ -45,9 +45,12 @@ public class ControllerStatisticsDB {
 
                         String oldDay = document.get("day").toString();
                         String oldTheme = document.get("theme").toString();
-                        double oldQuantityHours = timeDifference(document.get("beginTime").toString(), document.get("finishTime").toString());
                         boolean sameDay = oldDay.equals(newDay);
                         boolean sameTheme = oldTheme.equals(newTheme);
+
+                        //Duració en hores de l'activitat abans d'actualitzar-la.
+                        double oldActivityHours = timeDifference(document.get("beginTime").toString(), document.get("finishTime").toString());
+
 
                         //ACONSEGUIR HORES DEL TEMA ABANS DE MODIFICAR
                         //RESTAR oldQuantityHours
@@ -59,14 +62,24 @@ public class ControllerStatisticsDB {
                                 if (task.isSuccessful()) {
                                     DocumentSnapshot document = task.getResult();
                                     if (document.exists()) {
-                                        Map<String, Object> mapOldDay = (Map) document.get("statistics"+oldDay);
+                                        Map<String, Double> mapOldDay = (Map) document.get("statistics"+oldDay);
+                                        //Potser s'ha de fer mapa <string, object> i convertir a double
                                         //double oldThemeTime = mapOldDay.get(oldTheme);
                                         if (sameDay && sameTheme){
-
+                                            double difference = newQuantityHours - oldActivityHours;
+                                            mapOldDay.put(oldTheme,mapOldDay.get(oldTheme)+difference);
+                                            //PUJAR MAPA A DATABASE
                                         }
 
-                                        else if (sameDay){}
-                                        else if (sameTheme){}
+                                        else if (sameDay){
+                                            mapOldDay.put(oldTheme,mapOldDay.get(oldTheme)-oldActivityHours);
+                                            mapOldDay.put(newTheme,mapOldDay.get(oldTheme)-oldActivityHours);
+                                        }
+                                        else if (sameTheme){
+                                            mapOldDay.put(oldTheme,mapOldDay.get(oldTheme)-oldActivityHours);
+                                            Map<String, Double> mapNewDay = (Map) document.get("statistics"+newDay);
+
+                                        }
                                         else {}
                                     }
                                 }
@@ -96,7 +109,7 @@ public class ControllerStatisticsDB {
         double minutes = (finishMinute - beginMinute)/60.0;
 
         if (minutes<0.0){
-            hours = hours - 1;
+            hours = hours - 1.0;
             minutes = minutes * -1.0;
         }
 
