@@ -379,6 +379,7 @@ public class ControllerUserDB {
                                 mapa.put("Username", user.getDisplayName());
                                 mapa.put("selectedRoutine", "");
                                 docRefToUser1.set(mapa);
+                                updateProfilePic(userID, user.getPhotoUrl());
                             }
 
                             params[0] = true;
@@ -387,7 +388,7 @@ public class ControllerUserDB {
                             params[3] = documentSnapshot.get("selectedRoutine");
 
                             //Codi que descarrega la foto de perfil de l'usuari de Google i la fica de perfil
-
+                            /*
                             //Descarreguem la imatge
                             DownloadManager.Request request = new DownloadManager.Request(user.getPhotoUrl());
                             request.setTitle(userID);
@@ -418,7 +419,7 @@ public class ControllerUserDB {
 
                             //Crec que aixo s'ha de fer pero ni idea
                             MainActivity.getInstance().registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
-                            //Fi del codi que carrega la imatge de Google
+                            //Fi del codi que carrega la imatge de Google*/
 
                             try {
                                 File localFile = File.createTempFile("images", "jpeg");
