@@ -6,14 +6,19 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapter;
+import com.pes.become.backend.domain.Routine;
 
 import java.util.ArrayList;
+
+import static android.provider.Settings.System.getString;
+import static java.security.AccessController.getContext;
 
 public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesListRecyclerAdapter.ViewHolder> {
 
@@ -41,13 +46,10 @@ public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesLi
         View view = layoutInflater.inflate(R.layout.routines_list_element, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
 
-        viewHolder.switchButton.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    selectRoutine(viewHolder.getAdapterPosition());
-                } catch (NoSuchMethodException ignore) { }
-            }
+        viewHolder.switchButton.setOnClickListener(view1 -> {
+            try {
+                selectRoutine(viewHolder.getAdapterPosition());
+            } catch (NoSuchMethodException ignore) { }
         });
 
         return viewHolder;
@@ -69,9 +71,11 @@ public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesLi
 
         holder.deleteButton.setOnClickListener(view -> {
             String currentId = routinesList.get(position).get(0);
-            DA.deleteRoutine(currentId);
-            notifyDataSetChanged();
-            if (routinesList.isEmpty()) RoutinesList.getInstance().initEmptyView();
+            if(!currentId.equals(selectedRoutineID)) {
+                DA.deleteRoutine(currentId);
+                notifyDataSetChanged();
+                if (routinesList.isEmpty()) RoutinesList.getInstance().initEmptyView();
+            }
         });
 
         boolean isSelected = routinesList.get(position).get(0).equals(selectedRoutineID);
@@ -110,8 +114,13 @@ public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesLi
     }
 
     private void selectRoutine(int position) throws NoSuchMethodException {
-        DA.selectRoutine(routinesList.get(position));
-        selectedRoutineID = routinesList.get(position).get(0);
+        if(routinesList.get(position).get(0).equals(selectedRoutineID)) {
+            DA.selectRoutine(null);
+            selectedRoutineID = "";
+        } else {
+            DA.selectRoutine(routinesList.get(position));
+            selectedRoutineID = routinesList.get(position).get(0);
+        }
         notifyDataSetChanged();
     }
 }
