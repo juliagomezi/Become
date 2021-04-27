@@ -26,6 +26,44 @@ public class ControllerActivityDB {
         db = FirebaseFirestore.getInstance();
     }
 
+
+    /**
+     * Obtenir les activitats d'una rutina
+     * @param userId identificador de l'usuari
+     * @param idRoutine l'identificador de la rutina
+     * @param method metode a cridar quan es retornin les dades
+     * @param object classe que conté el mètode
+     */
+    public void getActivities(String userId, String idRoutine, Method method, Object object) {
+        db.collection("users").document(userId).collection("routines").document(idRoutine).collection("activities").addSnapshotListener((value, e) -> {
+            if (e != null) {
+                return;
+            }
+            HashMap <String, ArrayList<ArrayList<String>> > routineActivities = new HashMap<>();
+
+            for (QueryDocumentSnapshot document : value) {
+                ArrayList<String> activity = new ArrayList<>();
+                activity.add(document.getId());
+                activity.add(document.get("name").toString());
+                activity.add(document.get("description").toString());
+                activity.add(document.get("theme").toString());
+                String activityDay = document.get("day").toString();
+                activity.add(activityDay);
+                activity.add(document.get("beginTime").toString());
+                activity.add(document.get("finishTime").toString());
+
+                ArrayList<ArrayList<String>> aux = routineActivities.get(activityDay);
+                aux.add(activity);
+                routineActivities.put(activityDay,aux);
+            }
+            try {
+                method.invoke(object, routineActivities);
+            } catch (IllegalAccessException ignore) {
+            } catch (InvocationTargetException ignore) {
+            }
+        });
+    }
+
     /**
      * Obtenir les activitats d'una rutina i un dia indicats
      * @param userId identificador de l'usuari
