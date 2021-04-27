@@ -208,9 +208,8 @@ public class Profile extends Fragment {
         if(requestCode==1 && resultCode==RESULT_OK && data!=null && data.getData()!=null) {
             Uri imageUri = data.getData();
             profilePic.setImageURI(imageUri);
-            DA.updateProfilePic(imageUri);
             try {
-                DA.updateProfilePic(MediaStore.Images.Media.getBitmap(MainActivity.getInstance().getContentResolver(), imageUri));
+                DA.updateProfilePic(imageUri, MediaStore.Images.Media.getBitmap(MainActivity.getInstance().getContentResolver(), imageUri));
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -110,13 +110,6 @@ public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesLi
     }
 
     private void selectRoutine(int position) throws NoSuchMethodException {
-        DA.selectRoutine(routinesList.get(position).get(0));
-        selectedRoutineID = routinesList.get(position).get(0);
-        notifyDataSetChanged();
-    }
-
-
-    private void selectRoutine(int position) throws NoSuchMethodException {
         DA.selectRoutine(routinesList.get(position));
         selectedRoutineID = routinesList.get(position).get(0);
         notifyDataSetChanged();

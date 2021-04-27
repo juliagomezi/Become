@@ -492,11 +492,8 @@ public class DomainAdapter {
      * Metode per penjar una foto de perfil des de la galeria de l'usuari
      * @param imageUri uri de la imatge a penjar
      */
-    public void updateProfilePic(Uri imageUri) {
+    public void updateProfilePic(Uri imageUri, Bitmap imageBm) {
         controllerPersistence.updateProfilePic(currentUser.getID(), imageUri);
-    }
-
-    public void updateProfilePic(Bitmap imageBm){
         currentUser.setPFP(imageBm);
     }
 
