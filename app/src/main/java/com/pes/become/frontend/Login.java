@@ -4,8 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +28,8 @@ public class Login extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
     private final static int RC_SIGN_IN = 123;
 
+    private ProgressBar loading;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +41,7 @@ public class Login extends AppCompatActivity {
         Button login = findViewById(R.id.logInButton);
         Button googleLogin = findViewById(R.id.googleLoginButton);
         TextView signUp = findViewById(R.id.signUp);
+        loading = findViewById(R.id.loading);
 
         login.setOnClickListener(v-> loginUser());
 
@@ -46,13 +51,11 @@ public class Login extends AppCompatActivity {
     }
 
     private void createRequest() {
-        // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
 
-        // Build a GoogleSignInClient with the options specified by gso.
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
     }
 
@@ -63,11 +66,12 @@ public class Login extends AppCompatActivity {
         if (user.isEmpty()) userText.setError(getString(R.string.notNull));
         else if (password.isEmpty()) userText.setError(getString(R.string.notNull));
 
+        loading.setVisibility(View.VISIBLE);
         DA.loginUser(user, password, this);
-
     }
 
     private void googleLoginUser() {
+        loading.setVisibility(View.VISIBLE);
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }

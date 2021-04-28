@@ -113,28 +113,6 @@ public class ControllerPersistence {
     }
 
     /**
-     * Metode per obtenir la informació de l'usuari
-     * @param userID identificador de l'usuari
-     * @param method metode a cridar quan s'obtingui la resposta
-     * @param object classe que conte el metode
-     */
-    public void getInfoUser(String userID, Method method, Object object){
-        CU = ControllerUserDB.getInstance();
-        CU.getInfoUser(userID, method, object);
-    }
-
-    /**
-     * Metode per obtenir la rutina seleccionada de l'usuari
-     * @param userID identificador de l'usuari
-     * @param method metode a cridar quan s'obtingui la resposta
-     * @param object classe que conte el metode
-     */
-    public void getSelectedRoutine(String userID, Method method, Object object){
-        CU = ControllerUserDB.getInstance();
-        CU.getSelectedRoutine(userID, method, object);
-    }
-
-    /**
      * Canvi de contrasenya de l'usuari actual
      * @param newPassword nova contrasenya
      * @param method mètode a executar de forma asíncrona un cop acabada la reautentificació (el paràmetre és un boolea que retorna true si la reautentificació ha anat bé o false si no)
@@ -160,9 +138,9 @@ public class ControllerPersistence {
      * @param method mètode a executar de forma asíncrona un cop acabada la reautentificació (el paràmetre és un boolea que retorna true si la reautentificació ha anat bé o false si no)
      * @param object instancia de la classe del mètode a executar
      */
-    public void deleteUser(Method method, Object object) {
+    public void deleteUser(String password, Method method, Object object) {
         CU = ControllerUserDB.getInstance();
-        CU.deleteUser(method, object);
+        CU.deleteUser(password, method, object);
     }
 
     /**
@@ -187,18 +165,6 @@ public class ControllerPersistence {
     public void loginUserGoogle(String idToken, Method method, Object object ){
         CU = ControllerUserDB.getInstance();
         CU.loginUserGoogle(idToken, method, object);
-    }
-
-    /**
-     * Reautenticació de l'usuari
-     * @param mail correu
-     * @param password contrasenya
-     * @param method mètode a executar de forma asíncrona un cop acabada la reautentificació (el paràmetre és un boolea que retorna true si la reautentificació ha anat bé o false si no)
-     * @param object instancia de la classe del mètode a executar
-     */
-    public void reauthenticate(String mail, String password, Method method, Object object) {
-        CU = ControllerUserDB.getInstance();
-        CU.reauthenticate(mail, password, method, object);
     }
 
     /**

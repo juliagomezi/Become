@@ -21,6 +21,7 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -49,6 +50,8 @@ public class Profile extends Fragment {
     private TextView username;
 
     private BottomSheetDialog optionsSheet;
+    private TextView deleteAccount;
+    private EditText passText;
 
     /**
      * Pestanyes del TabLayout
@@ -141,6 +144,11 @@ public class Profile extends Fragment {
         TextView logout = sheetView.findViewById(R.id.logout);
         logout.setOnClickListener(v -> logOut());
 
+        deleteAccount = sheetView.findViewById(R.id.deleteAcc);
+        deleteAccount.setOnClickListener(v -> askForPassword());
+
+        passText = sheetView.findViewById(R.id.passText);
+
         optionsSheet.setContentView(sheetView);
         optionsSheet.show();
     }
@@ -163,6 +171,39 @@ public class Profile extends Fragment {
         DA.logoutUser();
         startActivity(new Intent(global, Login.class));
         Objects.requireNonNull(getActivity()).finish();
+    }
+
+    /**
+     * Metode per demanar escriure el password si es vol esborrar el compte
+     */
+    private void askForPassword() {
+        passText.setVisibility(View.VISIBLE);
+        deleteAccount.setOnClickListener(v -> deleteUserAccount());
+    }
+
+    /**
+     * Metode per solicitar esborrar el compte
+     */
+    public void deleteUserAccount() {
+        String password = passText.getText().toString();
+        try {
+            DA.deleteUser(password);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Metode per rebre la resposta a la sol.licitud d'esborrat d'usuari
+     */
+    public void deleteCallback(boolean success) {
+        if(success) {
+            optionsSheet.dismiss();
+            startActivity(new Intent(global, Login.class));
+            getActivity().finish();
+        } else {
+            passText.setError(getString(R.string.wrongPassword));
+        }
     }
 
     /**

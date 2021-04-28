@@ -1,16 +1,8 @@
 package com.pes.become.backend.persistence;
 
 import android.app.Activity;
-import android.app.DownloadManager;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Environment;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -28,8 +20,6 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.pes.become.backend.adapters.DomainAdapter;
-import com.pes.become.frontend.MainActivity;
 
 import java.io.File;
 import java.io.IOException;
@@ -62,60 +52,6 @@ public class ControllerUserDB {
             instance = new ControllerUserDB();
         }
         return instance;
-    }
-
-    /**
-     * Funcio per obtenir el nom, el correu i la rutina seleccionada de l'usuari en aquest ordre
-     * @param userID l'identificador de l'usuari
-     * @param method el metode a cridar
-     * @param object l'objecte que conte el metode
-     */
-    public void getInfoUser(String userID, Method method, Object object) {
-        DocumentReference docRefToUser = db.collection("users").document(userID);
-        Object[] params = new Object[3];
-
-        docRefToUser.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                DocumentSnapshot document = task.getResult();
-                if (document.exists()) {
-                    params[0] = document.get("name");
-                    params[1] = mAuth.getCurrentUser().getEmail();
-                    params[2] = document.get("selectedRoutine");
-                    try {
-                        method.invoke(object, params);
-                    } catch (IllegalAccessException ignore) {
-                    } catch (InvocationTargetException ignore) {
-                    }
-                }
-            }
-        });
-    }
-
-    /**
-     * Metode utilizat per obtenir la rutina seleccionada de l'usuari
-     * @param userID l'identificador de l'usuari
-     * @param method el metode a cridar
-     * @param object l'objecte que conte el metode
-     */
-    public void getSelectedRoutine(String userID, Method method, Object object) {
-
-        DocumentReference docRefToUser = db.collection("users").document(userID);
-        Object[] params = new Object[1];
-
-        docRefToUser.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                DocumentSnapshot document = task.getResult();
-                if (document.exists()) {
-                    params[0] = document.get("selectedRoutine");
-                    try {
-                        method.invoke(object, params);
-                    } catch (IllegalAccessException ignore) {
-                    } catch (InvocationTargetException ignore) {
-                    }
-                }
-            }
-        });
-
     }
 
     /**
@@ -157,31 +93,6 @@ public class ControllerUserDB {
                 .addOnSuccessListener(taskSnapshot -> {
                 })
                 .addOnFailureListener(exception -> {
-                });
-    }
-
-    /**
-     * Esborrar l'usuari actual i les seves rutines i activitats
-     * @param method mètode a executar de forma asíncrona un cop acabada la reautentificació (el paràmetre és un boolea que retorna true si la reautentificació ha anat bé o false si no)
-     * @param object instancia de la classe del mètode a executar
-     */
-    public void deleteUser(Method method, Object object) {
-        //reauthenticate(mail, oldPassword);
-        FirebaseUser user = mAuth.getCurrentUser();
-        String userID = user.getUid();
-        user.delete()
-                .addOnCompleteListener(task -> {
-                    boolean success = false;
-                    if (task.isSuccessful()) {
-                        DocumentReference docRefToUser = db.collection("users").document(userID);
-                        deleteUserData(docRefToUser);
-                        success = true;
-                    }
-                    try {
-                        method.invoke(object, success);
-                    } catch (IllegalAccessException ignore) {
-                    } catch (InvocationTargetException ignore) {
-                    }
                 });
     }
 
@@ -387,40 +298,6 @@ public class ControllerUserDB {
                             params[2] = documentSnapshot.get("Username").toString();
                             params[3] = documentSnapshot.get("selectedRoutine");
 
-                            //Codi que descarrega la foto de perfil de l'usuari de Google i la fica de perfil
-                            /*
-                            //Descarreguem la imatge
-                            DownloadManager.Request request = new DownloadManager.Request(user.getPhotoUrl());
-                            request.setTitle(userID);
-                            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, userID+".jpg");
-                            DownloadManager manager = (DownloadManager) MainActivity.getInstance().getSystemService(Context.DOWNLOAD_SERVICE);
-                            manager.enqueue(request);
-
-                            //Quan acabem de descarregar:
-                            BroadcastReceiver onComplete = new BroadcastReceiver() {
-                                @Override
-                                public void onReceive(Context context, Intent intent) {
-                                    String action = intent.getAction();
-                                    if(DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)){
-                                        //Anem a la carpeta descarregues
-                                        File directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-                                        File[] files = directory.listFiles();
-                                        for (int i = 0; i < files.length; i++)
-                                        {
-                                            if(files[i].getName().equals(userID+".jpg")){ //quan trobem l'arxiu amb la id de l'usuari com a nom
-                                                Bitmap bm = BitmapFactory.decodeFile(files[i].getAbsolutePath()); //el convertim a bitmap
-                                                DomainAdapter.getInstance().updateProfilePic(bm); //el passem a domini
-                                                files[i].delete(); //i l'eliminem
-                                            }
-                                        }
-                                    }
-                                }
-                            };
-
-                            //Crec que aixo s'ha de fer pero ni idea
-                            MainActivity.getInstance().registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
-                            //Fi del codi que carrega la imatge de Google*/
-
                             try {
                                 File localFile = File.createTempFile("images", "jpeg");
                                 StorageReference imageRef = storageRef.child("images/"+userID);
@@ -490,32 +367,6 @@ public class ControllerUserDB {
     }
 
     /**
-     * Reautenticació de l'usuari
-     * @param mail correu de l'usuari
-     * @param password contrasenya de l'usuari
-     * @param method mètode a executar de forma asíncrona un cop acabada la reautentificació (el paràmetre és un boolea que retorna true si la reautentificació ha anat bé o false si no)
-     * @param object instancia de la classe del mètode a executar
-     */
-    public void reauthenticate(String mail, String password, Method method, Object object) {
-        FirebaseUser user = mAuth.getCurrentUser();
-        AuthCredential credential = EmailAuthProvider
-                .getCredential(mail, password);
-
-        user.reauthenticate(credential)
-                .addOnCompleteListener(task -> {
-                    boolean success = false;
-                    if(task.isSuccessful()) {
-                        success = true;
-                    }
-                    try {
-                        method.invoke(object, success);
-                    } catch (IllegalAccessException ignore) {
-                    } catch (InvocationTargetException ignore) {
-                    }
-                });
-    }
-
-    /**
      * Registre d'un nou usuari
      * @param mail correu de l'usuari que es vol crear
      * @param password contrasenya de l'usuari que es vol crear
@@ -573,6 +424,31 @@ public class ControllerUserDB {
         mAuth.getInstance().signOut();
     }
 
+    /**
+     * Esborrar l'usuari actual i les seves rutines i activitats
+     */
+    public void deleteUser(String password, Method method, Object object) {
+        FirebaseUser user = mAuth.getCurrentUser();
+        AuthCredential credential = EmailAuthProvider
+                .getCredential(user.getEmail(), password);
+
+        String id = user.getUid();
+        user.reauthenticate(credential)
+                .addOnCompleteListener(task -> user.delete()
+                        .addOnCompleteListener(task2 -> {
+                            boolean success = false;
+                            if (task2.isSuccessful()) {
+                                DocumentReference docRefToUser = db.collection("users").document(id);
+                                deleteUserData(docRefToUser);
+                                success = true;
+                            }
+                            try {
+                                method.invoke(object, success);
+                            } catch (IllegalAccessException ignore) {
+                            } catch (InvocationTargetException ignore) {
+                            }
+                        }));
+    }
 
     /**
      * Esborra totes les dades de la BD de l'usuari (rutines i activitats)

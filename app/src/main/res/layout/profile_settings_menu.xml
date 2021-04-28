@@ -15,6 +15,8 @@
         android:fontFamily="@font/sourcesanspro_regular"
         android:text="@string/change_profile_photo"
         android:textColor="@color/black"
+        android:clickable="true"
+        android:focusable="true"
         android:textSize="22sp" />
 
     <TextView
@@ -25,6 +27,8 @@
         android:fontFamily="@font/sourcesanspro_regular"
         android:text="@string/change_password"
         android:textColor="@color/black"
+        android:clickable="true"
+        android:focusable="true"
         android:textSize="22sp" />
 
     <TextView
@@ -35,6 +39,42 @@
         android:fontFamily="@font/sourcesanspro_regular"
         android:text="@string/log_out"
         android:textColor="@color/darkred"
+        android:clickable="true"
+        android:focusable="true"
         android:textSize="22sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="30dp"
+        android:background="@android:color/darker_gray"/>
+
+    <TextView
+        android:id="@+id/deleteAcc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/sourcesanspro_regular"
+        android:text="Delete account"
+        android:clickable="true"
+        android:focusable="true"
+        android:textColor="@color/darkred"
+        android:textSize="22sp" />
+
+    <EditText
+        android:id="@+id/passText"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edittext_background"
+        android:drawableLeft="@drawable/ic_padlock"
+        android:drawablePadding="10dp"
+        android:ems="10"
+        android:fontFamily="@font/sourcesanspro_regular"
+        android:hint="@string/password"
+        android:inputType="textPassword"
+        android:textColor="@color/black"
+        android:textSize="22sp"
+        android:visibility="gone"/>
 
 </LinearLayout>

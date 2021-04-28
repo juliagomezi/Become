@@ -69,5 +69,6 @@
     <string name="permissionDenied">Has denegat a Become poder accedir a les teves fotos, actualitza els permisos a configuració per poder usar aquesta funcionalitat.</string>
     <string name="permissionDeniedTitle">Permís denegat</string>
     <string name="existingRoutineName">Hi ha una altra rutina amb el mateix nom</string>
-  
+    <string name="wrongPassword">Clau de pas incorrecta</string>
+
 </resources>

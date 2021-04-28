@@ -17,6 +17,7 @@ import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 import com.pes.become.backend.persistence.ControllerPersistence;
 import com.pes.become.frontend.LogoScreen;
 import com.pes.become.frontend.Login;
+import com.pes.become.frontend.Profile;
 import com.pes.become.frontend.Signup;
 
 import java.lang.reflect.Method;
@@ -58,7 +59,10 @@ public class DomainAdapter {
      * Usuari autenticat que esta usant l'aplicació actualment
      */
     private static User currentUser;
-
+    /**
+     * Instancia de la classe profile del frontend
+     */
+    private Profile profile;
     /**
      * Obtenir la instancia de la classe
      * @return instancia
@@ -245,12 +249,19 @@ public class DomainAdapter {
 
     /**
      * Metode per donar de baixa un compte d'usuari
-     * @param mail correu de l'usuari
-     * @param password contrasenya de l'usuari
      */
-    public void deleteUser(String mail, String password) {
+    public void deleteUser(String password) throws NoSuchMethodException {
         logoutUser();
-        //controllerPersistence.deleteUser(mail, password);
+        Method method = DomainAdapter.class.getMethod("deleteCallback", boolean.class);
+        controllerPersistence.deleteUser(password, method, DomainAdapter.getInstance());
+    }
+
+    /**
+     * Metode per rebre la resposta de l'esborrat del compte
+     * @param success resultat de la reautenticacio
+     */
+    public void deleteCallback(boolean success) {
+        profile.deleteCallback(success);
     }
 
     /**
