@@ -20,6 +20,17 @@ public class ControllerPersistence {
     }
 
     /**
+     * Obtenir les activitats d'una rutina
+     * @param userId identificador de l'usuari
+     * @param idRoutine identificador de la rutina
+     * @param method metode a cridar quan es retornin les dades
+     * @param object classe que conté el mètode
+     */
+    public void getActivitiesRoutine(String userId, String idRoutine, Method method, Object object) {
+        CA.getActivities(userId, idRoutine, method, object);
+    }
+
+    /**
      * Obtenir les activitats d'una rutina i un dia indicats
      * @param userId identificador de l'usuari
      * @param idRoutine identificador de la rutina
