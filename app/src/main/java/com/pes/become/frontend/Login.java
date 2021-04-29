@@ -97,6 +97,7 @@ public class Login extends AppCompatActivity {
      */
     public void loginCallbackFailed(){
         Toast.makeText(Login.this, "Login failed", Toast.LENGTH_SHORT).show();
+        loading.setVisibility(View.INVISIBLE);
     }
 
     /**

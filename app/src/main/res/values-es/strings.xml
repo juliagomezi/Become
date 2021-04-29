@@ -70,5 +70,6 @@
     <string name="permissionDeniedTitle">Permiso denegado</string>
     <string name="existingRoutineName">Hay otra rutina con el mismo nombre</string>
     <string name="wrongPassword">Contraseña incorrecta</string>
+    <string name="accountDeleted">Cuenta eliminada con éxito</string>
 
 </resources>

@@ -2,6 +2,7 @@ package com.pes.become.backend.adapters;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.util.Log;
 
 import com.pes.become.backend.domain.Activity;
 import com.pes.become.backend.domain.Day;
@@ -263,6 +264,14 @@ public class DomainAdapter {
     public void deleteCallback(boolean success) {
         currentUser = null;
         profile.deleteCallback(success);
+    }
+
+    /**
+     * Metode per obtenir el provider de l'usuari
+     * @return el provider de l'usuari
+     */
+    public String getUserProvider() {
+        return controllerPersistence.getUserProvider();
     }
 
     /**

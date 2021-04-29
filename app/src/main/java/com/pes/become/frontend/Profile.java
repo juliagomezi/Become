@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.tabs.TabLayout;
@@ -138,14 +139,18 @@ public class Profile extends Fragment {
         TextView updateProfilePic = sheetView.findViewById(R.id.updateProfilePic);
         updateProfilePic.setOnClickListener(v -> changeProfilePic());
 
+        deleteAccount = sheetView.findViewById(R.id.deleteAcc);
         TextView changePassword = sheetView.findViewById(R.id.changePassword);
-        changePassword.setOnClickListener(v -> changePassword());
+        if(DA.getUserProvider().equals("google.com")) {
+            changePassword.setVisibility(View.GONE);
+            deleteAccount.setVisibility(View.GONE);
+        } else {
+            changePassword.setOnClickListener(v -> changePassword());
+            deleteAccount.setOnClickListener(v -> askForPassword());
+        }
 
         TextView logout = sheetView.findViewById(R.id.logout);
         logout.setOnClickListener(v -> logOut());
-
-        deleteAccount = sheetView.findViewById(R.id.deleteAcc);
-        deleteAccount.setOnClickListener(v -> askForPassword());
 
         passText = sheetView.findViewById(R.id.passText);
 
@@ -198,6 +203,7 @@ public class Profile extends Fragment {
      */
     public void deleteCallback(boolean success) {
         if(success) {
+            Toast.makeText(global, getString(R.string.accountDeleted), Toast.LENGTH_SHORT).show();
             optionsSheet.dismiss();
             startActivity(new Intent(global, Login.class));
             getActivity().finish();

@@ -72,5 +72,6 @@
     <string name="permissionDeniedTitle">Permission denied</string>
     <string name="existingRoutineName">Another routine with same name already exists</string>
     <string name="wrongPassword">Wrong password</string>
+    <string name="accountDeleted">Account deleted successfully</string>
 
 </resources>

@@ -70,5 +70,6 @@
     <string name="permissionDeniedTitle">Permission refusée</string>
     <string name="existingRoutineName">Il y a une autre routine avec le même nom</string>
     <string name="wrongPassword">Mot de passe incorrect</string>
+    <string name="accountDeleted">" Compte supprimé avec succès"</string>
 
 </resources>

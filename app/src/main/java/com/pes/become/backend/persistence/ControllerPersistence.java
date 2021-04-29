@@ -2,6 +2,7 @@ package com.pes.become.backend.persistence;
 
 import android.app.Activity;
 import android.net.Uri;
+import android.util.Log;
 
 import java.lang.reflect.Method;
 
@@ -110,6 +111,15 @@ public class ControllerPersistence {
      */
     public void deleteRoutine(String userId, String idRoutine) {
         CR.deleteRoutine(userId, idRoutine);
+    }
+
+    /**
+     * Metode per obtenir el provider de l'usuari
+     * @return el provider de l'usuari
+     */
+    public String getUserProvider() {
+        CU = ControllerUserDB.getInstance();
+        return CU.getUserProvider();
     }
 
     /**

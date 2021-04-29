@@ -3,6 +3,7 @@ package com.pes.become.backend.persistence;
 import android.app.Activity;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -13,6 +14,7 @@ import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -27,6 +29,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class ControllerUserDB {
 
@@ -290,7 +293,6 @@ public class ControllerUserDB {
                                 mapa.put("Username", user.getDisplayName());
                                 mapa.put("selectedRoutine", "");
                                 docRefToUser1.set(mapa);
-                                updateProfilePic(userID, user.getPhotoUrl());
                             }
 
                             params[0] = true;
@@ -434,20 +436,43 @@ public class ControllerUserDB {
 
         String id = user.getUid();
         user.reauthenticate(credential)
-                .addOnCompleteListener(task -> user.delete()
-                        .addOnCompleteListener(task2 -> {
-                            boolean success = false;
-                            if (task2.isSuccessful()) {
-                                DocumentReference docRefToUser = db.collection("users").document(id);
-                                deleteUserData(docRefToUser);
-                                success = true;
-                            }
-                            try {
-                                method.invoke(object, success);
-                            } catch (IllegalAccessException ignore) {
-                            } catch (InvocationTargetException ignore) {
-                            }
-                        }));
+                .addOnCompleteListener(task -> {
+                    if(task.isSuccessful()) {
+                        user.delete()
+                                .addOnCompleteListener(task2 -> {
+                                    boolean success = false;
+                                    if (task2.isSuccessful()) {
+                                        DocumentReference docRefToUser = db.collection("users").document(id);
+                                        deleteUserData(docRefToUser);
+                                        success = true;
+                                    }
+                                    try {
+                                        method.invoke(object, success);
+                                    } catch (IllegalAccessException ignore) {
+                                    } catch (InvocationTargetException ignore) {
+                                    }
+                                });
+                    } else {
+                        try {
+                            method.invoke(object, false);
+                        } catch (IllegalAccessException ignore) {
+                        } catch (InvocationTargetException ignore) {
+                        }
+                    }
+                });
+    }
+
+    /**
+     * Metode per obtenir el provider de l'usuari
+     * @return el provider de l'usuari
+     */
+    public String getUserProvider() {
+        for(UserInfo prov :  mAuth.getCurrentUser().getProviderData()) {
+            if(prov.getProviderId().equals("google.com")) {
+                return "google.com";
+            }
+        }
+        return mAuth.getCurrentUser().getProviderId();
     }
 
     /**
