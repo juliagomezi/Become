@@ -4,8 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapter;
@@ -17,6 +19,7 @@ public class Signup extends AppCompatActivity {
 
     private final DomainAdapter DA = DomainAdapter.getInstance();
     private EditText emailText, userText, passwordText, passwordConfirm;
+    private ProgressBar loading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,11 +31,17 @@ public class Signup extends AppCompatActivity {
         passwordText = findViewById(R.id.passwordText);
         passwordConfirm = findViewById(R.id.passwordconfirmText);
         Button signUp = findViewById(R.id.signupButton);
+        loading = findViewById(R.id.loading);
 
         signUp.setOnClickListener(v -> signUpUser());
     }
 
     private void signUpUser() {
+        emailText.setError(null);
+        userText.setError(null);
+        passwordText.setError(null);
+        passwordConfirm.setError(null);
+
         String email = emailText.getText().toString();
         String user = userText.getText().toString();
         String password = passwordText.getText().toString();
@@ -46,13 +55,17 @@ public class Signup extends AppCompatActivity {
             passwordText.setError(getString(R.string.passwords));
             passwordConfirm.setError(getString(R.string.passwords));
         }
-        else DA.registerUser(email, password, user, this);
+        else {
+            loading.setVisibility(View.VISIBLE);
+            DA.registerUser(email, password, user, this);
+        }
     }
 
     /**
      * Funcio per registrar un usuari i retorna error
      */
     public void registerCallbackFailed() {
+        loading.setVisibility(View.INVISIBLE);
         emailText.setError(getString(R.string.emailExists));
     }
 

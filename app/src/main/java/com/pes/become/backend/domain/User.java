@@ -121,6 +121,19 @@ public class User {
     }
 
     /**
+     * Metode per eliminar una rutina de la llista de rutines de l'usuari
+     * @param id ID de la rutina a eliminar
+     */
+    public void changeRoutineName(String id, String name){
+        for(int i = 0; i < routines.size(); ++i) {
+            if(routines.get(i).get(0).equals(id)) {
+                routines.get(i).set(1,name);
+                break;
+            }
+        }
+    }
+
+    /**
      * Metode per afegir una rutina a la llista de rutines de l'usuari
      * @param r rutina a afegir
      */

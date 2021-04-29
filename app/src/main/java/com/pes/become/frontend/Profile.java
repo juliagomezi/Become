@@ -187,7 +187,7 @@ public class Profile extends Fragment {
     public void deleteUserAccount() {
         String password = passText.getText().toString();
         try {
-            DA.deleteUser(password);
+            DA.deleteUser(password,this);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }

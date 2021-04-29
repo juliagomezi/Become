@@ -60,8 +60,8 @@ public class ControllerRoutineDB {
                             DocumentReference docRefToActivity = documentSnap.getReference();
                             docRefToActivity.delete();
                         }
-                        routineReference.delete();
                     }
+                    routineReference.delete();
                 });
     }
 

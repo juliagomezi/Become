@@ -250,8 +250,8 @@ public class DomainAdapter {
     /**
      * Metode per donar de baixa un compte d'usuari
      */
-    public void deleteUser(String password) throws NoSuchMethodException {
-        logoutUser();
+    public void deleteUser(String password, Profile profile) throws NoSuchMethodException {
+        this.profile = profile;
         Method method = DomainAdapter.class.getMethod("deleteCallback", boolean.class);
         controllerPersistence.deleteUser(password, method, DomainAdapter.getInstance());
     }
@@ -261,6 +261,7 @@ public class DomainAdapter {
      * @param success resultat de la reautenticacio
      */
     public void deleteCallback(boolean success) {
+        currentUser = null;
         profile.deleteCallback(success);
     }
 
@@ -366,6 +367,7 @@ public class DomainAdapter {
         if(!currentUser.existsRoutine(name)) {
             controllerPersistence.changeRoutineName(currentUser.getID(), id, name);
             routineAdapter.changeName(id, name);
+            currentUser.changeRoutineName(id,name);
         } else {
             throw new ExistingRoutineException();
         }
