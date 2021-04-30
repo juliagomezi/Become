@@ -588,8 +588,8 @@ public class ControllerUserDB {
                             deleteRoutineData(docRefToRoutine);
 
                         }
-                        docRefToUser.delete();
                     }
+                    docRefToUser.delete();
                 });
     }
 
@@ -605,8 +605,8 @@ public class ControllerUserDB {
                             DocumentReference docRefToActivity = documentSnap.getReference();
                             docRefToActivity.delete();
                         }
-                        docRefToRoutine.delete();
                     }
+                    docRefToRoutine.delete();
                 });
     }
 

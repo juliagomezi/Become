@@ -26,6 +26,7 @@ public class ControllerActivityDB {
         db = FirebaseFirestore.getInstance();
     }
 
+    /*****************************************CONSULTORES******************************************/
 
     /**
      * Obtenir les activitats d'una rutina
@@ -124,6 +125,8 @@ public class ControllerActivityDB {
             }
         });
     }
+
+    /*****************************************MODIFICADORES****************************************/
 
     /**
      * Crear una activitat en una rutina existent
