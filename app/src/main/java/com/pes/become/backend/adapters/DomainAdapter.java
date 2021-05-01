@@ -317,12 +317,16 @@ public class DomainAdapter {
     }
 
     /**
-     * Metode per obtenir les hores de la rutina seleccionada dedicades a un tema
-     * @param theme tema del que es volen les hores
-     * @return hores setmanals dedicades al tema
+     * Metode per obtenir les hores dedicades a cada tema en la rutina seleccionada
+     * @return ArrayList on a cada posicio hi han les hores dedicades al tema equivalent a la posicio (i.e. a la posicio 0 hi ha les hores dedicades a Music)
      */
-    public int getHoursByTheme(int theme){
-        return currentUser.getHoursByTheme(Theme.values()[theme]);
+    public ArrayList<Integer> getHoursByTheme(){
+        ArrayList<Integer> hoursByTheme = new ArrayList<>();
+        for(int theme=0; theme<Theme.values().length; ++theme){
+            int hours = currentUser.getHoursByTheme(Theme.values()[theme]);
+            hoursByTheme.add(theme, hours);
+        }
+        return hoursByTheme;
     }
 
     /**
