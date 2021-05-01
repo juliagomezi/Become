@@ -134,6 +134,20 @@ public class User {
     }
 
     /**
+     *
+     * @param theme
+     * @return
+     */
+    public int getHoursByTheme(Theme theme){
+        Map<Day, Integer> themeStats = statisticsSelectedRoutine.get(theme);
+        int total = 0;
+        for(Map.Entry<Day, Integer> dayStats : themeStats.entrySet()){
+            total += dayStats.getValue();
+        }
+        return total;
+    }
+
+    /**
      * Setter de les estadistiques de la rutina seleccionada
      * @param statisticsSelectedRoutine mapa que representa les estadistiques amb Tema com a clau i un segon mapa com a valor, amb Dia com a clau i les hores dedicades com a valor
      */
