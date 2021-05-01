@@ -58,7 +58,7 @@
     <string name="new_routine">Nouvelle rutine</string>
     <string name="routineCreated">Routine créée</string>
     <string name="noRoutineSelected">Vous n\'avez pas de routine sélectionnée</string>
-    <string name="adopt_new_habits">Adopter de nouvelles habitudes et faire un changement!</string>
+    <string name="adopt_new_habits">Adopter de nouvelles habitudes!</string>
     <string name="noActivities">Vous n\'avez aucune activité programmée pour aujourd\'hui.</string>
     <string name="noRoutines">Tu n\'as aucune routine, créez-en un nouveau!</string>
     <string name="shortPassword">Le mot de passe doit comporter au moins 6 caractères</string>
@@ -71,5 +71,12 @@
     <string name="existingRoutineName">Il y a une autre routine avec le même nom</string>
     <string name="wrongPassword">Mot de passe incorrect</string>
     <string name="accountDeleted">" Compte supprimé avec succès"</string>
+    <string name="shortMonday">LUN</string>
+    <string name="shortTuesday">MAR</string>
+    <string name="shortWednesday">MER</string>
+    <string name="shortThursday">JEU</string>
+    <string name="shortFriday">VEN</string>
+    <string name="shortSaturday">SAM</string>
+    <string name="shortSunday">DIM</string>
 
 </resources>

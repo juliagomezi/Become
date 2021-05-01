@@ -8,5 +8,13 @@
     <color name="coldwhite">#F2F2F7</color>
     <color name="orange">#cc8424</color>
     <color name="darkred">#8B0000</color>
+    <color name="cooking">#F99450</color>
+    <color name="sport">#7777D8</color>
+    <color name="sleep">#7BDDC5</color>
+    <color name="work">#D46B6D</color>
+    <color name="music">#D8D455</color>
+    <color name="entertainment">#DF81C2</color>
+    <color name="plants">#88DB79</color>
+    <color name="other">#A2A2A2</color>
 
 </resources>

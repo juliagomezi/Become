@@ -71,5 +71,12 @@
     <string name="existingRoutineName">Another routine with same name already exists</string>
     <string name="wrongPassword">Wrong password</string>
     <string name="accountDeleted">Account deleted successfully</string>
+    <string name="shortMonday">MON</string>
+    <string name="shortTuesday">TUE</string>
+    <string name="shortWednesday">WED</string>
+    <string name="shortThursday">THUR</string>
+    <string name="shortFriday">FRI</string>
+    <string name="shortSaturday">SAT</string>
+    <string name="shortSunday">SUN</string>
 
 </resources>
