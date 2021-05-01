@@ -22,6 +22,7 @@ import com.pes.become.frontend.Signup;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Classe que gestiona la comunicacio entre la capa de presentacio i la capa de domini, i la creacio dels adaptadors de cada classe de domini
@@ -291,6 +292,14 @@ public class DomainAdapter {
      */
     public void changeUserName(String newName) {
         currentUser.setName(newName);
+    }
+
+    /**
+     * Metode per obtenir les estadistiques de la rutina seleccionada de l'usuari
+     * @return Array d'Arrays d'enters on la primera array representa els temes, la segona els dies i la tercera les hores
+     */
+    public ArrayList<ArrayList<Integer>> getStatisticsSelectedRoutine(){
+        return currentUser.getStatisticsSelectedRoutine();
     }
 
     /**
