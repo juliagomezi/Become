@@ -105,14 +105,15 @@ public class RoutineAdapter {
 
     /**
      * Actualitzar els parametres d'una activitat d'una rutina
+     * @param activity activitat actualitzada
      * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
      * @throws NoSelectedRoutineException si l'usuari no te cap rutina seleccionada
      */
-    public void updateActivity(Activity a) throws OverlappingActivitiesException, NoSelectedRoutineException {
+    public void updateActivity(Activity activity) throws OverlappingActivitiesException, NoSelectedRoutineException {
         if(routine == null){
             throw new NoSelectedRoutineException();
         }
-        routine.updateActivity(a);
+        routine.updateActivity(activity);
     }
 
     /**
@@ -137,6 +138,8 @@ public class RoutineAdapter {
 
     /**
      * Setter de totes les activitats d'un dia d'una rutina
+     * @param acts llista de les activitats
+     * @param day dia de les activitats
      */
     public void setActivitiesByDay(ArrayList<Activity> acts, Day day) {
         routine.setActivitiesByDay(acts,day);

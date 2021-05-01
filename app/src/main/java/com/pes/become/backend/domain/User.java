@@ -3,6 +3,7 @@ package com.pes.become.backend.domain;
 import android.graphics.Bitmap;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Classe que defineix els usuaris de l'aplicacio
@@ -24,6 +25,10 @@ public class User {
      * Instancia de la rutina activada per l'usuari
      */
     private Routine selectedRoutine;
+    /**
+     * Estadistiques de la rutina seleccionada de l'usuari
+     */
+    private Map<Day, Map<Theme, Integer>> statisticsSelectedRoutine;
     /**
      * ID i nom de les rutines de l'usuari
      */
