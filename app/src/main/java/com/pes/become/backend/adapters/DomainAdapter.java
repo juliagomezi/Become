@@ -317,6 +317,15 @@ public class DomainAdapter {
     }
 
     /**
+     * Metode per obtenir les hores de la rutina seleccionada dedicades a un tema
+     * @param theme tema del que es volen les hores
+     * @return hores setmanals dedicades al tema
+     */
+    public int getHoursByTheme(int theme){
+        return currentUser.getHoursByTheme(Theme.values()[theme]);
+    }
+
+    /**
      * Crear una rutina
      * @param name nom de la rutina
      * @throws ExistingRoutineException si l'usuari ja té una altra rutina amb aquest nom
