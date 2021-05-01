@@ -17,6 +17,11 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.pes.become.R;
 
 import java.time.LocalDate;
@@ -32,6 +37,9 @@ public class Stats extends Fragment implements CalendarAdapter.OnItemListener {
     private TextView monthYearText;
     private RecyclerView calendarRecyclerView;
     private LocalDate selectedDate;
+    private LineChart mpLineChart;
+    private ArrayList<Entry> sportValues, sleepValues, musicValues, cookingValues,
+                            workValues, enterValues, plantsValues, otherValues;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -43,10 +51,14 @@ public class Stats extends Fragment implements CalendarAdapter.OnItemListener {
         selectedDate = LocalDate.now();
         setMonthView();
 
+        mpLineChart = (LineChart) view.findViewById(R.id.linechart);
         ImageButton back = view.findViewById(R.id.previousMonthButton);
         back.setOnClickListener(v -> previousMonthAction());
         ImageButton next = view.findViewById(R.id.nextMonthButton);
         next.setOnClickListener(v -> nextMonthAction());
+
+        setHoursStats();
+        setValuesChart();
 
         return view;
     }
@@ -126,5 +138,84 @@ public class Stats extends Fragment implements CalendarAdapter.OnItemListener {
             Toast.makeText(global, message, Toast.LENGTH_LONG).show();
         }
     }
+
+    private void setHoursStats() {
+        TextView sportHour = view.findViewById(R.id.sportHour);
+        TextView sleepHour = view.findViewById(R.id.sleepingHour);
+        TextView musicHour = view.findViewById(R.id.musicHour);
+        TextView cookingHour = view.findViewById(R.id.cookingHour);
+        TextView workingHour = view.findViewById(R.id.workingHour);
+        TextView entertainmentHour = view.findViewById(R.id.entertainmentHour);
+        TextView plantsHour = view.findViewById(R.id.plantsHour);
+        TextView otherHour = view.findViewById(R.id.otherHour);
+
+        sportHour.setText("0" +"h");
+        sleepHour.setText("0" +"h");
+        musicHour.setText("0" +"h");
+        cookingHour.setText("0" +"h");
+        workingHour.setText("0" +"h");
+        entertainmentHour.setText("0" +"h");
+        plantsHour.setText("0" +"h");
+        otherHour.setText("0" +"h");
+    }
+
+    private void setValuesChart(){
+        setDataValues();
+
+        LineDataSet dataSport = new LineDataSet(sportValues,"Sport");
+        LineDataSet dataSleep = new LineDataSet(sleepValues,"Sleep");
+        LineDataSet dataMusic = new LineDataSet(musicValues,"Music");
+        LineDataSet dataCooking = new LineDataSet(cookingValues,"Cooking");
+        LineDataSet dataWorking = new LineDataSet(workValues,"Work");
+        LineDataSet dataEnter = new LineDataSet(enterValues,"Entertainment");
+        LineDataSet dataPlants = new LineDataSet(plantsValues,"Plants");
+        LineDataSet dataOther = new LineDataSet(otherValues,"Other");
+
+        ArrayList<ILineDataSet> dataSet = new ArrayList<>();
+        dataSet.add(dataSport);
+        dataSet.add(dataSleep);
+        dataSet.add(dataMusic);
+        dataSet.add(dataCooking);
+        dataSet.add(dataWorking);
+        dataSet.add(dataEnter);
+        dataSet.add(dataPlants);
+        dataSet.add(dataOther);
+
+        LineData data = new LineData(dataSet);
+        mpLineChart.setData(data);
+        mpLineChart.invalidate();
+    }
+
+    private void setDataValues(){
+        //ArrayList<ArrayList<Integer>> allValues = getStatisticsSelectedRoutine();
+        ArrayList<ArrayList<Integer>> allValues = new ArrayList<>();
+        for (int tema=0; tema<8; ++tema) {
+            ArrayList<Entry> array = new ArrayList<>();
+            for (int dia=0; dia<7; ++dia) {
+                array.add(new Entry(dia, allValues.get(tema).get(dia)));
+            }
+            switch (tema)
+            {
+                case 0:  musicValues = array;
+                    break;
+                case 1:  sportValues = array;
+                    break;
+                case 2:  sleepValues = array;
+                    break;
+                case 3:  cookingValues = array;
+                    break;
+                case 4:  workValues = array;
+                    break;
+                case 5:  enterValues = array;
+                    break;
+                case 6:  plantsValues = array;
+                    break;
+                default: otherValues = array;
+                    break;
+            }
+        }
+    }
+
+
 
 }

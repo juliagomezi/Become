@@ -41,7 +41,7 @@
                     android:text="@string/sport"
                     android:gravity="center_horizontal"
                     android:fontFamily="@font/sourcesanspro_semibold"
-                    android:textColor="#7777D8"
+                    android:textColor="@color/sport"
                     android:textSize="22sp"/>
 
                 <TextView
@@ -52,7 +52,7 @@
                     android:text="@string/sleeping"
                     android:gravity="center_horizontal"
                     android:fontFamily="@font/sourcesanspro_semibold"
-                    android:textColor="#7BDDC5"
+                    android:textColor="@color/sleep"
                     android:textSize="22sp"/>
             </LinearLayout>
 
@@ -69,7 +69,7 @@
                     android:gravity="center_horizontal"
                     android:fontFamily="@font/sourcesanspro_semibold"
                     android:textSize="44sp"
-                    android:textColor="#7777D8"
+                    android:textColor="@color/sport"
                     android:layout_margin="10dp"/>
 
                 <TextView
@@ -81,7 +81,7 @@
                     android:gravity="center_horizontal"
                     android:fontFamily="@font/sourcesanspro_semibold"
                     android:textSize="44sp"
-                    android:textColor="#7BDDC5"
+                    android:textColor="@color/sleep"
                     android:layout_margin="10dp"/>
             </LinearLayout>
 
@@ -95,7 +95,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="@string/cooking"
-                    android:textColor="#F99450"
+                    android:textColor="@color/cooking"
                     android:gravity="center_horizontal"
                     android:fontFamily="@font/sourcesanspro_semibold"
                     android:textSize="22sp"/>
@@ -107,7 +107,7 @@
                     android:layout_weight="1"
                     android:text="@string/working"
                     android:gravity="center_horizontal"
-                    android:textColor="#D46B6D"
+                    android:textColor="@color/work"
                     android:fontFamily="@font/sourcesanspro_semibold"
                     android:textSize="22sp"/>
             </LinearLayout>
@@ -125,7 +125,7 @@
                     android:gravity="center_horizontal"
                     android:fontFamily="@font/sourcesanspro_semibold"
                     android:textSize="44sp"
-                    android:textColor="#F99450"
+                    android:textColor="@color/cooking"
                     android:layout_margin="10dp"/>
 
                 <TextView
@@ -137,7 +137,7 @@
                     android:gravity="center_horizontal"
                     android:fontFamily="@font/sourcesanspro_semibold"
                     android:textSize="44sp"
-                    android:textColor="#D46B6D"
+                    android:textColor="@color/work"
                     android:layout_margin="10dp"/>
             </LinearLayout>
 
@@ -153,7 +153,7 @@
                     android:text="@string/music"
                     android:gravity="center_horizontal"
                     android:fontFamily="@font/sourcesanspro_semibold"
-                    android:textColor="#D8D455"
+                    android:textColor="@color/music"
                     android:textSize="22sp"/>
 
                 <TextView
@@ -164,7 +164,7 @@
                     android:text="@string/entertainment"
                     android:gravity="center_horizontal"
                     android:fontFamily="@font/sourcesanspro_semibold"
-                    android:textColor="#DF81C2"
+                    android:textColor="@color/entertainment"
                     android:textSize="22sp"/>
             </LinearLayout>
 
@@ -181,7 +181,7 @@
                     android:gravity="center_horizontal"
                     android:fontFamily="@font/sourcesanspro_semibold"
                     android:textSize="44sp"
-                    android:textColor="#D8D455"
+                    android:textColor="@color/music"
                     android:layout_margin="10dp"/>
 
                 <TextView
@@ -193,7 +193,7 @@
                         android:gravity="center_horizontal"
                         android:fontFamily="@font/sourcesanspro_semibold"
                         android:textSize="44sp"
-                        android:textColor="#DF81C2"
+                        android:textColor="@color/entertainment"
                         android:layout_margin="10dp"/>
                 </LinearLayout>
 
@@ -209,7 +209,7 @@
                         android:text="@string/plants"
                         android:gravity="center_horizontal"
                         android:fontFamily="@font/sourcesanspro_semibold"
-                        android:textColor="#88DB79"
+                        android:textColor="@color/plants"
                         android:textSize="22sp"/>
 
                     <TextView
@@ -220,7 +220,7 @@
                         android:text="@string/other"
                         android:gravity="center_horizontal"
                         android:fontFamily="@font/sourcesanspro_semibold"
-                            android:textColor="#A2A2A2"
+                        android:textColor="@color/other"
                         android:textSize="22sp"/>
                 </LinearLayout>
 
@@ -237,7 +237,7 @@
                         android:gravity="center_horizontal"
                         android:fontFamily="@font/sourcesanspro_semibold"
                         android:textSize="44sp"
-                        android:textColor="#88DB79"
+                        android:textColor="@color/plants"
                         android:layout_margin="10dp"/>
 
                     <TextView
@@ -249,10 +249,15 @@
                         android:gravity="center_horizontal"
                         android:fontFamily="@font/sourcesanspro_semibold"
                         android:textSize="44sp"
-                        android:textColor="#A2A2A2"
+                        android:textColor="@color/other"
                         android:layout_margin="10dp"/>
                 </LinearLayout>
             </TableLayout>
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/linechart"
+            android:layout_height="200dp"
+            android:layout_width="match_parent" />
+
 
             <LinearLayout
                     android:layout_width="match_parent"
