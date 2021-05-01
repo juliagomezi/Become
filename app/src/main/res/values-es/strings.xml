@@ -71,5 +71,12 @@
     <string name="existingRoutineName">Hay otra rutina con el mismo nombre</string>
     <string name="wrongPassword">Contraseña incorrecta</string>
     <string name="accountDeleted">Cuenta eliminada con éxito</string>
+    <string name="shortMonday">LU</string>
+    <string name="shortTuesday">MAR</string>
+    <string name="shortWednesday">MIE</string>
+    <string name="shortThursday">JUE</string>
+    <string name="shortFriday">VIE</string>
+    <string name="shortSaturday">SAB</string>
+    <string name="shortSunday">DOM</string>
 
 </resources>
