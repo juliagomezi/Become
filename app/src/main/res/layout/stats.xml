@@ -5,15 +5,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".frontend.Stats"
-    >
+    android:background="@color/white"
+    tools:context=".frontend.Stats" >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -23,11 +23,13 @@
             android:fontFamily="@font/sourcesanspro_regular"
             android:textSize="22sp"
             android:textColor="@color/black"
-            android:layout_margin="20dp"/>
+            android:layout_margin="30dp"/>
 
         <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -39,10 +41,11 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="@string/sport"
-                    android:gravity="center_horizontal"
-                    android:fontFamily="@font/sourcesanspro_semibold"
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:fontFamily="@font/sourcesanspro_regular"
                     android:textColor="@color/sport"
-                    android:textSize="22sp"/>
+                    android:textSize="20sp"/>
 
                 <TextView
                     android:id="@+id/sleepingText"
@@ -50,10 +53,11 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="@string/sleeping"
-                    android:gravity="center_horizontal"
-                    android:fontFamily="@font/sourcesanspro_semibold"
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:fontFamily="@font/sourcesanspro_regular"
                     android:textColor="@color/sleep"
-                    android:textSize="22sp"/>
+                    android:textSize="20sp"/>
             </LinearLayout>
 
             <LinearLayout
@@ -68,7 +72,7 @@
                     android:text="0"
                     android:gravity="center_horizontal"
                     android:fontFamily="@font/sourcesanspro_semibold"
-                    android:textSize="44sp"
+                    android:textSize="40sp"
                     android:textColor="@color/sport"
                     android:layout_margin="10dp"/>
 
@@ -80,7 +84,7 @@
                     android:text="0"
                     android:gravity="center_horizontal"
                     android:fontFamily="@font/sourcesanspro_semibold"
-                    android:textSize="44sp"
+                    android:textSize="40sp"
                     android:textColor="@color/sleep"
                     android:layout_margin="10dp"/>
             </LinearLayout>
@@ -96,9 +100,10 @@
                     android:layout_weight="1"
                     android:text="@string/cooking"
                     android:textColor="@color/cooking"
-                    android:gravity="center_horizontal"
-                    android:fontFamily="@font/sourcesanspro_semibold"
-                    android:textSize="22sp"/>
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:fontFamily="@font/sourcesanspro_regular"
+                    android:textSize="20sp"/>
 
                 <TextView
                     android:id="@+id/workingText"
@@ -106,10 +111,11 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="@string/working"
-                    android:gravity="center_horizontal"
+                    android:textAlignment="center"
+                    android:gravity="center"
                     android:textColor="@color/work"
-                    android:fontFamily="@font/sourcesanspro_semibold"
-                    android:textSize="22sp"/>
+                    android:fontFamily="@font/sourcesanspro_regular"
+                    android:textSize="20sp"/>
             </LinearLayout>
 
             <LinearLayout
@@ -124,7 +130,7 @@
                     android:text="0"
                     android:gravity="center_horizontal"
                     android:fontFamily="@font/sourcesanspro_semibold"
-                    android:textSize="44sp"
+                    android:textSize="40sp"
                     android:textColor="@color/cooking"
                     android:layout_margin="10dp"/>
 
@@ -136,7 +142,7 @@
                     android:text="0"
                     android:gravity="center_horizontal"
                     android:fontFamily="@font/sourcesanspro_semibold"
-                    android:textSize="44sp"
+                    android:textSize="40sp"
                     android:textColor="@color/work"
                     android:layout_margin="10dp"/>
             </LinearLayout>
@@ -151,10 +157,11 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="@string/music"
-                    android:gravity="center_horizontal"
-                    android:fontFamily="@font/sourcesanspro_semibold"
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:fontFamily="@font/sourcesanspro_regular"
                     android:textColor="@color/music"
-                    android:textSize="22sp"/>
+                    android:textSize="20sp"/>
 
                 <TextView
                     android:id="@+id/entertainmentText"
@@ -162,10 +169,11 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="@string/entertainment"
-                    android:gravity="center_horizontal"
-                    android:fontFamily="@font/sourcesanspro_semibold"
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:fontFamily="@font/sourcesanspro_regular"
                     android:textColor="@color/entertainment"
-                    android:textSize="22sp"/>
+                    android:textSize="20sp"/>
             </LinearLayout>
 
             <LinearLayout
@@ -180,7 +188,7 @@
                     android:text="0"
                     android:gravity="center_horizontal"
                     android:fontFamily="@font/sourcesanspro_semibold"
-                    android:textSize="44sp"
+                    android:textSize="40sp"
                     android:textColor="@color/music"
                     android:layout_margin="10dp"/>
 
@@ -188,85 +196,102 @@
                     android:id="@+id/entertainmentHour"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="0"
-                        android:gravity="center_horizontal"
-                        android:fontFamily="@font/sourcesanspro_semibold"
-                        android:textSize="44sp"
-                        android:textColor="@color/entertainment"
-                        android:layout_margin="10dp"/>
-                </LinearLayout>
+                    android:layout_weight="1"
+                    android:text="0"
+                    android:gravity="center_horizontal"
+                    android:fontFamily="@font/sourcesanspro_semibold"
+                    android:textSize="40sp"
+                    android:textColor="@color/entertainment"
+                    android:layout_margin="10dp"/>
+            </LinearLayout>
 
-                <LinearLayout
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <TextView
+                    android:id="@+id/plantsText"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" >
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/plants"
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:fontFamily="@font/sourcesanspro_regular"
+                    android:textColor="@color/plants"
+                    android:textSize="20sp"/>
 
-                    <TextView
-                        android:id="@+id/plantsText"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="@string/plants"
-                        android:gravity="center_horizontal"
-                        android:fontFamily="@font/sourcesanspro_semibold"
-                        android:textColor="@color/plants"
-                        android:textSize="22sp"/>
-
-                    <TextView
-                        android:id="@+id/otherText"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="@string/other"
-                        android:gravity="center_horizontal"
-                        android:fontFamily="@font/sourcesanspro_semibold"
-                        android:textColor="@color/other"
-                        android:textSize="22sp"/>
-                </LinearLayout>
-
-                <LinearLayout
+                <TextView
+                    android:id="@+id/otherText"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" >
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/other"
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:fontFamily="@font/sourcesanspro_regular"
+                    android:textColor="@color/other"
+                    android:textSize="20sp"/>
+            </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/plantsHour"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="0"
-                        android:gravity="center_horizontal"
-                        android:fontFamily="@font/sourcesanspro_semibold"
-                        android:textSize="44sp"
-                        android:textColor="@color/plants"
-                        android:layout_margin="10dp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
 
-                    <TextView
-                        android:id="@+id/otherHour"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="0"
-                        android:gravity="center_horizontal"
-                        android:fontFamily="@font/sourcesanspro_semibold"
-                        android:textSize="44sp"
-                        android:textColor="@color/other"
-                        android:layout_margin="10dp"/>
-                </LinearLayout>
-            </TableLayout>
+                <TextView
+                    android:id="@+id/plantsHour"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="0"
+                    android:gravity="center_horizontal"
+                    android:fontFamily="@font/sourcesanspro_semibold"
+                    android:textSize="40sp"
+                    android:textColor="@color/plants"
+                    android:layout_margin="10dp"/>
+
+                <TextView
+                    android:id="@+id/otherHour"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="0"
+                    android:gravity="center_horizontal"
+                    android:fontFamily="@font/sourcesanspro_semibold"
+                    android:textSize="40sp"
+                    android:textColor="@color/other"
+                    android:layout_margin="10dp"/>
+
+            </LinearLayout>
+
+        </TableLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/routine_distribution"
+            android:gravity="center_horizontal"
+            android:fontFamily="@font/sourcesanspro_regular"
+            android:textSize="22sp"
+            android:textColor="@color/black"
+            android:layout_margin="30dp"/>
+
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/linechart"
             android:layout_height="250dp"
             android:layout_width="match_parent"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"/>
-
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
 
             <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="20dp"
-                    android:layout_marginTop="20dp">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="20dp">
 
                     <ImageButton
                         android:id="@+id/previousMonthButton"
@@ -308,6 +333,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -385,8 +412,12 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/calendarRecyclerView"
                     android:layout_width="match_parent"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
                     android:layout_height="250dp"/>
 
-        </LinearLayout>
+    </LinearLayout>
 
-    </androidx.core.widget.NestedScrollView>
+</androidx.core.widget.NestedScrollView>

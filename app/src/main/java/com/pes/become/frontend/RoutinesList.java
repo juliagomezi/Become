@@ -81,7 +81,7 @@ public class RoutinesList extends Fragment {
         recyclerView.setVisibility(View.VISIBLE);
         emptyView.setVisibility(View.INVISIBLE);
         recyclerView.setLayoutManager((new LinearLayoutManager(global)));
-        routinesListRecyclerAdapter = new RoutinesListRecyclerAdapter(routinesList, selectedRoutineID);
+        routinesListRecyclerAdapter = new RoutinesListRecyclerAdapter(routinesList, selectedRoutineID, global);
         recyclerView.setAdapter(routinesListRecyclerAdapter);
     }
 

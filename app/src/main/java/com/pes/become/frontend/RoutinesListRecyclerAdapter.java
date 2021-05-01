@@ -1,5 +1,8 @@
 package com.pes.become.frontend;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,14 +28,16 @@ public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesLi
     private final DomainAdapter DA = DomainAdapter.getInstance();
     private final ArrayList<ArrayList<String>> routinesList;
     private String selectedRoutineID;
+    private Context global;
 
     /**
      * Constructora del RecyclerAdapterRoutinesList
      * @param routinesList llistat d'activitats que es mostren al RecyclerView
      */
-    public RoutinesListRecyclerAdapter(ArrayList<ArrayList<String>> routinesList, String selectedRoutineID) {
+    public RoutinesListRecyclerAdapter(ArrayList<ArrayList<String>> routinesList, String selectedRoutineID, Context global) {
         this.routinesList = routinesList;
         this.selectedRoutineID = selectedRoutineID;
+        this.global = global;
     }
 
     /**
@@ -69,12 +74,21 @@ public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesLi
         });
 
         holder.deleteButton.setOnClickListener(view -> {
-            String currentId = routinesList.get(position).get(0);
-            if(!currentId.equals(selectedRoutineID)) {
-                DA.deleteRoutine(currentId);
-                notifyDataSetChanged();
-                if (routinesList.isEmpty()) RoutinesList.getInstance().initEmptyView();
-            }
+
+            new AlertDialog.Builder(global)
+                    .setTitle(R.string.deleteRoutine)
+                    .setMessage(R.string.deleteRoutineConfirmation)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> {
+                        String currentId = routinesList.get(position).get(0);
+                        if(!currentId.equals(selectedRoutineID)) {
+                            DA.deleteRoutine(currentId);
+                            notifyDataSetChanged();
+                            if (routinesList.isEmpty()) RoutinesList.getInstance().initEmptyView();
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, null).show();
+
         });
 
         boolean isSelected = routinesList.get(position).get(0).equals(selectedRoutineID);

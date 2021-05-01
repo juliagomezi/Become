@@ -78,5 +78,17 @@
     <string name="shortFriday">VEN</string>
     <string name="shortSaturday">SAM</string>
     <string name="shortSunday">DIM</string>
+    <string name="deleteRoutine">" Supprimer la routine"</string>
+    <string name="deleteRoutineConfirmation">" Voulez-vous vraiment supprimer cette routine et toutes ses activités?"</string>
+    <string name="music">MUSIQUE</string>
+    <string name="sport">SPORT</string>
+    <string name="sleeping">DORMIR</string>
+    <string name="cooking">CUISINE</string>
+    <string name="plants">PLANTES ET JARDINAGE</string>
+    <string name="entertainment">DIVERTISSEMENT</string>
+    <string name="working">TRAVAIL ET ÉTUDE</string>
+    <string name="other">AUTRE</string>
+    <string name="hours_of_dedication">Heures de dévouement</string>
+    <string name="routine_distribution">Distribution de routine</string>
 
 </resources>

@@ -78,5 +78,17 @@
     <string name="shortFriday">FRI</string>
     <string name="shortSaturday">SAT</string>
     <string name="shortSunday">SUN</string>
+    <string name="deleteRoutine">Delete routine</string>
+    <string name="deleteRoutineConfirmation">Do you really want to delete this routine and all its activities?</string>
+    <string name="sport">SPORT</string>
+    <string name="sleeping">SLEEPING</string>
+    <string name="cooking">COOKING</string>
+    <string name="hours_of_dedication">Hours of dedication</string>
+    <string name="working">WORKING AND STUDYING</string>
+    <string name="music">MUSIC</string>
+    <string name="entertainment">ENTERTAINMENT</string>
+    <string name="plants">PLANTS AND GARDENING</string>
+    <string name="other">OTHER</string>
+    <string name="routine_distribution">Routine distribution</string>
 
 </resources>

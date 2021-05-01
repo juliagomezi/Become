@@ -78,5 +78,17 @@
     <string name="shortFriday">DV</string>
     <string name="shortSaturday">DS</string>
     <string name="shortSunday">DG</string>
+    <string name="deleteRoutine">Eliminar rutina</string>
+    <string name="deleteRoutineConfirmation">Estàs segur que vols eliminar la rutina i totes les seves activitats?</string>
+    <string name="sport">ESPORT</string>
+    <string name="sleeping">DORMIR</string>
+    <string name="cooking">CUINA</string>
+    <string name="hours_of_dedication">Hores de dedicació</string>
+    <string name="working">FEINA I ESTUDI</string>
+    <string name="music">MÚSICA</string>
+    <string name="entertainment">ENTRETENIMENT</string>
+    <string name="plants">PLANTES I JARDINERIA</string>
+    <string name="other">ALTRES</string>
+    <string name="routine_distribution">Distribució de la rutina</string>
 
 </resources>
