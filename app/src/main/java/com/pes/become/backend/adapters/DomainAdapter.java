@@ -23,6 +23,7 @@ import com.pes.become.frontend.Signup;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Classe que gestiona la comunicacio entre la capa de presentacio i la capa de domini, i la creacio dels adaptadors de cada classe de domini
@@ -183,6 +184,19 @@ public class DomainAdapter {
                 }
             }
             if(!selectedRoutineId.equals("")) selectRoutine(routine);
+
+            //stats hardcoded
+            Map<Theme, Map<Day, Integer>> stats = new TreeMap<>();
+            for(int t=0; t<Theme.values().length; ++t){
+                Map<Day, Integer> emptyMap = new TreeMap<>();
+                for(int d = 0; d< Day.values().length; ++d){
+                    emptyMap.put(Day.values()[d], t*d);
+                }
+                stats.put(Theme.values()[t], emptyMap);
+            }
+            currentUser.setStatisticsSelectedRoutine(stats);
+            //fi stats hardcoded
+
             login.loginCallback();
         }
         else {
