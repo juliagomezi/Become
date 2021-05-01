@@ -1,10 +1,12 @@
 package com.pes.become.frontend;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.RequiresApi;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,11 +19,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.pes.become.R;
+import com.pes.become.backend.adapters.DomainAdapter;
 
 import org.w3c.dom.Text;
 
@@ -37,6 +42,7 @@ public class Stats extends Fragment {
     private Context global;
     private View view;
 
+    private final DomainAdapter DA = DomainAdapter.getInstance();
     private TextView monthYearText;
     private RecyclerView calendarRecyclerView;
     private LocalDate selectedDate;
@@ -61,7 +67,7 @@ public class Stats extends Fragment {
         next.setOnClickListener(v -> nextMonthAction());
 
         setHoursStats();
-        setValuesChart();
+        setChart();
 
         return view;
     }
@@ -160,27 +166,71 @@ public class Stats extends Fragment {
         TextView plantsHour = view.findViewById(R.id.plantsHour);
         TextView otherHour = view.findViewById(R.id.otherHour);
 
-        sportHour.setText("0" +"h");
-        sleepHour.setText("0" +"h");
-        musicHour.setText("0" +"h");
-        cookingHour.setText("0" +"h");
-        workingHour.setText("0" +"h");
-        entertainmentHour.setText("0" +"h");
-        plantsHour.setText("0" +"h");
-        otherHour.setText("0" +"h");
+        ArrayList<Integer> hoursTheme = DA.getHoursByTheme();
+
+        musicHour.setText(hoursTheme.get(0).toString() +"h");
+        sportHour.setText(hoursTheme.get(1).toString() +"h");
+        sleepHour.setText(hoursTheme.get(2).toString() +"h");
+        cookingHour.setText(hoursTheme.get(3).toString() +"h");
+        workingHour.setText(hoursTheme.get(4).toString() +"h");
+        entertainmentHour.setText(hoursTheme.get(5).toString() +"h");
+        plantsHour.setText(hoursTheme.get(6).toString() +"h");
+        otherHour.setText(hoursTheme.get(7).toString() +"h");
     }
 
-    private void setValuesChart(){
+    private void setChart() {
         setDataValues();
 
         LineDataSet dataSport = new LineDataSet(sportValues,"Sport");
+        dataSport.setColor(ContextCompat.getColor(getContext(), R.color.sport));
+        dataSport.setCircleColor(ContextCompat.getColor(getContext(), R.color.sport));
+        dataSport.setDrawCircleHole(false);
+        dataSport.setLineWidth(2);
+
         LineDataSet dataSleep = new LineDataSet(sleepValues,"Sleep");
+        dataSleep.setColor(ContextCompat.getColor(getContext(), R.color.sleep));
+        dataSleep.setCircleColor(ContextCompat.getColor(getContext(), R.color.sleep));
+        dataSleep.setDrawCircleHole(false);
+        dataSleep.setLineWidth(2);
+
         LineDataSet dataMusic = new LineDataSet(musicValues,"Music");
+        dataMusic.setColor(ContextCompat.getColor(getContext(), R.color.music));
+        dataMusic.setCircleColor(ContextCompat.getColor(getContext(), R.color.music));
+        dataMusic.setDrawCircleHole(false);
+        dataMusic.setLineWidth(2);
+
         LineDataSet dataCooking = new LineDataSet(cookingValues,"Cooking");
+        dataCooking.setColor(ContextCompat.getColor(getContext(), R.color.cooking));
+        dataCooking.setCircleColor(ContextCompat.getColor(getContext(), R.color.cooking));
+        dataCooking.setDrawCircleHole(false);
+        dataCooking.setLineWidth(2);
+
         LineDataSet dataWorking = new LineDataSet(workValues,"Work");
+        dataWorking.setColor(ContextCompat.getColor(getContext(), R.color.work));
+        dataWorking.setCircleColor(ContextCompat.getColor(getContext(), R.color.work));
+        dataWorking.setDrawCircleHole(false);
+        dataWorking.setLineWidth(2);
+
         LineDataSet dataEnter = new LineDataSet(enterValues,"Entertainment");
+        dataEnter.setColor(ContextCompat.getColor(getContext(), R.color.entertainment));
+        dataEnter.setCircleColor(ContextCompat.getColor(getContext(), R.color.entertainment));
+        dataEnter.setDrawCircleHole(false);
+        dataEnter.setLineWidth(2);
+
         LineDataSet dataPlants = new LineDataSet(plantsValues,"Plants");
+        dataPlants.setColor(ContextCompat.getColor(getContext(), R.color.plants));
+        dataPlants.setCircleColor(ContextCompat.getColor(getContext(), R.color.plants));
+        dataPlants.setDrawCircleHole(false);
+        dataPlants.setLineWidth(2);
+
         LineDataSet dataOther = new LineDataSet(otherValues,"Other");
+        dataOther.setColor(ContextCompat.getColor(getContext(), R.color.other));
+        dataOther.setCircleColor(ContextCompat.getColor(getContext(), R.color.other));
+        dataOther.setDrawCircleHole(false);
+        dataOther.setLineWidth(2);
+
+        Legend legend = mpLineChart.getLegend();
+        legend.setEnabled(false);
 
         ArrayList<ILineDataSet> dataSet = new ArrayList<>();
         dataSet.add(dataSport);
@@ -193,13 +243,16 @@ public class Stats extends Fragment {
         dataSet.add(dataOther);
 
         LineData data = new LineData(dataSet);
+
+        Description desc = new Description();
+        desc.setText("");
+        mpLineChart.setDescription(desc);
         mpLineChart.setData(data);
         mpLineChart.invalidate();
     }
 
     private void setDataValues(){
-        //ArrayList<ArrayList<Integer>> allValues = getStatisticsSelectedRoutine();
-        ArrayList<ArrayList<Integer>> allValues = new ArrayList<>();
+        ArrayList<ArrayList<Integer>> allValues = DA.getStatisticsSelectedRoutine();
         for (int tema=0; tema<8; ++tema) {
             ArrayList<Entry> array = new ArrayList<>();
             for (int dia=0; dia<7; ++dia) {

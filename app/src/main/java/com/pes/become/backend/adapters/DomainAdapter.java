@@ -2,7 +2,6 @@ package com.pes.become.backend.adapters;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.util.Log;
 
 import com.pes.become.backend.domain.Activity;
 import com.pes.become.backend.domain.Day;
@@ -23,6 +22,8 @@ import com.pes.become.frontend.Signup;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Classe que gestiona la comunicacio entre la capa de presentacio i la capa de domini, i la creacio dels adaptadors de cada classe de domini
@@ -64,6 +65,7 @@ public class DomainAdapter {
      * Instancia de la classe profile del frontend
      */
     private Profile profile;
+
     /**
      * Obtenir la instancia de la classe
      * @return instancia
@@ -87,11 +89,11 @@ public class DomainAdapter {
         parameterTypes[1] = String.class;
         parameterTypes[2] = String.class;
         parameterTypes[3] = String.class;
-        Method method1;
+        Method method;
         signup = (Signup) act;
         try {
-            method1 = DomainAdapter.class.getMethod("registerCallback", parameterTypes);
-            controllerPersistence.registerUser(mail, password, name, act, method1, DomainAdapter.getInstance());
+            method = DomainAdapter.class.getMethod("registerCallback", parameterTypes);
+            controllerPersistence.registerUser(mail, password, name, act, method, DomainAdapter.getInstance());
         } catch (NoSuchMethodException ignore) {}
     }
 
@@ -107,11 +109,11 @@ public class DomainAdapter {
         parameterTypes[3] = String.class;
         parameterTypes[4] = Bitmap.class;
         parameterTypes[5] = ArrayList.class;
-        Method method1;
+        Method method;
         logoScreen = (LogoScreen)act;
         try {
-            method1 = DomainAdapter.class.getMethod("authUser", parameterTypes);
-            controllerPersistence.loadUser(method1, DomainAdapter.getInstance());
+            method = DomainAdapter.class.getMethod("authUser", parameterTypes);
+            controllerPersistence.loadUser(method, DomainAdapter.getInstance());
         } catch(NoSuchMethodException ignore) {}
     }
 
@@ -129,11 +131,11 @@ public class DomainAdapter {
         parameterTypes[3] = String.class;
         parameterTypes[4] = Bitmap.class;
         parameterTypes[5] = ArrayList.class;
-        Method method1;
+        Method method;
         login = (Login)act;
         try {
-            method1 = DomainAdapter.class.getMethod("loginCallback", parameterTypes);
-            controllerPersistence.loginUser(mail, password, act, method1, DomainAdapter.getInstance());
+            method = DomainAdapter.class.getMethod("loginCallback", parameterTypes);
+            controllerPersistence.loginUser(mail, password, act, method, DomainAdapter.getInstance());
         } catch (NoSuchMethodException ignore) {}
 
     }
@@ -151,12 +153,12 @@ public class DomainAdapter {
         parameterTypes[3] = String.class;
         parameterTypes[4] = Bitmap.class;
         parameterTypes[5] = ArrayList.class;
-        Method method1;
+        Method method;
         login = (Login)act;
 
         try {
-            method1 = DomainAdapter.class.getMethod("loginCallback", parameterTypes);
-            controllerPersistence.loginUserGoogle(idToken, method1, DomainAdapter.getInstance());
+            method = DomainAdapter.class.getMethod("loginCallback", parameterTypes);
+            controllerPersistence.loginUserGoogle(idToken, method, DomainAdapter.getInstance());
         } catch (NoSuchMethodException ignore) {}
     }
 
@@ -167,9 +169,8 @@ public class DomainAdapter {
      * @param username nom d'usuari
      * @param selectedRoutineId rutina seleccionada de l'usuari
      * @param pfp imatge de perfil de l'usuari
-     * @throws NoSuchMethodException si el metode passat no existeix
      */
-    public void loginCallback(boolean success, String userId, String username, String selectedRoutineId, Bitmap pfp, ArrayList<ArrayList<String>> routineInfo) throws NoSuchMethodException {
+    public void loginCallback(boolean success, String userId, String username, String selectedRoutineId, Bitmap pfp, ArrayList<ArrayList<String>> routineInfo) {
         if (success) {
             currentUser = userAdapter.createUser(username);
             currentUser.setID(userId);
@@ -183,6 +184,19 @@ public class DomainAdapter {
                 }
             }
             if(!selectedRoutineId.equals("")) selectRoutine(routine);
+
+            //stats hardcoded
+            Map<Theme, Map<Day, Integer>> stats = new TreeMap<>();
+            for(int t=0; t<Theme.values().length; ++t){
+                Map<Day, Integer> emptyMap = new TreeMap<>();
+                for(int d = 0; d< Day.values().length; ++d){
+                    emptyMap.put(Day.values()[d], t*d);
+                }
+                stats.put(Theme.values()[t], emptyMap);
+            }
+            currentUser.setStatisticsSelectedRoutine(stats);
+            //fi stats hardcoded
+
             login.loginCallback();
         }
         else {
@@ -197,9 +211,8 @@ public class DomainAdapter {
      * @param username nom d'usuari
      * @param selectedRoutineId rutina seleccionada de l'usuari
      * @param pfp imatge de perfil de l'usuari
-     * @throws NoSuchMethodException si el metode passat no existeix
      */
-    public void authUser(boolean success, String userId, String username, String selectedRoutineId, Bitmap pfp, ArrayList<ArrayList<String>> routineInfo) throws NoSuchMethodException {
+    public void authUser(boolean success, String userId, String username, String selectedRoutineId, Bitmap pfp, ArrayList<ArrayList<String>> routineInfo) {
         if (success) {
             currentUser = userAdapter.createUser(username);
             currentUser.setID(userId);
@@ -226,9 +239,8 @@ public class DomainAdapter {
      * @param userId identificador de l'usuari
      * @param username nom d'usuari
      * @param selectedRoutineId rutina seleccionada de l'usuari
-     * @throws NoSuchMethodException si el metode passat no existeix
      */
-    public void registerCallback(boolean success, String userId, String username, String selectedRoutineId) throws NoSuchMethodException {
+    public void registerCallback(boolean success, String userId, String username, String selectedRoutineId) {
         if (success) {
             currentUser = userAdapter.createUser(username);
             currentUser.setID(userId);
@@ -250,11 +262,16 @@ public class DomainAdapter {
 
     /**
      * Metode per donar de baixa un compte d'usuari
+     * @param password contrassenya de l'usuari
+     * @param profile instancia Fragment del front-end que renderitza el perfil
      */
-    public void deleteUser(String password, Profile profile) throws NoSuchMethodException {
+    public void deleteUser(String password, Profile profile) {
         this.profile = profile;
-        Method method = DomainAdapter.class.getMethod("deleteCallback", boolean.class);
-        controllerPersistence.deleteUser(password, method, DomainAdapter.getInstance());
+        try {
+            Method method = DomainAdapter.class.getMethod("deleteCallback", boolean.class);
+            controllerPersistence.deleteUser(password, method, DomainAdapter.getInstance());
+        } catch (NoSuchMethodException ignore) {
+        }
     }
 
     /**
@@ -285,10 +302,31 @@ public class DomainAdapter {
 
     /**
      * Metode per canviar el nom de l'usuari
-     * @param newname nou nom de l'usuari
+     * @param newName nou nom de l'usuari
      */
-    public void changeUserName(String newname) {
-        currentUser.setName(newname);
+    public void changeUserName(String newName) {
+        currentUser.setName(newName);
+    }
+
+    /**
+     * Metode per obtenir les estadistiques de la rutina seleccionada de l'usuari
+     * @return Array d'Arrays d'enters on la primera array representa els temes, la segona els dies i la tercera les hores
+     */
+    public ArrayList<ArrayList<Integer>> getStatisticsSelectedRoutine(){
+        return currentUser.getStatisticsSelectedRoutine();
+    }
+
+    /**
+     * Metode per obtenir les hores dedicades a cada tema en la rutina seleccionada
+     * @return ArrayList on a cada posicio hi han les hores dedicades al tema equivalent a la posicio (i.e. a la posicio 0 hi ha les hores dedicades a Music)
+     */
+    public ArrayList<Integer> getHoursByTheme(){
+        ArrayList<Integer> hoursByTheme = new ArrayList<>();
+        for(int theme=0; theme<Theme.values().length; ++theme){
+            int hours = currentUser.getHoursByTheme(Theme.values()[theme]);
+            hoursByTheme.add(theme, hours);
+        }
+        return hoursByTheme;
     }
 
     /**
@@ -296,14 +334,13 @@ public class DomainAdapter {
      * @param name nom de la rutina
      * @throws ExistingRoutineException si l'usuari ja té una altra rutina amb aquest nom
      */
-    public String createRoutine(String name) throws ExistingRoutineException {
+    public void createRoutine(String name) throws ExistingRoutineException {
         if(!currentUser.existsRoutine(name)) {
             String id = controllerPersistence.createRoutine(currentUser.getID(), name);
             ArrayList<String> routine = new ArrayList<>();
             routine.add(id);
             routine.add(name);
             currentUser.addRoutine(routine);
-            return id;
         } else {
             throw new ExistingRoutineException();
         }
@@ -312,9 +349,8 @@ public class DomainAdapter {
     /**
      * Metode per seleccionar una rutina ja existent
      * @param infoRoutine llista amb la informacio de la rutina a seleccionar
-     * @throws NoSuchMethodException si el metode no existeix
      */
-    public void selectRoutine(ArrayList<String> infoRoutine) throws NoSuchMethodException {
+    public void selectRoutine(ArrayList<String> infoRoutine) {
         if(infoRoutine!=null) {
             Routine routine = routineAdapter.createRoutine(infoRoutine.get(1));
             routine.setId(infoRoutine.get(0));
@@ -331,15 +367,17 @@ public class DomainAdapter {
 
     /**
      * Metode per carregar la rutina seleccionada
-     * @throws NoSuchMethodException si el metode no existeix
      */
-    public void loadSelectedRoutine() throws NoSuchMethodException {
-        routineAdapter.clearActivities();
-        Class[] parameterTypes = new Class[1];
-        parameterTypes[0] = ArrayList.class;
-        Method method1 = DomainAdapter.class.getMethod("loadSelectedRoutineCallback", parameterTypes);
-        for(int d = 0; d < 7; ++d) {
-            controllerPersistence.getActivitiesByDay(currentUser.getID(), currentUser.getSelectedRoutine().getId(), Day.values()[d].toString(), method1, DomainAdapter.getInstance());
+    public void loadSelectedRoutine() {
+        try {
+            routineAdapter.clearActivities();
+            Class[] parameterTypes = new Class[1];
+            parameterTypes[0] = ArrayList.class;
+            Method method = DomainAdapter.class.getMethod("loadSelectedRoutineCallback", parameterTypes);
+            for(int d = 0; d < 7; ++d) {
+                controllerPersistence.getActivitiesByDay(currentUser.getID(), currentUser.getSelectedRoutine().getId(), Day.values()[d].toString(), method, DomainAdapter.getInstance());
+            }
+        } catch (NoSuchMethodException ignore) {
         }
     }
 
@@ -519,6 +557,7 @@ public class DomainAdapter {
     /**
      * Metode per penjar una foto de perfil des de la galeria de l'usuari
      * @param imageUri uri de la imatge a penjar
+     * @param imageBm Bitmap de la imatge
      */
     public void updateProfilePic(Uri imageUri, Bitmap imageBm) {
         controllerPersistence.updateProfilePic(currentUser.getID(), imageUri);
@@ -534,6 +573,17 @@ public class DomainAdapter {
         res.add(currentUser.getName());
         Bitmap pfp = currentUser.getProfilePic();
         res.add(pfp);
+        //stats hardcoded
+        Map<Theme, Map<Day, Integer>> stats = new TreeMap<>();
+        for(int t=0; t<Theme.values().length; ++t){
+            Map<Day, Integer> emptyMap = new TreeMap<>();
+            for(int d = 0; d< Day.values().length; ++d){
+                emptyMap.put(Day.values()[d], t*d);
+            }
+            stats.put(Theme.values()[t], emptyMap);
+        }
+        currentUser.setStatisticsSelectedRoutine(stats);
+        //fi stats hardcoded
         return res;
     }
 

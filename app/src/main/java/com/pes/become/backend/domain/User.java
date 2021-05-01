@@ -3,6 +3,8 @@ package com.pes.become.backend.domain;
 import android.graphics.Bitmap;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Classe que defineix els usuaris de l'aplicacio
@@ -25,6 +27,10 @@ public class User {
      */
     private Routine selectedRoutine;
     /**
+     * Estadistiques de la rutina seleccionada de l'usuari
+     */
+    private Map<Theme, Map<Day, Integer>> statisticsSelectedRoutine;
+    /**
      * ID i nom de les rutines de l'usuari
      */
     private ArrayList<ArrayList<String>> routines;
@@ -37,6 +43,14 @@ public class User {
         this.name = name;
         this.selectedRoutine = null;
         this.routines = new ArrayList<>();
+        this.statisticsSelectedRoutine = new TreeMap<>();
+        for(int t=0; t<Theme.values().length; ++t){
+            Map<Day, Integer> emptyMap = new TreeMap<>();
+            for(int d=0; d<Day.values().length; ++d){
+                emptyMap.put(Day.values()[d], 0);
+            }
+            statisticsSelectedRoutine.put(Theme.values()[t], emptyMap);
+        }
     }
 
     /**
@@ -104,6 +118,44 @@ public class User {
     }
 
     /**
+     * Getter de les estadistiques de la rutina seleccionada
+     * @return Array d'Arrays d'enters on la primera array representa els temes, la segona els dies i la tercera les hores
+     */
+    public ArrayList<ArrayList<Integer>> getStatisticsSelectedRoutine() {
+        ArrayList<ArrayList<Integer>> result = new ArrayList<>();
+        for(Map.Entry<Theme, Map<Day, Integer>> themeEntry : statisticsSelectedRoutine.entrySet()){
+            ArrayList<Integer> hoursByDay = new ArrayList<>();
+            for(Map.Entry<Day, Integer> dayEntry : themeEntry.getValue().entrySet()){
+                hoursByDay.add(dayEntry.getKey().ordinal(), dayEntry.getValue());
+            }
+            result.add(themeEntry.getKey().ordinal(), hoursByDay);
+        }
+        return result;
+    }
+
+    /**
+     *
+     * @param theme
+     * @return
+     */
+    public int getHoursByTheme(Theme theme){
+        Map<Day, Integer> themeStats = statisticsSelectedRoutine.get(theme);
+        int total = 0;
+        for(Map.Entry<Day, Integer> dayStats : themeStats.entrySet()){
+            total += dayStats.getValue();
+        }
+        return total;
+    }
+
+    /**
+     * Setter de les estadistiques de la rutina seleccionada
+     * @param statisticsSelectedRoutine mapa que representa les estadistiques amb Tema com a clau i un segon mapa com a valor, amb Dia com a clau i les hores dedicades com a valor
+     */
+    public void setStatisticsSelectedRoutine(Map<Theme, Map<Day, Integer>> statisticsSelectedRoutine) {
+        this.statisticsSelectedRoutine = statisticsSelectedRoutine;
+    }
+
+    /**
      * Getter de les rutines
      * @return les rutines de l'usuari
      */
@@ -165,5 +217,4 @@ public class User {
         }
         return false;
     }
-
 }

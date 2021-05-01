@@ -63,9 +63,8 @@ public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesLi
         holder.routineName.setText(routinesList.get(position).get(1));
 
         holder.editButton.setOnClickListener(view -> {
-            try {
-                DA.selectRoutine(routinesList.get(position));
-            } catch (NoSuchMethodException ignore) {}
+            DA.selectRoutine(routinesList.get(position));
+
             MainActivity.getInstance().setEditRoutineScreen(routinesList.get(position).get(0),routinesList.get(position).get(1));
         });
 
