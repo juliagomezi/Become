@@ -12,10 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
@@ -24,12 +22,15 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.pes.become.R;
 
+import org.w3c.dom.Text;
+
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
+import java.util.Locale;
 
-public class Stats extends Fragment implements CalendarAdapter.OnItemListener {
+public class Stats extends Fragment {
 
     private Context global;
     private View view;
@@ -76,7 +77,7 @@ public class Stats extends Fragment implements CalendarAdapter.OnItemListener {
         monthYearText.setText(monthYearFromDate(selectedDate));
         ArrayList<String> daysInMonth = daysInMonthArray(selectedDate);
 
-        CalendarAdapter calendarAdapter = new CalendarAdapter(daysInMonth, this);
+        CalendarAdapter calendarAdapter = new CalendarAdapter(daysInMonth);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(global, 7);
         calendarRecyclerView.setLayoutManager(layoutManager);
         calendarRecyclerView.setAdapter(calendarAdapter);
@@ -93,7 +94,7 @@ public class Stats extends Fragment implements CalendarAdapter.OnItemListener {
         LocalDate firstOfMonth = selectedDate.withDayOfMonth(1);
         int dayOfWeek = firstOfMonth.getDayOfWeek().getValue();
 
-        for(int i = 1; i <= 42; i++)
+        for(int i = 2; i <= 43; i++)
         {
             if(i <= dayOfWeek || i > daysInMonth + dayOfWeek)
             {
@@ -110,8 +111,9 @@ public class Stats extends Fragment implements CalendarAdapter.OnItemListener {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private String monthYearFromDate(LocalDate date)
     {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy");
-        return date.format(formatter);
+        String str = date.getMonth().getDisplayName(TextStyle.FULL_STANDALONE, Locale.getDefault());
+        String cap = str.substring(0, 1).toUpperCase() + str.substring(1);
+        return cap + " " + date.getYear();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
