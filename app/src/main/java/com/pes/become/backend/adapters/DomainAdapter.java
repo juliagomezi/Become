@@ -573,6 +573,17 @@ public class DomainAdapter {
         res.add(currentUser.getName());
         Bitmap pfp = currentUser.getProfilePic();
         res.add(pfp);
+        //stats hardcoded
+        Map<Theme, Map<Day, Integer>> stats = new TreeMap<>();
+        for(int t=0; t<Theme.values().length; ++t){
+            Map<Day, Integer> emptyMap = new TreeMap<>();
+            for(int d = 0; d< Day.values().length; ++d){
+                emptyMap.put(Day.values()[d], t*d);
+            }
+            stats.put(Theme.values()[t], emptyMap);
+        }
+        currentUser.setStatisticsSelectedRoutine(stats);
+        //fi stats hardcoded
         return res;
     }
 
