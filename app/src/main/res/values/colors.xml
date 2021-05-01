@@ -17,4 +17,10 @@
     <color name="plants">#88DB79</color>
     <color name="other">#A2A2A2</color>
 
+    <color name="softred">#F1948A</color>
+    <color name="green25">#C1E1C1</color>
+    <color name="green50">#9FE2BF</color>
+    <color name="green75">#98FB98</color>
+    <color name="green100">#5bf95b</color>
+
 </resources>

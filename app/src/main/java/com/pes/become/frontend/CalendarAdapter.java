@@ -14,10 +14,12 @@ import java.util.ArrayList;
 class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder>
 {
     private final ArrayList<String> daysOfMonth;
+    private final ArrayList<Integer> dayStats;
 
-    public CalendarAdapter(ArrayList<String> daysOfMonth)
+    public CalendarAdapter(ArrayList<String> daysOfMonth, ArrayList<Integer> dayStats)
     {
         this.daysOfMonth = daysOfMonth;
+        this.dayStats = dayStats;
     }
 
     @NonNull
@@ -34,7 +36,23 @@ class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder>
     @Override
     public void onBindViewHolder(@NonNull CalendarViewHolder holder, int position)
     {
-        holder.dayOfMonth.setText(daysOfMonth.get(position));
+        String day = daysOfMonth.get(position);
+        holder.dayOfMonth.setText(day);
+        if(!day.equals("")) {
+            int stat = dayStats.get(Integer.valueOf(day) - 1);
+            if(stat != -1) {
+                if (stat == 0)
+                    holder.dayOfMonth.setBackgroundColor(MainActivity.getInstance().getResources().getColor(R.color.softred));
+                else if (stat < 25)
+                    holder.dayOfMonth.setBackgroundColor(MainActivity.getInstance().getResources().getColor(R.color.green25));
+                else if (stat < 50)
+                    holder.dayOfMonth.setBackgroundColor(MainActivity.getInstance().getResources().getColor(R.color.green50));
+                else if (stat < 75)
+                    holder.dayOfMonth.setBackgroundColor(MainActivity.getInstance().getResources().getColor(R.color.green75));
+                else
+                    holder.dayOfMonth.setBackgroundColor(MainActivity.getInstance().getResources().getColor(R.color.green100));
+            }
+        }
     }
 
     @Override
