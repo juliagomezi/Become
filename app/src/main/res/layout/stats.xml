@@ -1,137 +1,385 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    android:orientation="vertical"
-    tools:context=".frontend.Stats">
+    tools:context=".frontend.Stats"
+    >
 
-        <LinearLayout
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical"
+        >
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="20dp"
-            android:layout_marginTop="20dp">
+            android:layout_gravity="center"
+            android:text="@string/hours_of_dedication"
+            android:gravity="center_horizontal"
+            android:fontFamily="@font/sourcesanspro_regular"
+            android:textSize="22sp"
+            android:textColor="@color/black"
+            android:layout_margin="20dp"/>
 
-            <ImageButton
-                android:id="@+id/previousMonthButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/ic_arrow_back"
-                tools:ignore="VectorDrawableCompat"
-                android:textColor="@color/black"
-                android:background="@null"
-                android:textStyle="bold"
-                android:textSize="20sp"/>
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/monthYearTV"
-                android:layout_width="0dp"
-                android:layout_weight="2"
-                android:layout_height="wrap_content"
-                android:text="Feb 2021"
-                android:textSize="20sp"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:gravity="center_horizontal" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <ImageButton
-                android:id="@+id/nextMonthButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_arrow_forward"
-                tools:ignore="VectorDrawableCompat"
-                android:layout_weight="1"
-                android:textColor="@color/black"
-                android:background="@null"
-                android:textStyle="bold"
-                android:textSize="20sp"/>
+                <TextView
+                    android:id="@+id/sportText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/sport"
+                    android:gravity="center_horizontal"
+                    android:fontFamily="@font/sourcesanspro_semibold"
+                    android:textColor="#7777D8"
+                    android:textSize="22sp"/>
+
+                <TextView
+                    android:id="@+id/sleepingText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/sleeping"
+                    android:gravity="center_horizontal"
+                    android:fontFamily="@font/sourcesanspro_semibold"
+                    android:textColor="#7BDDC5"
+                    android:textSize="22sp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <TextView
+                    android:id="@+id/sportHour"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="0"
+                    android:gravity="center_horizontal"
+                    android:fontFamily="@font/sourcesanspro_semibold"
+                    android:textSize="44sp"
+                    android:textColor="#7777D8"
+                    android:layout_margin="10dp"/>
+
+                <TextView
+                    android:id="@+id/sleepingHour"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="0"
+                    android:gravity="center_horizontal"
+                    android:fontFamily="@font/sourcesanspro_semibold"
+                    android:textSize="44sp"
+                    android:textColor="#7BDDC5"
+                    android:layout_margin="10dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <TextView
+                    android:id="@+id/cookingText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/cooking"
+                    android:textColor="#F99450"
+                    android:gravity="center_horizontal"
+                    android:fontFamily="@font/sourcesanspro_semibold"
+                    android:textSize="22sp"/>
+
+                <TextView
+                    android:id="@+id/workingText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/working"
+                    android:gravity="center_horizontal"
+                    android:textColor="#D46B6D"
+                    android:fontFamily="@font/sourcesanspro_semibold"
+                    android:textSize="22sp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <TextView
+                    android:id="@+id/cookingHour"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="0"
+                    android:gravity="center_horizontal"
+                    android:fontFamily="@font/sourcesanspro_semibold"
+                    android:textSize="44sp"
+                    android:textColor="#F99450"
+                    android:layout_margin="10dp"/>
+
+                <TextView
+                    android:id="@+id/workingHour"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="0"
+                    android:gravity="center_horizontal"
+                    android:fontFamily="@font/sourcesanspro_semibold"
+                    android:textSize="44sp"
+                    android:textColor="#D46B6D"
+                    android:layout_margin="10dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <TextView
+                    android:id="@+id/musicText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/music"
+                    android:gravity="center_horizontal"
+                    android:fontFamily="@font/sourcesanspro_semibold"
+                    android:textColor="#D8D455"
+                    android:textSize="22sp"/>
+
+                <TextView
+                    android:id="@+id/entertainmentText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/entertainment"
+                    android:gravity="center_horizontal"
+                    android:fontFamily="@font/sourcesanspro_semibold"
+                    android:textColor="#DF81C2"
+                    android:textSize="22sp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <TextView
+                    android:id="@+id/musicHour"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="0"
+                    android:gravity="center_horizontal"
+                    android:fontFamily="@font/sourcesanspro_semibold"
+                    android:textSize="44sp"
+                    android:textColor="#D8D455"
+                    android:layout_margin="10dp"/>
+
+                <TextView
+                    android:id="@+id/entertainmentHour"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="0"
+                        android:gravity="center_horizontal"
+                        android:fontFamily="@font/sourcesanspro_semibold"
+                        android:textSize="44sp"
+                        android:textColor="#DF81C2"
+                        android:layout_margin="10dp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:id="@+id/plantsText"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="@string/plants"
+                        android:gravity="center_horizontal"
+                        android:fontFamily="@font/sourcesanspro_semibold"
+                        android:textColor="#88DB79"
+                        android:textSize="22sp"/>
+
+                    <TextView
+                        android:id="@+id/otherText"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="@string/other"
+                        android:gravity="center_horizontal"
+                        android:fontFamily="@font/sourcesanspro_semibold"
+                            android:textColor="#A2A2A2"
+                        android:textSize="22sp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:id="@+id/plantsHour"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="0"
+                        android:gravity="center_horizontal"
+                        android:fontFamily="@font/sourcesanspro_semibold"
+                        android:textSize="44sp"
+                        android:textColor="#88DB79"
+                        android:layout_margin="10dp"/>
+
+                    <TextView
+                        android:id="@+id/otherHour"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="0"
+                        android:gravity="center_horizontal"
+                        android:fontFamily="@font/sourcesanspro_semibold"
+                        android:textSize="44sp"
+                        android:textColor="#A2A2A2"
+                        android:layout_margin="10dp"/>
+                </LinearLayout>
+            </TableLayout>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginTop="20dp">
+
+                    <ImageButton
+                        android:id="@+id/previousMonthButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:srcCompat="@drawable/ic_arrow_back"
+                        tools:ignore="VectorDrawableCompat"
+                        android:textColor="@color/black"
+                        android:background="@null"
+                        android:textStyle="bold"
+                        android:textSize="20sp"/>
+
+                    <TextView
+                        android:id="@+id/monthYearTV"
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:layout_height="wrap_content"
+                        android:text="Feb 2021"
+                        android:textSize="20sp"
+                        android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:gravity="center_horizontal" />
+
+                    <ImageButton
+                        android:id="@+id/nextMonthButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_arrow_forward"
+                        tools:ignore="VectorDrawableCompat"
+                        android:layout_weight="1"
+                        android:textColor="@color/black"
+                        android:background="@null"
+                        android:textStyle="bold"
+                        android:textSize="20sp"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="SUN"
+                        android:textColor="@color/black"
+                        android:textAlignment="center"
+                        android:textSize="16sp"
+                        android:gravity="center_horizontal" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="MON"
+                        android:textColor="@color/black"
+                        android:textAlignment="center"
+                        android:textSize="16sp"
+                        android:gravity="center_horizontal" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="TUE"
+                        android:textColor="@color/black"
+                        android:textAlignment="center"
+                        android:textSize="16sp"
+                        android:gravity="center_horizontal" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="WED"
+                        android:textColor="@color/black"
+                        android:textAlignment="center"
+                        android:textSize="16sp"
+                        android:gravity="center_horizontal" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="THUR"
+                        android:textColor="@color/black"
+                        android:textAlignment="center"
+                        android:textSize="16sp"
+                        android:gravity="center_horizontal" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="FRI"
+                        android:textColor="@color/black"
+                        android:textAlignment="center"
+                        android:textSize="16sp"
+                        android:gravity="center_horizontal" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="SAT"
+                        android:textColor="@color/black"
+                        android:textAlignment="center"
+                        android:textSize="16sp"
+                        android:gravity="center_horizontal" />
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/calendarRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"/>
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="SUN"
-                android:textColor="@color/black"
-                android:textAlignment="center"
-                android:textSize="16sp"
-                android:gravity="center_horizontal" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="MON"
-                android:textColor="@color/black"
-                android:textAlignment="center"
-                android:textSize="16sp"
-                android:gravity="center_horizontal" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="TUE"
-                android:textColor="@color/black"
-                android:textAlignment="center"
-                android:textSize="16sp"
-                android:gravity="center_horizontal" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="WED"
-                android:textColor="@color/black"
-                android:textAlignment="center"
-                android:textSize="16sp"
-                android:gravity="center_horizontal" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="THUR"
-                android:textColor="@color/black"
-                android:textAlignment="center"
-                android:textSize="16sp"
-                android:gravity="center_horizontal" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="FRI"
-                android:textColor="@color/black"
-                android:textAlignment="center"
-                android:textSize="16sp"
-                android:gravity="center_horizontal" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="SAT"
-                android:textColor="@color/black"
-                android:textAlignment="center"
-                android:textSize="16sp"
-                android:gravity="center_horizontal" />
-
-        </LinearLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/calendarRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
-</LinearLayout>
+    </androidx.core.widget.NestedScrollView>

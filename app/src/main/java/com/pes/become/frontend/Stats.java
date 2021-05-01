@@ -54,6 +54,7 @@ public class Stats extends Fragment implements CalendarAdapter.OnItemListener {
     private void initWidgets()
     {
         calendarRecyclerView = view.findViewById(R.id.calendarRecyclerView);
+        calendarRecyclerView.setNestedScrollingEnabled(false);
         monthYearText = view.findViewById(R.id.monthYearTV);
     }
 
