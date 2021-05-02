@@ -10,6 +10,7 @@ public class ControllerPersistence {
     ControllerRoutineDB CR;
     ControllerActivityDB CA;
     ControllerUserDB CU;
+    //ControllerStatisticsDB CS;
 
     /**
      * Creadora per defecte de la classe ControllerPersistence
@@ -17,6 +18,7 @@ public class ControllerPersistence {
     public ControllerPersistence() {
         CA = new ControllerActivityDB();
         CR = new ControllerRoutineDB();
+        //CS = new ControllerStatisticsDB();
     }
     /********************FUNCIONS RELACIONADES AMB ACTIVITATS**************************************/
     /***************************CONSULTORES D'ACTIVITATS***********************/
@@ -58,16 +60,18 @@ public class ControllerPersistence {
      * @return el valor del id de l'activitat creada
      */
     public String createActivity(String userId, String idRoutine, String activityName, String actTheme,String actDescription, String actDay, String beginTime, String finishTime) {
+        //CS.addActivityToStatistics(userId, idRoutine, actTheme, actDay, beginTime, finishTime);
         return CA.createActivity(userId, idRoutine, activityName,actTheme,actDescription, actDay, beginTime, finishTime);
     }
 
     /**
      * Esborrar una activitat d'una rutina
      * @param userId identificador de l'usuari
-     * @param idRoutine és el nom i l'identificador de la rutina
-     * @param idActivity és l'identificador de l'activitat
+     * @param idRoutine identificador de la rutina
+     * @param idActivity identificador de l'activitat
      */
     public void deleteActivity(String userId, String idRoutine, String idActivity) {
+        //CS.deleteActivityStatistics(userId, idRoutine, idActivity);
         CA.deleteActivity(userId, idRoutine, idActivity);
     }
 
@@ -84,6 +88,7 @@ public class ControllerPersistence {
      * @param idActivity és l'identificador de l'activitat
      */
     public void updateActivity(String userId, String idRoutine, String actName, String description, String theme,  String iniT, String endT, String day,String idActivity) {
+        //CS.updateDedicatedTimeActivity(userId, idRoutine, idActivity, theme, day, iniT, endT);
         CA.updateActivity(userId, idRoutine, actName, description, theme, day, iniT, endT, idActivity);
     }
 
@@ -107,7 +112,9 @@ public class ControllerPersistence {
      * @param routineName és el nom que es vol que tingui la rutina
      */
     public String createRoutine(String userId, String routineName) {
-        return CR.createRoutine(userId, routineName);
+        String idRoutine = CR.createRoutine(userId, routineName);
+        //CS.createRoutineStatistics(userId,idRoutine);
+        return idRoutine;
     }
 
     /**

@@ -1,5 +1,7 @@
 package com.pes.become.backend.persistence;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -58,7 +60,7 @@ public class ControllerStatisticsDB {
     /********************************MODIFICADORES DE STATISTICS***********************************/
 
     /**
-     * Afegeix les estadistiques d'una nova activitat al conjunt d'estadistiques
+     * Afegeix les estadistiques d'una nova activitat al conjunt d'estadistiques-----AQUESTA SI QUE FUNCIONAAAAAAAAAAAAAAAAAAAAAAAAA
      * @param userId identificador de l'usuari
      * @param idRoutine identificador de la rutina
      * @param theme tema de l'activitat
@@ -83,12 +85,10 @@ public class ControllerStatisticsDB {
                 }
             }
         });
-
-
     }
 
     /**
-     * Es crea les estadistiques de la rutina que s'acaba de crear
+     * Es crea les estadistiques de la rutina que s'acaba de crear ----------AQUESTA SI QUE FUNCIONAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
      * @param userId identificador de l'usuari
      * @param idRoutine identificador de la rutina
      */
@@ -98,18 +98,74 @@ public class ControllerStatisticsDB {
         String[] differentThemes = { "Music", "Sport", "Sleeping", "Cooking", "Working", "Entertainment", "Plants", "Other" };
         String[] differentDays = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
         HashMap <String, Object> dataInput = new HashMap<>();
-        HashMap <String, Object> mapStatistics = new HashMap<>();
+        HashMap <String, Double> mapStatistics = new HashMap<>();
 
 
         for (int i = 0; i<8; ++i){
-            mapStatistics.put(differentThemes[i],0.0);
+            mapStatistics.put(differentThemes[i], 0.0);
         }
 
         for (int j = 0; j<7; ++j){
-            dataInput.put("statistics"+differentDays[j],mapStatistics);
+            dataInput.put("statistics" + differentDays[j], mapStatistics);
         }
 
         docRefToRoutineStatistics.set(dataInput);
+    }
+
+    /**
+     * Esborra les estadistiques d'una activitat d'una rutina
+     * @param userId identificador de l'usuari
+     * @param idRoutine identificador de la rutina
+     * @param idActivity identificador de l'activitat
+     */
+    public void deleteActivityStatistics(String userId, String idRoutine, String idActivity){
+
+        DocumentReference docRefToActivity = db.collection("users").document(userId).
+                collection("routines").document(idRoutine).
+                collection("activities").document(idActivity);
+
+        DocumentReference docRefToStatistics = db.collection("users").
+                document(userId).collection("statistics").document(idRoutine);
+
+
+        //LES DADES QUE TE AQUESTA ACTIVITAT SON LES VELLES
+        docRefToActivity.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+
+                        String day = document.get("day").toString();
+                        String theme = document.get("theme").toString();
+                        String beginTime = document.get("beginTime").toString();
+                        String finishTime = document.get("finishTime").toString();
+                        double hoursToDelete = timeDifference(beginTime, finishTime);
+
+                        docRefToStatistics.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
+                                if (task.isSuccessful()) {
+
+                                    DocumentSnapshot document = task.getResult();
+
+                                    if (document.exists()) {
+
+                                        HashMap<String, Double> mapDay = (HashMap) document.get("statistics" + day);
+                                        Log.d("HORES", String.valueOf(mapDay.get(theme)));
+
+                                        mapDay.put(theme, mapDay.get(theme) - hoursToDelete);
+                                        docRefToStatistics.update("statistics" + day, mapDay);
+
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        });
     }
     
     
@@ -124,10 +180,8 @@ public class ControllerStatisticsDB {
      * @param newDay nou dia de l'activitat
      * @param newBeginTime nova hora d'inici de l'activitat
      * @param newFinishTime nova hora de finalització de l'activitat
-     * @param method metode a cridar
-     * @param object classe que conte el metode
      */
-    public void updateDedicatedTimeActivity(String userId, String idRoutine, String idActivity, String newTheme, String newDay, String newBeginTime, String newFinishTime, Method method, Object object) {
+    public void updateDedicatedTimeActivity(String userId, String idRoutine, String idActivity, String newTheme, String newDay, String newBeginTime, String newFinishTime) {
         DocumentReference docRefToActivity = db.collection("users").document(userId).
                 collection("routines").document(idRoutine).
                 collection("activities").document(idActivity);
@@ -165,7 +219,6 @@ public class ControllerStatisticsDB {
                                     if (document.exists()) {
 
                                         HashMap<String, Double> mapOldDay = (HashMap) document.get("statistics" + oldDay);
-                                        //Potser s'ha de fer mapa <string, object> i convertir a double
 
                                         if (sameDay && sameTheme){
                                             double difference = newActivityHours - oldActivityHours;
@@ -203,7 +256,7 @@ public class ControllerStatisticsDB {
     }
 
     /*************************************FUNCIONS PRIVADES****************************************/
-    public double timeDifference(String beginTime, String finishTime) {
+    private double timeDifference(String beginTime, String finishTime) {
         //return finishTime-beginTime
         double beginHour = Double.parseDouble(beginTime.substring(0,2));
         double beginMinute = Double.parseDouble(beginTime.substring(3));
