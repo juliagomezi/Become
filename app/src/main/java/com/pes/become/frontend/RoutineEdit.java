@@ -101,13 +101,15 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
 
             String newName = routineName.getText().toString();
             if (newName.isEmpty()) routineName.setError(getString(R.string.notNull));
-            else {
+            else if(!newName.equals(name)){
                 try {
                     DA.changeRoutineName(routineId, newName);
                     MainActivity.getInstance().setProfileScreen();
                 } catch (ExistingRoutineException e) {
                     routineName.setError(getString(R.string.existingRoutineName));
                 }
+            } else {
+                MainActivity.getInstance().setProfileScreen();
             }
         });
 
