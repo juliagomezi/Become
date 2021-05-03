@@ -1,6 +1,7 @@
 package com.pes.become.frontend;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,17 +11,22 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapter;
 import com.pes.become.backend.exceptions.NoSelectedRoutineException;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
 public class RoutineView extends Fragment implements AdapterView.OnItemSelectedListener{
 
@@ -147,14 +153,14 @@ public class RoutineView extends Fragment implements AdapterView.OnItemSelectedL
         RoutineViewRecyclerAdapter routineViewRecyclerAdapter = new RoutineViewRecyclerAdapter(activitiesList);
         recyclerView.setAdapter(routineViewRecyclerAdapter);
 
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
+
         routineDay.setVisibility(View.VISIBLE);
         previousDayButton.setVisibility(View.VISIBLE);
         nextDayButton.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.VISIBLE);
         emptyView.setVisibility(View.INVISIBLE);
-
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
-        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
     /**
@@ -192,10 +198,14 @@ public class RoutineView extends Fragment implements AdapterView.OnItemSelectedL
         }
     }
 
+    String doneActivityID = null;
+    String doneActivityName = null;
+
     /**
      * Implementacio del que es fa quan es fa swipe right i left als elements del recycler view
      */
     ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+
         @Override
         public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
             return false;
@@ -203,14 +213,53 @@ public class RoutineView extends Fragment implements AdapterView.OnItemSelectedL
 
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+            int position = viewHolder.getAdapterPosition();
+
             switch (direction) {
+
                 case ItemTouchHelper.LEFT: // <-
+                    doneActivityID = activitiesList.get(position).get(0);
+                    doneActivityName = activitiesList.get(position).get(1);
 
+                    // marcar com a feta
+
+                    Snackbar.make(recyclerView, doneActivityName, BaseTransientBottomBar.LENGTH_LONG)
+                            .setAction("Undo", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    // marcar com a no feta
+                                }
+                            }).show();
                     break;
-                case ItemTouchHelper.RIGHT: // ->
 
+                case ItemTouchHelper.RIGHT: // ->
+                    doneActivityID = activitiesList.get(position).get(0);
+                    doneActivityName = activitiesList.get(position).get(1);
+                    // marcar com a no feta
+
+                    Snackbar.make(recyclerView, doneActivityName, BaseTransientBottomBar.LENGTH_LONG)
+                            .setAction("Undo", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    // marcar com a feta
+                                }
+                            }).show();
                     break;
             }
+        }
+
+        @Override
+        public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+            new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                    .addSwipeLeftBackgroundColor(ContextCompat.getColor(global, R.color.green25))
+                    .addSwipeLeftLabel("DONE")
+                    .addSwipeRightBackgroundColor(ContextCompat.getColor(global, R.color.softred))
+                    .addSwipeRightLabel("UNDONE")
+                    .create()
+                    .decorate();
+            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+
         }
     };
 

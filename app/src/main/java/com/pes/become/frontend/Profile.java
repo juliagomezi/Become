@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import android.provider.MediaStore;
@@ -87,6 +88,9 @@ public class Profile extends Fragment {
         ImageButton settingsButton = view.findViewById(R.id.settingsButton);
         settingsButton.setOnClickListener(v -> createOptionsSheet());
 
+        ImageButton trophiesButton = view.findViewById(R.id.trophiesButton);
+        trophiesButton.setOnClickListener(v -> showTrophiesView());
+
         TabLayout tabLayout = view.findViewById(R.id.tabLayout);
         ViewPager viewPager = view.findViewById(R.id.viewPager);
         viewPager.setAdapter(new MainAdapter(getChildFragmentManager()));
@@ -156,6 +160,14 @@ public class Profile extends Fragment {
 
         optionsSheet.setContentView(sheetView);
         optionsSheet.show();
+    }
+
+    public void showTrophiesView() {
+        Fragment fragment = new Trophies();
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction transaction = fm.beginTransaction();
+        transaction.replace(R.id.fragment_layout, fragment);
+        transaction.commit();
     }
 
     /**
