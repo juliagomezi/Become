@@ -3,6 +3,7 @@ package com.pes.become.frontend;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
@@ -65,6 +66,18 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
     private String id, name, routineId;
 
     /**
+     * Classe per afegir padding al final del recycler view
+     */
+    class BottomItemDecoration  extends RecyclerView.ItemDecoration {
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            super.getItemOffsets(outRect, view, parent, state);
+            if (parent.getChildAdapterPosition(view) == state.getItemCount() - 1)
+                outRect.bottom = 80;
+        }
+    }
+
+    /**
      * Constructora del RoutineEdit
      */
     public RoutineEdit(String id, String name) {
@@ -122,7 +135,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
     }
 
     /**
-     * Funció obtenir la instancia de la RoutineEdit actual
+     * Funcio obtenir la instancia de la RoutineEdit actual
      * */
     public static RoutineEdit getInstance() {
         return instance;
@@ -190,30 +203,31 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
     }
 
     /**
-     * Funció per inicialitzar l'element que mostra el llistat d'activitats
+     * Funcio per inicialitzar l'element que mostra el llistat d'activitats
      */
     private void initRecyclerView() {
+        emptyView.setVisibility(View.INVISIBLE);
+        recyclerView.setVisibility(View.VISIBLE);
+
         recyclerView.setLayoutManager((new LinearLayoutManager(global)));
         routineEditRecyclerAdapter = new RoutineEditRecyclerAdapter(activitiesList);
         recyclerView.setAdapter(routineEditRecyclerAdapter);
-
-        recyclerView.setVisibility(View.VISIBLE);
-        emptyView.setVisibility(View.INVISIBLE);
+        recyclerView.addItemDecoration(new BottomItemDecoration());
     }
 
     /**
-     * Funció per inicialitzar l'element que es mostra quan no hi ha activitats
+     * Funcio per inicialitzar l'element que es mostra quan no hi ha activitats
      * @param text text que mostrara la vista
      */
     private void initEmptyView(String text) {
-        emptyView.setText(text);
-
         recyclerView.setVisibility(View.INVISIBLE);
         emptyView.setVisibility(View.VISIBLE);
+
+        emptyView.setText(text);
     }
 
     /**
-     * Funció per crear la pestanya de creacio/modificacio d'activitat
+     * Funcio per crear la pestanya de creacio/modificacio d'activitat
      * @param modify boolea que indica si s'esta modificicant una activitat existent o creant una de nova
      */
     public void createActivitySheet(boolean modify) {
@@ -313,7 +327,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
     }
 
     /**
-     * Funció per posar els valors a la pestanya de modificació d'activitat
+     * Funcio per posar els valors a la pestanya de modificacio d'activitat
      * @param id identificador de l'activitat
      * @param name nom de l'activitat
      * @param description descripció de l'activitat
@@ -344,28 +358,28 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
     }
 
     /**
-     * Funcio per saber la posició del dia al spinner
+     * Funcio per saber la posicio del dia al spinner
      * @param element nom del dia
-     * @return posició del dia al spinner
+     * @return posicio del dia al spinner
      */
     private int findPositionInAdapterDay(String element) {
         return DA.getPositionDay(element);
     }
     
     /**
-     * Funció necessària pel correcte funcionament dels spinners
+     * Funcio necessaria pel correcte funcionament dels spinners
      */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) { }
 
     /**
-     * Funció necessària pel correcte funcionament dels spinners
+     * Funcio necessaria pel correcte funcionament dels spinners
      */
     @Override
     public void onNothingSelected(AdapterView<?> parent) { }
 
     /**
-     * Funció per crear una nova activitat i afegir-la a la rutina que està sent editada
+     * Funcio per crear una nova activitat i afegir-la a la rutina que esta sent editada
      */
     private void createActivity() {
         String name = activityName.getText().toString();
@@ -401,7 +415,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
     }
 
     /**
-     * Funció per modificar una activitat existent i afegir-la a la rutina que està sent editada
+     * Funcio per modificar una activitat existent i afegir-la a la rutina que esta sent editada
      */
     private void updateActivity() {
         String name = activityName.getText().toString();
@@ -439,6 +453,9 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         } catch (NoSelectedRoutineException ignore) { }
     }
 
+    /**
+     * Funcio per obtenir la llista d'activitats
+     */
     public void updateActivitiesList() {
         try {
             activitiesList = DA.getActivitiesByDay(getWeekDay(seeingDay));

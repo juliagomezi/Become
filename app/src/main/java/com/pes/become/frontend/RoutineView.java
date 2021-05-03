@@ -179,6 +179,9 @@ public class RoutineView extends Fragment implements AdapterView.OnItemSelectedL
         emptyView.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Funcio per obtenir la llista d'activitats
+     */
     private void updateActivitiesList() {
         try {
             activitiesList = DA.getActivitiesByDay(getWeekDay(seeingDay));
