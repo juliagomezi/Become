@@ -2,6 +2,8 @@ package com.pes.become.frontend;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.Shader;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -11,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.TextPaint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,6 +68,15 @@ public class Stats extends Fragment {
         back.setOnClickListener(v -> previousMonthAction());
         ImageButton next = view.findViewById(R.id.nextMonthButton);
         next.setOnClickListener(v -> nextMonthAction());
+
+        TextView streakText = view.findViewById(R.id.streakText);
+        TextPaint paint = streakText.getPaint();
+        float width = paint.measureText("00 DAYS STREAK!");
+        Shader textShader=new LinearGradient(0, 0, width, streakText.getTextSize(),
+                new int[]{Color.parseColor("#12c2e9"),Color.parseColor("#c471ed"),Color.parseColor("#f64f59")},
+                null, Shader.TileMode.CLAMP);
+        streakText.getPaint().setShader(textShader);
+        streakText.setTextColor(Color.parseColor("#12c2e9"));
 
         setHoursStats();
         setChart();

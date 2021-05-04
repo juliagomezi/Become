@@ -95,5 +95,7 @@
     <string name="verifyEmail">Registrat amb èxit. Comprova el teu correu electrònic i verifica\'l per tal d\'usar l\'app.</string>
     <string name="emailNotRegistered">El correu especificat no pertany a cap compte.</string>
     <string name="loginfailed">El correu o la contrasenya no són correctes, assegura\'t d\'haver verificat el correu.</string>
+    <string name="congratsStreak">Enhorabona! Portes una ratxa de</string>
+    <string name="streak">DIES!</string>
 
 </resources>
