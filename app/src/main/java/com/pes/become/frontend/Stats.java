@@ -19,7 +19,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Description;
@@ -30,8 +29,6 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapter;
-
-import org.w3c.dom.Text;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
