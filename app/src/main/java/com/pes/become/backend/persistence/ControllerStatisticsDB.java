@@ -27,7 +27,14 @@ public class ControllerStatisticsDB {
     public ControllerStatisticsDB() { db = FirebaseFirestore.getInstance(); }
 
     /********************************CONSULTORES DE STATISTICS*************************************/
-    
+
+    /**
+     * Funcio que retorna les estadistiques de tots els dies d'una rutina
+     * @param userId identificador de l'usuari
+     * @param idRoutine identificador de la rutina
+     * @param method metode a cridar quan es retornin les dades
+     * @param object classe que conte el metode
+     */
     public void getAllStatisticsRoutine(String userId, String idRoutine, Method method, Object object){
 
         DocumentReference docRefToRoutineStatistics = db.collection("users").document(userId).collection("statistics").document(idRoutine);
@@ -42,6 +49,41 @@ public class ControllerStatisticsDB {
                     for (int i = 0; i<7; ++i){
                         params[i] = document.get("statistics" + days[i]);
                     }
+
+                    try {
+                        method.invoke(object, params);
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    } catch (InvocationTargetException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        });
+    }
+
+    /**
+     * Funcio que retorna les estadistiques d'una rutina en un dia concret
+     * @param userId identificador de l'usuari
+     * @param idRoutine identificador de la rutina
+     * @param day dia de les estadistiques que es volen aconseguir
+     * @param method metode a cridar quan es retornin les dades
+     * @param object classe que conte el metode
+     */
+    public void getStatisticsRoutineByDay(String userId, String idRoutine, String day, Method method, Object object){
+
+        DocumentReference docRefToRoutineStatistics = db.collection("users").document(userId).collection("statistics").document(idRoutine);
+
+        Object[] params = new Object[1];
+
+        docRefToRoutineStatistics.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+
+
+                    params[0] = document.get("statistics" + day);
 
                     try {
                         method.invoke(object, params);
