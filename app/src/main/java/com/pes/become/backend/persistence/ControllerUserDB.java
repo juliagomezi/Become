@@ -534,8 +534,9 @@ public class ControllerUserDB {
         FirebaseAuth.getInstance().fetchSignInMethodsForEmail(mail)
                 .addOnCompleteListener(task -> {
                     boolean isNewUser = task.getResult().getSignInMethods().isEmpty();
-                    boolean google = task.getResult().getSignInMethods().get(0).equals("google.com");
+                    boolean google = false;
                     if (!isNewUser) {
+                        google = task.getResult().getSignInMethods().get(0).equals("google.com");
                         if(!google) FirebaseAuth.getInstance().sendPasswordResetEmail(mail);
                     }
                     boolean sent = true;

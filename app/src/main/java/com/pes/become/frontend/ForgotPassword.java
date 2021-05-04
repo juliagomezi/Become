@@ -1,8 +1,10 @@
 package com.pes.become.frontend;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -44,6 +46,11 @@ public class ForgotPassword extends AppCompatActivity {
      * Metode per recuperar la contrasenya
      */
     private void sendPassResetEmail() {
+        InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (null != this.getCurrentFocus())
+            imm.hideSoftInputFromWindow(this.getCurrentFocus()
+                    .getApplicationWindowToken(), 0);
+
         sent.setVisibility(View.GONE);
         String user = mail.getText().toString();
         if (user.isEmpty()) mail.setError(getString(R.string.notNull));
