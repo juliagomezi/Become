@@ -39,6 +39,14 @@
           }
         },
         {
+          "client_id": "364384690021-gt8i6dg11nlbof7ogi62rlaml9q0dvpl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pes.become",
+            "certificate_hash": "24ad2a184ce5a14fe67ef4f5ea823be88d0290e6"
+          }
+        },
+        {
           "client_id": "364384690021-ig0aphg2taa7lgr35igjj5j3tueeq87q.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
