@@ -434,6 +434,16 @@ public class ControllerUserDB {
     }
 
     /**
+     * Canvia el nom d'usuari
+     * @param userID identificador de l'usuari
+     * @param name nou nom d'usuari
+     */
+    public void changeUsername(String userID, String name) {
+        DocumentReference docRefToUser = db.collection("users").document(userID);
+        docRefToUser.update("Username",name);
+    }
+
+    /**
      * Metode per fer sign out de l'usuari actual
      */
     public void signOut() {

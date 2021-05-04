@@ -8,10 +8,47 @@
     >
 
     <TextView
-        android:id="@+id/updateProfilePic"
+        android:id="@+id/changeUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:fontFamily="@font/sourcesanspro_regular"
+        android:text="@string/change_username"
+        android:textColor="@color/black"
+        android:clickable="true"
+        android:focusable="true"
+        android:textSize="22sp" />
+
+    <EditText
+        android:id="@+id/newName"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edittext_background"
+        android:ems="10"
+        android:fontFamily="@font/sourcesanspro_regular"
+        android:textColor="@color/black"
+        android:textSize="22sp"
+        android:visibility="gone"/>
+
+    <Button
+        android:id="@+id/doneButton2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/doneButton"
+        android:background="@drawable/custom_button"
+        android:fontFamily="@font/sourcesanspro_regular"
+        android:layout_gravity="right"
+        android:textSize="18dp"
+        android:layout_marginTop="20dp"
+        android:textAllCaps="false"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/updateProfilePic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
         android:fontFamily="@font/sourcesanspro_regular"
         android:text="@string/change_profile_photo"
         android:textColor="@color/black"

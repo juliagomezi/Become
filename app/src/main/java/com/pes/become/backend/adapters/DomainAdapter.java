@@ -333,6 +333,7 @@ public class DomainAdapter {
      * @param newName nou nom de l'usuari
      */
     public void changeUserName(String newName) {
+        controllerPersistence.changeUsername(currentUser.getID(),newName);
         currentUser.setName(newName);
     }
 

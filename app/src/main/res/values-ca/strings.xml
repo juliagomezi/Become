@@ -102,5 +102,7 @@
     <string name="currentPassword">Contrasenya actual</string>
     <string name="newPassword">Nova contrasenya</string>
     <string name="passChanged">La contrasenya s\'ha canviat correctament.</string>
+    <string name="change_username">Canviar nom</string>
+    <string name="username_changed">Nom canviat correctament.</string>
 
 </resources>

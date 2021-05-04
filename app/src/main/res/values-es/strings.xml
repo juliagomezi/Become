@@ -102,5 +102,7 @@
     <string name="currentPassword">Contraseña actual</string>
     <string name="passChanged">La contraseña se ha cambiado correctamente.</string>
     <string name="newPassword">Nueva contraseña</string>
+    <string name="change_username">Cambiar nombre</string>
+    <string name="username_changed">Nombre actualizado correctamente.</string>
 
 </resources>

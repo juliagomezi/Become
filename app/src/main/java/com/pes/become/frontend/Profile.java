@@ -55,8 +55,8 @@ public class Profile extends Fragment {
 
     private BottomSheetDialog optionsSheet;
     private TextView deleteAccount;
-    private EditText passText, currPass, newPass, confPass;
-    private Button done;
+    private EditText passText, currPass, newPass, confPass, nameText;
+    private Button done, done2;
 
     private ProgressBar loading;
 
@@ -150,16 +150,22 @@ public class Profile extends Fragment {
 
         deleteAccount = sheetView.findViewById(R.id.deleteAcc);
         TextView changePassword = sheetView.findViewById(R.id.changePassword);
+        TextView changeUsername = sheetView.findViewById(R.id.changeUsername);
         if(DA.getUserProvider().equals("google.com")) {
             changePassword.setVisibility(View.GONE);
             deleteAccount.setVisibility(View.GONE);
+            changeUsername.setVisibility(View.GONE);
         } else {
             changePassword.setOnClickListener(v -> changePasswordSheet());
             deleteAccount.setOnClickListener(v -> askForPassword());
+            changeUsername.setOnClickListener(v -> showChangeName());
         }
 
         TextView logout = sheetView.findViewById(R.id.logout);
         logout.setOnClickListener(v -> logOut());
+
+        nameText = sheetView.findViewById(R.id.newName);
+        done2 = sheetView.findViewById(R.id.doneButton2);
 
         passText = sheetView.findViewById(R.id.passText);
         done = sheetView.findViewById(R.id.doneButton);
@@ -249,6 +255,23 @@ public class Profile extends Fragment {
         passText.setVisibility(View.VISIBLE);
         done.setVisibility(View.VISIBLE);
         done.setOnClickListener(v -> deleteUserAccount());
+    }
+
+    private void showChangeName() {
+        nameText.setVisibility(View.VISIBLE);
+        done2.setVisibility(View.VISIBLE);
+        done2.setOnClickListener(v -> changeUsername());
+    }
+
+    private void changeUsername() {
+        String name = nameText.getText().toString();
+        if(name.isEmpty()) nameText.setError(getString(R.string.notNull));
+        else {
+            optionsSheet.dismiss();
+            DA.changeUserName(name);
+            username.setText(name);
+            Toast.makeText(global, getString(R.string.username_changed), Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**

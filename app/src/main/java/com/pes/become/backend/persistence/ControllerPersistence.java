@@ -228,4 +228,13 @@ public class ControllerPersistence {
         CU.sendPassResetEmail(mail, method, object);
     }
 
+    /**
+     * Metode per canviar el nom de l'usuari
+     * @param newName nou nom de l'usuari
+     */
+    public void changeUsername(String userID, String newName) {
+        CU = ControllerUserDB.getInstance();
+        CU.changeUsername(userID, newName);
+    }
+
 }
