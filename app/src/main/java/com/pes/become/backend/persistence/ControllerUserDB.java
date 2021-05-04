@@ -521,11 +521,14 @@ public class ControllerUserDB {
         FirebaseAuth.getInstance().fetchSignInMethodsForEmail(mail)
                 .addOnCompleteListener(task -> {
                     boolean isNewUser = task.getResult().getSignInMethods().isEmpty();
+                    boolean google = task.getResult().getSignInMethods().get(0).equals("google.com");
                     if (!isNewUser) {
-                        if(!task.getResult().getSignInMethods().get(0).equals("google.com")) FirebaseAuth.getInstance().sendPasswordResetEmail(mail);
+                        if(!google) FirebaseAuth.getInstance().sendPasswordResetEmail(mail);
                     }
+                    boolean sent = true;
+                    if(isNewUser || google) sent = false;
                     try {
-                        method.invoke(object, !isNewUser);
+                        method.invoke(object, sent);
                     } catch (IllegalAccessException ignore) {
                     } catch (InvocationTargetException ignore) {
                     }

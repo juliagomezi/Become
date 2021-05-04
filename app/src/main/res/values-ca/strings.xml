@@ -97,5 +97,7 @@
     <string name="loginfailed">El correu o la contrasenya no són correctes, assegura\'t d\'haver verificat el correu.</string>
     <string name="congratsStreak">Enhorabona! Portes una ratxa de</string>
     <string name="streak">DIES!</string>
+    <string name="backButton">Tornar</string>
+    <string name="reset_password">Restablir contrasenya</string>
 
 </resources>

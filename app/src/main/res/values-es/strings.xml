@@ -97,5 +97,7 @@
     <string name="loginfailed">El correo o la contraseña no son correctos, asegúrate de haver confirmado el correo.</string>
     <string name="streak">DÍAS!</string>
     <string name="congratsStreak">Enhorabuena! Llevas una racha de</string>
+    <string name="backButton">Atrás</string>
+    <string name="reset_password">Restablecer contraseña</string>
 
 </resources>

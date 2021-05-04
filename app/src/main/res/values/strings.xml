@@ -101,5 +101,7 @@
     <string name="loginfailed">Mail or password are not correct, make sure to verify your email</string>
     <string name="streak">DAYS STREAK!</string>
     <string name="congratsStreak">Congrats! You are on a</string>
+    <string name="backButton">Back</string>
+    <string name="reset_password">Reset password</string>
 
 </resources>

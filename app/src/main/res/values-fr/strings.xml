@@ -97,5 +97,7 @@
     <string name="loginfailed">" Le courrier ou le mot de passe ne sont pas corrects, assurez-vous de vérifier votre courrier électronique"</string>
     <string name="streak">JOURS STREAK!</string>
     <string name="congratsStreak">Félicitations! Vous êtes sur un</string>
+    <string name="backButton">Retourner</string>
+    <string name="reset_password">Réinitialiser le mot de passe</string>
 
 </resources>

@@ -21,6 +21,7 @@
         <activity android:name=".frontend.Signup" />
         <activity android:name=".frontend.Login" />
         <activity android:name=".frontend.MainActivity" />
+        <activity android:name=".frontend.ForgotPassword" />
     </application>
 
 </manifest>
