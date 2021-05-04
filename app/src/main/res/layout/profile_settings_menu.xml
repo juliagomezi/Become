@@ -107,7 +107,7 @@
         android:fontFamily="@font/sourcesanspro_regular"
         android:layout_gravity="right"
         android:textSize="18dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:textAllCaps="false"
         android:visibility="gone"/>
 

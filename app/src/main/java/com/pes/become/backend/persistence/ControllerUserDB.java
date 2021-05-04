@@ -60,24 +60,36 @@ public class ControllerUserDB {
      * @param method mètode a executar de forma asíncrona un cop acabada la reautentificació (el paràmetre és un boolea que retorna true si la reautentificació ha anat bé o false si no)
      * @param object instancia de la classe del mètode a executar
      */
-    public void changePassword(String newPassword, Method method, Object object) {
+    public void changePassword(String oldPassword, String newPassword, Method method, Object object) {
         FirebaseUser user = mAuth.getCurrentUser();
+        AuthCredential credential = EmailAuthProvider
+                .getCredential(user.getEmail(), oldPassword);
 
-        user.updatePassword(newPassword)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    boolean success;
-
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            success = true;
-                        }
-
+        user.reauthenticate(credential)
+                .addOnCompleteListener(task -> {
+                    if(task.isSuccessful()) {
+                        user.updatePassword(newPassword)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            try {
+                                                method.invoke(object, true);
+                                            } catch (IllegalAccessException ignore) {
+                                            } catch (InvocationTargetException ignore) {}
+                                        } else {
+                                            try {
+                                                method.invoke(object, false);
+                                            } catch (IllegalAccessException ignore) {
+                                            } catch (InvocationTargetException ignore) {}
+                                        }
+                                    }
+                                });
+                    } else {
                         try {
-                            method.invoke(object, success);
+                            method.invoke(object, false);
                         } catch (IllegalAccessException ignore) {
-                        } catch (InvocationTargetException ignore) {
-                        }
+                        } catch (InvocationTargetException ignore) {}
                     }
                 });
     }
@@ -435,6 +447,7 @@ public class ControllerUserDB {
         FirebaseUser user = mAuth.getCurrentUser();
         AuthCredential credential = EmailAuthProvider
                 .getCredential(user.getEmail(), password);
+
 
         String id = user.getUid();
         user.reauthenticate(credential)

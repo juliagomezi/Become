@@ -99,5 +99,8 @@
     <string name="streak">DAYS STREAK!</string>
     <string name="backButton">Back</string>
     <string name="reset_password">Reset password</string>
+    <string name="currentPassword">Current password</string>
+    <string name="newPassword">New password</string>
+    <string name="passChanged">Password was changed successfully.</string>
 
 </resources>

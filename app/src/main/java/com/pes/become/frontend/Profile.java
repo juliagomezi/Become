@@ -55,7 +55,7 @@ public class Profile extends Fragment {
 
     private BottomSheetDialog optionsSheet;
     private TextView deleteAccount;
-    private EditText passText;
+    private EditText passText, currPass, newPass, confPass;
     private Button done;
 
     private ProgressBar loading;
@@ -154,7 +154,7 @@ public class Profile extends Fragment {
             changePassword.setVisibility(View.GONE);
             deleteAccount.setVisibility(View.GONE);
         } else {
-            changePassword.setOnClickListener(v -> changePassword());
+            changePassword.setOnClickListener(v -> changePasswordSheet());
             deleteAccount.setOnClickListener(v -> askForPassword());
         }
 
@@ -177,14 +177,59 @@ public class Profile extends Fragment {
         transaction.commit();
     }
 
+    private void changePasswordSheet() {
+        optionsSheet.dismiss();
+        optionsSheet = new BottomSheetDialog(global,R.style.BottomSheetTheme);
+        View sheetView = LayoutInflater.from(getContext()).inflate(R.layout.change_password, view.findViewById(R.id.bottom_sheet));
+
+        currPass = sheetView.findViewById(R.id.currentPassword);
+        newPass = sheetView.findViewById(R.id.newPassword);
+        confPass = sheetView.findViewById(R.id.confirmedPassword);
+
+        Button done = sheetView.findViewById(R.id.doneButton);
+        done.setOnClickListener(v -> changePassword());
+
+        loading = sheetView.findViewById(R.id.loading);
+
+        optionsSheet.setContentView(sheetView);
+        optionsSheet.show();
+    }
+
     /**
      * Metode per canviar la contrasenya d'un usuari
      */
     private void changePassword() {
+        currPass.setError(null);
+        newPass.setError(null);
+        confPass.setError(null);
 
-        //do something
+        String current = currPass.getText().toString();
+        String new1 = newPass.getText().toString();
+        String new2 = confPass.getText().toString();
 
-        optionsSheet.dismiss();
+        if (new1.isEmpty() || new2.isEmpty()) {
+            newPass.setError(getString(R.string.notNull));
+            confPass.setError(getString(R.string.notNull));
+        } else if (!new1.equals(new2)) {
+            newPass.setError(getString(R.string.passwords));
+            confPass.setError(getString(R.string.passwords));
+        } else if (new1.length() < 6) {
+            newPass.setError(getString(R.string.shortPassword));
+            confPass.setError(getString(R.string.shortPassword));
+        } else {
+            loading.setVisibility(View.VISIBLE);
+            DA.changePassword(current,new1,this);
+        }
+    }
+
+    public void changePasswordCallback(boolean success) {
+        loading.setVisibility(View.GONE);
+        if(success) {
+            Toast.makeText(global, getString(R.string.passChanged), Toast.LENGTH_SHORT).show();
+            optionsSheet.dismiss();
+        } else {
+            currPass.setError(getString(R.string.wrongPassword));
+        }
     }
 
     /**

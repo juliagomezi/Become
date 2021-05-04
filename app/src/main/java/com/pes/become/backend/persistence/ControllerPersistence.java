@@ -128,9 +128,9 @@ public class ControllerPersistence {
      * @param method mètode a executar de forma asíncrona un cop acabada la reautentificació (el paràmetre és un boolea que retorna true si la reautentificació ha anat bé o false si no)
      * @param object instancia de la classe del mètode a executar
      */
-    public void changePassword(String newPassword, Method method, Object object) {
+    public void changePassword(String oldPassword, String newPassword, Method method, Object object) {
         CU = ControllerUserDB.getInstance();
-        CU.changePassword(newPassword, method, object);
+        CU.changePassword(oldPassword, newPassword, method, object);
     }
 
     /**

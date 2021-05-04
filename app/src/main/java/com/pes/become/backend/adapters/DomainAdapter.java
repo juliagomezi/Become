@@ -312,8 +312,20 @@ public class DomainAdapter {
      * @param oldPassword contrasenya antiga
      * @param newPassword contrasenya nova
      */
-    public void changePassword(String oldPassword, String newPassword) {
-        //controllerPersistence.changePassword(oldPassword, newPassword);
+    public void changePassword(String oldPassword, String newPassword, Profile profile) {
+        this.profile = profile;
+        try {
+            Method method = DomainAdapter.class.getMethod("changePasswordCallback", boolean.class);
+            controllerPersistence.changePassword(oldPassword, newPassword, method, this);
+        } catch(Exception ignore) {}
+    }
+
+    /**
+     * Metode per rebre el resultat del canvi de contrasenya
+     * @param success resultat de la operacio
+     */
+    public void changePasswordCallback(boolean success) {
+        profile.changePasswordCallback(success);
     }
 
     /**

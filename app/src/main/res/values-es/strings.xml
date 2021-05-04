@@ -99,5 +99,8 @@
     <string name="congratsStreak">Enhorabuena! Llevas una racha de</string>
     <string name="backButton">Atrás</string>
     <string name="reset_password">Restablecer contraseña</string>
+    <string name="currentPassword">Contraseña actual</string>
+    <string name="passChanged">La contraseña se ha cambiado correctamente.</string>
+    <string name="newPassword">Nueva contraseña</string>
 
 </resources>

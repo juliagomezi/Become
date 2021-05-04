@@ -99,5 +99,8 @@
     <string name="streak">DIES!</string>
     <string name="backButton">Tornar</string>
     <string name="reset_password">Restablir contrasenya</string>
+    <string name="currentPassword">Contrasenya actual</string>
+    <string name="newPassword">Nova contrasenya</string>
+    <string name="passChanged">La contrasenya s\'ha canviat correctament.</string>
 
 </resources>
