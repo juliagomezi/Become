@@ -49,17 +49,38 @@
         android:layout_marginTop="30dp"
         android:background="@android:color/darker_gray"/>
 
-    <TextView
-        android:id="@+id/deleteAcc"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:fontFamily="@font/sourcesanspro_regular"
-        android:text="Delete account"
-        android:clickable="true"
-        android:focusable="true"
-        android:textColor="@color/darkred"
-        android:textSize="22sp" />
+        android:orientation="horizontal"
+        android:layout_marginTop="30dp">
+
+        <TextView
+            android:id="@+id/deleteAcc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/sourcesanspro_regular"
+            android:text="Delete account"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_gravity="center"
+            android:textColor="@color/darkred"
+            android:textSize="22sp" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="4" />
+
+        <ProgressBar
+            android:id="@+id/loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="gone"
+            android:layout_gravity="right"/>
+
+    </LinearLayout>
 
     <EditText
         android:id="@+id/passText"
@@ -75,6 +96,19 @@
         android:inputType="textPassword"
         android:textColor="@color/black"
         android:textSize="22sp"
+        android:visibility="gone"/>
+
+    <Button
+        android:id="@+id/doneButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/doneButton"
+        android:background="@drawable/custom_button"
+        android:fontFamily="@font/sourcesanspro_regular"
+        android:layout_gravity="right"
+        android:textSize="18dp"
+        android:layout_marginTop="10dp"
+        android:textAllCaps="false"
         android:visibility="gone"/>
 
 </LinearLayout>

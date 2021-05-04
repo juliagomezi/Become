@@ -22,8 +22,10 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,6 +56,9 @@ public class Profile extends Fragment {
     private BottomSheetDialog optionsSheet;
     private TextView deleteAccount;
     private EditText passText;
+    private Button done;
+
+    private ProgressBar loading;
 
     /**
      * Pestanyes del TabLayout
@@ -157,12 +162,14 @@ public class Profile extends Fragment {
         logout.setOnClickListener(v -> logOut());
 
         passText = sheetView.findViewById(R.id.passText);
+        done = sheetView.findViewById(R.id.doneButton);
+        loading = sheetView.findViewById(R.id.loading);
 
         optionsSheet.setContentView(sheetView);
         optionsSheet.show();
     }
 
-    public void showTrophiesView() {
+    private void showTrophiesView() {
         Fragment fragment = new Trophies();
         FragmentManager fm = getFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
@@ -195,13 +202,15 @@ public class Profile extends Fragment {
      */
     private void askForPassword() {
         passText.setVisibility(View.VISIBLE);
-        deleteAccount.setOnClickListener(v -> deleteUserAccount());
+        done.setVisibility(View.VISIBLE);
+        done.setOnClickListener(v -> deleteUserAccount());
     }
 
     /**
      * Metode per solicitar esborrar el compte
      */
-    public void deleteUserAccount() {
+    private void deleteUserAccount() {
+        loading.setVisibility(View.VISIBLE);
         String password = passText.getText().toString();
         DA.deleteUser(password,this);
     }
@@ -210,6 +219,7 @@ public class Profile extends Fragment {
      * Metode per rebre la resposta a la sol.licitud d'esborrat d'usuari
      */
     public void deleteCallback(boolean success) {
+        loading.setVisibility(View.GONE);
         if(success) {
             Toast.makeText(global, getString(R.string.accountDeleted), Toast.LENGTH_SHORT).show();
             optionsSheet.dismiss();
