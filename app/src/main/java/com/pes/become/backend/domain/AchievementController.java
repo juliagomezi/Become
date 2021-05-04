@@ -40,11 +40,103 @@ public class AchievementController {
         switch (achievement){
             case CreateRoutine: //aquest no te logica complexa
                 return currentUser.gainAchievement(Achievement.CreateRoutine);
+
             case HourMusic5:
                 if(checkHoursPerTheme(Theme.Music, 5))
                     return currentUser.gainAchievement(Achievement.HourMusic5);
                 else
                     return false;
+
+            case HourSport5:
+                if(checkHoursPerTheme(Theme.Sport, 5))
+                    return currentUser.gainAchievement(Achievement.HourMusic5);
+                else
+                    return false;
+
+            case HourSleeping5:
+                if(checkHoursPerTheme(Theme.Sleeping, 5))
+                    return currentUser.gainAchievement(Achievement.HourMusic5);
+                else
+                    return false;
+
+            case HourCooking5:
+                if(checkHoursPerTheme(Theme.Cooking, 5))
+                    return currentUser.gainAchievement(Achievement.HourMusic5);
+                else
+                    return false;
+
+            case HourWorking5:
+                if(checkHoursPerTheme(Theme.Working, 5))
+                    return currentUser.gainAchievement(Achievement.HourMusic5);
+                else
+                    return false;
+
+            case HourEntertainment5:
+                if(checkHoursPerTheme(Theme.Entertainment, 5))
+                    return currentUser.gainAchievement(Achievement.HourMusic5);
+                else
+                    return false;
+
+            case HourPlants5:
+                if(checkHoursPerTheme(Theme.Plants, 5))
+                    return currentUser.gainAchievement(Achievement.HourMusic5);
+                else
+                    return false;
+
+            case HourOther5:
+                if(checkHoursPerTheme(Theme.Other, 5))
+                    return currentUser.gainAchievement(Achievement.HourMusic5);
+                else
+                    return false;
+
+            case HourMusic10:
+                if(checkHoursPerTheme(Theme.Music, 10))
+                    return currentUser.gainAchievement(Achievement.HourMusic5);
+                else
+                    return false;
+
+            case HourSport10:
+                if(checkHoursPerTheme(Theme.Sport, 10))
+                    return currentUser.gainAchievement(Achievement.HourMusic5);
+                else
+                    return false;
+
+            case HourSleeping10:
+                if(checkHoursPerTheme(Theme.Sleeping, 10))
+                    return currentUser.gainAchievement(Achievement.HourMusic5);
+                else
+                    return false;
+
+            case HourCooking10:
+                if(checkHoursPerTheme(Theme.Cooking, 10))
+                    return currentUser.gainAchievement(Achievement.HourMusic5);
+                else
+                    return false;
+
+            case HourWorking10:
+                if(checkHoursPerTheme(Theme.Working, 10))
+                    return currentUser.gainAchievement(Achievement.HourMusic5);
+                else
+                    return false;
+
+            case HourEntertainment10:
+                if(checkHoursPerTheme(Theme.Entertainment, 10))
+                    return currentUser.gainAchievement(Achievement.HourMusic5);
+                else
+                    return false;
+
+            case HourPlants10:
+                if(checkHoursPerTheme(Theme.Plants, 10))
+                    return currentUser.gainAchievement(Achievement.HourMusic5);
+                else
+                    return false;
+
+            case HourOther10:
+                if(checkHoursPerTheme(Theme.Other, 10))
+                    return currentUser.gainAchievement(Achievement.HourMusic5);
+                else
+                    return false;
+
             default:
                 return false;
         }
