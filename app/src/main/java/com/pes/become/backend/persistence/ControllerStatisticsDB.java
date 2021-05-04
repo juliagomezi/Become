@@ -116,143 +116,115 @@ public class ControllerStatisticsDB {
      * Esborra les estadistiques d'una activitat d'una rutina
      * @param userId identificador de l'usuari
      * @param idRoutine identificador de la rutina
-     * @param idActivity identificador de l'activitat
+     * @param day dia de l'activitat que es vol borrar
+     * @param theme tema de l'activitat que es vol borrar
+     * @param beginTime hora d'inici de l'activitat que es vol borrar
+     * @param finishTime hora final de l'activitat que es vol borrar
      */
-    public void deleteActivityStatistics(String userId, String idRoutine, String idActivity){
+    public void deleteActivityStatistics(String userId, String idRoutine, String day, String theme, String beginTime, String finishTime){
 
-        DocumentReference docRefToActivity = db.collection("users").document(userId).
-                collection("routines").document(idRoutine).
-                collection("activities").document(idActivity);
+
 
         DocumentReference docRefToStatistics = db.collection("users").
                 document(userId).collection("statistics").document(idRoutine);
 
 
-        //LES DADES QUE TE AQUESTA ACTIVITAT SON LES VELLES
-        docRefToActivity.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        double hoursToDelete = timeDifference(beginTime, finishTime);
+
+        docRefToStatistics.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
                 if (task.isSuccessful()) {
+
                     DocumentSnapshot document = task.getResult();
+
                     if (document.exists()) {
 
-                        String day = document.get("day").toString();
-                        String theme = document.get("theme").toString();
-                        String beginTime = document.get("beginTime").toString();
-                        String finishTime = document.get("finishTime").toString();
-                        double hoursToDelete = timeDifference(beginTime, finishTime);
+                        HashMap<String, Double> mapDay = (HashMap) document.get("statistics" + day);
+                        Log.d("HORES", String.valueOf(mapDay.get(theme)));
 
-                        docRefToStatistics.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        mapDay.put(theme, mapDay.get(theme) - hoursToDelete);
+                        docRefToStatistics.update("statistics" + day, mapDay);
 
-                                if (task.isSuccessful()) {
-
-                                    DocumentSnapshot document = task.getResult();
-
-                                    if (document.exists()) {
-
-                                        HashMap<String, Double> mapDay = (HashMap) document.get("statistics" + day);
-                                        Log.d("HORES", String.valueOf(mapDay.get(theme)));
-
-                                        mapDay.put(theme, mapDay.get(theme) - hoursToDelete);
-                                        docRefToStatistics.update("statistics" + day, mapDay);
-
-                                    }
-                                }
-                            }
-                        });
                     }
                 }
             }
         });
+
     }
-    
-    
-    
+
+
     /**
-     * Funcio per actualitzar les estadistiques d'una rutina quan s'ha modificat una de les seves
-     * activitats
+     * Funcio per actualitzar les estadistiques d'una rutina quan s'ha modificat una de les seves activitats
      * @param userId identificador de l'usuari
      * @param idRoutine identificador de la rutina
-     * @param idActivity identificador de l'activitat
-     * @param newTheme nou tema de l'activitat
      * @param newDay nou dia de l'activitat
-     * @param newBeginTime nova hora d'inici de l'activitat
-     * @param newFinishTime nova hora de finalització de l'activitat
+     * @param newTheme nou tema de l'activitat
+     * @param newBeginTime nou hora d'inici de l'activitat
+     * @param newFinishTime nou hora d'acabament de l'activitat
+     * @param oldDay vell dia de l'activitat
+     * @param oldTheme nou tema de l'activitat
+     * @param oldBeginTime vell hora d'inici de l'activitat
+     * @param oldFinishTime vell hora d'acabament de l'activitat
      */
-    public void updateDedicatedTimeActivity(String userId, String idRoutine, String idActivity, String newTheme, String newDay, String newBeginTime, String newFinishTime) {
-        DocumentReference docRefToActivity = db.collection("users").document(userId).
-                collection("routines").document(idRoutine).
-                collection("activities").document(idActivity);
+    public void updateDedicatedTimeActivity(String userId, String idRoutine, String newDay, String newTheme,  String newBeginTime, String newFinishTime, String oldDay, String oldTheme,  String oldBeginTime, String oldFinishTime) {
+
 
         DocumentReference docRefToStatistics = db.collection("users").document(userId).
                 collection("statistics").document(idRoutine);
 
         //Nova duracio de l'activitat
         double newActivityHours = timeDifference(newBeginTime, newFinishTime);
+        double oldActivityHours = timeDifference(oldBeginTime, oldFinishTime);
+        boolean sameDay = oldDay.equals(newDay);
+        boolean sameTheme = oldTheme.equals(newTheme);
 
-        //LES DADES QUE TE AQUESTA ACTIVITAT SON LES VELLES
-        docRefToActivity.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+
+
+        docRefToStatistics.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
                 if (task.isSuccessful()) {
+
                     DocumentSnapshot document = task.getResult();
+
                     if (document.exists()) {
 
-                        String oldDay = document.get("day").toString();
-                        String oldTheme = document.get("theme").toString();
-                        boolean sameDay = oldDay.equals(newDay);
-                        boolean sameTheme = oldTheme.equals(newTheme);
+                        HashMap<String, Double> mapOldDay = (HashMap) document.get("statistics" + oldDay);
 
-                        //Duracio en hores de l'activitat abans d'actualitzar-la.
-                        double oldActivityHours = timeDifference(document.get("beginTime").toString(), document.get("finishTime").toString());
+                        if (sameDay && sameTheme){
+                            double difference = newActivityHours - oldActivityHours;
+                            mapOldDay.put(oldTheme, mapOldDay.get(oldTheme) + difference);
+                        }
 
-                        docRefToStatistics.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        else {
+                            //Treure les hores antigues de l'activitat antiga
+                            mapOldDay.put(oldTheme, mapOldDay.get(oldTheme) - oldActivityHours);
 
-                                if (task.isSuccessful()) {
-
-                                    DocumentSnapshot document = task.getResult();
-
-                                    if (document.exists()) {
-
-                                        HashMap<String, Double> mapOldDay = (HashMap) document.get("statistics" + oldDay);
-
-                                        if (sameDay && sameTheme){
-                                            double difference = newActivityHours - oldActivityHours;
-                                            mapOldDay.put(oldTheme, mapOldDay.get(oldTheme) + difference);
-                                        }
-
-                                        else{
-
-                                            //Treure les hores antigues de l'activitat antiga
-                                            mapOldDay.put(oldTheme, mapOldDay.get(oldTheme) - oldActivityHours);
-
-                                            if (sameDay){
-                                                //Posar les noves hores al mateix mapa i al tema diferent corresponent
-                                                mapOldDay.put(newTheme, mapOldDay.get(newTheme) + newActivityHours);
-                                            }
-
-                                            else {
-                                                //Posar les noves hores al mapa del dia diferent corresponent i al tema corresponent
-                                                HashMap<String, Double> mapNewDay = (HashMap) document.get("statistics" + newDay);
-                                                mapNewDay.put(newTheme, mapNewDay.get(newTheme) + newActivityHours);
-
-                                                docRefToStatistics.update("statistics" + newDay, mapNewDay);
-                                            }
-                                        }
-                                        docRefToStatistics.update("statistics" + oldDay, mapOldDay);
-
-                                    }
-                                }
+                            if (sameDay){
+                                //Posar les noves hores al mateix mapa i al tema diferent corresponent
+                                mapOldDay.put(newTheme, mapOldDay.get(newTheme) + newActivityHours);
                             }
-                        });
+
+                            else {
+                                //Posar les noves hores al mapa del dia diferent corresponent i al tema corresponent
+                                HashMap<String, Double> mapNewDay = (HashMap) document.get("statistics" + newDay);
+                                mapNewDay.put(newTheme, mapNewDay.get(newTheme) + newActivityHours);
+                                 docRefToStatistics.update("statistics" + newDay, mapNewDay);
+                            }
+                        }
+                        docRefToStatistics.update("statistics" + oldDay, mapOldDay);
+
                     }
                 }
             }
         });
+
+
+
+
     }
 
     /*************************************FUNCIONS PRIVADES****************************************/

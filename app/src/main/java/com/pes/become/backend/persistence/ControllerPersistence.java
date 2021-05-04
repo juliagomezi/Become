@@ -10,7 +10,7 @@ public class ControllerPersistence {
     ControllerRoutineDB CR;
     ControllerActivityDB CA;
     ControllerUserDB CU;
-    //ControllerStatisticsDB CS;
+    ControllerStatisticsDB CS;
 
     /**
      * Creadora per defecte de la classe ControllerPersistence
@@ -18,7 +18,7 @@ public class ControllerPersistence {
     public ControllerPersistence() {
         CA = new ControllerActivityDB();
         CR = new ControllerRoutineDB();
-        //CS = new ControllerStatisticsDB();
+        CS = new ControllerStatisticsDB();
     }
     /********************FUNCIONS RELACIONADES AMB ACTIVITATS**************************************/
     /***************************CONSULTORES D'ACTIVITATS***********************/
@@ -60,7 +60,7 @@ public class ControllerPersistence {
      * @return el valor del id de l'activitat creada
      */
     public String createActivity(String userId, String idRoutine, String activityName, String actTheme,String actDescription, String actDay, String beginTime, String finishTime) {
-        //CS.addActivityToStatistics(userId, idRoutine, actTheme, actDay, beginTime, finishTime);
+        CS.addActivityToStatistics(userId, idRoutine, actTheme, actDay, beginTime, finishTime);
         return CA.createActivity(userId, idRoutine, activityName,actTheme,actDescription, actDay, beginTime, finishTime);
     }
 
@@ -69,27 +69,37 @@ public class ControllerPersistence {
      * @param userId identificador de l'usuari
      * @param idRoutine identificador de la rutina
      * @param idActivity identificador de l'activitat
+     * @param day dia de l'activitat que es vol borrar
+     * @param theme tema de l'activitat que es vol borrar
+     * @param beginTime hora d'inici de l'activitat que es vol borrar
+     * @param finishTime hora final de l'activitat que es vol borrar
      */
-    public void deleteActivity(String userId, String idRoutine, String idActivity) {
-        //CS.deleteActivityStatistics(userId, idRoutine, idActivity);
+    public void deleteActivity(String userId, String idRoutine, String idActivity, String day, String theme, String beginTime, String finishTime) {
+        CS.deleteActivityStatistics(userId, idRoutine, day, theme, beginTime, finishTime);
         CA.deleteActivity(userId, idRoutine, idActivity);
     }
 
     /**
      * Actualitzar una activitat existent en una rutina existent
      * @param userId identificador de l'usuari
-     * @param idRoutine és l'identificador de la rutina ja existent
-     * @param actName és el nom de l'activitat que es vol modificar
-     * @param description és la nova descripció que es vol afegir a l'activitat
-     * @param theme és el tema que es vol afegir a l'activitat
-     * @param day és el dia de  l'activitat que es vol modificar
-     * @param iniT és l'hora d'inici de l'activitat
-     * @param endT és l'hora d'acabament de l'activitat
-     * @param idActivity és l'identificador de l'activitat
+     * @param idRoutine identificador de la rutina
+     * @param idActivity identificador de l'activitat
+     * @param actName nou nom de l'activitat
+     * @param description nova descripcio de l'activitat
+     * @param newDay nou dia de l'activitat
+     * @param newTheme nou tema de l'activitat
+     * @param newBeginTime nova hora d'inici de l'activitat
+     * @param newFinishTime nova hora final de l'activitat
+     * @param oldDay vell dia de l'activitat
+     * @param oldTheme vell tema de l'activitat
+     * @param oldBeginTime vella hora d'inici de l'activitat
+     * @param oldFinishTime vella hora final de l'activitat
      */
-    public void updateActivity(String userId, String idRoutine, String actName, String description, String theme,  String iniT, String endT, String day,String idActivity) {
-        //CS.updateDedicatedTimeActivity(userId, idRoutine, idActivity, theme, day, iniT, endT);
-        CA.updateActivity(userId, idRoutine, actName, description, theme, day, iniT, endT, idActivity);
+    public void updateActivity(String userId, String idRoutine, String idActivity, String actName, String description, String newDay, String newTheme,  String newBeginTime, String newFinishTime,
+                               String oldDay, String oldTheme,  String oldBeginTime, String oldFinishTime) {
+
+        CS.updateDedicatedTimeActivity(userId, idRoutine, newDay, newTheme, newBeginTime, newFinishTime, oldDay, oldTheme, oldBeginTime, oldFinishTime);
+        CA.updateActivity(userId, idRoutine, actName, description, newTheme, newDay, newBeginTime, newFinishTime, idActivity);
     }
 
 
@@ -113,7 +123,7 @@ public class ControllerPersistence {
      */
     public String createRoutine(String userId, String routineName) {
         String idRoutine = CR.createRoutine(userId, routineName);
-        //CS.createRoutineStatistics(userId,idRoutine);
+        CS.createRoutineStatistics(userId,idRoutine);
         return idRoutine;
     }
 
