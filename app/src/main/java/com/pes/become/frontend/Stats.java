@@ -63,7 +63,7 @@ public class Stats extends Fragment {
         selectedDate = LocalDate.now();
         setMonthView();
 
-        mpLineChart = (LineChart) view.findViewById(R.id.linechart);
+        mpLineChart = view.findViewById(R.id.linechart);
         ImageButton back = view.findViewById(R.id.previousMonthButton);
         back.setOnClickListener(v -> previousMonthAction());
         ImageButton next = view.findViewById(R.id.nextMonthButton);
@@ -71,7 +71,7 @@ public class Stats extends Fragment {
 
         TextView streakText = view.findViewById(R.id.streakText);
         TextPaint paint = streakText.getPaint();
-        float width = paint.measureText("00 DAYS STREAK!");
+        float width = paint.measureText(getString(R.string.streak));
         Shader textShader=new LinearGradient(0, 0, width, streakText.getTextSize(),
                 new int[]{Color.parseColor("#12c2e9"),Color.parseColor("#c471ed"),Color.parseColor("#f64f59")},
                 null, Shader.TileMode.CLAMP);
