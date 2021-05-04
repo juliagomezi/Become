@@ -1,7 +1,12 @@
 package com.pes.become.frontend;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.RectF;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -259,7 +264,25 @@ public class RoutineView extends Fragment implements AdapterView.OnItemSelectedL
                     .create()
                     .decorate();
             super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+            /*try {
+                Bitmap icon;
 
+                View itemView = viewHolder.itemView;
+                float height = (float) itemView.getBottom() - (float) itemView.getTop();
+                float width = height / 5;
+                viewHolder.itemView.setTranslationX(dX / 5);
+
+                Paint paint = new Paint(Color.parseColor("#ccffcc"));
+                RectF background = new RectF((float) itemView.getRight() + dX / 5, (float) itemView.getTop(), (float) itemView.getRight(), (float) itemView.getBottom());
+                c.drawRect(background, paint);
+                icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_email);
+                RectF icon_dest = new RectF((float) (itemView.getRight() + dX /7), (float) itemView.getTop()+width, (float) itemView.getRight()+dX/20, (float) itemView.getBottom()-width);
+                c.drawBitmap(icon, null, icon_dest, paint);
+
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }*/
         }
     };
 
