@@ -3,6 +3,8 @@ package com.pes.become.backend.adapters;
 import android.graphics.Bitmap;
 import android.net.Uri;
 
+import com.pes.become.backend.domain.Achievement;
+import com.pes.become.backend.domain.AchievementController;
 import com.pes.become.backend.domain.Activity;
 import com.pes.become.backend.domain.Day;
 import com.pes.become.backend.domain.Routine;
@@ -45,6 +47,10 @@ public class DomainAdapter {
      * Unica instancia de l'adaptador de la classe Usuari
      */
     private static final UserAdapter userAdapter = UserAdapter.getInstance();
+    /**
+     * Unica instancia del controlador de trofeus
+     */
+    private static final AchievementController achievementController = AchievementController.getInstance();
     /**
      * Instancia de la classe login del frontend
      */
@@ -197,6 +203,8 @@ public class DomainAdapter {
             currentUser.setStatisticsSelectedRoutine(stats);
             //fi stats hardcoded
 
+            achievementController.setCurrentUser(currentUser);
+
             login.loginCallback();
         }
         else {
@@ -226,6 +234,9 @@ public class DomainAdapter {
                 }
             }
             if(!selectedRoutineId.equals("")) selectRoutine(routine);
+
+            achievementController.setCurrentUser(currentUser);
+
             logoScreen.loginCallback();
         }
         else {
@@ -327,6 +338,15 @@ public class DomainAdapter {
             hoursByTheme.add(theme, hours);
         }
         return hoursByTheme;
+    }
+
+    /**
+     * Metode per comprovar si l'usuari ha guanyat un trofeu
+     * @param achievement ordinal del trofeu que volem comprovar
+     * @return cert si l'ha guanyat, fals si no o ja el tenia
+     */
+    public boolean checkAchievement(int achievement){
+        return achievementController.checkAchievement(Achievement.values()[achievement]);
     }
 
     /**

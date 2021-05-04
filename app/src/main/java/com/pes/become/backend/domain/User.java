@@ -34,6 +34,10 @@ public class User {
      * ID i nom de les rutines de l'usuari
      */
     private ArrayList<ArrayList<String>> routines;
+    /**
+     * Trofeus obtinguts per l'usuari
+     */
+    private Map<Achievement, Boolean> achievements;
 
     /**
      * Creadora de la classe per a un nou usuari
@@ -50,6 +54,10 @@ public class User {
                 emptyMap.put(Day.values()[d], 0);
             }
             statisticsSelectedRoutine.put(Theme.values()[t], emptyMap);
+        }
+        achievements = new TreeMap<>();
+        for(int a = 0; a<Achievement.values().length; ++a){
+            achievements.put(Achievement.values()[a], false);
         }
     }
 
@@ -134,9 +142,9 @@ public class User {
     }
 
     /**
-     *
-     * @param theme
-     * @return
+     * Metode per obtenir totes les hores que hi han dedicades a un tema en la rutina seleccionada
+     * @param theme tema del que es volen les hores
+     * @return hores setmanals dedicades al tema
      */
     public int getHoursByTheme(Theme theme){
         Map<Day, Integer> themeStats = statisticsSelectedRoutine.get(theme);
@@ -153,6 +161,36 @@ public class User {
      */
     public void setStatisticsSelectedRoutine(Map<Theme, Map<Day, Integer>> statisticsSelectedRoutine) {
         this.statisticsSelectedRoutine = statisticsSelectedRoutine;
+    }
+
+    /**
+     * Metode per obtenir tots els trofeus de l'usuari
+     * @return mapa amb els trofeus de l'usuari on el trofeu es la key i el valor es cert si te el trofeu i fals si no
+     */
+    public Map<Achievement, Boolean> getAllAchievementsStates() {
+        return achievements;
+    }
+
+    /**
+     * Metode per saber l'estat d'un trofeu de l'usuari
+     * @param achievement trofeu del que es vol l'estat
+     * @return cert si te el trofeu, fals si no
+     */
+    public boolean getAchievementState(Achievement achievement){
+        return achievements.get(achievement);
+    }
+
+    /**
+     * Metode perque l'usuari obtingui un trofeu
+     * @param achievement trofeu a obtenir
+     * @return cert si no tenia el trofeu i per tant l'ha guanyat, fals si ja el tenia
+     */
+    public boolean gainAchievement(Achievement achievement){
+        if(!achievements.get(achievement)){
+            achievements.put(achievement, true);
+            return true;
+        }
+        return false;
     }
 
     /**
