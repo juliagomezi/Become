@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.pes.become.R;
+import com.pes.become.backend.adapters.DomainAdapter;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -20,7 +21,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public static MainActivity getInstance() { return instance; }
 
     /**
-     * Funcio del MaincActivity que s'executa al crear-lo
+     * Funcio del MainActivity que s'executa al crear-lo
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {

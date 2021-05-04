@@ -47,7 +47,7 @@
     <string name="confirm_password">Repetir contrassenya</string>
     <string name="username">Nom d\'usuari</string>
     <string name="notNull">Aquest camp no pot estar buit</string>
-    <string name="emailExists">Aquest email ja està registrat</string>
+    <string name="emailExists">Aquest correu ja està registrat</string>
     <string name="userNotMatch">Usuari i contrassenya no coincideixen</string>
     <string name="passwords">Les contrassenyes no són iguals</string>
     <string name="activityCreated">Activitat creada correctament</string>
@@ -62,10 +62,10 @@
     <string name="noActivities">No tens cap activitat programada avui.</string>
     <string name="noRoutines">No tens cap rutina, crea\'n una de nova!</string>
     <string name="shortPassword">La contrasenya ha de contenir com a mínim 6 caràcters</string>
-    <string name="notAValidEmail">Introdueix un email vàlid</string>
+    <string name="notAValidEmail">Introdueix un correu vàlid</string>
     <string name="change_profile_photo">Canviar foto de perfil</string>
     <string name="log_out">Sortir</string>
-    <string name="change_password">Canviar clau de pas</string>
+    <string name="change_password">Canviar contrasenya</string>
     <string name="permissionDenied">Has denegat a Become poder accedir a les teves fotos, actualitza els permisos a configuració per poder usar aquesta funcionalitat.</string>
     <string name="permissionDeniedTitle">Permís denegat</string>
     <string name="existingRoutineName">Hi ha una altra rutina amb el mateix nom</string>
@@ -90,5 +90,10 @@
     <string name="plants">PLANTES I JARDINERIA</string>
     <string name="other">ALTRES</string>
     <string name="routine_distribution">Distribució de la rutina</string>
+    <string name="emailSent">S\'ha enviat un correu electrònic per restablir la contrsenya</string>
+    <string name="forgot_password">Has oblidat la contrasenya?</string>
+    <string name="verifyEmail">Registrat amb èxit. Comprova el teu correu electrònic i verifica\'l per tal d\'usar l\'app.</string>
+    <string name="emailNotRegistered">El correu especificat no pertany a cap compte.</string>
+    <string name="loginfailed">El correu o la contrasenya no són correctes, assegura\'t d\'haver verificat el correu.</string>
 
 </resources>

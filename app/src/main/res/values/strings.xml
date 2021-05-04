@@ -94,5 +94,10 @@
     <string name="deleteRoutineConfirmation">Do you really want to delete this routine and all its activities?</string>
     <string name="deleteRoutine">Delete routine</string>
     <string name="routine_distribution">Routine distribution</string>
+    <string name="emailSent">An email has been sent to reset your password</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="verifyEmail">Registered successfully. Please check your email and verify your account before using the app.</string>
+    <string name="emailNotRegistered">This email does not belong to any registered account</string>
+    <string name="loginfailed">Mail or password are not correct, make sure to verify your email</string>
 
 </resources>

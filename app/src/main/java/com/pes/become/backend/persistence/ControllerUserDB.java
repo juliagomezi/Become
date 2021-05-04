@@ -3,7 +3,6 @@ package com.pes.become.backend.persistence;
 import android.app.Activity;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -16,7 +15,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.UserInfo;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -29,7 +27,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class ControllerUserDB {
 
@@ -112,7 +109,7 @@ public class ControllerUserDB {
                 .addOnCompleteListener(act, task -> {
                     Object[] params = new Object[6];
 
-                    if (task.isSuccessful()) {
+                    if (task.isSuccessful() && mAuth.getCurrentUser().isEmailVerified()) {
                         FirebaseUser user = mAuth.getCurrentUser();
                         String userID = user.getUid();
 
@@ -288,23 +285,21 @@ public class ControllerUserDB {
                         docRefToUser.get().addOnSuccessListener(documentSnapshot -> {
 
                             if(!documentSnapshot.exists()) {
-                                DocumentReference docRefToUser1 =  db.collection("users").document(userID);
                                 HashMap<String, Object> mapa = new HashMap<>();
                                 mapa.put("Username", user.getDisplayName());
                                 mapa.put("selectedRoutine", "");
-                                docRefToUser1.set(mapa);
+                                docRefToUser.set(mapa);
                             }
-
-                            params[0] = true;
-                            params[1] = userID;
-                            params[2] = documentSnapshot.get("Username").toString();
-                            params[3] = documentSnapshot.get("selectedRoutine");
 
                             try {
                                 File localFile = File.createTempFile("images", "jpeg");
                                 StorageReference imageRef = storageRef.child("images/"+userID);
                                 imageRef.getFile(localFile)
                                         .addOnSuccessListener(taskSnapshot -> {
+                                            params[0] = true;
+                                            params[1] = userID;
+                                            params[2] = documentSnapshot.get("Username").toString();
+                                            params[3] = documentSnapshot.get("selectedRoutine");
                                             params[4] = BitmapFactory.decodeFile(localFile.getAbsolutePath());
 
                                             if (params[3] == null) params[3]="";
@@ -328,6 +323,10 @@ public class ControllerUserDB {
                                                 }
                                             });
                                         }).addOnFailureListener(exception -> {
+                                            params[0] = true;
+                                            params[1] = userID;
+                                            params[2] = documentSnapshot.get("Username").toString();
+                                            params[3] = documentSnapshot.get("selectedRoutine");
                                             params[4] = null;
 
                                             if (params[3] == null) params[3]="";
@@ -396,6 +395,9 @@ public class ControllerUserDB {
                         params[1] = userID;
                         params[2] = name;
                         params[3] = "";
+
+                        user.sendEmailVerification();
+                        signOut();
                     }
                     else {
                         params[0] = false;
@@ -508,6 +510,25 @@ public class ControllerUserDB {
                         }
                     }
                     docRefToRoutine.delete();
+                });
+    }
+
+    /**
+     * Metode per recuperar la contrasenya d'un usuari
+     * @param mail mail del compte a recuperar
+     */
+    public void sendPassResetEmail(String mail, Method method, Object object) {
+        FirebaseAuth.getInstance().fetchSignInMethodsForEmail(mail)
+                .addOnCompleteListener(task -> {
+                    boolean isNewUser = task.getResult().getSignInMethods().isEmpty();
+                    if (!isNewUser) {
+                        if(!task.getResult().getSignInMethods().get(0).equals("google.com")) FirebaseAuth.getInstance().sendPasswordResetEmail(mail);
+                    }
+                    try {
+                        method.invoke(object, !isNewUser);
+                    } catch (IllegalAccessException ignore) {
+                    } catch (InvocationTargetException ignore) {
+                    }
                 });
     }
 

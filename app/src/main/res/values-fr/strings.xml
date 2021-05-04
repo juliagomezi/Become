@@ -90,5 +90,10 @@
     <string name="other">AUTRE</string>
     <string name="hours_of_dedication">Heures de dévouement</string>
     <string name="routine_distribution">Distribution de routine</string>
+    <string name="emailSent">" Un e-mail a été envoyé pour réinitialiser votre mot de passe"</string>
+    <string name="forgot_password">Mot de passe oublié?</string>
+    <string name="verifyEmail">Enregistré avec succès. Veuillez vérifier votre courrier électronique et vérifier votre compte avant d\'utiliser l\'application.</string>
+    <string name="emailNotRegistered">" Cet e-mail n'appartient à aucun compte enregistré"</string>
+    <string name="loginfailed">" Le courrier ou le mot de passe ne sont pas corrects, assurez-vous de vérifier votre courrier électronique"</string>
 
 </resources>

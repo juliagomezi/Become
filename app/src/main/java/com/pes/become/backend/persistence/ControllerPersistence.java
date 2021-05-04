@@ -218,4 +218,14 @@ public class ControllerPersistence {
         CU = ControllerUserDB.getInstance();
         CU.loadUser(method, object);
     }
+
+    /**
+     * Metode per recuperar la contrasenya d'un usuari
+     * @param mail mail del compte a recuperar
+     */
+    public void sendPassResetEmail(String mail, Method method, Object object) {
+        CU = ControllerUserDB.getInstance();
+        CU.sendPassResetEmail(mail, method, object);
+    }
+
 }

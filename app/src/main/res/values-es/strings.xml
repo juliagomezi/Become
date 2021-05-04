@@ -47,7 +47,7 @@
     <string name="confirm_password">Confirmar contraseña</string>
     <string name="username">Nombre de usuario</string>
     <string name="notNull">Este campo no puede estar vacío</string>
-    <string name="emailExists">Este email ya está registrado</string>
+    <string name="emailExists">Este correo ya está registrado</string>
     <string name="userNotMatch">Usuario y contraseña no coinciden</string>
     <string name="passwords">Las contraseñas no coinciden</string>
     <string name="activityCreated">Actividad creada correctamente</string>
@@ -62,7 +62,7 @@
     <string name="noActivities">No tienes ninguna actividad programada para hoy.</string>
     <string name="noRoutines">No tienes ninguna rutina, crea una nueva!</string>
     <string name="shortPassword">La contraseña debe tener como m</string>
-    <string name="notAValidEmail">Introduce un email válido</string>
+    <string name="notAValidEmail">Introduce un correo válido</string>
     <string name="change_profile_photo">Cambiar foto de perfil</string>
     <string name="log_out">Salir</string>
     <string name="change_password">Cambiar contraseña</string>
@@ -90,5 +90,10 @@
     <string name="plants">PLANTAS Y JARDINERÍA</string>
     <string name="other">OTROS</string>
     <string name="routine_distribution">Distribución de la rutina</string>
+    <string name="emailSent">Se ha enviado un correo electrónico para restablecer la contraseña</string>
+    <string name="forgot_password">Has olvidado la contraseña?</string>
+    <string name="verifyEmail">Registrado correctamente. Comprueba tu correo electrónico y verificalo para usar la app.</string>
+    <string name="emailNotRegistered">El correo introducido no pertenece a ninguna cuenta.</string>
+    <string name="loginfailed">El correo o la contraseña no son correctos, asegúrate de haver confirmado el correo.</string>
 
 </resources>

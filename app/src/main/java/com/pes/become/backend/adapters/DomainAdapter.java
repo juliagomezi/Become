@@ -613,4 +613,25 @@ public class DomainAdapter {
     public ArrayList<ArrayList<String>> getActivitiesByDay(String weekDay) throws NoSelectedRoutineException {
         return routineAdapter.getActivitiesByDay(weekDay);
     }
+
+    /**
+     * Metode per recuperar la contrasenya d'un usuari
+     * @param mail mail del compte a recuperar
+     * @return true si el mail pertany a un usuari registrat i es pot enviar el correu, false altrament
+     */
+    public void sendPassResetEmail(String mail, android.app.Activity act) {
+        login = (Login)act;
+        try {
+            Method method = DomainAdapter.class.getMethod("passResetCallback", boolean.class);
+            controllerPersistence.sendPassResetEmail(mail, method, this);
+        } catch (Exception ignore) {}
+    }
+
+    /**
+     * Metode per rebre la resposta de la base de dades del mail de recuperacio de la contrasenya
+     * @param success resultat de l'operacio
+     */
+    public void passResetCallback(boolean success) {
+        login.passResetCallback(success);
+    }
 }

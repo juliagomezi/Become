@@ -20,6 +20,9 @@ import com.google.android.gms.tasks.Task;
 import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapter;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class Login extends AppCompatActivity {
 
 
@@ -41,6 +44,7 @@ public class Login extends AppCompatActivity {
         Button login = findViewById(R.id.logInButton);
         Button googleLogin = findViewById(R.id.googleLoginButton);
         TextView signUp = findViewById(R.id.signUp);
+        TextView forgotPassword = findViewById(R.id.forgotPassword);
         loading = findViewById(R.id.loading);
 
         login.setOnClickListener(v-> loginUser());
@@ -48,6 +52,8 @@ public class Login extends AppCompatActivity {
         googleLogin.setOnClickListener(v -> googleLoginUser());
 
         signUp.setOnClickListener(v -> startActivity(new Intent(Login.this, Signup.class)));
+
+        forgotPassword.setOnClickListener(v -> sendPassResetEmail());
     }
 
     private void createRequest() {
@@ -64,10 +70,12 @@ public class Login extends AppCompatActivity {
         String password = passwordText.getText().toString();
 
         if (user.isEmpty()) userText.setError(getString(R.string.notNull));
-        else if (password.isEmpty()) userText.setError(getString(R.string.notNull));
-
-        loading.setVisibility(View.VISIBLE);
-        DA.loginUser(user, password, this);
+        else if(!isEmailValid(user)) userText.setError(getString(R.string.notAValidEmail));
+        else if (password.isEmpty()) passwordText.setError(getString(R.string.notNull));
+        else {
+            loading.setVisibility(View.VISIBLE);
+            DA.loginUser(user, password, this);
+        }
     }
 
     private void googleLoginUser() {
@@ -95,8 +103,9 @@ public class Login extends AppCompatActivity {
     /**
      * Funcio de callback per loguejar l'usuari sense exit
      */
-    public void loginCallbackFailed(){
-        Toast.makeText(Login.this, "Login failed", Toast.LENGTH_SHORT).show();
+    public void loginCallbackFailed() {
+        userText.setError(getString(R.string.loginfailed));
+        passwordText.setError(getString(R.string.loginfailed));
         loading.setVisibility(View.INVISIBLE);
     }
 
@@ -106,5 +115,38 @@ public class Login extends AppCompatActivity {
     public void loginCallback() {
         startActivity(new Intent(this, MainActivity.class));
         finish();
+    }
+
+    /**
+     * Metode per recuperar la contrasenya
+     */
+    private void sendPassResetEmail() {
+        String user = userText.getText().toString();
+        if (user.isEmpty()) userText.setError(getString(R.string.notNull));
+        else if(!isEmailValid(user)) userText.setError(getString(R.string.notAValidEmail));
+        else {
+            loading.setVisibility(View.VISIBLE);
+            DA.sendPassResetEmail(user,this);
+        }
+    }
+
+    /**
+     * Metode per rebre la resposta de la base de dades del mail de recuperacio de la contrasenya
+     * @param success resultat de l'operacio
+     */
+    public void passResetCallback(boolean success) {
+        loading.setVisibility(View.INVISIBLE);
+        if(success) {
+            userText.setText("");
+            Toast.makeText(this, getString(R.string.emailSent), Toast.LENGTH_SHORT).show();
+        }
+        else userText.setError(getString(R.string.emailNotRegistered));
+    }
+
+    public static boolean isEmailValid(String email) {
+        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 }
