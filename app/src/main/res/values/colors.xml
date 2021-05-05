@@ -26,7 +26,12 @@
     <color name="green75">#98FB98</color>
     <color name="green100">#5bf95b</color>
 
-    <color name="darkgold">#ffd300</color>
-    <color name="softgold">#ffee9d</color>
+    <color name="gold25">#ffee9d</color>
+    <color name="gold75">#ffd300</color>
+    <color name="gold100">#A38800</color>
+
+    <color name="softblack">#6c757d</color>
+
+
 
 </resources>

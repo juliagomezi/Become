@@ -55,7 +55,15 @@ public class Trophies extends Fragment {
         trophiesList.add(trophy);
         trophy = new ArrayList<>();
         trophy.add("RATXA MENSUAL");
-        trophy.add("S'obté al obtenir una ratxa de 30 dies");
+        trophy.add("S'obté al obtenir una ratxa de 30 diesaaaaaaaaaaaaaaaaaaaaaa");
+        trophiesList.add(trophy);
+        trophy = new ArrayList<>();
+        trophy.add("RATXA MENSUAL");
+        trophy.add("S'obté al obtenir una ratxa de 30 diesaaaaaaaaaaaaaaaaaaaaaa");
+        trophiesList.add(trophy);
+        trophy = new ArrayList<>();
+        trophy.add("RATXA MENSUAL");
+        trophy.add("S'obté al obtenir una ratxa de 30 diesaaaaaaaaaaaaaaaaaaaaaa");
         trophiesList.add(trophy);
 
         obtainedTrophiesList = new ArrayList<>();
@@ -63,6 +71,8 @@ public class Trophies extends Fragment {
         obtainedTrophiesList.add(true);
         obtainedTrophiesList.add(false);
         obtainedTrophiesList.add(true);
+        obtainedTrophiesList.add(false);
+        obtainedTrophiesList.add(false);
         obtainedTrophiesList.add(false);
     }
 

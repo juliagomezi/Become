@@ -57,15 +57,16 @@ public class TrophiesRecyclerAdapter extends RecyclerView.Adapter<TrophiesRecycl
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        holder.trophyCard.setOnClickListener(view -> {
-            Log.d("card", String.valueOf(position));
-        });
-
         holder.trophyName.setText(trophiesList.get(position).get(0));
+        holder.trophyDescription.setText(trophiesList.get(position).get(1));
 
         if (obtainedThrophiesList.get(position)) {
-            holder.trophyCard.setCardBackgroundColor(global.getResources().getColor(R.color.softgold));
-            holder.trophyIcon.setColorFilter(global.getResources().getColor(R.color.darkgold), PorterDuff.Mode.SRC_ATOP);
+            holder.trophyCard.setCardBackgroundColor(global.getResources().getColor(R.color.gold25));
+            holder.trophyName.setTextColor(global.getResources().getColor(R.color.gold100));
+            holder.trophyIcon.setColorFilter(global.getResources().getColor(R.color.gold75), PorterDuff.Mode.SRC_ATOP);
+        }
+        else {
+            holder.trophyCard.setCardBackgroundColor(global.getResources().getColor(R.color.coldwhite));
         }
 
     }
@@ -86,7 +87,7 @@ public class TrophiesRecyclerAdapter extends RecyclerView.Adapter<TrophiesRecycl
     class ViewHolder extends RecyclerView.ViewHolder {
 
         CardView trophyCard;
-        TextView trophyName;
+        TextView trophyName, trophyDescription;
         ImageButton trophyIcon;
 
         /**
@@ -96,6 +97,7 @@ public class TrophiesRecyclerAdapter extends RecyclerView.Adapter<TrophiesRecycl
             super(itemView);
             trophyCard = itemView.findViewById(R.id.trophyCard);
             trophyName = itemView.findViewById(R.id.trophyName);
+            trophyDescription = itemView.findViewById(R.id.trophyDescription);
             trophyIcon = itemView.findViewById(R.id.trophyIcon);
         }
     }

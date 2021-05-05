@@ -9,35 +9,33 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
         tools:context=".frontend.MainActivity">
 
-        <TextView
+        <!--<TextView
             android:id="@+id/trophyName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
             android:background="?attr/selectableItemBackground"
-            android:fontFamily="@font/sourcesanspro_semibold"
-            android:text="Throphies!"
+            android:fontFamily="@font/sourcesanspro_bold"
+            android:text="TROPHIES!"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/black"
-            android:textSize="20sp"
+            android:letterSpacing="0"
+            android:textSize="30sp"
+            android:gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent" />-->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/trophiesList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="50dp"
             android:animationCache="true"
             android:background="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/trophyName"
+            app:layout_constraintTop_toBottomOf="parent"
             app:layout_constraintVertical_bias="0.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

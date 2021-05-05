@@ -21,7 +21,6 @@
             android:id="@+id/trophyCard"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/coldwhite"
             app:cardCornerRadius="20dp"
             android:outlineSpotShadowColor="@color/white"
             android:outlineAmbientShadowColor="@color/white"
@@ -29,44 +28,66 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/coldwhite">
+                android:layout_height="match_parent">
 
                 <ImageButton
                     android:id="@+id/trophyIcon"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:layout_marginStart="1dp"
-                    android:layout_marginLeft="1dp"
-                    android:layout_marginEnd="1dp"
-                    android:layout_marginRight="1dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginRight="20dp"
                     android:background="?selectableItemBackgroundBorderless"
                     android:clickable="false"
-                    android:tint="@color/black"
-                    app:iconTint="@color/black"
+                    android:tint="@color/softblack"
+                    app:iconTint="@color/softblack"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/trophyName"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.491"
                     app:srcCompat="@drawable/ic_trophy"
                     tools:ignore="VectorDrawableCompat" />
 
                 <TextView
                     android:id="@+id/trophyName"
-                    android:layout_width="wrap_content"
+                    android:layout_width="800px"
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
                     android:fontFamily="@font/sourcesanspro_semibold"
-                    android:text="Throphy Name"
+                    android:gravity="start"
+                    android:text="Trophy Name"
+                    android:textAlignment="viewStart"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textColor="@color/black"
+                    android:textColor="@color/softblack"
                     android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.197"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.228" />
 
-
+                <TextView
+                    android:id="@+id/trophyDescription"
+                    android:layout_width="800px"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:fontFamily="@font/sourcesanspro_semibold"
+                    android:gravity="start"
+                    android:text="Trophy description"
+                    android:textAlignment="viewStart"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="@color/softblack"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.197"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/trophyName"
+                    app:layout_constraintVertical_bias="0.371" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
