@@ -9,6 +9,7 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -54,7 +55,7 @@ public class ControllerCalendarDB {
         dataInput.put("year", getStringYear(day));
 
         Log.w("Calendar", "A punt de crear un nou dia");
-        DocumentReference docRefToDay= db.collection("users").document(userId).collection("calendar").document(getStringDate(day));
+        DocumentReference docRefToDay= db.collection("users").document(userId).collection("calendar").document(StringDateConverter.dateToString(day));
         docRefToDay.set(dataInput);
         return docRefToDay.getId();
     }
@@ -67,9 +68,22 @@ public class ControllerCalendarDB {
      * @param idRoutine nova id de la rutina a la que referencia
      */
     public void updateDay(String userId, Date day, int activitiesDone, String idRoutine){
-        DocumentReference docRefToRoutine = db.collection("users").document(userId).collection("calendar").document(getStringDate(day));
+        DocumentReference docRefToRoutine = db.collection("users").document(userId).collection("calendar").document(StringDateConverter.dateToString(day));
         if(activitiesDone >= 0)docRefToRoutine.update("numActivitiesDone", activitiesDone);
         if(idRoutine != null && idRoutine != "")docRefToRoutine.update("idRoutine", idRoutine);
+    }
+    /**
+     * Actualitza la informació d'un dia
+     * @param userId id de l'usuari del calendari
+     * @param day dia del calendari
+     * @param activitiesDoneIncrement incrrement del nombre d'activitats fetes
+     */
+    public void incrementDay(String userId, String day, int activitiesDoneIncrement){
+        Map<String, Object> data = new HashMap<>();
+        data.put("numActivitiesDone", FieldValue.increment(activitiesDoneIncrement));
+        DocumentReference docRefToRoutine = db.collection("users").document(userId).collection("calendar").document(day);
+        //Aixo esta posat aixi perque volem actualitzar els camps concrets del document (merge) o crear-lo si no existeix (set)
+        docRefToRoutine.set( data, SetOptions.merge());
     }
     /**
      * Executa el metode method amb un hashmap que representa el day de la base de dades si aquest s'ha pogut consultar, o l'excepció que ha saltat si no.
@@ -81,7 +95,7 @@ public class ControllerCalendarDB {
      */
     public void getDay(String userId, Date day, Method method, Object object){
 
-        db.collection("users").document(userId).collection("calendar").document(getStringDate(day))
+        db.collection("users").document(userId).collection("calendar").document(StringDateConverter.dateToString(day))
             .get().addOnCompleteListener(task -> {
             Object[] params = new Object[2];
                 params[0] = task.isSuccessful();
@@ -149,16 +163,7 @@ public class ControllerCalendarDB {
         });
     }
 
-    /**
-     * Retorna la data en format per la ID de la base de dades
-     * @param date data
-     * @return
-     */
-    private String getStringDate(Date date)
-    {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        return dateFormat.format(date);
-    }
+
     /**
      * Retorna la data en format per el dia de la base de dades
      * @param date data

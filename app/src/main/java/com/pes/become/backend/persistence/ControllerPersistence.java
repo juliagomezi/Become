@@ -61,7 +61,7 @@ public class ControllerPersistence {
      */
     public String createActivity(String userId, String idRoutine, String activityName, String actTheme,String actDescription, String actDay, String beginTime, String finishTime) {
         CS.addActivityToStatistics(userId, idRoutine, actTheme, actDay, beginTime, finishTime);
-        return CA.createActivity(userId, idRoutine, activityName,actTheme,actDescription, actDay, beginTime, finishTime);
+        return CA.createActivity(userId, idRoutine, activityName,actTheme,actDescription, actDay, beginTime, finishTime, "null");
     }
 
     /**
@@ -96,10 +96,10 @@ public class ControllerPersistence {
      * @param oldFinishTime vella hora final de l'activitat
      */
     public void updateActivity(String userId, String idRoutine, String idActivity, String actName, String description, String newDay, String newTheme,  String newBeginTime, String newFinishTime,
-                               String oldDay, String oldTheme,  String oldBeginTime, String oldFinishTime) {
+                               String oldDay, String oldTheme,  String oldBeginTime, String oldFinishTime, String lastDayDone) {
 
         CS.updateDedicatedTimeActivity(userId, idRoutine, newDay, newTheme, newBeginTime, newFinishTime, oldDay, oldTheme, oldBeginTime, oldFinishTime);
-        CA.updateActivity(userId, idRoutine, actName, description, newTheme, newDay, newBeginTime, newFinishTime, idActivity);
+        CA.updateActivity(userId, idRoutine, actName, description, newTheme, newDay, newBeginTime, newFinishTime, idActivity, lastDayDone);
     }
 
 

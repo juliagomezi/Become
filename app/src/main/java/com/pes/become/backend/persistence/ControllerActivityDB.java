@@ -1,6 +1,7 @@
 package com.pes.become.backend.persistence;
 
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -60,6 +61,7 @@ public class ControllerActivityDB {
                 activity.add(activityDay);
                 activity.add(document.get("beginTime").toString());
                 activity.add(document.get("finishTime").toString());
+                activity.add(document.get("lastDayDone").toString());
 
                 //ArrayList<ArrayList<String>> aux = routineActivities.get(activityDay);
                 //aux.add(activity);
@@ -116,6 +118,7 @@ public class ControllerActivityDB {
                 activity.add(document.get("day").toString());
                 activity.add(document.get("beginTime").toString());
                 activity.add(document.get("finishTime").toString());
+                activity.add(document.get("lastDayDone").toString());
                 activitiesResult.add(activity);
             }
             try {
@@ -139,8 +142,9 @@ public class ControllerActivityDB {
      * @param beginTime es l'hora d'inici de l'activitat
      * @param finishTime es l'hora d'acabament de l'activitat
      * @return el valor del id de l'activitat creada
+     * @param lastDayDone és l'últim dia que l'usuari ha marcat la rutina com a feta en format de data Standard del firebase
      */
-    public String createActivity( String userId, String idRoutine, String activityName, String actTheme,String actDescription, String actDay, String beginTime, String finishTime) {
+    public String createActivity( String userId, String idRoutine, String activityName, String actTheme,String actDescription, String actDay, String beginTime, String finishTime, String lastDayDone) {
         CollectionReference refToActivities = db.collection("users").document(userId).collection("routines").document(idRoutine).collection("activities");
         Map<String,Object> dataInput = new HashMap<>();
         dataInput.put("name",activityName);
@@ -149,7 +153,7 @@ public class ControllerActivityDB {
         dataInput.put("beginTime",beginTime);
         dataInput.put("finishTime",finishTime);
         dataInput.put("day",actDay);
-
+        dataInput.put("lastDayDone", lastDayDone);
         DocumentReference refToNewActivity = refToActivities.document();
         String ID = refToNewActivity.getId();
 
@@ -181,15 +185,27 @@ public class ControllerActivityDB {
      * @param iniT es l'hora d'inici de l'activitat
      * @param endT es l'hora d'acabament de l'activitat
      * @param idActivity és l'identificador de l'activitat
+     * @param lastDayDone és l'últim dia que l'usuari ha marcat la rutina com a feta en format de data Standard del firebase, hauria d'exsistir al calendari de l'usuari de la base de dades un document del dia
      */
-    public void updateActivity(String userId, String idRoutine, String actName, String description, String theme, String day, String iniT, String endT,  String idActivity) {
+    public void updateActivity(String userId, String idRoutine, String actName, String description, String theme, String day, String iniT, String endT,  String lastDayDone, String idActivity) {
         DocumentReference docRefToActivity = db.collection("users").document(userId).collection("routines").document(idRoutine).collection("activities").document(idActivity);
-        docRefToActivity.update("name", actName);
-        docRefToActivity.update("description", description);
-        docRefToActivity.update("theme", theme);
-        docRefToActivity.update("day", day);
-        docRefToActivity.update("beginTime", iniT);
-        docRefToActivity.update("finishTime", endT);
+        if(actName != null) docRefToActivity.update("name", actName);
+        if(description != null) docRefToActivity.update("description", description);
+        if(theme != null) docRefToActivity.update("theme", theme);
+        if(day != null) docRefToActivity.update("day", day);
+        if(iniT != null) docRefToActivity.update("beginTime", iniT);
+        if(endT != null) docRefToActivity.update("finishTime", endT);
+        if(lastDayDone != null)
+        {
+            docRefToActivity.update("lastDayDone", lastDayDone).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    ControllerCalendarDB cal = new ControllerCalendarDB();
+                    cal.incrementDay(userId, lastDayDone, 1);
+                }
+                else {
+                }
+            });
+        }
     }
-
+//    public void markActivity
 }
