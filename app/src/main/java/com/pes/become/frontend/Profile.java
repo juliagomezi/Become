@@ -94,7 +94,7 @@ public class Profile extends Fragment {
         settingsButton.setOnClickListener(v -> createOptionsSheet());
 
         ImageButton trophiesButton = view.findViewById(R.id.trophiesButton);
-        trophiesButton.setOnClickListener(v -> showTrophiesView());
+        trophiesButton.setOnClickListener(v -> MainActivity.getInstance().setTrophiesScreen());
 
         TabLayout tabLayout = view.findViewById(R.id.tabLayout);
         ViewPager viewPager = view.findViewById(R.id.viewPager);
@@ -175,13 +175,6 @@ public class Profile extends Fragment {
         optionsSheet.show();
     }
 
-    private void showTrophiesView() {
-        Fragment fragment = new Trophies();
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction transaction = fm.beginTransaction();
-        transaction.replace(R.id.fragment_layout, fragment);
-        transaction.commit();
-    }
 
     private void changePasswordSheet() {
         optionsSheet.dismiss();

@@ -83,4 +83,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_layout, new Profile()).commit();
     }
+
+    public void setTrophiesScreen() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_layout, new Trophies()).commit();
+    }
 }

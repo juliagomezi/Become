@@ -26,4 +26,7 @@
     <color name="green75">#98FB98</color>
     <color name="green100">#5bf95b</color>
 
+    <color name="darkgold">#ffd300</color>
+    <color name="softgold">#ffee9d</color>
+
 </resources>
