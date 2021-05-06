@@ -113,13 +113,14 @@ public class DomainAdapter {
      * @param act activitat
      */
     public void loadUser (android.app.Activity act) {
-        Class[] parameterTypes = new Class[6];
+        Class[] parameterTypes = new Class[7];
         parameterTypes[0] = boolean.class;
         parameterTypes[1] = String.class;
         parameterTypes[2] = String.class;
         parameterTypes[3] = String.class;
         parameterTypes[4] = Bitmap.class;
         parameterTypes[5] = ArrayList.class;
+        parameterTypes[6] = Map.class;
         Method method;
         logoScreen = (LogoScreen)act;
         try {
@@ -135,13 +136,14 @@ public class DomainAdapter {
      * @param act Activity d'Android necessaria per la execucio del firebase
      */
     public void loginUser(String mail, String password, android.app.Activity act) {
-        Class[] parameterTypes = new Class[6];
+        Class[] parameterTypes = new Class[7];
         parameterTypes[0] = boolean.class;
         parameterTypes[1] = String.class;
         parameterTypes[2] = String.class;
         parameterTypes[3] = String.class;
         parameterTypes[4] = Bitmap.class;
         parameterTypes[5] = ArrayList.class;
+        parameterTypes[6] = Map.class;
         Method method;
         login = (Login)act;
         try {
@@ -157,13 +159,14 @@ public class DomainAdapter {
      * @param act activitat
      */
     public void loginGoogleUser(String idToken, android.app.Activity act) {
-        Class[] parameterTypes = new Class[6];
+        Class[] parameterTypes = new Class[7];
         parameterTypes[0] = boolean.class;
         parameterTypes[1] = String.class;
         parameterTypes[2] = String.class;
         parameterTypes[3] = String.class;
         parameterTypes[4] = Bitmap.class;
         parameterTypes[5] = ArrayList.class;
+        parameterTypes[6] = Map.class;
         Method method;
         login = (Login)act;
 
@@ -181,7 +184,7 @@ public class DomainAdapter {
      * @param selectedRoutineId rutina seleccionada de l'usuari
      * @param pfp imatge de perfil de l'usuari
      */
-    public void loginCallback(boolean success, String userId, String username, String selectedRoutineId, Bitmap pfp, ArrayList<ArrayList<String>> routineInfo) {
+    public void loginCallback(boolean success, String userId, String username, String selectedRoutineId, Bitmap pfp, ArrayList<ArrayList<String>> routineInfo, Map<String, Map<String, Double>> stats) {
         if (success) {
             currentUser = userAdapter.createUser(username);
             currentUser.setID(userId);
@@ -196,17 +199,18 @@ public class DomainAdapter {
             }
             if(!selectedRoutineId.equals("")) selectRoutine(routine);
 
-            //stats hardcoded
-            Map<Theme, Map<Day, Integer>> stats = new TreeMap<>();
-            for(int t=0; t<Theme.values().length; ++t){
-                Map<Day, Integer> emptyMap = new TreeMap<>();
-                for(int d = 0; d< Day.values().length; ++d){
-                    emptyMap.put(Day.values()[d], t*d);
+            Map<Theme,Map<Day, Double>> statistics = new TreeMap<>();
+            for(Map.Entry<String,Map<String,Double>> themeStats : stats.entrySet()) {
+                Map<Day, Double> s = new TreeMap<>();
+                for (Map.Entry<String, Double> dayStats : themeStats.getValue().entrySet()) {
+                    Day day = Day.valueOf(dayStats.getKey());
+                    s.put(day, dayStats.getValue());
                 }
-                stats.put(Theme.values()[t], emptyMap);
+                Theme theme = Theme.valueOf(themeStats.getKey());
+                statistics.put(theme,s);
             }
-            currentUser.setStatisticsSelectedRoutine(stats);
-            //fi stats hardcoded
+
+            currentUser.setStatisticsSelectedRoutine(statistics);
 
             achievementController.setCurrentUser(currentUser);
 
@@ -225,7 +229,7 @@ public class DomainAdapter {
      * @param selectedRoutineId rutina seleccionada de l'usuari
      * @param pfp imatge de perfil de l'usuari
      */
-    public void authUser(boolean success, String userId, String username, String selectedRoutineId, Bitmap pfp, ArrayList<ArrayList<String>> routineInfo) {
+    public void authUser(boolean success, String userId, String username, String selectedRoutineId, Bitmap pfp, ArrayList<ArrayList<String>> routineInfo, Map<String, Map<String, Double>> stats) {
         if (success) {
             currentUser = userAdapter.createUser(username);
             currentUser.setID(userId);
@@ -239,6 +243,19 @@ public class DomainAdapter {
                 }
             }
             if(!selectedRoutineId.equals("")) selectRoutine(routine);
+
+            Map<Theme,Map<Day, Double>> statistics = new TreeMap<>();
+            for(Map.Entry<String,Map<String,Double>> themeStats : stats.entrySet()) {
+                Map<Day, Double> s = new TreeMap<>();
+                for (Map.Entry<String, Double> dayStats : themeStats.getValue().entrySet()) {
+                    Day day = Day.valueOf(dayStats.getKey());
+                    s.put(day, dayStats.getValue());
+                }
+                Theme theme = Theme.valueOf(themeStats.getKey());
+                statistics.put(theme,s);
+            }
+
+            currentUser.setStatisticsSelectedRoutine(statistics);
 
             achievementController.setCurrentUser(currentUser);
 
@@ -543,7 +560,7 @@ public class DomainAdapter {
             routineAdapter.updateActivity(updatedActivity1);
             String beginTime = iniH + ":" + iniM;
             String endTime = "23:59";
-            controllerPersistence.updateActivity(currentUser.getID(), currentUser.getSelectedRoutine().getId(), name, description, Theme.values()[Integer.parseInt(theme)].toString(), beginTime, endTime, startDay.toString(), id);
+            controllerPersistence.updateActivity(currentUser.getID(), currentUser.getSelectedRoutine().getId(), id, name, description, startDay.toString(), Theme.values()[Integer.parseInt(theme)].toString(), beginTime, endTime, null);
             createActivity(name, description, theme, endDayString, endDayString, "0","0", endH, endM);
         }
         else if (comparison == 0) {
@@ -552,7 +569,7 @@ public class DomainAdapter {
             routineAdapter.updateActivity(updatedActivity);
             String beginTime = iniH + ":" + iniM;
             String endTime = endH + ":" + endM;
-            controllerPersistence.updateActivity(currentUser.getID(), currentUser.getSelectedRoutine().getId(), name, description, Theme.values()[Integer.parseInt(theme)].toString(), beginTime, endTime, startDay.toString(), id);
+            controllerPersistence.updateActivity(currentUser.getID(), currentUser.getSelectedRoutine().getId(), id, name, description, startDay.toString(), Theme.values()[Integer.parseInt(theme)].toString(), beginTime, endTime, null);
         }
         else throw new InvalidDayIntervalException();
     }
@@ -611,17 +628,6 @@ public class DomainAdapter {
         res.add(currentUser.getName());
         Bitmap pfp = currentUser.getProfilePic();
         res.add(pfp);
-        //stats hardcoded
-        Map<Theme, Map<Day, Integer>> stats = new TreeMap<>();
-        for(int t=0; t<Theme.values().length; ++t){
-            Map<Day, Integer> emptyMap = new TreeMap<>();
-            for(int d = 0; d< Day.values().length; ++d){
-                emptyMap.put(Day.values()[d], t*d);
-            }
-            stats.put(Theme.values()[t], emptyMap);
-        }
-        currentUser.setStatisticsSelectedRoutine(stats);
-        //fi stats hardcoded
         return res;
     }
 
