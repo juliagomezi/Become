@@ -129,12 +129,12 @@ public class User {
      * Getter de les estadistiques de la rutina seleccionada
      * @return Array d'Arrays d'enters on la primera array representa els temes, la segona els dies i la tercera les hores
      */
-    public ArrayList<ArrayList<Integer>> getStatisticsSelectedRoutine() {
-        ArrayList<ArrayList<Integer>> result = new ArrayList<>();
+    public ArrayList<ArrayList<Double>> getStatisticsSelectedRoutine() {
+        ArrayList<ArrayList<Double>> result = new ArrayList<>();
         for(Map.Entry<Theme, Map<Day, Double>> themeEntry : statisticsSelectedRoutine.entrySet()){
-            ArrayList<Integer> hoursByDay = new ArrayList<>();
+            ArrayList<Double> hoursByDay = new ArrayList<>();
             for(Map.Entry<Day, Double> dayEntry : themeEntry.getValue().entrySet()){
-                hoursByDay.add(dayEntry.getKey().ordinal(), (int)Math.round(dayEntry.getValue()));
+                hoursByDay.add(dayEntry.getKey().ordinal(), dayEntry.getValue());
             }
             result.add(themeEntry.getKey().ordinal(), hoursByDay);
         }
@@ -163,8 +163,10 @@ public class User {
         this.statisticsSelectedRoutine = statisticsSelectedRoutine;
     }
 
-    public void updateStatistics(Theme theme, Day day, int hours, int minutes) {
+    public void updateStatistics(Theme theme, Day day, int hours, int minutes, boolean add) {
         double time = (double)hours + (double)minutes/60.0;
+        if(!add)
+            time *= -1;
         time += statisticsSelectedRoutine.get(theme).get(day);
         statisticsSelectedRoutine.get(theme).put(day, time);
     }

@@ -283,11 +283,11 @@ public class Stats extends Fragment {
     }
 
     private void setDataValues(){
-        ArrayList<ArrayList<Integer>> allValues = DA.getStatisticsSelectedRoutine();
+        ArrayList<ArrayList<Double>> allValues = DA.getStatisticsSelectedRoutine();
         for (int tema=0; tema<8; ++tema) {
             ArrayList<Entry> array = new ArrayList<>();
             for (int dia=0; dia<7; ++dia) {
-                array.add(new Entry(dia, allValues.get(tema).get(dia)));
+                array.add(new Entry(dia, (float)(double)allValues.get(tema).get(dia)));
             }
             switch (tema)
             {
