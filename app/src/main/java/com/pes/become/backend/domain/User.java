@@ -47,14 +47,7 @@ public class User {
         this.name = name;
         this.selectedRoutine = null;
         this.routines = new ArrayList<>();
-        this.statisticsSelectedRoutine = new TreeMap<>();
-        for(int t=0; t<Theme.values().length; ++t){
-            Map<Day, Double> emptyMap = new TreeMap<>();
-            for(int d=0; d<Day.values().length; ++d){
-                emptyMap.put(Day.values()[d], 0.0);
-            }
-            statisticsSelectedRoutine.put(Theme.values()[t], emptyMap);
-        }
+        clearStatistics();
         achievements = new TreeMap<>();
         for(int a = 0; a<Achievement.values().length; ++a){
             achievements.put(Achievement.values()[a], false);
@@ -262,5 +255,16 @@ public class User {
             if(routine.get(1).equals(name)) return true;
         }
         return false;
+    }
+
+    public void clearStatistics() {
+        this.statisticsSelectedRoutine = new TreeMap<>();
+        for(int t=0; t<Theme.values().length; ++t){
+            Map<Day, Double> emptyMap = new TreeMap<>();
+            for(int d=0; d<Day.values().length; ++d){
+                emptyMap.put(Day.values()[d], 0.0);
+            }
+            statisticsSelectedRoutine.put(Theme.values()[t], emptyMap);
+        }
     }
 }

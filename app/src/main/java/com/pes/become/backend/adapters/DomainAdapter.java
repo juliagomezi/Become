@@ -422,6 +422,7 @@ public class DomainAdapter {
         } else {
             routineAdapter.setCurrentRoutine(null);
             currentUser.setSelectedRoutine(null);
+            currentUser.clearStatistics();
             controllerPersistence.setSelectedRoutine(currentUser.getID(),"");
         }
     }

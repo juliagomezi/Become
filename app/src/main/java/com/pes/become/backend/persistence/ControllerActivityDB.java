@@ -187,7 +187,7 @@ public class ControllerActivityDB {
      * @param idActivity és l'identificador de l'activitat
      * @param lastDayDone és l'últim dia que l'usuari ha marcat la rutina com a feta en format de data Standard del firebase, hauria d'exsistir al calendari de l'usuari de la base de dades un document del dia
      */
-    public void updateActivity(String userId, String idRoutine, String actName, String description, String theme, String day, String iniT, String endT,  String lastDayDone, String idActivity) {
+    public void updateActivity(String userId, String idRoutine, String actName, String description, String theme, String day, String iniT, String endT, String idActivity, String lastDayDone) {
         DocumentReference docRefToActivity = db.collection("users").document(userId).collection("routines").document(idRoutine).collection("activities").document(idActivity);
         if(actName != null) docRefToActivity.update("name", actName);
         if(description != null) docRefToActivity.update("description", description);
