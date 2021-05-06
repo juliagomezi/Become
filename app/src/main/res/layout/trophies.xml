@@ -11,22 +11,6 @@
         android:layout_height="match_parent"
         tools:context=".frontend.MainActivity">
 
-        <!--<TextView
-            android:id="@+id/trophyName"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="?attr/selectableItemBackground"
-            android:fontFamily="@font/sourcesanspro_bold"
-            android:text="TROPHIES!"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/black"
-            android:letterSpacing="0"
-            android:textSize="30sp"
-            android:gravity="center"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />-->
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/trophiesList"
             android:layout_width="match_parent"

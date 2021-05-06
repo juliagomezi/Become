@@ -63,10 +63,13 @@ public class TrophiesRecyclerAdapter extends RecyclerView.Adapter<TrophiesRecycl
         if (obtainedThrophiesList.get(position)) {
             holder.trophyCard.setCardBackgroundColor(global.getResources().getColor(R.color.gold25));
             holder.trophyName.setTextColor(global.getResources().getColor(R.color.gold100));
-            holder.trophyIcon.setColorFilter(global.getResources().getColor(R.color.gold75), PorterDuff.Mode.SRC_ATOP);
+            holder.trophyWonIcon.setVisibility(View.VISIBLE);
+            holder.trophyNotWonIcon.setVisibility(View.INVISIBLE);
         }
         else {
             holder.trophyCard.setCardBackgroundColor(global.getResources().getColor(R.color.coldwhite));
+            holder.trophyWonIcon.setVisibility(View.INVISIBLE);
+            holder.trophyNotWonIcon.setVisibility(View.VISIBLE);
         }
 
     }
@@ -88,7 +91,7 @@ public class TrophiesRecyclerAdapter extends RecyclerView.Adapter<TrophiesRecycl
 
         CardView trophyCard;
         TextView trophyName, trophyDescription;
-        ImageButton trophyIcon;
+        ImageButton trophyWonIcon, trophyNotWonIcon;
 
         /**
          * Constructora del ViewHolder
@@ -98,7 +101,8 @@ public class TrophiesRecyclerAdapter extends RecyclerView.Adapter<TrophiesRecycl
             trophyCard = itemView.findViewById(R.id.trophyCard);
             trophyName = itemView.findViewById(R.id.trophyName);
             trophyDescription = itemView.findViewById(R.id.trophyDescription);
-            trophyIcon = itemView.findViewById(R.id.trophyIcon);
+            trophyWonIcon = itemView.findViewById(R.id.trophyWonIcon);
+            trophyNotWonIcon = itemView.findViewById(R.id.trophyNotWonIcon);
         }
     }
 
