@@ -41,6 +41,9 @@ public class AchievementController {
             case CreateRoutine: //aquest no te logica complexa
                 return currentUser.gainAchievement(Achievement.CreateRoutine);
 
+            case UpdateRoutine:
+                return currentUser.gainAchievement(Achievement.UpdateRoutine);
+
             case HourMusic5:
                 if(checkHoursPerTheme(Theme.Music, 5))
                     return currentUser.gainAchievement(Achievement.HourMusic5);
@@ -137,6 +140,30 @@ public class AchievementController {
                 else
                     return false;
 
+            case ActivitiesPerDay1:
+                if(checkActivitiesPerDay(1))
+                    return currentUser.gainAchievement(Achievement.ActivitiesPerDay1);
+                else
+                    return false;
+
+            case ActivitiesPerDay5:
+                if(checkActivitiesPerDay(5))
+                    return currentUser.gainAchievement(Achievement.ActivitiesPerDay5);
+                else
+                    return false;
+
+            case HoursPerDay5:
+                if(checkHoursPerDay(5))
+                    return currentUser.gainAchievement(Achievement.HoursPerDay5);
+                else
+                    return false;
+
+            case HoursPerDay10:
+                if(checkHoursPerDay(10))
+                    return currentUser.gainAchievement(Achievement.HoursPerDay10);
+                else
+                    return false;
+
             default:
                 return false;
         }
@@ -164,5 +191,46 @@ public class AchievementController {
         }
         int comparision = totalTime.compareTo(new Time(hours, 0));
         return comparision >= 0; // totalTime >= hours
+    }
+
+    /**
+     * Metode per comprovar si l'usuari fa un cert nombre d'activitats cada dia de la setmana a la seva rutina seleccionada
+     * @param activity minim d'activitats que ha de fer
+     * @return cert si fa com a minim tantes activitats, fals si no
+     */
+    private boolean checkActivitiesPerDay(int activity) {
+        Routine selRoutine = currentUser.getSelectedRoutine();
+        boolean correct = true;
+        for(int d = 0; d<Day.values().length && correct; ++d){
+            ArrayList<Activity> actsDay = selRoutine.getActivitiesByDay(Day.values()[d]);
+            if(actsDay.size() < activity)
+                correct = false;
+        }
+        return correct;
+    }
+
+    /**
+     * Metode per comprovar si l'usuari empleia una certa quantitat d'hores a la realització d'activitats cada dia de la setmana a la seva rutina seleccionada
+     * @param hours minim d'hores que ha de fer
+     * @return cert si fa com a minim tantes hores, fals si no
+     */
+    private boolean checkHoursPerDay(int hours) {
+        Routine selRoutine = currentUser.getSelectedRoutine();
+        boolean correct = true;
+        int comparison = 0;
+        for(int d = 0; d<Day.values().length && correct; ++d){
+            ArrayList<Activity> actsDay = selRoutine.getActivitiesByDay(Day.values()[d]);
+            Time totalTime = new Time(0,0);
+            for(Activity act : actsDay){
+                Time duration = act.getInterval().getIntervalDuration();
+                int totalHours = totalTime.getHours() + duration.getHours();
+                int totalMinutes = totalTime.getMinutes() + duration.getMinutes();
+                totalTime = new Time(totalHours, totalMinutes);
+            }
+            comparison = totalTime.compareTo(new Time(hours, 0));
+            if(comparison < 0)
+                correct = false;
+        }
+        return correct;
     }
 }

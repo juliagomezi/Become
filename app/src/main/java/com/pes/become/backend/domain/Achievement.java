@@ -2,6 +2,7 @@ package com.pes.become.backend.domain;
 
 public enum Achievement {
     CreateRoutine,
+    UpdateRoutine,
     HourMusic5,
     HourSport5,
     HourSleeping5,
@@ -17,5 +18,9 @@ public enum Achievement {
     HourWorking10,
     HourEntertainment10,
     HourPlants10,
-    HourOther10
+    HourOther10,
+    ActivitiesPerDay1,
+    ActivitiesPerDay5,
+    HoursPerDay5,
+    HoursPerDay10
 }
