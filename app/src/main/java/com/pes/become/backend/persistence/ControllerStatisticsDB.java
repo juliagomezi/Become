@@ -24,6 +24,7 @@ public class ControllerStatisticsDB {
     private final String[] differentDays;
     private final int numberOfThemes;
 
+
     /**
      * Creadora per defecte de la classe ControllerStatisticsDB
      */

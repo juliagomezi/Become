@@ -19,6 +19,7 @@ public class ControllerPersistence {
     ControllerStatisticsDB CS;
     private final FirebaseFirestore db;
 
+
     /**
      * Creadora per defecte de la classe ControllerPersistence
      */
