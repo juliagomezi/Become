@@ -3,7 +3,13 @@ package com.pes.become.backend.persistence;
 import android.app.Activity;
 import android.net.Uri;
 
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.zip.DeflaterOutputStream;
 
 public class ControllerPersistence {
 
@@ -11,6 +17,7 @@ public class ControllerPersistence {
     ControllerActivityDB CA;
     ControllerUserDB CU;
     ControllerStatisticsDB CS;
+    private final FirebaseFirestore db;
 
     /**
      * Creadora per defecte de la classe ControllerPersistence
@@ -19,7 +26,11 @@ public class ControllerPersistence {
         CA = new ControllerActivityDB();
         CR = new ControllerRoutineDB();
         CS = new ControllerStatisticsDB();
+        db = FirebaseFirestore.getInstance();
     }
+
+/*********************************FUNCIONS RELACIONADES AMB ACTIVITATS*****************************/
+    /******************************CONSULTORES D'ACTIVITATS***********************/
 
     /**
      * Obtenir les activitats d'una rutina
@@ -44,6 +55,8 @@ public class ControllerPersistence {
         CA.getActivitiesByDay(userId, idRoutine,day,method,object);
     }
 
+    /******************************MODIFICADORES D'ACTIVITATS***********************/
+
     /**
      * Afegir una nova activitat a una certa rutina de la base de dades
      * @param userId identificador de l'usuari
@@ -66,14 +79,29 @@ public class ControllerPersistence {
      * @param userId identificador de l'usuari
      * @param idRoutine identificador de la rutina
      * @param idActivity identificador de l'activitat
-     * @param day dia de l'activitat que es vol borrar
-     * @param theme tema de l'activitat que es vol borrar
-     * @param beginTime hora d'inici de l'activitat que es vol borrar
-     * @param finishTime hora final de l'activitat que es vol borrar
      */
-    public void deleteActivity(String userId, String idRoutine, String idActivity, String day, String theme, String beginTime, String finishTime) {
-        CS.deleteActivityStatistics(userId, idRoutine, day, theme, beginTime, finishTime);
-        CA.deleteActivity(userId, idRoutine, idActivity);
+    public void deleteActivity(String userId, String idRoutine, String idActivity) {
+
+        DocumentReference docRefToActivity = db.collection("users").document(userId).
+                collection("routines").document(idRoutine).
+                collection("activities").document(idActivity);
+
+        docRefToActivity.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    String day = document.get("day").toString();
+                    String theme = document.get("theme").toString();
+                    String beginTime = document.get("beginTime").toString();
+                    String finishTime = document.get("finishTime").toString();
+                    CS.deleteActivityStatistics(userId, idRoutine, day, theme, beginTime, finishTime);
+                    CA.deleteActivity(userId, idRoutine, idActivity);
+
+                }
+            }
+        });
+
+
     }
 
     /**
@@ -87,18 +115,33 @@ public class ControllerPersistence {
      * @param newTheme nou tema de l'activitat
      * @param newBeginTime nova hora d'inici de l'activitat
      * @param newFinishTime nova hora final de l'activitat
-     * @param oldDay vell dia de l'activitat
-     * @param oldTheme vell tema de l'activitat
-     * @param oldBeginTime vella hora d'inici de l'activitat
-     * @param oldFinishTime vella hora final de l'activitat
+     * @param lastDayDone ultim dia que l'activitat s'ha marcat com a feta
      */
-    public void updateActivity(String userId, String idRoutine, String idActivity, String actName, String description, String newDay, String newTheme,  String newBeginTime, String newFinishTime,
-                               String oldDay, String oldTheme,  String oldBeginTime, String oldFinishTime, String lastDayDone) {
+    public void updateActivity(String userId, String idRoutine, String idActivity, String actName, String description, String newDay, String newTheme,  String newBeginTime, String newFinishTime, String lastDayDone) {
 
-        CS.updateDedicatedTimeActivity(userId, idRoutine, newDay, newTheme, newBeginTime, newFinishTime, oldDay, oldTheme, oldBeginTime, oldFinishTime);
-        CA.updateActivity(userId, idRoutine, actName, description, newTheme, newDay, newBeginTime, newFinishTime, idActivity, lastDayDone);
+        DocumentReference docRefToActivity = db.collection("users").document(userId).
+                collection("routines").document(idRoutine).
+                collection("activities").document(idActivity);
+
+        docRefToActivity.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    String oldDay = document.get("day").toString();
+                    String oldTheme = document.get("theme").toString();
+                    String oldBeginTime = document.get("beginTime").toString();
+                    String oldFinishTime = document.get("finishTime").toString();
+                    CS.updateDedicatedTimeActivity(userId, idRoutine, newDay, newTheme, newBeginTime, newFinishTime, oldDay, oldTheme, oldBeginTime, oldFinishTime);
+                    CA.updateActivity(userId, idRoutine, actName, description, newTheme, newDay, newBeginTime, newFinishTime, idActivity, lastDayDone);
+
+                }
+            }
+        });
+
+
     }
-
+/*********************************FUNCIONS RELACIONADES AMB RUTINES********************************/
+    /******************************MODIFICADORES DE RUTINES***********************/
     /**
      * Canvia el nom d'una rutina.
      * @param userId identificador de l'usuari
@@ -129,6 +172,9 @@ public class ControllerPersistence {
         CR.deleteRoutine(userId, idRoutine);
     }
 
+    /*********************************FUNCIONS RELACIONADES AMB USUARIS****************************/
+    /******************************CONSULTORES D'USUARIS***********************/
+
     /**
      * Metode per obtenir el provider de l'usuari
      * @return el provider de l'usuari
@@ -137,6 +183,18 @@ public class ControllerPersistence {
         CU = ControllerUserDB.getInstance();
         return CU.getUserProvider();
     }
+
+    /**
+     * Metode per carregar un usuari
+     * @param method metode a cridar quan es retornin les dades
+     * @param object classe que conté el mètode
+     */
+    public void loadUser(Method method, Object object) {
+        CU = ControllerUserDB.getInstance();
+        CU.loadUser(method, object);
+    }
+
+    /******************************MODIFICADORES D'USUARIS***********************/
 
     /**
      * Canvi de contrasenya de l'usuari actual
@@ -169,15 +227,7 @@ public class ControllerPersistence {
         CU.deleteUser(password, method, object);
     }
 
-    /**
-     * Metode per carregar un usuari
-     * @param method metode a cridar quan es retornin les dades
-     * @param object classe que conté el mètode
-     */
-    public void loadUser(Method method, Object object) {
-        CU = ControllerUserDB.getInstance();
-        CU.loadUser(method, object);
-    }
+
 
     /**
      * Inici de sessió d'usuari
@@ -251,6 +301,32 @@ public class ControllerPersistence {
     public void changeUsername(String userID, String newName) {
         CU = ControllerUserDB.getInstance();
         CU.changeUsername(userID, newName);
+    }
+
+    /***************************FUNCIONS RELACIONADES AMB ESTADISTIQUES****************************/
+    /*****************************CONSULTORES D'ESTADISTIQUES***********************/
+
+    /**
+     * Funcio per aconseguir totes les estadistiques d'una rutina
+     * @param userId identificador de l'usuari
+     * @param idRoutine identificador de la rutina
+     * @param method metode a cridar per retornar les dades
+     * @param object classe que conte el metode
+     */
+    public void getAllStatisticsRoutine(String userId, String idRoutine, Method method, Object object){
+        CS.getAllStatisticsRoutine(userId, idRoutine, method, object);
+    }
+
+    /**
+     * Funcio per aconseguir les estadistiques d'una rutina i d'un tema concret
+     * @param userId identificador de l'usuari
+     * @param idRoutine identificador de la rutina
+     * @param theme tema del que es vol aconseguir les estadistiques
+     * @param method metode a cridar per retornar les dades
+     * @param object classe que conte el metode
+     */
+    public void getStatisticsRoutineByTheme(String userId, String idRoutine, String theme, Method method, Object object){
+        CS.getStatisticsRoutineByTheme(userId, idRoutine, theme, method, object);
     }
 
 }

@@ -20,16 +20,24 @@ import java.util.Map;
 public class ControllerStatisticsDB {
 
     private final FirebaseFirestore db;
+    private final String[] differentThemes;
+    private final String[] differentDays;
+    private final int numberOfThemes;
 
     /**
      * Creadora per defecte de la classe ControllerStatisticsDB
      */
-    public ControllerStatisticsDB() { db = FirebaseFirestore.getInstance(); }
+    public ControllerStatisticsDB() {
+        db = FirebaseFirestore.getInstance();
+        differentThemes = new String[]{"Music", "Sport", "Sleeping", "Cooking", "Working", "Entertainment", "Plants", "Other"};
+        differentDays = new String[]{"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+        numberOfThemes = 8;
+    }
 
     /********************************CONSULTORES DE STATISTICS*************************************/
 
     /**
-     * Funcio que retorna les estadistiques de tots els dies d'una rutina
+     * Funcio que retorna les estadistiques de tots els temes d'una rutina
      * @param userId identificador de l'usuari
      * @param idRoutine identificador de la rutina
      * @param method metode a cridar quan es retornin les dades
@@ -38,16 +46,23 @@ public class ControllerStatisticsDB {
     public void getAllStatisticsRoutine(String userId, String idRoutine, Method method, Object object){
 
         DocumentReference docRefToRoutineStatistics = db.collection("users").document(userId).collection("statistics").document(idRoutine);
-        String[] days = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
-        Object[] params = new Object[7];
+
+        Object[] params = new Object[numberOfThemes];
+
+        //HashMap <String, HashMap<String, Double>> mapThemes = new HashMap<>();
 
         docRefToRoutineStatistics.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
 
-                    for (int i = 0; i<7; ++i){
-                        params[i] = document.get("statistics" + days[i]);
+                    for (int i = 0; i<numberOfThemes; ++i){
+
+                        params[i] = (HashMap) document.get("statistics" + differentThemes[i]);
+
+
+
+                        //mapThemes.put(differentThemes[i],(HashMap) document.get("statistics" + differentThemes[i]));
                     }
 
                     try {
@@ -64,14 +79,14 @@ public class ControllerStatisticsDB {
     }
 
     /**
-     * Funcio que retorna les estadistiques d'una rutina en un dia concret
+     * Funcio que retorna les estadistiques d'una rutina sobre un tema concret
      * @param userId identificador de l'usuari
      * @param idRoutine identificador de la rutina
-     * @param day dia de les estadistiques que es volen aconseguir
+     * @param theme tema de les estadistiques que es volen aconseguir
      * @param method metode a cridar quan es retornin les dades
      * @param object classe que conte el metode
      */
-    public void getStatisticsRoutineByDay(String userId, String idRoutine, String day, Method method, Object object){
+    public void getStatisticsRoutineByTheme(String userId, String idRoutine, String theme, Method method, Object object){
 
         DocumentReference docRefToRoutineStatistics = db.collection("users").document(userId).collection("statistics").document(idRoutine);
 
@@ -83,7 +98,7 @@ public class ControllerStatisticsDB {
                 if (document.exists()) {
 
 
-                    params[0] = document.get("statistics" + day);
+                    params[0] = (HashMap) document.get("statistics" + theme);
 
                     try {
                         method.invoke(object, params);
@@ -113,16 +128,16 @@ public class ControllerStatisticsDB {
     public void addActivityToStatistics(String userId, String idRoutine, String theme, String day, String beginTime, String finishTime) {
 
         DocumentReference docRefToRoutineStatistics = db.collection("users").document(userId).collection("statistics").document(idRoutine);
-        double timeToAdd = timeDifference(beginTime, finishTime);
+
 
         docRefToRoutineStatistics.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
-
-                    HashMap<String, Double> mapActDay = (HashMap) document.get("statistics" + day);
-                    mapActDay.put(theme, mapActDay.get(theme) + timeToAdd);
-                    docRefToRoutineStatistics.update("statistics" + day, mapActDay);
+                    double timeToAdd = timeDifference(beginTime, finishTime);
+                    HashMap<String, Double> mapActTheme = (HashMap) document.get("statistics" + theme);
+                    mapActTheme.put(day, mapActTheme.get(day) + timeToAdd);
+                    docRefToRoutineStatistics.update("statistics" + theme, mapActTheme);
 
                 }
             }
@@ -137,18 +152,17 @@ public class ControllerStatisticsDB {
     public void createRoutineStatistics(String userId, String idRoutine){
 
         DocumentReference docRefToRoutineStatistics = db.collection("users").document(userId).collection("statistics").document(idRoutine);
-        String[] differentThemes = { "Music", "Sport", "Sleeping", "Cooking", "Working", "Entertainment", "Plants", "Other" };
-        String[] differentDays = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
+
         HashMap <String, Object> dataInput = new HashMap<>();
         HashMap <String, Double> mapStatistics = new HashMap<>();
 
 
-        for (int i = 0; i<8; ++i){
-            mapStatistics.put(differentThemes[i], 0.0);
+        for (int i = 0; i<7; ++i){
+            mapStatistics.put(differentDays[i], 0.0);
         }
 
-        for (int j = 0; j<7; ++j){
-            dataInput.put("statistics" + differentDays[j], mapStatistics);
+        for (int j = 0; j<numberOfThemes; ++j){
+            dataInput.put("statistics" + differentThemes[j], mapStatistics);
         }
 
         docRefToRoutineStatistics.set(dataInput);
@@ -166,29 +180,19 @@ public class ControllerStatisticsDB {
     public void deleteActivityStatistics(String userId, String idRoutine, String day, String theme, String beginTime, String finishTime){
 
 
-
         DocumentReference docRefToStatistics = db.collection("users").
                 document(userId).collection("statistics").document(idRoutine);
-
-
-        double hoursToDelete = timeDifference(beginTime, finishTime);
 
         docRefToStatistics.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-
                 if (task.isSuccessful()) {
-
                     DocumentSnapshot document = task.getResult();
-
                     if (document.exists()) {
-
-                        HashMap<String, Double> mapDay = (HashMap) document.get("statistics" + day);
-                        Log.d("HORES", String.valueOf(mapDay.get(theme)));
-
-                        mapDay.put(theme, mapDay.get(theme) - hoursToDelete);
-                        docRefToStatistics.update("statistics" + day, mapDay);
-
+                        double hoursToDelete = timeDifference(beginTime, finishTime);
+                        HashMap<String, Double> mapActTheme = (HashMap) document.get("statistics" + theme);
+                        mapActTheme.put(day, mapActTheme.get(day) - hoursToDelete);
+                        docRefToStatistics.update("statistics" + theme, mapActTheme);
                     }
                 }
             }
@@ -210,54 +214,50 @@ public class ControllerStatisticsDB {
      * @param oldBeginTime vell hora d'inici de l'activitat
      * @param oldFinishTime vell hora d'acabament de l'activitat
      */
-    public void updateDedicatedTimeActivity(String userId, String idRoutine, String newDay, String newTheme,  String newBeginTime, String newFinishTime, String oldDay, String oldTheme,  String oldBeginTime, String oldFinishTime) {
+    public void updateDedicatedTimeActivity(String userId, String idRoutine, String newDay, String newTheme,  String newBeginTime,
+                                            String newFinishTime, String oldDay, String oldTheme,  String oldBeginTime, String oldFinishTime) {
 
 
         DocumentReference docRefToStatistics = db.collection("users").document(userId).
                 collection("statistics").document(idRoutine);
-
-        //Nova duracio de l'activitat
-        double newActivityHours = timeDifference(newBeginTime, newFinishTime);
-        double oldActivityHours = timeDifference(oldBeginTime, oldFinishTime);
-        boolean sameDay = oldDay.equals(newDay);
-        boolean sameTheme = oldTheme.equals(newTheme);
 
 
 
         docRefToStatistics.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-
                 if (task.isSuccessful()) {
-
                     DocumentSnapshot document = task.getResult();
-
                     if (document.exists()) {
 
-                        HashMap<String, Double> mapOldDay = (HashMap) document.get("statistics" + oldDay);
+                        double newActivityHours = timeDifference(newBeginTime, newFinishTime);
+                        double oldActivityHours = timeDifference(oldBeginTime, oldFinishTime);
+                        boolean sameDay = oldDay.equals(newDay);
+                        boolean sameTheme = oldTheme.equals(newTheme);
 
+                        HashMap<String, Double> mapOldTheme = (HashMap) document.get("statistics" + oldTheme);
                         if (sameDay && sameTheme){
                             double difference = newActivityHours - oldActivityHours;
-                            mapOldDay.put(oldTheme, mapOldDay.get(oldTheme) + difference);
+                            mapOldTheme.put(oldDay, mapOldTheme.get(oldDay) + difference);
                         }
 
                         else {
-                            //Treure les hores antigues de l'activitat antiga
-                            mapOldDay.put(oldTheme, mapOldDay.get(oldTheme) - oldActivityHours);
 
-                            if (sameDay){
+                            mapOldTheme.put(oldDay, mapOldTheme.get(oldDay) - oldActivityHours);
+
+                            if (sameTheme){
                                 //Posar les noves hores al mateix mapa i al tema diferent corresponent
-                                mapOldDay.put(newTheme, mapOldDay.get(newTheme) + newActivityHours);
+                                mapOldTheme.put(newDay, mapOldTheme.get(newDay) + newActivityHours);
                             }
 
                             else {
                                 //Posar les noves hores al mapa del dia diferent corresponent i al tema corresponent
-                                HashMap<String, Double> mapNewDay = (HashMap) document.get("statistics" + newDay);
-                                mapNewDay.put(newTheme, mapNewDay.get(newTheme) + newActivityHours);
-                                 docRefToStatistics.update("statistics" + newDay, mapNewDay);
+                                HashMap<String, Double> mapNewTheme = (HashMap) document.get("statistics" + newTheme);
+                                mapNewTheme.put(newDay, mapNewTheme.get(newDay) + newActivityHours);
+                                 docRefToStatistics.update("statistics" + newTheme, mapNewTheme);
                             }
                         }
-                        docRefToStatistics.update("statistics" + oldDay, mapOldDay);
+                        docRefToStatistics.update("statistics" + oldTheme, mapOldTheme);
 
                     }
                 }
