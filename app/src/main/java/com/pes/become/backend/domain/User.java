@@ -38,6 +38,10 @@ public class User {
      * Trofeus obtinguts per l'usuari
      */
     private Map<Achievement, Boolean> achievements;
+    /**
+     * Ratxa actual de l'usuari
+     */
+    private int streak;
 
     /**
      * Creadora de la classe per a un nou usuari
