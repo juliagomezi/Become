@@ -1,6 +1,7 @@
 package com.pes.become.backend.persistence;
 
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -26,6 +27,7 @@ public class ControllerActivityDB {
         db = FirebaseFirestore.getInstance();
     }
 
+    /*****************************************CONSULTORES******************************************/
 
     /**
      * Obtenir les activitats d'una rutina
@@ -40,6 +42,14 @@ public class ControllerActivityDB {
                 return;
             }
             HashMap <String, ArrayList<ArrayList<String>> > routineActivities = new HashMap<>();
+            ArrayList<ArrayList<String>> activitiesMonday = new ArrayList<ArrayList<String>>();
+            ArrayList<ArrayList<String>> activitiesTuesday = new ArrayList<ArrayList<String>>();
+            ArrayList<ArrayList<String>> activitiesWednesday = new ArrayList<ArrayList<String>>();
+            ArrayList<ArrayList<String>> activitiesThursday = new ArrayList<ArrayList<String>>();
+            ArrayList<ArrayList<String>> activitiesFriday = new ArrayList<ArrayList<String>>();
+            ArrayList<ArrayList<String>> activitiesSaturday = new ArrayList<ArrayList<String>>();
+            ArrayList<ArrayList<String>> activitiesSunday = new ArrayList<ArrayList<String>>();
+
 
             for (QueryDocumentSnapshot document : value) {
                 ArrayList<String> activity = new ArrayList<>();
@@ -51,11 +61,31 @@ public class ControllerActivityDB {
                 activity.add(activityDay);
                 activity.add(document.get("beginTime").toString());
                 activity.add(document.get("finishTime").toString());
+                activity.add(document.get("lastDayDone").toString());
 
-                ArrayList<ArrayList<String>> aux = routineActivities.get(activityDay);
-                aux.add(activity);
-                routineActivities.put(activityDay,aux);
+                //ArrayList<ArrayList<String>> aux = routineActivities.get(activityDay);
+                //aux.add(activity);
+                //routineActivities.put(activityDay,aux);
+
+                if (activityDay.equals("Monday")) { activitiesMonday.add(activity); }
+                else if (activityDay.equals("Tuesday")) { activitiesTuesday.add(activity); }
+                else if (activityDay.equals("Wednesday")) { activitiesWednesday.add(activity); }
+                else if (activityDay.equals("Thursday")) { activitiesThursday.add(activity); }
+                else if (activityDay.equals("Friday")) { activitiesFriday.add(activity); }
+                else if (activityDay.equals("Saturday")) { activitiesSaturday.add(activity); }
+                else { activitiesSunday.add(activity); }
+
+
             }
+            routineActivities.put("Monday",activitiesMonday);
+            routineActivities.put("Tuesday",activitiesTuesday);
+            routineActivities.put("Wednesday",activitiesWednesday);
+            routineActivities.put("Thursday",activitiesThursday);
+            routineActivities.put("Friday",activitiesFriday);
+            routineActivities.put("Saturday",activitiesSaturday);
+            routineActivities.put("Sunday",activitiesSunday);
+
+
             try {
                 method.invoke(object, routineActivities);
             } catch (IllegalAccessException ignore) {
@@ -88,6 +118,7 @@ public class ControllerActivityDB {
                 activity.add(document.get("day").toString());
                 activity.add(document.get("beginTime").toString());
                 activity.add(document.get("finishTime").toString());
+                activity.add(document.get("lastDayDone").toString());
                 activitiesResult.add(activity);
             }
             try {
@@ -97,6 +128,8 @@ public class ControllerActivityDB {
             }
         });
     }
+
+    /*****************************************MODIFICADORES****************************************/
 
     /**
      * Crear una activitat en una rutina existent
@@ -109,8 +142,9 @@ public class ControllerActivityDB {
      * @param beginTime es l'hora d'inici de l'activitat
      * @param finishTime es l'hora d'acabament de l'activitat
      * @return el valor del id de l'activitat creada
+     * @param lastDayDone és l'últim dia que l'usuari ha marcat la rutina com a feta en format de data Standard del firebase
      */
-    public String createActivity( String userId, String idRoutine, String activityName, String actTheme,String actDescription, String actDay, String beginTime, String finishTime) {
+    public String createActivity( String userId, String idRoutine, String activityName, String actTheme,String actDescription, String actDay, String beginTime, String finishTime, String lastDayDone) {
         CollectionReference refToActivities = db.collection("users").document(userId).collection("routines").document(idRoutine).collection("activities");
         Map<String,Object> dataInput = new HashMap<>();
         dataInput.put("name",activityName);
@@ -119,7 +153,7 @@ public class ControllerActivityDB {
         dataInput.put("beginTime",beginTime);
         dataInput.put("finishTime",finishTime);
         dataInput.put("day",actDay);
-
+        dataInput.put("lastDayDone", lastDayDone);
         DocumentReference refToNewActivity = refToActivities.document();
         String ID = refToNewActivity.getId();
 
@@ -151,15 +185,27 @@ public class ControllerActivityDB {
      * @param iniT es l'hora d'inici de l'activitat
      * @param endT es l'hora d'acabament de l'activitat
      * @param idActivity és l'identificador de l'activitat
+     * @param lastDayDone és l'últim dia que l'usuari ha marcat la rutina com a feta en format de data Standard del firebase, hauria d'exsistir al calendari de l'usuari de la base de dades un document del dia
      */
-    public void updateActivity(String userId, String idRoutine, String actName, String description, String theme, String day, String iniT, String endT,  String idActivity) {
+    public void updateActivity(String userId, String idRoutine, String actName, String description, String theme, String day, String iniT, String endT,  String lastDayDone, String idActivity) {
         DocumentReference docRefToActivity = db.collection("users").document(userId).collection("routines").document(idRoutine).collection("activities").document(idActivity);
-        docRefToActivity.update("name", actName);
-        docRefToActivity.update("description", description);
-        docRefToActivity.update("theme", theme);
-        docRefToActivity.update("day", day);
-        docRefToActivity.update("beginTime", iniT);
-        docRefToActivity.update("finishTime", endT);
+        if(actName != null) docRefToActivity.update("name", actName);
+        if(description != null) docRefToActivity.update("description", description);
+        if(theme != null) docRefToActivity.update("theme", theme);
+        if(day != null) docRefToActivity.update("day", day);
+        if(iniT != null) docRefToActivity.update("beginTime", iniT);
+        if(endT != null) docRefToActivity.update("finishTime", endT);
+        if(lastDayDone != null)
+        {
+            docRefToActivity.update("lastDayDone", lastDayDone).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    ControllerCalendarDB cal = new ControllerCalendarDB();
+                    cal.incrementDay(userId, lastDayDone, 1);
+                }
+                else {
+                }
+            });
+        }
     }
-
+//    public void markActivity
 }
