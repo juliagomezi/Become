@@ -73,7 +73,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
             super.getItemOffsets(outRect, view, parent, state);
             if (parent.getChildAdapterPosition(view) == state.getItemCount() - 1)
-                outRect.bottom = 110;
+                outRect.bottom = 70;
         }
     }
 

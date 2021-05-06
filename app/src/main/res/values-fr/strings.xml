@@ -95,5 +95,14 @@
     <string name="verifyEmail">Enregistré avec succès. Veuillez vérifier votre courrier électronique et vérifier votre compte avant d\'utiliser l\'application.</string>
     <string name="emailNotRegistered">" Cet e-mail n'appartient à aucun compte enregistré"</string>
     <string name="loginfailed">" Le courrier ou le mot de passe ne sont pas corrects, assurez-vous de vérifier votre courrier électronique"</string>
+    <string name="streak">JOURS STREAK!</string>
+    <string name="congratsStreak">Félicitations! Vous êtes sur un</string>
+    <string name="backButton">Retourner</string>
+    <string name="reset_password">Réinitialiser le mot de passe</string>
+    <string name="currentPassword">Mot de passe actuel</string>
+    <string name="newPassword">Nouveau mot de passe</string>
+    <string name="passChanged">Le mot de passe a été modifié avec succès.</string>
+    <string name="username_changed">Le nom d\'utilisateur a bien été modifié</string>
+    <string name="change_username">Changer le nom d\'utilisateur</string>
 
 </resources>

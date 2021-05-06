@@ -2,8 +2,16 @@ package com.pes.become.frontend;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.Shader;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextPaint;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
@@ -11,24 +19,18 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapter;
-
-import org.w3c.dom.Text;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -50,21 +52,40 @@ public class Stats extends Fragment {
     private ArrayList<Entry> sportValues, sleepValues, musicValues, cookingValues,
                             workValues, enterValues, plantsValues, otherValues;
 
+    private final ArrayList<String> label= new ArrayList<>();
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.stats, container, false);
         global = this.getActivity();
 
+        label.add(getString(R.string.shortMonday));
+        label.add(getString(R.string.shortTuesday));
+        label.add(getString(R.string.shortWednesday));
+        label.add(getString(R.string.shortThursday));
+        label.add(getString(R.string.shortFriday));
+        label.add(getString(R.string.shortSaturday));
+        label.add(getString(R.string.shortSunday));
+
         initWidgets();
         selectedDate = LocalDate.now();
         setMonthView();
 
-        mpLineChart = (LineChart) view.findViewById(R.id.linechart);
+        mpLineChart = view.findViewById(R.id.linechart);
         ImageButton back = view.findViewById(R.id.previousMonthButton);
         back.setOnClickListener(v -> previousMonthAction());
         ImageButton next = view.findViewById(R.id.nextMonthButton);
         next.setOnClickListener(v -> nextMonthAction());
+
+        TextView streakText = view.findViewById(R.id.streakText);
+        TextPaint paint = streakText.getPaint();
+        float width = paint.measureText(getString(R.string.streak));
+        Shader textShader=new LinearGradient(0, 0, width, streakText.getTextSize(),
+                new int[]{Color.parseColor("#12c2e9"),Color.parseColor("#c471ed"),Color.parseColor("#f64f59")},
+                null, Shader.TileMode.CLAMP);
+        streakText.getPaint().setShader(textShader);
+        streakText.setTextColor(Color.parseColor("#12c2e9"));
 
         setHoursStats();
         setChart();
@@ -232,6 +253,16 @@ public class Stats extends Fragment {
         Legend legend = mpLineChart.getLegend();
         legend.setEnabled(false);
 
+        XAxis xAxis = mpLineChart.getXAxis();
+        xAxis.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getAxisLabel(float value, AxisBase axis) {
+                axis.setLabelCount(7,true);
+                return label.get((int) value);
+
+            }
+        });
+
         ArrayList<ILineDataSet> dataSet = new ArrayList<>();
         dataSet.add(dataSport);
         dataSet.add(dataSleep);
@@ -279,7 +310,5 @@ public class Stats extends Fragment {
             }
         }
     }
-
-
 
 }

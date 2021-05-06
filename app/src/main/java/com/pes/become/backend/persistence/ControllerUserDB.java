@@ -60,24 +60,36 @@ public class ControllerUserDB {
      * @param method mètode a executar de forma asíncrona un cop acabada la reautentificació (el paràmetre és un boolea que retorna true si la reautentificació ha anat bé o false si no)
      * @param object instancia de la classe del mètode a executar
      */
-    public void changePassword(String newPassword, Method method, Object object) {
+    public void changePassword(String oldPassword, String newPassword, Method method, Object object) {
         FirebaseUser user = mAuth.getCurrentUser();
+        AuthCredential credential = EmailAuthProvider
+                .getCredential(user.getEmail(), oldPassword);
 
-        user.updatePassword(newPassword)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    boolean success;
-
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            success = true;
-                        }
-
+        user.reauthenticate(credential)
+                .addOnCompleteListener(task -> {
+                    if(task.isSuccessful()) {
+                        user.updatePassword(newPassword)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            try {
+                                                method.invoke(object, true);
+                                            } catch (IllegalAccessException ignore) {
+                                            } catch (InvocationTargetException ignore) {}
+                                        } else {
+                                            try {
+                                                method.invoke(object, false);
+                                            } catch (IllegalAccessException ignore) {
+                                            } catch (InvocationTargetException ignore) {}
+                                        }
+                                    }
+                                });
+                    } else {
                         try {
-                            method.invoke(object, success);
+                            method.invoke(object, false);
                         } catch (IllegalAccessException ignore) {
-                        } catch (InvocationTargetException ignore) {
-                        }
+                        } catch (InvocationTargetException ignore) {}
                     }
                 });
     }
@@ -422,6 +434,16 @@ public class ControllerUserDB {
     }
 
     /**
+     * Canvia el nom d'usuari
+     * @param userID identificador de l'usuari
+     * @param name nou nom d'usuari
+     */
+    public void changeUsername(String userID, String name) {
+        DocumentReference docRefToUser = db.collection("users").document(userID);
+        docRefToUser.update("Username",name);
+    }
+
+    /**
      * Metode per fer sign out de l'usuari actual
      */
     public void signOut() {
@@ -435,6 +457,7 @@ public class ControllerUserDB {
         FirebaseUser user = mAuth.getCurrentUser();
         AuthCredential credential = EmailAuthProvider
                 .getCredential(user.getEmail(), password);
+
 
         String id = user.getUid();
         user.reauthenticate(credential)
@@ -521,11 +544,15 @@ public class ControllerUserDB {
         FirebaseAuth.getInstance().fetchSignInMethodsForEmail(mail)
                 .addOnCompleteListener(task -> {
                     boolean isNewUser = task.getResult().getSignInMethods().isEmpty();
+                    boolean google = false;
                     if (!isNewUser) {
-                        if(!task.getResult().getSignInMethods().get(0).equals("google.com")) FirebaseAuth.getInstance().sendPasswordResetEmail(mail);
+                        google = task.getResult().getSignInMethods().get(0).equals("google.com");
+                        if(!google) FirebaseAuth.getInstance().sendPasswordResetEmail(mail);
                     }
+                    boolean sent = true;
+                    if(isNewUser || google) sent = false;
                     try {
-                        method.invoke(object, !isNewUser);
+                        method.invoke(object, sent);
                     } catch (IllegalAccessException ignore) {
                     } catch (InvocationTargetException ignore) {
                     }

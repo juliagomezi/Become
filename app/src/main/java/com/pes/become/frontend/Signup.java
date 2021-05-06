@@ -74,7 +74,7 @@ public class Signup extends AppCompatActivity {
      * Funcio a executar despres de crear un usuari amb exit
      */
     public void registerCallback() {
-        Toast.makeText(this, getString(R.string.verifyEmail), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.verifyEmail), Toast.LENGTH_LONG).show();
         startActivity(new Intent(this, Login.class));
         finish();
     }

@@ -95,5 +95,14 @@
     <string name="verifyEmail">Registrado correctamente. Comprueba tu correo electrónico y verificalo para usar la app.</string>
     <string name="emailNotRegistered">El correo introducido no pertenece a ninguna cuenta.</string>
     <string name="loginfailed">El correo o la contraseña no son correctos, asegúrate de haver confirmado el correo.</string>
+    <string name="streak">DÍAS!</string>
+    <string name="congratsStreak">Enhorabuena! Llevas una racha de</string>
+    <string name="backButton">Atrás</string>
+    <string name="reset_password">Restablecer contraseña</string>
+    <string name="currentPassword">Contraseña actual</string>
+    <string name="passChanged">La contraseña se ha cambiado correctamente.</string>
+    <string name="newPassword">Nueva contraseña</string>
+    <string name="change_username">Cambiar nombre</string>
+    <string name="username_changed">Nombre actualizado correctamente.</string>
 
 </resources>

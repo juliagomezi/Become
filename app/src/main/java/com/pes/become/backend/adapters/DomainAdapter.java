@@ -17,6 +17,7 @@ import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
 import com.pes.become.backend.exceptions.NoSelectedRoutineException;
 import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 import com.pes.become.backend.persistence.ControllerPersistence;
+import com.pes.become.frontend.ForgotPassword;
 import com.pes.become.frontend.LogoScreen;
 import com.pes.become.frontend.Login;
 import com.pes.become.frontend.Profile;
@@ -63,6 +64,10 @@ public class DomainAdapter {
      * Instancia de la classe signup del frontend
      */
     private Signup signup;
+    /**
+     * Instancia de la classe forgotPassword del frontend
+     */
+    private ForgotPassword forgotPass;
     /**
      * Usuari autenticat que esta usant l'aplicació actualment
      */
@@ -307,8 +312,20 @@ public class DomainAdapter {
      * @param oldPassword contrasenya antiga
      * @param newPassword contrasenya nova
      */
-    public void changePassword(String oldPassword, String newPassword) {
-        //controllerPersistence.changePassword(oldPassword, newPassword);
+    public void changePassword(String oldPassword, String newPassword, Profile profile) {
+        this.profile = profile;
+        try {
+            Method method = DomainAdapter.class.getMethod("changePasswordCallback", boolean.class);
+            controllerPersistence.changePassword(oldPassword, newPassword, method, this);
+        } catch(Exception ignore) {}
+    }
+
+    /**
+     * Metode per rebre el resultat del canvi de contrasenya
+     * @param success resultat de la operacio
+     */
+    public void changePasswordCallback(boolean success) {
+        profile.changePasswordCallback(success);
     }
 
     /**
@@ -316,6 +333,7 @@ public class DomainAdapter {
      * @param newName nou nom de l'usuari
      */
     public void changeUserName(String newName) {
+        controllerPersistence.changeUsername(currentUser.getID(),newName);
         currentUser.setName(newName);
     }
 
@@ -637,10 +655,11 @@ public class DomainAdapter {
     /**
      * Metode per recuperar la contrasenya d'un usuari
      * @param mail mail del compte a recuperar
+     * @param act instància de l'activitat que solicita la recuperació de contrasenya
      * @return true si el mail pertany a un usuari registrat i es pot enviar el correu, false altrament
      */
     public void sendPassResetEmail(String mail, android.app.Activity act) {
-        login = (Login)act;
+        forgotPass = (ForgotPassword)act;
         try {
             Method method = DomainAdapter.class.getMethod("passResetCallback", boolean.class);
             controllerPersistence.sendPassResetEmail(mail, method, this);
@@ -652,6 +671,6 @@ public class DomainAdapter {
      * @param success resultat de l'operacio
      */
     public void passResetCallback(boolean success) {
-        login.passResetCallback(success);
+        forgotPass.passResetCallback(success);
     }
 }

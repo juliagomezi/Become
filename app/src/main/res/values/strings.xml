@@ -99,5 +99,14 @@
     <string name="verifyEmail">Registered successfully. Please check your email and verify your account before using the app.</string>
     <string name="emailNotRegistered">This email does not belong to any registered account</string>
     <string name="loginfailed">Mail or password are not correct, make sure to verify your email</string>
+    <string name="streak">DAYS STREAK!</string>
+    <string name="congratsStreak">Congrats! You are on a</string>
+    <string name="backButton">Back</string>
+    <string name="reset_password">Reset password</string>
+    <string name="currentPassword">Current password</string>
+    <string name="newPassword">New password</string>
+    <string name="passChanged">Password was changed successfully.</string>
+    <string name="change_username">Change username</string>
+    <string name="username_changed">Username changed successfully</string>
 
 </resources>

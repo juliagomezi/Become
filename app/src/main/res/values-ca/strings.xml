@@ -95,5 +95,14 @@
     <string name="verifyEmail">Registrat amb èxit. Comprova el teu correu electrònic i verifica\'l per tal d\'usar l\'app.</string>
     <string name="emailNotRegistered">El correu especificat no pertany a cap compte.</string>
     <string name="loginfailed">El correu o la contrasenya no són correctes, assegura\'t d\'haver verificat el correu.</string>
+    <string name="congratsStreak">Enhorabona! Portes una ratxa de</string>
+    <string name="streak">DIES!</string>
+    <string name="backButton">Tornar</string>
+    <string name="reset_password">Restablir contrasenya</string>
+    <string name="currentPassword">Contrasenya actual</string>
+    <string name="newPassword">Nova contrasenya</string>
+    <string name="passChanged">La contrasenya s\'ha canviat correctament.</string>
+    <string name="change_username">Canviar nom</string>
+    <string name="username_changed">Nom canviat correctament.</string>
 
 </resources>
