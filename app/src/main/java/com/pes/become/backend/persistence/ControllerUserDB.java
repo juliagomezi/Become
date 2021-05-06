@@ -14,6 +14,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.UserInfo;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -500,13 +501,18 @@ public class ControllerUserDB {
         return mAuth.getCurrentUser().getProviderId();
     }
 
+    /**************************************FUNCIONS PRIVADES***************************************/
+
     /**
      * Esborra totes les dades de la BD de l'usuari (rutines i activitats)
      * @param docRefToUser es el document de l'usuari que conte totes les altres subcol·leccions
      */
     private void deleteUserData(DocumentReference docRefToUser) {
 
-        docRefToUser.collection("routines").get()
+        CollectionReference colRefToRoutines = docRefToUser.collection("routines");
+        CollectionReference colRefToStatistics = docRefToUser.collection("statistics");
+
+        colRefToRoutines.get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot documentSnap : task.getResult()) {
@@ -515,8 +521,21 @@ public class ControllerUserDB {
 
                         }
                     }
-                    docRefToUser.delete();
                 });
+
+        colRefToStatistics.get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot documentSnap : task.getResult()) {
+                            DocumentReference docRefToStatistic = documentSnap.getReference();
+                            docRefToStatistic.delete();
+
+                        }
+                    }
+                });
+        docRefToUser.delete();
+
+
     }
 
     /**
@@ -535,6 +554,8 @@ public class ControllerUserDB {
                     docRefToRoutine.delete();
                 });
     }
+
+
 
     /**
      * Metode per recuperar la contrasenya d'un usuari

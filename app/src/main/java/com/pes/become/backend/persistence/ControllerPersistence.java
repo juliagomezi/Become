@@ -170,6 +170,7 @@ public class ControllerPersistence {
      */
     public void deleteRoutine(String userId, String idRoutine) {
         CR.deleteRoutine(userId, idRoutine);
+        CS.deleteRoutineStatistics(userId, idRoutine);
     }
 
     /*********************************FUNCIONS RELACIONADES AMB USUARIS****************************/

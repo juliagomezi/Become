@@ -200,6 +200,11 @@ public class ControllerStatisticsDB {
 
     }
 
+    public void deleteRoutineStatistics(String userId, String idRoutine){
+        DocumentReference docRefToRoutineStatistics = db.collection("users").document(userId).collection("statistics").document(idRoutine);
+        docRefToRoutineStatistics.delete();
+    }
+
 
     /**
      * Funcio per actualitzar les estadistiques d'una rutina quan s'ha modificat una de les seves activitats
