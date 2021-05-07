@@ -48,9 +48,9 @@ public class ControllerStatisticsDB {
 
         DocumentReference docRefToRoutineStatistics = db.collection("users").document(userId).collection("statistics").document(idRoutine);
 
-        Object[] params = new Object[numberOfThemes];
+        Object[] params = new Object[1];
 
-        //HashMap <String, HashMap<String, Double>> mapThemes = new HashMap<>();
+        HashMap <String, HashMap<String, Double>> mapThemes = new HashMap<>();
 
         docRefToRoutineStatistics.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -59,12 +59,9 @@ public class ControllerStatisticsDB {
 
                     for (int i = 0; i<numberOfThemes; ++i){
 
-                        params[i] = (HashMap) document.get("statistics" + differentThemes[i]);
-
-
-
-                        //mapThemes.put(differentThemes[i],(HashMap) document.get("statistics" + differentThemes[i]));
+                        mapThemes.put(differentThemes[i],(HashMap) document.get("statistics" + differentThemes[i]));
                     }
+                    params[0] = mapThemes;
 
                     try {
                         method.invoke(object, params);

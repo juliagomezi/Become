@@ -30,6 +30,11 @@ public class Activity implements Comparable<Activity>{
     private final Day day;
 
     /**
+     * Activitat feta avui
+     */
+    private boolean doneToday;
+
+    /**
      * Creadora de l'activitat amb descripcio
      * @param name nom de l'activitat
      * @param description descripcio de l'activitat
@@ -44,6 +49,7 @@ public class Activity implements Comparable<Activity>{
         this.theme = theme;
         this.interval = ti;
         this.day = day;
+        this.doneToday = false;
     }
 
     /**
@@ -100,6 +106,14 @@ public class Activity implements Comparable<Activity>{
      */
     public Day getDay() {
         return day;
+    }
+
+    public boolean isDoneToday() {
+        return doneToday;
+    }
+
+    public void setDoneToday(boolean doneToday) {
+        this.doneToday = doneToday;
     }
 
     /**

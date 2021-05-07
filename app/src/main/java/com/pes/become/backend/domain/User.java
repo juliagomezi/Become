@@ -29,7 +29,7 @@ public class User {
     /**
      * Estadistiques de la rutina seleccionada de l'usuari
      */
-    private Map<Theme, Map<Day, Integer>> statisticsSelectedRoutine;
+    private Map<Theme, Map<Day, Double>> statisticsSelectedRoutine;
     /**
      * ID i nom de les rutines de l'usuari
      */
@@ -47,14 +47,7 @@ public class User {
         this.name = name;
         this.selectedRoutine = null;
         this.routines = new ArrayList<>();
-        this.statisticsSelectedRoutine = new TreeMap<>();
-        for(int t=0; t<Theme.values().length; ++t){
-            Map<Day, Integer> emptyMap = new TreeMap<>();
-            for(int d=0; d<Day.values().length; ++d){
-                emptyMap.put(Day.values()[d], 0);
-            }
-            statisticsSelectedRoutine.put(Theme.values()[t], emptyMap);
-        }
+        clearStatistics();
         achievements = new TreeMap<>();
         for(int a = 0; a<Achievement.values().length; ++a){
             achievements.put(Achievement.values()[a], false);
@@ -129,11 +122,11 @@ public class User {
      * Getter de les estadistiques de la rutina seleccionada
      * @return Array d'Arrays d'enters on la primera array representa els temes, la segona els dies i la tercera les hores
      */
-    public ArrayList<ArrayList<Integer>> getStatisticsSelectedRoutine() {
-        ArrayList<ArrayList<Integer>> result = new ArrayList<>();
-        for(Map.Entry<Theme, Map<Day, Integer>> themeEntry : statisticsSelectedRoutine.entrySet()){
-            ArrayList<Integer> hoursByDay = new ArrayList<>();
-            for(Map.Entry<Day, Integer> dayEntry : themeEntry.getValue().entrySet()){
+    public ArrayList<ArrayList<Double>> getStatisticsSelectedRoutine() {
+        ArrayList<ArrayList<Double>> result = new ArrayList<>();
+        for(Map.Entry<Theme, Map<Day, Double>> themeEntry : statisticsSelectedRoutine.entrySet()){
+            ArrayList<Double> hoursByDay = new ArrayList<>();
+            for(Map.Entry<Day, Double> dayEntry : themeEntry.getValue().entrySet()){
                 hoursByDay.add(dayEntry.getKey().ordinal(), dayEntry.getValue());
             }
             result.add(themeEntry.getKey().ordinal(), hoursByDay);
@@ -146,10 +139,10 @@ public class User {
      * @param theme tema del que es volen les hores
      * @return hores setmanals dedicades al tema
      */
-    public int getHoursByTheme(Theme theme){
-        Map<Day, Integer> themeStats = statisticsSelectedRoutine.get(theme);
-        int total = 0;
-        for(Map.Entry<Day, Integer> dayStats : themeStats.entrySet()){
+    public double getHoursByTheme(Theme theme){
+        Map<Day, Double> themeStats = statisticsSelectedRoutine.get(theme);
+        double total = 0.0;
+        for(Map.Entry<Day, Double> dayStats : themeStats.entrySet()){
             total += dayStats.getValue();
         }
         return total;
@@ -159,8 +152,16 @@ public class User {
      * Setter de les estadistiques de la rutina seleccionada
      * @param statisticsSelectedRoutine mapa que representa les estadistiques amb Tema com a clau i un segon mapa com a valor, amb Dia com a clau i les hores dedicades com a valor
      */
-    public void setStatisticsSelectedRoutine(Map<Theme, Map<Day, Integer>> statisticsSelectedRoutine) {
+    public void setStatisticsSelectedRoutine(Map<Theme, Map<Day, Double>> statisticsSelectedRoutine) {
         this.statisticsSelectedRoutine = statisticsSelectedRoutine;
+    }
+
+    public void updateStatistics(Theme theme, Day day, int hours, int minutes, boolean add) {
+        double time = (double)hours + (double)minutes/60.0;
+        if(!add)
+            time *= -1;
+        time += statisticsSelectedRoutine.get(theme).get(day);
+        statisticsSelectedRoutine.get(theme).put(day, time);
     }
 
     /**
@@ -254,5 +255,16 @@ public class User {
             if(routine.get(1).equals(name)) return true;
         }
         return false;
+    }
+
+    public void clearStatistics() {
+        this.statisticsSelectedRoutine = new TreeMap<>();
+        for(int t=0; t<Theme.values().length; ++t){
+            Map<Day, Double> emptyMap = new TreeMap<>();
+            for(int d=0; d<Day.values().length; ++d){
+                emptyMap.put(Day.values()[d], 0.0);
+            }
+            statisticsSelectedRoutine.put(Theme.values()[t], emptyMap);
+        }
     }
 }
