@@ -142,21 +142,7 @@ public class ControllerStatisticsDB {
                 return null;
             }
         });
-        /*
-        docRefToRoutineStatistics.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                DocumentSnapshot document = task.getResult();
-                if (document.exists()) {
-                    double timeToAdd = timeDifference(beginTime, finishTime);
-                    HashMap<String, Double> mapActTheme = (HashMap) document.get("statistics" + theme);
-                    mapActTheme.put(day, mapActTheme.get(day) + timeToAdd);
-                    docRefToRoutineStatistics.update("statistics" + theme, mapActTheme);
 
-                }
-            }
-        });
-
-         */
     }
 
     /**
