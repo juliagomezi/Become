@@ -119,7 +119,6 @@ public class ControllerPersistence {
      * @param newTheme nou tema de l'activitat
      * @param newBeginTime nova hora d'inici de l'activitat
      * @param newFinishTime nova hora final de l'activitat
-     * @param lastDayDone ultim dia que l'activitat s'ha marcat com a feta
      */
     public void updateActivity(String userId, String idRoutine, String idActivity, String actName, String description, String newDay, String newTheme,  String newBeginTime, String newFinishTime) {
 
