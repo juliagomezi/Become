@@ -38,6 +38,7 @@ import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Random;
+import java.util.regex.Pattern;
 
 public class Stats extends Fragment {
 
@@ -189,14 +190,14 @@ public class Stats extends Fragment {
 
         ArrayList<Double> hoursTheme = DA.getHoursByTheme();
 
-        musicHour.setText(hoursTheme.get(0).toString() +"h");
-        sportHour.setText(hoursTheme.get(1).toString() +"h");
-        sleepHour.setText(hoursTheme.get(2).toString() +"h");
-        cookingHour.setText(hoursTheme.get(3).toString() +"h");
-        workingHour.setText(hoursTheme.get(4).toString() +"h");
-        entertainmentHour.setText(hoursTheme.get(5).toString() +"h");
-        plantsHour.setText(hoursTheme.get(6).toString() +"h");
-        otherHour.setText(hoursTheme.get(7).toString() +"h");
+        musicHour.setText(formatHoursMinutes(hoursTheme.get(0)));
+        sportHour.setText(String.format("%.2f", (float)(double)hoursTheme.get(1)) +"h");
+        sleepHour.setText(String.format("%.2f", (float)(double)hoursTheme.get(2)) +"h");
+        cookingHour.setText(String.format("%.2f", (float)(double)hoursTheme.get(3)) +"h");
+        workingHour.setText(formatHoursMinutes(hoursTheme.get(4)));
+        entertainmentHour.setText(formatHoursMinutes(hoursTheme.get(5)));
+        plantsHour.setText(String.format("%.2f", (float)(double)hoursTheme.get(6)) +"h");
+        otherHour.setText(String.format("%.2f", (float)(double)hoursTheme.get(7)) +"h");
     }
 
     private void setChart() {
@@ -309,6 +310,22 @@ public class Stats extends Fragment {
                     break;
             }
         }
+    }
+
+    /**
+     * Metode que formateja un double a hores i minuts
+     * @param time double a formatejar
+     * @return string amb format hh:mm h
+     */
+    private String formatHoursMinutes(double time) {
+        String timeString = String.format("%.2f", (float)time);
+        String[] hoursMinutes = timeString.split(Pattern.quote("."));
+        double minutes = (double)Integer.valueOf(hoursMinutes[1]);
+        minutes /= 100;
+        minutes *= 60;
+        String minutesString = String.format("%.0f", (float)minutes);
+        String result = hoursMinutes[0] + ":" + minutesString + "h";
+        return result;
     }
 
 }

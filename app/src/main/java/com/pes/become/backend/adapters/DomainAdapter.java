@@ -201,7 +201,7 @@ public class DomainAdapter {
             }
             if(!selectedRoutineId.equals("")) selectRoutine(routine);
 
-            if(!stats.isEmpty()) {
+            if(stats != null) {
                 Map<Theme,Map<Day, Double>> statistics = new TreeMap<>();
                 for(Map.Entry<String,Map<String,Double>> themeStats : stats.entrySet()) {
                     Map<Day, Double> s = new TreeMap<>();
@@ -383,11 +383,11 @@ public class DomainAdapter {
 
     /**
      * Metode per comprovar si l'usuari ha guanyat un trofeu
-     * @param achievement ordinal del trofeu que volem comprovar
+     * @param achievement nom del trofeu que volem comprovar
      * @return cert si l'ha guanyat, fals si no o ja el tenia
      */
-    public boolean checkAchievement(int achievement){
-        return achievementController.checkAchievement(Achievement.values()[achievement]);
+    public boolean checkAchievement(String achievement){
+        return achievementController.checkAchievement(Achievement.valueOf(achievement));
     }
 
     /**
