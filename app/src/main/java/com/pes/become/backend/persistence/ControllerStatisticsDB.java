@@ -9,6 +9,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Transaction;
 
 import org.w3c.dom.Document;
 
@@ -127,7 +129,20 @@ public class ControllerStatisticsDB {
 
         DocumentReference docRefToRoutineStatistics = db.collection("users").document(userId).collection("statistics").document(idRoutine);
 
+        db.runTransaction(new Transaction.Function<Void>() {
+            @Override
+            public Void apply(Transaction transaction) throws FirebaseFirestoreException {
+                DocumentSnapshot snapshot = transaction.get(docRefToRoutineStatistics);
 
+                double timeToAdd = timeDifference(beginTime, finishTime);
+                HashMap<String, Double> mapActTheme = (HashMap) snapshot.get("statistics" + theme);
+                mapActTheme.put(day, mapActTheme.get(day) + timeToAdd);
+                transaction.update(docRefToRoutineStatistics, "statistics" + theme, mapActTheme);
+
+                return null;
+            }
+        });
+        /*
         docRefToRoutineStatistics.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
@@ -140,6 +155,8 @@ public class ControllerStatisticsDB {
                 }
             }
         });
+
+         */
     }
 
     /**
