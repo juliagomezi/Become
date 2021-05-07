@@ -187,7 +187,7 @@ public class Stats extends Fragment {
         TextView plantsHour = view.findViewById(R.id.plantsHour);
         TextView otherHour = view.findViewById(R.id.otherHour);
 
-        ArrayList<Integer> hoursTheme = DA.getHoursByTheme();
+        ArrayList<Double> hoursTheme = DA.getHoursByTheme();
 
         musicHour.setText(hoursTheme.get(0).toString() +"h");
         sportHour.setText(hoursTheme.get(1).toString() +"h");

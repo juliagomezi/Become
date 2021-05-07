@@ -139,9 +139,9 @@ public class User {
      * @param theme tema del que es volen les hores
      * @return hores setmanals dedicades al tema
      */
-    public int getHoursByTheme(Theme theme){
+    public double getHoursByTheme(Theme theme){
         Map<Day, Double> themeStats = statisticsSelectedRoutine.get(theme);
-        int total = 0;
+        double total = 0.0;
         for(Map.Entry<Day, Double> dayStats : themeStats.entrySet()){
             total += dayStats.getValue();
         }
