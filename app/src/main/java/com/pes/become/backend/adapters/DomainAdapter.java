@@ -2,6 +2,8 @@ package com.pes.become.backend.adapters;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.text.BoringLayout;
+import android.util.Log;
 
 import com.pes.become.backend.domain.Achievement;
 import com.pes.become.backend.domain.AchievementController;
@@ -25,6 +27,7 @@ import com.pes.become.frontend.Signup;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -76,6 +79,8 @@ public class DomainAdapter {
      * Instancia de la classe profile del frontend
      */
     private Profile profile;
+
+    private int loadedDays = 0;
 
     /**
      * Obtenir la instancia de la classe
@@ -194,7 +199,7 @@ public class DomainAdapter {
                     break;
                 }
             }
-            if(!selectedRoutineId.equals("")) selectRoutine(routine);
+            if(!selectedRoutineId.equals("")) selectRoutine(routine, true);
 
             //stats hardcoded
             Map<Theme, Map<Day, Integer>> stats = new TreeMap<>();
@@ -210,7 +215,7 @@ public class DomainAdapter {
 
             achievementController.setCurrentUser(currentUser);
 
-            login.loginCallback();
+            //login.loginCallback();
         }
         else {
             login.loginCallbackFailed();
@@ -230,23 +235,24 @@ public class DomainAdapter {
             currentUser = userAdapter.createUser(username);
             currentUser.setID(userId);
             currentUser.setPFP(pfp);
-            if(!routineInfo.isEmpty()) currentUser.setRoutines(routineInfo);
+            if (!routineInfo.isEmpty()) currentUser.setRoutines(routineInfo);
             ArrayList<String> routine = new ArrayList<>();
-            for(ArrayList<String> r : routineInfo) {
-                if(r.get(0).equals(selectedRoutineId)) {
+            for (ArrayList<String> r : routineInfo) {
+                if (r.get(0).equals(selectedRoutineId)) {
                     routine = r;
                     break;
                 }
             }
-            if(!selectedRoutineId.equals("")) selectRoutine(routine);
+            if (!selectedRoutineId.equals("")) selectRoutine(routine, true);
 
             achievementController.setCurrentUser(currentUser);
 
-            logoScreen.loginCallback();
+            //logoScreen.loginCallback();
         }
         else {
             logoScreen.loginCallbackFailed();
         }
+
     }
 
     /**
@@ -260,7 +266,7 @@ public class DomainAdapter {
         if (success) {
             currentUser = userAdapter.createUser(username);
             currentUser.setID(userId);
-            if (!selectedRoutineId.equals("")) loadSelectedRoutine(); //això és impossible que passi!!!
+            if (!selectedRoutineId.equals("")) loadSelectedRoutine(true); //això és impossible que passi!!!
             signup.registerCallback();
         }
         else {
@@ -387,15 +393,16 @@ public class DomainAdapter {
     /**
      * Metode per seleccionar una rutina ja existent
      * @param infoRoutine llista amb la informacio de la rutina a seleccionar
+     * @param login bolea que indica si s'esta seleccionant des de login o no
      */
-    public void selectRoutine(ArrayList<String> infoRoutine) {
+    public void selectRoutine(ArrayList<String> infoRoutine, boolean login) {
         if(infoRoutine!=null) {
             Routine routine = routineAdapter.createRoutine(infoRoutine.get(1));
             routine.setId(infoRoutine.get(0));
             currentUser.setSelectedRoutine(routine);
             routineAdapter.setCurrentRoutine(currentUser.getSelectedRoutine());
             controllerPersistence.setSelectedRoutine(currentUser.getID(), currentUser.getSelectedRoutine().getId());
-            loadSelectedRoutine();
+            loadSelectedRoutine(login);
         } else {
             routineAdapter.setCurrentRoutine(null);
             currentUser.setSelectedRoutine(null);
@@ -406,39 +413,45 @@ public class DomainAdapter {
     /**
      * Metode per carregar la rutina seleccionada
      */
-    public void loadSelectedRoutine() {
+    public void loadSelectedRoutine(boolean login) {
         try {
             routineAdapter.clearActivities();
-            Class[] parameterTypes = new Class[1];
-            parameterTypes[0] = ArrayList.class;
+            Class[] parameterTypes = new Class[2];
+            parameterTypes[0] = HashMap.class;
+            parameterTypes[1] = Boolean.class;
             Method method = DomainAdapter.class.getMethod("loadSelectedRoutineCallback", parameterTypes);
-            for(int d = 0; d < 7; ++d) {
-                controllerPersistence.getActivitiesByDay(currentUser.getID(), currentUser.getSelectedRoutine().getId(), Day.values()[d].toString(), method, DomainAdapter.getInstance());
-            }
-        } catch (NoSuchMethodException ignore) {
-        }
+            controllerPersistence.getActivitiesRoutine(currentUser.getID(), currentUser.getSelectedRoutine().getId(), method, DomainAdapter.getInstance(), login);
+        } catch (NoSuchMethodException ignore) { }
     }
 
     /**
      * Metode per rebre les activitats de la rutina seleccionada
-     * @param activities activitats de la rutina
+     * @param activitiesList activitats de la rutina
      * @throws InvalidTimeIntervalException si l'interval de temps no és valid
      */
-    public void loadSelectedRoutineCallback(ArrayList<ArrayList<String>> activities) throws InvalidTimeIntervalException {
-        if(!activities.isEmpty()) {
-            ArrayList<Activity> acts = new ArrayList<>();
-            for (int i = 0; i < activities.size(); ++i) {
-                String[] s = activities.get(i).get(5).split(":");
-                String[] s2 = activities.get(i).get(6).split(":");
-                int iniH = Integer.parseInt(s[0]);
-                int iniM = Integer.parseInt(s[1]);
-                int endH = Integer.parseInt(s2[0]);
-                int endM = Integer.parseInt(s2[1]);
-                Activity activity = new Activity(activities.get(i).get(1), activities.get(i).get(2), Theme.valueOf(activities.get(i).get(3)), new TimeInterval(iniH, iniM, endH, endM), Day.valueOf(activities.get(i).get(4)));
-                activity.setId(activities.get(i).get(0));
-                acts.add(activity);
+    public void loadSelectedRoutineCallback(HashMap<String, ArrayList<ArrayList<String>>> activitiesList, boolean login) throws InvalidTimeIntervalException {
+        Log.d("loadCallback", "loadSelectedRoutineCallback");
+        for (HashMap.Entry<String, ArrayList<ArrayList<String>>> dayActivities : activitiesList.entrySet()) {
+            ArrayList<ArrayList<String>> activities = dayActivities.getValue();
+            if (!activities.isEmpty()) {
+                ArrayList<Activity> acts = new ArrayList<>();
+                for (int i = 0; i < activities.size(); ++i) {
+                    String[] s = activities.get(i).get(5).split(":");
+                    String[] s2 = activities.get(i).get(6).split(":");
+                    int iniH = Integer.parseInt(s[0]);
+                    int iniM = Integer.parseInt(s[1]);
+                    int endH = Integer.parseInt(s2[0]);
+                    int endM = Integer.parseInt(s2[1]);
+                    Activity activity = new Activity(activities.get(i).get(1), activities.get(i).get(2), Theme.valueOf(activities.get(i).get(3)), new TimeInterval(iniH, iniM, endH, endM), Day.valueOf(activities.get(i).get(4)));
+                    activity.setId(activities.get(i).get(0));
+                    acts.add(activity);
+                }
+                routineAdapter.setActivitiesByDay(acts, acts.get(0).getDay());
             }
-            routineAdapter.setActivitiesByDay(acts, acts.get(0).getDay());
+        }
+        if (login) {
+            if (this.login != null) this.login.loginCallback();
+            else if (this.logoScreen != null) this.logoScreen.loginCallback();
         }
     }
 
@@ -641,6 +654,7 @@ public class DomainAdapter {
         if (currentUser.getSelectedRoutine() != null) return currentUser.getSelectedRoutine().getId();
         else return "";
     }
+
 
     /**
      * Metode per obtenir les activitats d'un dia de la rutina seleccionada

@@ -68,7 +68,7 @@ public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesLi
         holder.routineName.setText(routinesList.get(position).get(1));
 
         holder.editButton.setOnClickListener(view -> {
-            DA.selectRoutine(routinesList.get(position));
+            DA.selectRoutine(routinesList.get(position), false);
 
             MainActivity.getInstance().setEditRoutineScreen(routinesList.get(position).get(0),routinesList.get(position).get(1));
         });
@@ -128,10 +128,10 @@ public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesLi
 
     private void selectRoutine(int position) throws NoSuchMethodException {
         if(routinesList.get(position).get(0).equals(selectedRoutineID)) {
-            DA.selectRoutine(null);
+            DA.selectRoutine(null, false);
             selectedRoutineID = "";
         } else {
-            DA.selectRoutine(routinesList.get(position));
+            DA.selectRoutine(routinesList.get(position), false);
             selectedRoutineID = routinesList.get(position).get(0);
         }
         notifyDataSetChanged();

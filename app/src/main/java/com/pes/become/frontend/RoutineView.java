@@ -1,12 +1,7 @@
 package com.pes.become.frontend;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.RectF;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -192,6 +187,17 @@ public class RoutineView extends Fragment implements AdapterView.OnItemSelectedL
 
     /**
      * Funcio per obtenir la llista d'activitats
+     */
+    private void getActivitiesList() {
+        try {
+            DA.getActivitiesByDay(getWeekDay(seeingDay));
+        } catch (NoSelectedRoutineException e) {
+            initEmptyView(getString(R.string.noRoutineSelected));
+        }
+    }
+
+    /**
+     * Funcio per actualitzar la llista d'activitats
      */
     private void updateActivitiesList() {
         try {

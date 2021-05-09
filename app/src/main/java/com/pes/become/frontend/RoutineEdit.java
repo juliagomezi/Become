@@ -101,7 +101,8 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         seeingDay = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
         translateSeeingDay();
         setDay();
-        updateActivitiesList();
+
+        getActivitiesList();
 
         TextView addActivity = view.findViewById(R.id.addActivity);
         addActivity.setOnClickListener(v -> createActivitySheet(false));
@@ -456,6 +457,27 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
     /**
      * Funcio per obtenir la llista d'activitats
      */
+    private void getActivitiesList() {
+        try {
+            DA.getActivitiesByDay(getWeekDay(seeingDay));
+        } catch (NoSelectedRoutineException e) {
+            initEmptyView(getString(R.string.noRoutineSelected));
+        }
+    }
+
+    /**
+     * Funcio per obtenir la llista d'activitats callback
+     * @param activitiesList llista d'activitats
+     */
+    public void getActivitiesListCallback(ArrayList<ArrayList<String>> activitiesList) {
+        this.activitiesList = activitiesList;
+        initRecyclerView();
+        if (activitiesList.isEmpty()) initEmptyView(getString(R.string.noActivities));
+    }
+
+    /**
+     * Funcio per actualitzar la llista d'activitats
+     */
     public void updateActivitiesList() {
         try {
             activitiesList = DA.getActivitiesByDay(getWeekDay(seeingDay));
@@ -464,6 +486,5 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         } catch (NoSelectedRoutineException e) {
             initEmptyView(getString(R.string.noRoutineSelected));
         }
-        routineEditRecyclerAdapter.notifyDataSetChanged();
     }
 }
