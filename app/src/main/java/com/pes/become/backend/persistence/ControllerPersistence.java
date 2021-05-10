@@ -8,8 +8,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.zip.DeflaterOutputStream;
 
 public class ControllerPersistence {
 
@@ -18,7 +16,6 @@ public class ControllerPersistence {
     ControllerUserDB CU;
     ControllerStatisticsDB CS;
     private final FirebaseFirestore db;
-
 
     /**
      * Creadora per defecte de la classe ControllerPersistence
@@ -30,9 +27,6 @@ public class ControllerPersistence {
         db = FirebaseFirestore.getInstance();
     }
 
-/*********************************FUNCIONS RELACIONADES AMB ACTIVITATS*****************************/
-    /******************************CONSULTORES D'ACTIVITATS***********************/
-
     /**
      * Obtenir les activitats d'una rutina
      * @param userId identificador de l'usuari
@@ -43,20 +37,6 @@ public class ControllerPersistence {
     public void getActivitiesRoutine(String userId, String idRoutine, Method method, Object object) {
         CA.getActivities(userId, idRoutine, method, object);
     }
-
-    /**
-     * Obtenir les activitats d'una rutina i un dia indicats
-     * @param userId identificador de l'usuari
-     * @param idRoutine identificador de la rutina
-     * @param day dia a consultar
-     * @param method metode a cridar quan es retornin les dades
-     * @param object classe que conté el mètode
-     */
-    public void getActivitiesByDay(String userId, String idRoutine, String day, Method method, Object object) {
-        CA.getActivitiesByDay(userId, idRoutine,day,method,object);
-    }
-
-    /******************************MODIFICADORES D'ACTIVITATS***********************/
 
     /**
      * Afegir una nova activitat a una certa rutina de la base de dades
@@ -101,8 +81,6 @@ public class ControllerPersistence {
                 }
             }
         });
-
-
     }
 
     /**
@@ -138,11 +116,8 @@ public class ControllerPersistence {
                 }
             }
         });
-
-
     }
-/*********************************FUNCIONS RELACIONADES AMB RUTINES********************************/
-    /******************************MODIFICADORES DE RUTINES***********************/
+
     /**
      * Canvia el nom d'una rutina.
      * @param userId identificador de l'usuari
@@ -174,9 +149,6 @@ public class ControllerPersistence {
         CS.deleteRoutineStatistics(userId, idRoutine);
     }
 
-    /*********************************FUNCIONS RELACIONADES AMB USUARIS****************************/
-    /******************************CONSULTORES D'USUARIS***********************/
-
     /**
      * Metode per obtenir el provider de l'usuari
      * @return el provider de l'usuari
@@ -195,8 +167,6 @@ public class ControllerPersistence {
         CU = ControllerUserDB.getInstance();
         CU.loadUser(method, object);
     }
-
-    /******************************MODIFICADORES D'USUARIS***********************/
 
     /**
      * Canvi de contrasenya de l'usuari actual
@@ -228,8 +198,6 @@ public class ControllerPersistence {
         CU = ControllerUserDB.getInstance();
         CU.deleteUser(password, method, object);
     }
-
-
 
     /**
      * Inici de sessió d'usuari
@@ -304,9 +272,6 @@ public class ControllerPersistence {
         CU = ControllerUserDB.getInstance();
         CU.changeUsername(userID, newName);
     }
-
-    /***************************FUNCIONS RELACIONADES AMB ESTADISTIQUES****************************/
-    /*****************************CONSULTORES D'ESTADISTIQUES***********************/
 
     /**
      * Funcio per aconseguir totes les estadistiques d'una rutina

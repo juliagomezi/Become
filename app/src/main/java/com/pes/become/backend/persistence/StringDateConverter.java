@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class StringDateConverter {
+
     /**
      * Retorna la data en format per la ID de la base de dades
      * @param date data
@@ -16,6 +17,12 @@ public class StringDateConverter {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         return dateFormat.format(date);
     }
+
+    /**
+     *
+     * @param date
+     * @return
+     */
     public static Date stringToDate(String date)
     {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -26,4 +33,5 @@ public class StringDateConverter {
         }
         return null;
     }
+
 }

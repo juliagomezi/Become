@@ -2,6 +2,8 @@ package com.pes.become.backend.persistence;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -56,7 +58,7 @@ public class ControllerRoutineDB {
         routineReference.collection("activities").get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot documentSnap : task.getResult()) {
+                        for (QueryDocumentSnapshot documentSnap : Objects.requireNonNull(task.getResult())) {
                             DocumentReference docRefToActivity = documentSnap.getReference();
                             docRefToActivity.delete();
                         }
