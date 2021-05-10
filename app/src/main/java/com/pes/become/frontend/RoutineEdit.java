@@ -102,7 +102,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         translateSeeingDay();
         setDay();
 
-        getActivitiesList();
+        updateActivitiesList();
 
         TextView addActivity = view.findViewById(R.id.addActivity);
         addActivity.setOnClickListener(v -> createActivitySheet(false));
@@ -452,27 +452,6 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
             this.startTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
             this.endTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
         } catch (NoSelectedRoutineException ignore) { }
-    }
-
-    /**
-     * Funcio per obtenir la llista d'activitats
-     */
-    private void getActivitiesList() {
-        try {
-            DA.getActivitiesByDay(getWeekDay(seeingDay));
-        } catch (NoSelectedRoutineException e) {
-            initEmptyView(getString(R.string.noRoutineSelected));
-        }
-    }
-
-    /**
-     * Funcio per obtenir la llista d'activitats callback
-     * @param activitiesList llista d'activitats
-     */
-    public void getActivitiesListCallback(ArrayList<ArrayList<String>> activitiesList) {
-        this.activitiesList = activitiesList;
-        initRecyclerView();
-        if (activitiesList.isEmpty()) initEmptyView(getString(R.string.noActivities));
     }
 
     /**

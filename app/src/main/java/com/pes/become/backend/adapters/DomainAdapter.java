@@ -2,7 +2,6 @@ package com.pes.become.backend.adapters;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.util.Log;
 
 import com.pes.become.backend.domain.Achievement;
 import com.pes.become.backend.domain.AchievementController;
@@ -412,7 +411,7 @@ public class DomainAdapter {
             routineAdapter.clearActivities();
             Class[] parameterTypes = new Class[2];
             parameterTypes[0] = HashMap.class;
-            parameterTypes[1] = Boolean.class;
+            parameterTypes[1] = boolean.class;
             Method method = DomainAdapter.class.getMethod("loadSelectedRoutineCallback", parameterTypes);
             controllerPersistence.getActivitiesRoutine(currentUser.getID(), currentUser.getSelectedRoutine().getId(), method, DomainAdapter.getInstance(), login);
         } catch (NoSuchMethodException e) {
@@ -426,7 +425,6 @@ public class DomainAdapter {
      * @throws InvalidTimeIntervalException si l'interval de temps no és valid
      */
     public void loadSelectedRoutineCallback(HashMap<String, ArrayList<ArrayList<String>>> activitiesList, boolean login) throws InvalidTimeIntervalException {
-        Log.d("loadCallback", "loadSelectedRoutineCallback");
         for (HashMap.Entry<String, ArrayList<ArrayList<String>>> dayActivities : activitiesList.entrySet()) {
             ArrayList<ArrayList<String>> activities = dayActivities.getValue();
             if (!activities.isEmpty()) {
@@ -446,7 +444,6 @@ public class DomainAdapter {
             }
         }
         if (login) {
-            Log.d("login", "return");
             if (this.login != null) this.login.loginCallback();
             else if (this.logoScreen != null) this.logoScreen.loginCallback();
         }

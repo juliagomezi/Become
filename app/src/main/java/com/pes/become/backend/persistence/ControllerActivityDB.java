@@ -1,7 +1,5 @@
 package com.pes.become.backend.persistence;
 
-import android.util.Log;
-
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -37,64 +35,63 @@ public class ControllerActivityDB {
      * @param object classe que conté el mètode
      */
     public void getActivities(String userId, String idRoutine, Method method, Object object, boolean login) {
-        Log.d("DB", "DB");
-        db.collection("users").document(userId).collection("routines").document(idRoutine).collection("activities").addSnapshotListener((value, e) -> {
-            if (e != null) {
-                return;
-            }
-            HashMap <String, ArrayList<ArrayList<String>> > routineActivities = new HashMap<>();
-            ArrayList<ArrayList<String>> activitiesMonday = new ArrayList<ArrayList<String>>();
-            ArrayList<ArrayList<String>> activitiesTuesday = new ArrayList<ArrayList<String>>();
-            ArrayList<ArrayList<String>> activitiesWednesday = new ArrayList<ArrayList<String>>();
-            ArrayList<ArrayList<String>> activitiesThursday = new ArrayList<ArrayList<String>>();
-            ArrayList<ArrayList<String>> activitiesFriday = new ArrayList<ArrayList<String>>();
-            ArrayList<ArrayList<String>> activitiesSaturday = new ArrayList<ArrayList<String>>();
-            ArrayList<ArrayList<String>> activitiesSunday = new ArrayList<ArrayList<String>>();
-
-
-            for (QueryDocumentSnapshot document : value) {
-                ArrayList<String> activity = new ArrayList<>();
-                activity.add(document.getId());
-                activity.add(document.get("name").toString());
-                activity.add(document.get("description").toString());
-                activity.add(document.get("theme").toString());
-                String activityDay = document.get("day").toString();
-                activity.add(activityDay);
-                activity.add(document.get("beginTime").toString());
-                activity.add(document.get("finishTime").toString());
-                //activity.add(document.get("lastDayDone").toString());
-
-                //ArrayList<ArrayList<String>> aux = routineActivities.get(activityDay);
-                //aux.add(activity);
-                //routineActivities.put(activityDay,aux);
-
-                if (activityDay.equals("Monday")) { activitiesMonday.add(activity); }
-                else if (activityDay.equals("Tuesday")) { activitiesTuesday.add(activity); }
-                else if (activityDay.equals("Wednesday")) { activitiesWednesday.add(activity); }
-                else if (activityDay.equals("Thursday")) { activitiesThursday.add(activity); }
-                else if (activityDay.equals("Friday")) { activitiesFriday.add(activity); }
-                else if (activityDay.equals("Saturday")) { activitiesSaturday.add(activity); }
-                else { activitiesSunday.add(activity); }
-
-
-            }
-            routineActivities.put("Monday",activitiesMonday);
-            routineActivities.put("Tuesday",activitiesTuesday);
-            routineActivities.put("Wednesday",activitiesWednesday);
-            routineActivities.put("Thursday",activitiesThursday);
-            routineActivities.put("Friday",activitiesFriday);
-            routineActivities.put("Saturday",activitiesSaturday);
-            routineActivities.put("Sunday",activitiesSunday);
-
+        db.collection("users").document(userId).collection("routines").document(idRoutine).collection("activities").get().addOnCompleteListener(task -> {
             Object[] params = new Object[2];
-            params[0] = routineActivities;
             params[1] = login;
-            try {
-                method.invoke(object, params);
-            } catch (IllegalAccessException e2) {
-                e2.printStackTrace();
-            } catch (InvocationTargetException e1) {
-                e1.printStackTrace();
+            HashMap<String, ArrayList<ArrayList<String>>> routineActivities = new HashMap<>();
+            routineActivities.put("Monday",  new ArrayList<>());
+            routineActivities.put("Tuesday",  new ArrayList<>());
+            routineActivities.put("Wednesday",  new ArrayList<>());
+            routineActivities.put("Thursday",  new ArrayList<>());
+            routineActivities.put("Friday",  new ArrayList<>());
+            routineActivities.put("Saturday",  new ArrayList<>());
+            routineActivities.put("Sunday",  new ArrayList<>());
+
+            if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    ArrayList<String> activity = new ArrayList<>();
+                    activity.add(document.getId());
+                    activity.add(document.get("name").toString());
+                    activity.add(document.get("description").toString());
+                    activity.add(document.get("theme").toString());
+                    String activityDay = document.get("day").toString();
+                    activity.add(activityDay);
+                    activity.add(document.get("beginTime").toString());
+                    activity.add(document.get("finishTime").toString());
+                    //activity.add(document.get("lastDayDone").toString());
+
+                    //ArrayList<ArrayList<String>> aux = routineActivities.get(activityDay);
+                    //aux.add(activity);
+                    //routineActivities.put(activityDay,aux);
+                    switch (activityDay) {
+                        case "Monday":
+                            routineActivities.get("Monday").add(activity);
+                            break;
+                        case "Tuesday":
+                            routineActivities.get("Tuesday").add(activity);
+                            break;
+                        case "Wednesday":
+                            routineActivities.get("Wednesday").add(activity);
+                            break;
+                        case "Thursday":
+                            routineActivities.get("Thursday").add(activity);
+                            break;
+                        case "Friday":
+                            routineActivities.get("Friday").add(activity);
+                            break;
+                        case "Saturday":
+                            routineActivities.get("Saturday").add(activity);
+                            break;
+                        case "Sunday":
+                            routineActivities.get("Sunday").add(activity);
+                            break;
+                    }
+                }
+                params[0] = routineActivities;
+                try {
+                    method.invoke(object, params);
+                } catch (IllegalAccessException ignore) {
+                } catch (InvocationTargetException ignore) { }
             }
         });
     }
