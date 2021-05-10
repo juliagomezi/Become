@@ -191,13 +191,13 @@ public class Stats extends Fragment {
         ArrayList<Double> hoursTheme = DA.getHoursByTheme();
 
         musicHour.setText(formatHoursMinutes(hoursTheme.get(0)));
-        sportHour.setText(String.format("%.2f", (float)(double)hoursTheme.get(1)) +"h");
-        sleepHour.setText(String.format("%.2f", (float)(double)hoursTheme.get(2)) +"h");
-        cookingHour.setText(String.format("%.2f", (float)(double)hoursTheme.get(3)) +"h");
+        sportHour.setText(formatHoursMinutes(hoursTheme.get(1)));
+        sleepHour.setText(formatHoursMinutes(hoursTheme.get(2)));
+        cookingHour.setText(formatHoursMinutes(hoursTheme.get(3)));
         workingHour.setText(formatHoursMinutes(hoursTheme.get(4)));
         entertainmentHour.setText(formatHoursMinutes(hoursTheme.get(5)));
-        plantsHour.setText(String.format("%.2f", (float)(double)hoursTheme.get(6)) +"h");
-        otherHour.setText(String.format("%.2f", (float)(double)hoursTheme.get(7)) +"h");
+        plantsHour.setText(formatHoursMinutes(hoursTheme.get(6)));
+        otherHour.setText(formatHoursMinutes(hoursTheme.get(7)));
     }
 
     private void setChart() {
