@@ -2,12 +2,10 @@ package com.pes.become.backend.persistence;
 
 import android.util.Log;
 
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 
@@ -16,12 +14,9 @@ import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TimeZone;
 
 public class ControllerCalendarDB {
 
@@ -70,7 +65,7 @@ public class ControllerCalendarDB {
     public void updateDay(String userId, Date day, int activitiesDone, String idRoutine){
         DocumentReference docRefToRoutine = db.collection("users").document(userId).collection("calendar").document(StringDateConverter.dateToString(day));
         if(activitiesDone >= 0)docRefToRoutine.update("numActivitiesDone", activitiesDone);
-        if(idRoutine != null && idRoutine != "")docRefToRoutine.update("idRoutine", idRoutine);
+        if(idRoutine != null && !idRoutine.equals(""))docRefToRoutine.update("idRoutine", idRoutine);
     }
     /**
      * Actualitza la informació d'un dia
@@ -140,10 +135,10 @@ public class ControllerCalendarDB {
             Object[] params = new Object[2];
             params[0] = task.isSuccessful();
             if (task.isSuccessful()) {
-                ArrayList<HashMap<String,String>> list = new  ArrayList<HashMap<String,String>>();
+                ArrayList<HashMap<String,String>> list = new  ArrayList<>();
                 QuerySnapshot documents = task.getResult();
                 for(DocumentSnapshot document: documents) {
-                    HashMap<String, String> hashAux = new HashMap<String, String>();
+                    HashMap<String, String> hashAux = new HashMap<>();
                     hashAux.put("day", document.get("day").toString());
                     hashAux.put("month", document.get("month").toString());
                     hashAux.put("year", document.get("year").toString());

@@ -1,12 +1,7 @@
 package com.pes.become.frontend;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.RectF;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,8 +25,6 @@ import com.pes.become.backend.exceptions.NoSelectedRoutineException;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-
-import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
 public class RoutineView extends Fragment implements AdapterView.OnItemSelectedListener{
 
@@ -193,6 +186,17 @@ public class RoutineView extends Fragment implements AdapterView.OnItemSelectedL
     /**
      * Funcio per obtenir la llista d'activitats
      */
+    private void getActivitiesList() {
+        try {
+            DA.getActivitiesByDay(getWeekDay(seeingDay));
+        } catch (NoSelectedRoutineException e) {
+            initEmptyView(getString(R.string.noRoutineSelected));
+        }
+    }
+
+    /**
+     * Funcio per actualitzar la llista d'activitats
+     */
     private void updateActivitiesList() {
         try {
             activitiesList = DA.getActivitiesByDay(getWeekDay(seeingDay));
@@ -256,7 +260,7 @@ public class RoutineView extends Fragment implements AdapterView.OnItemSelectedL
 
         @Override
         public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-            new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+            /*new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
                     .addSwipeLeftBackgroundColor(ContextCompat.getColor(global, R.color.green25))
                     .addSwipeLeftLabel("DONE")
                     .addSwipeRightBackgroundColor(ContextCompat.getColor(global, R.color.softred))

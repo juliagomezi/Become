@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -101,6 +102,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         seeingDay = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
         translateSeeingDay();
         setDay();
+
         updateActivitiesList();
 
         TextView addActivity = view.findViewById(R.id.addActivity);
@@ -454,16 +456,18 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
     }
 
     /**
-     * Funcio per obtenir la llista d'activitats
+     * Funcio per actualitzar la llista d'activitats
      */
     public void updateActivitiesList() {
         try {
             activitiesList = DA.getActivitiesByDay(getWeekDay(seeingDay));
             initRecyclerView();
-            if (activitiesList.isEmpty()) initEmptyView(getString(R.string.noActivities));
+            if (activitiesList.isEmpty()) {
+                Log.d("updateActivitiesList","updateActivitiesList");
+                initEmptyView(getString(R.string.noActivities));
+            }
         } catch (NoSelectedRoutineException e) {
             initEmptyView(getString(R.string.noRoutineSelected));
         }
-        routineEditRecyclerAdapter.notifyDataSetChanged();
     }
 }

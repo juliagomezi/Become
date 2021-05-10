@@ -30,27 +30,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <ImageButton
-                    android:id="@+id/trophyIcon"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginRight="20dp"
-                    android:background="?selectableItemBackgroundBorderless"
-                    android:clickable="false"
-                    android:tint="@color/softblack"
-                    app:iconTint="@color/softblack"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.491"
-                    app:srcCompat="@drawable/ic_trophy"
-                    tools:ignore="VectorDrawableCompat" />
-
                 <TextView
                     android:id="@+id/trophyName"
                     android:layout_width="800px"
@@ -88,6 +67,48 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/trophyName"
                     app:layout_constraintVertical_bias="0.371" />
+
+                <ImageButton
+                    android:id="@+id/trophyWonIcon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginRight="20dp"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:clickable="false"
+                    android:tint="@color/gold75"
+                    app:iconTint="@color/gold75"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.491"
+                    app:srcCompat="@drawable/ic_trophy"
+                    tools:ignore="VectorDrawableCompat" />
+
+                <ImageButton
+                    android:id="@+id/trophyNotWonIcon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginRight="20dp"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:clickable="false"
+                    android:tint="@color/softblack"
+                    app:iconTint="@color/softblack"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.491"
+                    app:srcCompat="@drawable/ic_trophy_blocked"
+                    tools:ignore="VectorDrawableCompat" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

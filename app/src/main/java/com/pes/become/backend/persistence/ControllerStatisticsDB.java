@@ -1,7 +1,5 @@
 package com.pes.become.backend.persistence;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -10,12 +8,9 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import org.w3c.dom.Document;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.Map;
 
 public class ControllerStatisticsDB {
 
@@ -34,8 +29,6 @@ public class ControllerStatisticsDB {
         differentDays = new String[]{"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
         numberOfThemes = 8;
     }
-
-    /********************************CONSULTORES DE STATISTICS*************************************/
 
     /**
      * Funcio que retorna les estadistiques de tots els temes d'una rutina
@@ -110,9 +103,6 @@ public class ControllerStatisticsDB {
             }
         });
     }
-
-
-    /********************************MODIFICADORES DE STATISTICS***********************************/
 
     /**
      * Afegeix les estadistiques d'una nova activitat al conjunt d'estadistiques-----AQUESTA SI QUE FUNCIONAAAAAAAAAAAAAAAAAAAAAAAAA
@@ -198,11 +188,15 @@ public class ControllerStatisticsDB {
 
     }
 
+    /**
+     *
+     * @param userId
+     * @param idRoutine
+     */
     public void deleteRoutineStatistics(String userId, String idRoutine){
         DocumentReference docRefToRoutineStatistics = db.collection("users").document(userId).collection("statistics").document(idRoutine);
         docRefToRoutineStatistics.delete();
     }
-
 
     /**
      * Funcio per actualitzar les estadistiques d'una rutina quan s'ha modificat una de les seves activitats
@@ -220,11 +214,8 @@ public class ControllerStatisticsDB {
     public void updateDedicatedTimeActivity(String userId, String idRoutine, String newDay, String newTheme,  String newBeginTime,
                                             String newFinishTime, String oldDay, String oldTheme,  String oldBeginTime, String oldFinishTime) {
 
-
         DocumentReference docRefToStatistics = db.collection("users").document(userId).
                 collection("statistics").document(idRoutine);
-
-
 
         docRefToStatistics.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -266,13 +257,14 @@ public class ControllerStatisticsDB {
                 }
             }
         });
-
-
-
-
     }
 
-    /*************************************FUNCIONS PRIVADES****************************************/
+    /**
+     *
+     * @param beginTime
+     * @param finishTime
+     * @return
+     */
     private double timeDifference(String beginTime, String finishTime) {
         //return finishTime-beginTime
         double beginHour = Double.parseDouble(beginTime.substring(0,2));

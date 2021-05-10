@@ -1,7 +1,6 @@
 package com.pes.become.backend.persistence;
 
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -27,8 +26,6 @@ public class ControllerActivityDB {
         db = FirebaseFirestore.getInstance();
     }
 
-    /*****************************************CONSULTORES******************************************/
-
     /**
      * Obtenir les activitats d'una rutina
      * @param userId identificador de l'usuari
@@ -37,99 +34,63 @@ public class ControllerActivityDB {
      * @param object classe que conté el mètode
      */
     public void getActivities(String userId, String idRoutine, Method method, Object object) {
-        db.collection("users").document(userId).collection("routines").document(idRoutine).collection("activities").addSnapshotListener((value, e) -> {
-            if (e != null) {
-                return;
-            }
-            HashMap <String, ArrayList<ArrayList<String>> > routineActivities = new HashMap<>();
-            ArrayList<ArrayList<String>> activitiesMonday = new ArrayList<ArrayList<String>>();
-            ArrayList<ArrayList<String>> activitiesTuesday = new ArrayList<ArrayList<String>>();
-            ArrayList<ArrayList<String>> activitiesWednesday = new ArrayList<ArrayList<String>>();
-            ArrayList<ArrayList<String>> activitiesThursday = new ArrayList<ArrayList<String>>();
-            ArrayList<ArrayList<String>> activitiesFriday = new ArrayList<ArrayList<String>>();
-            ArrayList<ArrayList<String>> activitiesSaturday = new ArrayList<ArrayList<String>>();
-            ArrayList<ArrayList<String>> activitiesSunday = new ArrayList<ArrayList<String>>();
+        db.collection("users").document(userId).collection("routines").document(idRoutine).collection("activities").get().addOnCompleteListener(task -> {
+            HashMap<String, ArrayList<ArrayList<String>>> routineActivities = new HashMap<>();
+            routineActivities.put("Monday",  new ArrayList<>());
+            routineActivities.put("Tuesday",  new ArrayList<>());
+            routineActivities.put("Wednesday",  new ArrayList<>());
+            routineActivities.put("Thursday",  new ArrayList<>());
+            routineActivities.put("Friday",  new ArrayList<>());
+            routineActivities.put("Saturday",  new ArrayList<>());
+            routineActivities.put("Sunday",  new ArrayList<>());
 
+            if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    ArrayList<String> activity = new ArrayList<>();
+                    activity.add(document.getId());
+                    activity.add(document.get("name").toString());
+                    activity.add(document.get("description").toString());
+                    activity.add(document.get("theme").toString());
+                    String activityDay = document.get("day").toString();
+                    activity.add(activityDay);
+                    activity.add(document.get("beginTime").toString());
+                    activity.add(document.get("finishTime").toString());
+                    //activity.add(document.get("lastDayDone").toString());
 
-            for (QueryDocumentSnapshot document : value) {
-                ArrayList<String> activity = new ArrayList<>();
-                activity.add(document.getId());
-                activity.add(document.get("name").toString());
-                activity.add(document.get("description").toString());
-                activity.add(document.get("theme").toString());
-                String activityDay = document.get("day").toString();
-                activity.add(activityDay);
-                activity.add(document.get("beginTime").toString());
-                activity.add(document.get("finishTime").toString());
-                activity.add(document.get("lastDayDone").toString());
-
-                //ArrayList<ArrayList<String>> aux = routineActivities.get(activityDay);
-                //aux.add(activity);
-                //routineActivities.put(activityDay,aux);
-
-                if (activityDay.equals("Monday")) { activitiesMonday.add(activity); }
-                else if (activityDay.equals("Tuesday")) { activitiesTuesday.add(activity); }
-                else if (activityDay.equals("Wednesday")) { activitiesWednesday.add(activity); }
-                else if (activityDay.equals("Thursday")) { activitiesThursday.add(activity); }
-                else if (activityDay.equals("Friday")) { activitiesFriday.add(activity); }
-                else if (activityDay.equals("Saturday")) { activitiesSaturday.add(activity); }
-                else { activitiesSunday.add(activity); }
-
-
-            }
-            routineActivities.put("Monday",activitiesMonday);
-            routineActivities.put("Tuesday",activitiesTuesday);
-            routineActivities.put("Wednesday",activitiesWednesday);
-            routineActivities.put("Thursday",activitiesThursday);
-            routineActivities.put("Friday",activitiesFriday);
-            routineActivities.put("Saturday",activitiesSaturday);
-            routineActivities.put("Sunday",activitiesSunday);
-
-
-            try {
-                method.invoke(object, routineActivities);
-            } catch (IllegalAccessException ignore) {
-            } catch (InvocationTargetException ignore) {
-            }
-        });
-    }
-
-    /**
-     * Obtenir les activitats d'una rutina i un dia indicats
-     * @param userId identificador de l'usuari
-     * @param idRoutine l'identificador de la rutina
-     * @param day dia a consultar
-     * @param method metode a cridar quan es retornin les dades
-     * @param object classe que conté el mètode
-     */
-    public void getActivitiesByDay(String userId, String idRoutine, String day, Method method, Object object) {
-        db.collection("users").document(userId).collection("routines").document(idRoutine).collection("activities").whereEqualTo("day", day).addSnapshotListener((value, e) -> {
-            if (e != null) {
-                return;
-            }
-
-            ArrayList<ArrayList<String>> activitiesResult = new ArrayList<>();
-            for (QueryDocumentSnapshot document : value) {
-                ArrayList<String> activity = new ArrayList<>();
-                activity.add(document.getId());
-                activity.add(document.get("name").toString());
-                activity.add(document.get("description").toString());
-                activity.add(document.get("theme").toString());
-                activity.add(document.get("day").toString());
-                activity.add(document.get("beginTime").toString());
-                activity.add(document.get("finishTime").toString());
-                activity.add(document.get("lastDayDone").toString());
-                activitiesResult.add(activity);
-            }
-            try {
-                method.invoke(object, activitiesResult);
-            } catch (IllegalAccessException ignore) {
-            } catch (InvocationTargetException ignore) {
+                    //ArrayList<ArrayList<String>> aux = routineActivities.get(activityDay);
+                    //aux.add(activity);
+                    //routineActivities.put(activityDay,aux);
+                    switch (activityDay) {
+                        case "Monday":
+                            routineActivities.get("Monday").add(activity);
+                            break;
+                        case "Tuesday":
+                            routineActivities.get("Tuesday").add(activity);
+                            break;
+                        case "Wednesday":
+                            routineActivities.get("Wednesday").add(activity);
+                            break;
+                        case "Thursday":
+                            routineActivities.get("Thursday").add(activity);
+                            break;
+                        case "Friday":
+                            routineActivities.get("Friday").add(activity);
+                            break;
+                        case "Saturday":
+                            routineActivities.get("Saturday").add(activity);
+                            break;
+                        case "Sunday":
+                            routineActivities.get("Sunday").add(activity);
+                            break;
+                    }
+                }
+                try {
+                    method.invoke(object, routineActivities);
+                } catch (IllegalAccessException ignore) {
+                } catch (InvocationTargetException ignore) { }
             }
         });
     }
-
-    /*****************************************MODIFICADORES****************************************/
 
     /**
      * Crear una activitat en una rutina existent
@@ -185,7 +146,6 @@ public class ControllerActivityDB {
      * @param iniT es l'hora d'inici de l'activitat
      * @param endT es l'hora d'acabament de l'activitat
      * @param idActivity és l'identificador de l'activitat
-     * @param lastDayDone és l'últim dia que l'usuari ha marcat la rutina com a feta en format de data Standard del firebase, hauria d'exsistir al calendari de l'usuari de la base de dades un document del dia
      */
     public void updateActivity(String userId, String idRoutine, String actName, String description, String theme, String day, String iniT, String endT, String idActivity, String lastDayDone) {
         DocumentReference docRefToActivity = db.collection("users").document(userId).collection("routines").document(idRoutine).collection("activities").document(idActivity);
@@ -202,10 +162,8 @@ public class ControllerActivityDB {
                     ControllerCalendarDB cal = new ControllerCalendarDB();
                     cal.incrementDay(userId, lastDayDone, 1);
                 }
-                else {
-                }
             });
         }
     }
-//    public void markActivity
+
 }

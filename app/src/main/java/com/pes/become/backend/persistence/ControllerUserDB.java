@@ -71,20 +71,17 @@ public class ControllerUserDB {
                 .addOnCompleteListener(task -> {
                     if(task.isSuccessful()) {
                         user.updatePassword(newPassword)
-                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful()) {
-                                            try {
-                                                method.invoke(object, true);
-                                            } catch (IllegalAccessException ignore) {
-                                            } catch (InvocationTargetException ignore) {}
-                                        } else {
-                                            try {
-                                                method.invoke(object, false);
-                                            } catch (IllegalAccessException ignore) {
-                                            } catch (InvocationTargetException ignore) {}
-                                        }
+                                .addOnCompleteListener(task1 -> {
+                                    if (task1.isSuccessful()) {
+                                        try {
+                                            method.invoke(object, true);
+                                        } catch (IllegalAccessException ignore) {
+                                        } catch (InvocationTargetException ignore) {}
+                                    } else {
+                                        try {
+                                            method.invoke(object, false);
+                                        } catch (IllegalAccessException ignore) {
+                                        } catch (InvocationTargetException ignore) {}
                                     }
                                 });
                     } else {
@@ -505,7 +502,7 @@ public class ControllerUserDB {
                                                     docRefToRoutineStatistics.get().addOnCompleteListener(task23 -> {
                                                         if (task23.isSuccessful()) {
                                                             DocumentSnapshot document = task23.getResult();
-                                                            if (document.exists()) {
+                                                            if(document.exists()) {
                                                                 String[] differentThemes = {"Music", "Sport", "Sleeping", "Cooking", "Working", "Entertainment", "Plants", "Other"};
                                                                 HashMap<String, HashMap<String, Double>> mapThemes = new HashMap<>();
                                                                 for (int i = 0; i < 8; ++i) {
@@ -743,8 +740,6 @@ public class ControllerUserDB {
         return mAuth.getCurrentUser().getProviderId();
     }
 
-    /**************************************FUNCIONS PRIVADES***************************************/
-
     /**
      * Esborra totes les dades de la BD de l'usuari (rutines i activitats)
      * @param docRefToUser es el document de l'usuari que conte totes les altres subcol·leccions
@@ -776,8 +771,6 @@ public class ControllerUserDB {
                     }
                 });
         docRefToUser.delete();
-
-
     }
 
     /**
@@ -796,8 +789,6 @@ public class ControllerUserDB {
                     docRefToRoutine.delete();
                 });
     }
-
-
 
     /**
      * Metode per recuperar la contrasenya d'un usuari
