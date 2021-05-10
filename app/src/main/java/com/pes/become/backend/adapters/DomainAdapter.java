@@ -21,6 +21,7 @@ import com.pes.become.backend.persistence.ControllerPersistence;
 import com.pes.become.frontend.ForgotPassword;
 import com.pes.become.frontend.LogoScreen;
 import com.pes.become.frontend.Login;
+import com.pes.become.frontend.MainActivity;
 import com.pes.become.frontend.Profile;
 import com.pes.become.frontend.Signup;
 
@@ -78,6 +79,10 @@ public class DomainAdapter {
      * Instancia de la classe profile del frontend
      */
     private Profile profile;
+    /**
+     * Indica si l'usuari ha seleccionat directament una rutina o s'ha seleccionat des del codi pel correcte funcionament de l'aplicacio
+     */
+    private boolean selectingRoutine;
 
     /**
      * Obtenir la instancia de la classe
@@ -199,7 +204,8 @@ public class DomainAdapter {
                     break;
                 }
             }
-            if(!selectedRoutineId.equals("")) selectRoutine(routine);
+            if(!selectedRoutineId.equals("")) selectRoutine(routine, false);
+            else login.loginCallback();
 
             if(stats != null) {
                 Map<Theme,Map<Day, Double>> statistics = new TreeMap<>();
@@ -217,8 +223,6 @@ public class DomainAdapter {
             }
 
             achievementController.setCurrentUser(currentUser);
-
-            login.loginCallback();
         }
         else {
             login.loginCallbackFailed();
@@ -246,7 +250,8 @@ public class DomainAdapter {
                     break;
                 }
             }
-            if(!selectedRoutineId.equals("")) selectRoutine(routine);
+            if (!selectedRoutineId.equals("")) selectRoutine(routine, false);
+            else logoScreen.loginCallback();
 
             if(stats != null) {
                 Map<Theme,Map<Day, Double>> statistics = new TreeMap<>();
@@ -264,8 +269,6 @@ public class DomainAdapter {
             }
 
             achievementController.setCurrentUser(currentUser);
-
-            logoScreen.loginCallback();
         }
         else {
             logoScreen.loginCallbackFailed();
@@ -410,8 +413,10 @@ public class DomainAdapter {
     /**
      * Metode per seleccionar una rutina ja existent
      * @param infoRoutine llista amb la informacio de la rutina a seleccionar
+     * @param selecting true si la rutina esta sent seleccionada directament per l'usuari, false altrament
      */
-    public void selectRoutine(ArrayList<String> infoRoutine) {
+    public void selectRoutine(ArrayList<String> infoRoutine, boolean selecting) {
+        selectingRoutine = selecting;
         if(infoRoutine!=null) {
             Routine routine = routineAdapter.createRoutine(infoRoutine.get(1));
             routine.setId(infoRoutine.get(0));
@@ -433,38 +438,48 @@ public class DomainAdapter {
     public void loadSelectedRoutine() {
         try {
             routineAdapter.clearActivities();
-            Class[] parameterTypes = new Class[1];
-            parameterTypes[0] = HashMap.class;
-            Method method = DomainAdapter.class.getMethod("loadSelectedRoutineCallback", parameterTypes);
-            /*for(int d = 0; d < 7; ++d) {
-                controllerPersistence.getActivitiesByDay(currentUser.getID(), currentUser.getSelectedRoutine().getId(), Day.values()[d].toString(), method, DomainAdapter.getInstance());
-            }*/
-            controllerPersistence.getActivitiesRoutine(currentUser.getID(),currentUser.getSelectedRoutine().getId(),method,DomainAdapter.getInstance());
-        } catch (NoSuchMethodException ignore) {
+            Method method = DomainAdapter.class.getMethod("loadSelectedRoutineCallback", HashMap.class);
+            controllerPersistence.getActivitiesRoutine(currentUser.getID(), currentUser.getSelectedRoutine().getId(), method, DomainAdapter.getInstance());
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
         }
     }
 
     /**
      * Metode per rebre les activitats de la rutina seleccionada
-     * @param activities activitats de la rutina
+     * @param activitiesList activitats de la rutina
      * @throws InvalidTimeIntervalException si l'interval de temps no és valid
      */
-    public void loadSelectedRoutineCallback(HashMap<String, ArrayList<ArrayList<String>>> activities) throws InvalidTimeIntervalException {
-        if(!activities.isEmpty()) {
-            for(Map.Entry<String, ArrayList<ArrayList<String>>> act : activities.entrySet()) {
+    public void loadSelectedRoutineCallback(HashMap<String, ArrayList<ArrayList<String>>> activitiesList) throws InvalidTimeIntervalException {
+        for (HashMap.Entry<String, ArrayList<ArrayList<String>>> dayActivities : activitiesList.entrySet()) {
+            ArrayList<ArrayList<String>> activities = dayActivities.getValue();
+            if (!activities.isEmpty()) {
                 ArrayList<Activity> acts = new ArrayList<>();
-                for (int i = 0; i < act.getValue().size(); ++i) {
-                    String[] s = act.getValue().get(i).get(5).split(":");
-                    String[] s2 = act.getValue().get(i).get(6).split(":");
+                for (int i = 0; i < activities.size(); ++i) {
+                    String[] s = activities.get(i).get(5).split(":");
+                    String[] s2 = activities.get(i).get(6).split(":");
                     int iniH = Integer.parseInt(s[0]);
                     int iniM = Integer.parseInt(s[1]);
                     int endH = Integer.parseInt(s2[0]);
                     int endM = Integer.parseInt(s2[1]);
-                    Activity activity = new Activity(act.getValue().get(i).get(1), act.getValue().get(i).get(2), Theme.valueOf(act.getValue().get(i).get(3)), new TimeInterval(iniH, iniM, endH, endM), Day.valueOf(act.getValue().get(i).get(4)));
-                    activity.setId(act.getValue().get(i).get(0));
+                    Activity activity = new Activity(activities.get(i).get(1), activities.get(i).get(2), Theme.valueOf(activities.get(i).get(3)), new TimeInterval(iniH, iniM, endH, endM), Day.valueOf(activities.get(i).get(4)));
+                    activity.setId(activities.get(i).get(0));
                     acts.add(activity);
                 }
-                routineAdapter.setActivitiesByDay(acts, Day.valueOf(act.getKey()));
+                routineAdapter.setActivitiesByDay(acts, acts.get(0).getDay());
+            }
+        }
+
+        if (!selectingRoutine) {
+            if (login != null) {
+                login.loginCallback();
+                login = null;
+            }
+            else if (logoScreen != null) {
+                logoScreen.loginCallback();
+                logoScreen = null;
+            } else {
+                MainActivity.getInstance().setEditRoutineScreen(currentUser.getSelectedRoutine().getId(),currentUser.getSelectedRoutine().getName());
             }
         }
     }
@@ -683,7 +698,6 @@ public class DomainAdapter {
      * Metode per recuperar la contrasenya d'un usuari
      * @param mail mail del compte a recuperar
      * @param act instància de l'activitat que solicita la recuperació de contrasenya
-     * @return true si el mail pertany a un usuari registrat i es pot enviar el correu, false altrament
      */
     public void sendPassResetEmail(String mail, android.app.Activity act) {
         forgotPass = (ForgotPassword)act;
