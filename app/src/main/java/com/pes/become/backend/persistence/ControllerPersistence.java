@@ -27,8 +27,8 @@ public class ControllerPersistence {
      * @param method metode a cridar quan es retornin les dades
      * @param object classe que conté el mètode
      */
-    public void getActivitiesRoutine(String userId, String idRoutine, Method method, Object object, boolean login) {
-        CA.getActivities(userId, idRoutine, method, object, login);
+    public void getActivitiesRoutine(String userId, String idRoutine, Method method, Object object) {
+        CA.getActivities(userId, idRoutine, method, object);
     }
 
     /**

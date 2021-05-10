@@ -34,10 +34,8 @@ public class ControllerActivityDB {
      * @param method metode a cridar quan es retornin les dades
      * @param object classe que conté el mètode
      */
-    public void getActivities(String userId, String idRoutine, Method method, Object object, boolean login) {
+    public void getActivities(String userId, String idRoutine, Method method, Object object) {
         db.collection("users").document(userId).collection("routines").document(idRoutine).collection("activities").get().addOnCompleteListener(task -> {
-            Object[] params = new Object[2];
-            params[1] = login;
             HashMap<String, ArrayList<ArrayList<String>>> routineActivities = new HashMap<>();
             routineActivities.put("Monday",  new ArrayList<>());
             routineActivities.put("Tuesday",  new ArrayList<>());
@@ -87,9 +85,8 @@ public class ControllerActivityDB {
                             break;
                     }
                 }
-                params[0] = routineActivities;
                 try {
-                    method.invoke(object, params);
+                    method.invoke(object, routineActivities);
                 } catch (IllegalAccessException ignore) {
                 } catch (InvocationTargetException ignore) { }
             }

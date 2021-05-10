@@ -20,6 +20,7 @@ import com.pes.become.backend.persistence.ControllerPersistence;
 import com.pes.become.frontend.ForgotPassword;
 import com.pes.become.frontend.LogoScreen;
 import com.pes.become.frontend.Login;
+import com.pes.become.frontend.MainActivity;
 import com.pes.become.frontend.Profile;
 import com.pes.become.frontend.Signup;
 
@@ -77,6 +78,10 @@ public class DomainAdapter {
      * Instancia de la classe profile del frontend
      */
     private Profile profile;
+    /**
+     * Indica si l'usuari ha seleccionat directament una rutina o s'ha seleccionat des del codi pel correcte funcionament de l'aplicacio
+     */
+    private boolean selectingRoutine;
 
     /**
      * Obtenir la instancia de la classe
@@ -195,7 +200,7 @@ public class DomainAdapter {
                     break;
                 }
             }
-            if(!selectedRoutineId.equals("")) selectRoutine(routine, true);
+            if(!selectedRoutineId.equals("")) selectRoutine(routine, false);
             else login.loginCallback();
 
             //inici stats hardcoded
@@ -238,7 +243,7 @@ public class DomainAdapter {
                     break;
                 }
             }
-            if (!selectedRoutineId.equals("")) selectRoutine(routine, true);
+            if (!selectedRoutineId.equals("")) selectRoutine(routine, false);
             else logoScreen.loginCallback();
 
             achievementController.setCurrentUser(currentUser);
@@ -386,16 +391,17 @@ public class DomainAdapter {
     /**
      * Metode per seleccionar una rutina ja existent
      * @param infoRoutine llista amb la informacio de la rutina a seleccionar
-     * @param login bolea que indica si s'esta seleccionant des de login o no
+     * @param selecting true si la rutina esta sent seleccionada directament per l'usuari, false altrament
      */
-    public void selectRoutine(ArrayList<String> infoRoutine, boolean login) {
+    public void selectRoutine(ArrayList<String> infoRoutine, boolean selecting) {
+        selectingRoutine = selecting;
         if(infoRoutine!=null) {
             Routine routine = routineAdapter.createRoutine(infoRoutine.get(1));
             routine.setId(infoRoutine.get(0));
             currentUser.setSelectedRoutine(routine);
             routineAdapter.setCurrentRoutine(currentUser.getSelectedRoutine());
             controllerPersistence.setSelectedRoutine(currentUser.getID(), currentUser.getSelectedRoutine().getId());
-            loadSelectedRoutine(login);
+            loadSelectedRoutine();
         } else {
             routineAdapter.setCurrentRoutine(null);
             currentUser.setSelectedRoutine(null);
@@ -406,14 +412,11 @@ public class DomainAdapter {
     /**
      * Metode per carregar la rutina seleccionada
      */
-    public void loadSelectedRoutine(boolean login) {
+    public void loadSelectedRoutine() {
         try {
             routineAdapter.clearActivities();
-            Class[] parameterTypes = new Class[2];
-            parameterTypes[0] = HashMap.class;
-            parameterTypes[1] = boolean.class;
-            Method method = DomainAdapter.class.getMethod("loadSelectedRoutineCallback", parameterTypes);
-            controllerPersistence.getActivitiesRoutine(currentUser.getID(), currentUser.getSelectedRoutine().getId(), method, DomainAdapter.getInstance(), login);
+            Method method = DomainAdapter.class.getMethod("loadSelectedRoutineCallback", HashMap.class);
+            controllerPersistence.getActivitiesRoutine(currentUser.getID(), currentUser.getSelectedRoutine().getId(), method, DomainAdapter.getInstance());
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
@@ -424,7 +427,7 @@ public class DomainAdapter {
      * @param activitiesList activitats de la rutina
      * @throws InvalidTimeIntervalException si l'interval de temps no és valid
      */
-    public void loadSelectedRoutineCallback(HashMap<String, ArrayList<ArrayList<String>>> activitiesList, boolean login) throws InvalidTimeIntervalException {
+    public void loadSelectedRoutineCallback(HashMap<String, ArrayList<ArrayList<String>>> activitiesList) throws InvalidTimeIntervalException {
         for (HashMap.Entry<String, ArrayList<ArrayList<String>>> dayActivities : activitiesList.entrySet()) {
             ArrayList<ArrayList<String>> activities = dayActivities.getValue();
             if (!activities.isEmpty()) {
@@ -443,9 +446,18 @@ public class DomainAdapter {
                 routineAdapter.setActivitiesByDay(acts, acts.get(0).getDay());
             }
         }
-        if (login) {
-            if (this.login != null) this.login.loginCallback();
-            else if (this.logoScreen != null) this.logoScreen.loginCallback();
+
+        if (!selectingRoutine) {
+            if (login != null) {
+                login.loginCallback();
+                login = null;
+            }
+            else if (logoScreen != null) {
+                logoScreen.loginCallback();
+                logoScreen = null;
+            } else {
+                MainActivity.getInstance().setEditRoutineScreen(currentUser.getSelectedRoutine().getId(),currentUser.getSelectedRoutine().getName());
+            }
         }
     }
 
@@ -664,7 +676,6 @@ public class DomainAdapter {
      * Metode per recuperar la contrasenya d'un usuari
      * @param mail mail del compte a recuperar
      * @param act instància de l'activitat que solicita la recuperació de contrasenya
-     * @return true si el mail pertany a un usuari registrat i es pot enviar el correu, false altrament
      */
     public void sendPassResetEmail(String mail, android.app.Activity act) {
         forgotPass = (ForgotPassword)act;

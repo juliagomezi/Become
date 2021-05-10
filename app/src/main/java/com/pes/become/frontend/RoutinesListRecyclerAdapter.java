@@ -2,26 +2,20 @@ package com.pes.become.frontend;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapter;
-import com.pes.become.backend.domain.Routine;
 
 import java.util.ArrayList;
-
-import static android.provider.Settings.System.getString;
-import static java.security.AccessController.getContext;
 
 public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesListRecyclerAdapter.ViewHolder> {
 
@@ -51,11 +45,7 @@ public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesLi
         View view = layoutInflater.inflate(R.layout.routines_list_element, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
 
-        viewHolder.switchButton.setOnClickListener(view1 -> {
-            try {
-                selectRoutine(viewHolder.getAdapterPosition());
-            } catch (NoSuchMethodException ignore) { }
-        });
+        viewHolder.switchButton.setOnClickListener(view1 -> selectRoutine(viewHolder.getAdapterPosition()));
 
         return viewHolder;
     }
@@ -69,7 +59,6 @@ public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesLi
 
         holder.editButton.setOnClickListener(view -> {
             DA.selectRoutine(routinesList.get(position), false);
-
             MainActivity.getInstance().setEditRoutineScreen(routinesList.get(position).get(0),routinesList.get(position).get(1));
         });
 
@@ -126,12 +115,12 @@ public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesLi
         }
     }
 
-    private void selectRoutine(int position) throws NoSuchMethodException {
+    private void selectRoutine(int position) {
         if(routinesList.get(position).get(0).equals(selectedRoutineID)) {
-            DA.selectRoutine(null, false);
+            DA.selectRoutine(null, true);
             selectedRoutineID = "";
         } else {
-            DA.selectRoutine(routinesList.get(position), false);
+            DA.selectRoutine(routinesList.get(position), true);
             selectedRoutineID = routinesList.get(position).get(0);
         }
         notifyDataSetChanged();
