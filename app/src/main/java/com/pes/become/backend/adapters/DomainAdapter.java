@@ -2,7 +2,6 @@ package com.pes.become.backend.adapters;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.text.BoringLayout;
 import android.util.Log;
 
 import com.pes.become.backend.domain.Achievement;
@@ -79,8 +78,6 @@ public class DomainAdapter {
      * Instancia de la classe profile del frontend
      */
     private Profile profile;
-
-    private int loadedDays = 0;
 
     /**
      * Obtenir la instancia de la classe
@@ -200,8 +197,9 @@ public class DomainAdapter {
                 }
             }
             if(!selectedRoutineId.equals("")) selectRoutine(routine, true);
+            else login.loginCallback();
 
-            //stats hardcoded
+            //inici stats hardcoded
             Map<Theme, Map<Day, Integer>> stats = new TreeMap<>();
             for(int t=0; t<Theme.values().length; ++t){
                 Map<Day, Integer> emptyMap = new TreeMap<>();
@@ -214,8 +212,6 @@ public class DomainAdapter {
             //fi stats hardcoded
 
             achievementController.setCurrentUser(currentUser);
-
-            //login.loginCallback();
         }
         else {
             login.loginCallbackFailed();
@@ -244,10 +240,9 @@ public class DomainAdapter {
                 }
             }
             if (!selectedRoutineId.equals("")) selectRoutine(routine, true);
+            else logoScreen.loginCallback();
 
             achievementController.setCurrentUser(currentUser);
-
-            //logoScreen.loginCallback();
         }
         else {
             logoScreen.loginCallbackFailed();
@@ -266,7 +261,6 @@ public class DomainAdapter {
         if (success) {
             currentUser = userAdapter.createUser(username);
             currentUser.setID(userId);
-            if (!selectedRoutineId.equals("")) loadSelectedRoutine(true); //això és impossible que passi!!!
             signup.registerCallback();
         }
         else {
@@ -421,7 +415,9 @@ public class DomainAdapter {
             parameterTypes[1] = Boolean.class;
             Method method = DomainAdapter.class.getMethod("loadSelectedRoutineCallback", parameterTypes);
             controllerPersistence.getActivitiesRoutine(currentUser.getID(), currentUser.getSelectedRoutine().getId(), method, DomainAdapter.getInstance(), login);
-        } catch (NoSuchMethodException ignore) { }
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -450,6 +446,7 @@ public class DomainAdapter {
             }
         }
         if (login) {
+            Log.d("login", "return");
             if (this.login != null) this.login.loginCallback();
             else if (this.logoScreen != null) this.logoScreen.loginCallback();
         }

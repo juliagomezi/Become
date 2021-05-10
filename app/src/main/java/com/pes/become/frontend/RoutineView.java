@@ -26,8 +26,6 @@ import com.pes.become.backend.exceptions.NoSelectedRoutineException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
-
 public class RoutineView extends Fragment implements AdapterView.OnItemSelectedListener{
 
     private static RoutineView instance;

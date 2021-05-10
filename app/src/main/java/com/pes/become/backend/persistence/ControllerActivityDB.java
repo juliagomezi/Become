@@ -37,6 +37,7 @@ public class ControllerActivityDB {
      * @param object classe que conté el mètode
      */
     public void getActivities(String userId, String idRoutine, Method method, Object object, boolean login) {
+        Log.d("DB", "DB");
         db.collection("users").document(userId).collection("routines").document(idRoutine).collection("activities").addSnapshotListener((value, e) -> {
             if (e != null) {
                 return;
@@ -90,8 +91,10 @@ public class ControllerActivityDB {
             params[1] = login;
             try {
                 method.invoke(object, params);
-            } catch (IllegalAccessException ignore) {
-            } catch (InvocationTargetException ignore) {
+            } catch (IllegalAccessException e2) {
+                e2.printStackTrace();
+            } catch (InvocationTargetException e1) {
+                e1.printStackTrace();
             }
         });
     }
