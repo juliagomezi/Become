@@ -3,6 +3,7 @@ package com.pes.become.backend.domain;
 import android.graphics.Bitmap;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -40,6 +41,11 @@ public class User {
     private Map<Achievement, Boolean> achievements;
 
     /**
+     *
+     */
+    private ArrayList<Integer> calendarMonth;
+
+    /**
      * Creadora de la classe per a un nou usuari
      * @param name nom de l'usuari
      */
@@ -52,6 +58,10 @@ public class User {
         for(int a = 0; a<Achievement.values().length; ++a){
             achievements.put(Achievement.values()[a], false);
         }
+    }
+
+    public void clearMonth(int daysMonth) {
+        this.calendarMonth = new ArrayList<>(Collections.nCopies(daysMonth, -1));
     }
 
     /**
@@ -266,5 +276,13 @@ public class User {
             }
             statisticsSelectedRoutine.put(Theme.values()[t], emptyMap);
         }
+    }
+
+    public ArrayList<Integer> getCalendarMonth() {
+        return calendarMonth;
+    }
+
+    public void setCalendarMonth(ArrayList<Integer> calendarMonth) {
+        this.calendarMonth = calendarMonth;
     }
 }

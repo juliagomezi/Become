@@ -128,9 +128,9 @@ public class ControllerCalendarDB {
      * @param method metode a executar
      * @param object objecte del metode a executar
      */
-    public void getAvailableDays(String userId, int month, Method method, Object object)
+    public void getAvailableDays(String userId, int month, int year, Method method, Object object)
     {
-        db.collection("users").document(userId).collection("calendar").whereEqualTo("month", String.format("%02d", month))
+        db.collection("users").document(userId).collection("calendar").whereEqualTo("month", String.format("%02d", month)).whereEqualTo("year", String.valueOf(year))
                 .get().addOnCompleteListener(task -> {
             Object[] params = new Object[2];
             params[0] = task.isSuccessful();

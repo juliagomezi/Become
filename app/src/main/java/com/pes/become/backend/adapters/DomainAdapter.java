@@ -221,6 +221,9 @@ public class DomainAdapter {
 
                 currentUser.setStatisticsSelectedRoutine(statistics);
             }
+            else{
+                currentUser.clearStatistics();
+            }
 
             achievementController.setCurrentUser(currentUser);
         }
@@ -439,7 +442,9 @@ public class DomainAdapter {
         try {
             routineAdapter.clearActivities();
             Method method = DomainAdapter.class.getMethod("loadSelectedRoutineCallback", HashMap.class);
+            //Method method1 = DomainAdapter.class.getMethod("loadStatisticsCallback", Map.class);
             controllerPersistence.getActivitiesRoutine(currentUser.getID(), currentUser.getSelectedRoutine().getId(), method, DomainAdapter.getInstance());
+            //controllerPersistence.getAllStatisticsRoutine(currentUser.getID(), currentUser.getSelectedRoutine().getId(), method1, DomainAdapter.getInstance());
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
