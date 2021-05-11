@@ -332,9 +332,9 @@ public class ControllerPersistence {
      * @param method metode a executar
      * @param object objecte del metode a executar
      */
-    public void getAvailableDays(String userId, int month, Method method, Object object)
+    public void getAvailableDays(String userId, int month, int year, Method method, Object object)
     {
-        CD.getAvailableDays(userId, month, method, object);
+        CD.getAvailableDays(userId, month, year, method, object);
     }
     /*****************************MODIFICADORES DE CALENDARI***********************/
 
@@ -343,11 +343,11 @@ public class ControllerPersistence {
      * @param userId identificador de l'usuari
      * @param day dia a crear.
      * @param routineId id de la rutina a la que referencia
-     * @param totalActivites nombre d'activitats totals del dia de la rutina que estem afegint.
+     * @param totalActivities nombre d'activitats totals del dia de la rutina que estem afegint.
      */
-    public String addDay(String userId, Date day, String routineId, int totalActivites)
+    public String addDay(String userId, Date day, String routineId, int totalActivities)
     {
-        return CD.addDay(userId, day,  routineId, totalActivites );
+        return CD.addDay(userId, day,  routineId, totalActivities );
     }
 
     /**
