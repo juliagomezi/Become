@@ -6,14 +6,17 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.firestore.core.OrderBy;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -160,7 +163,95 @@ public class ControllerCalendarDB {
             }
         });
     }
+    /**
+     * Retorna els dies de la base de dades
+     * @param userId id de l'usuari del calendari
+     * @param method metode a executar
+     * @param object objecte del metode a executar
+     */
+    public void getAllDays(String userId, Method method, Object object)
+    {
+        db.collection("users").document(userId).collection("calendar")
+                .get().addOnCompleteListener(task -> {
+            Object[] params = new Object[2];
+            params[0] = task.isSuccessful();
+            if (task.isSuccessful()) {
+                ArrayList<HashMap<String,String>> list = new  ArrayList<>();
+                QuerySnapshot documents = task.getResult();
+                for(DocumentSnapshot document: documents) {
+                    HashMap<String, String> hashAux = new HashMap<>();
+                    hashAux.put("day", document.get("day").toString());
+                    hashAux.put("month", document.get("month").toString());
+                    hashAux.put("year", document.get("year").toString());
+                    hashAux.put("idRoutine", document.get("idRoutine").toString());
+                    hashAux.put("numActivitiesDone", document.get("numActivitiesDone").toString());
+                    hashAux.put("numTotalActivities", document.get("numTotalActivities").toString());
+                    list.add(hashAux);
+                }
+                params[1] = list;
 
+            }else params[1] = task.getException();
+            try {
+                method.invoke(object, params);
+            } catch (IllegalAccessException ignore) {
+            } catch (InvocationTargetException ignore) {
+            }
+        });
+    }
+    /**
+     * Retorna un enter amb el nombre de dies en ratxa que porta l'usuari
+     * @param userId id de l'usuari del calendari
+     * @param method metode a executar
+     * @param object objecte del metode a executar
+     */
+    public void getStreak(String userId, Method method, Object object)
+    {
+        db.collection("users").document(userId).collection("calendar").orderBy("year", Query.Direction.DESCENDING)
+                .orderBy("month", Query.Direction.DESCENDING).orderBy("day", Query.Direction.DESCENDING)
+                .get().addOnCompleteListener(task -> {
+            Object[] params = new Object[2];
+            params[0] = task.isSuccessful();
+            if (task.isSuccessful()) {
+                ArrayList<Date> list = new  ArrayList<>();
+                QuerySnapshot documents = task.getResult();
+                for(DocumentSnapshot document: documents) {
+                    HashMap<String, String> hashAux = new HashMap<>();
+                    String dayAux =  document.get("day").toString();
+                    String monthAux =   document.get("month").toString();
+                    String yearAux =   document.get("year").toString();
+                    int numActivitiesDone = (int) document.get("numActivitiesDone");
+                    int numTotalActivities = (int) document.get("numTotalActivities");
+                    if(numTotalActivities == numActivitiesDone)
+                    {
+                        Date date = StringDateConverter.stringToDate(dayAux+"-"+monthAux+"-"+yearAux);
+                        list.add(date);
+                        //A la llista es queden els dies que la rutina està complerta
+                    }
+                }
+                Calendar cal = Calendar.getInstance();
+                Date iterador = cal.getTime();
+                cal.add(Calendar.DATE, -1);
+                iterador.setTime( cal.getTime().getTime() );
+                int streak = 0;
+                while(list.lastIndexOf(iterador) != -1)
+                {
+                    list.remove(iterador);
+                    streak++;
+                    //restem un al dia iterador
+                    cal.setTime(iterador);
+                    cal.add(Calendar.DATE, -1);
+                    iterador.setTime( cal.getTime().getTime() );
+                }
+                params[1] = streak;
+
+            }else params[1] = task.getException();
+            try {
+                method.invoke(object, params);
+            } catch (IllegalAccessException ignore) {
+            } catch (InvocationTargetException ignore) {
+            }
+        });
+    }
     /**PRIVADES**/
     /**
      * Retorna la data en format per el dia de la base de dades
