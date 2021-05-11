@@ -19,6 +19,7 @@ public class ControllerPersistence {
     ControllerUserDB CU;
     ControllerStatisticsDB CS;
     ControllerCalendarDB CD;
+    ControllerTrophiesDB CT;
     private final FirebaseFirestore db;
 
     /**
@@ -29,9 +30,10 @@ public class ControllerPersistence {
         CR = new ControllerRoutineDB();
         CS = new ControllerStatisticsDB();
         CD = new ControllerCalendarDB();
+        CT = new ControllerTrophiesDB();
         db = FirebaseFirestore.getInstance();
     }
-
+    //*********ACTIVITY************
     /**
      * Obtenir les activitats d'una rutina
      * @param userId identificador de l'usuari
@@ -133,7 +135,7 @@ public class ControllerPersistence {
     {
         CA.markActivityAsDone(userId, idRoutine, lastDayDone, idActivity, totalActivities);
     }
-
+    //*********ROUTINE************
     /**
      * Canvia el nom d'una rutina.
      * @param userId identificador de l'usuari
@@ -164,7 +166,7 @@ public class ControllerPersistence {
         CR.deleteRoutine(userId, idRoutine);
         CS.deleteRoutineStatistics(userId, idRoutine);
     }
-
+    //*********USUARI************
     /**
      * Metode per obtenir el provider de l'usuari
      * @return el provider de l'usuari
@@ -288,7 +290,7 @@ public class ControllerPersistence {
         CU = ControllerUserDB.getInstance();
         CU.changeUsername(userID, newName);
     }
-
+    //*********STATISTICS************
     /**
      * Funcio per aconseguir totes les estadistiques d'una rutina
      * @param userId identificador de l'usuari
@@ -311,7 +313,7 @@ public class ControllerPersistence {
     public void getStatisticsRoutineByTheme(String userId, String idRoutine, String theme, Method method, Object object){
         CS.getStatisticsRoutineByTheme(userId, idRoutine, theme, method, object);
     }
-
+    //*********CALENDAR************
     /**
      * Executa el metode method amb un hashmap que representa el day de la base de dades si aquest s'ha pogut consultar, o l'excepció que ha saltat si no.
      * Day tindrà les claus: day, idRoutine, numActivitiesDone, numTotalActivities. Totes son strings
@@ -335,7 +337,26 @@ public class ControllerPersistence {
     {
         CD.getAvailableDays(userId, month, year, method, object);
     }
-
+    /**
+     * Retorna els dies de la base de dades
+     * @param userId id de l'usuari del calendari
+     * @param method metode a executar
+     * @param object objecte del metode a executar
+     */
+    public void getAllDays(String userId, Method method, Object object)
+    {
+        CD.getAllDays(userId, method, object);
+    }
+    /**
+     * Retorna un enter amb el nombre de dies en ratxa que porta l'usuari
+     * @param userId id de l'usuari del calendari
+     * @param method metode a executar
+     * @param object objecte del metode a executar
+     */
+    public void getStreak(String userId, Method method, Object object)
+    {
+        CD.getStreak(userId,method,object);
+    }
     /**
      * Crea un dia al calendari nou.
      * @param userId identificador de l'usuari
@@ -370,5 +391,41 @@ public class ControllerPersistence {
     public void incrementDay(String userId, Date day, int activitiesDoneIncrement, int totalActivities)
     {
         CD.incrementDay(userId, day, activitiesDoneIncrement, totalActivities);
+    }
+
+    //*********TROFEUS************
+    /**
+     * Funcio que crea els trofeus d'un usuari quan aquest es registra
+     * @param userId identificador de l'usuari
+     */
+    public void createTrophies(String userId){
+        CT.createTrophies(userId);
+    }
+    /**
+     * Funcio que retorna els trofeus de l'usuari i un bool que indica per cada un si l'ha aconseguit
+     * @param userId identificador de l'usuari
+     * @param method metode que recull les dades
+     * @param object classe que conte el metode
+     */
+    public void getTrophies(String userId, Method method, Object object) {
+        CT.getTrophies(userId, method,object);
+    }
+    /**
+     * Funcio que registra el progres del trofeu de crear una rutina i mira si s'ha assolit.
+     * @param userId identificador de l'usuari
+     * @param method metode que recull les dades
+     * @param object classe que conte el metode
+     */
+    public void updateFirstRoutine(String userId, Method method, Object object) {
+        CT.updateFirstRoutine(userId, method, object);
+    }
+    /**
+     * Funcio que registra el progres del trofeu de crear dues rutines i mira si s'ha assolit.
+     * @param userId identificador de l'usuari
+     * @param method metode que recull les dades
+     * @param object classe que conte el metode
+     */
+    public void updateSecondRoutine(String userId, Method method, Object object) {
+        CT.updateFirstRoutine(userId, method, object);
     }
 }
