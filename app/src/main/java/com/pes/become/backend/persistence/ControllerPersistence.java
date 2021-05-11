@@ -8,6 +8,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.lang.reflect.Method;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.zip.DeflaterOutputStream;
 
 public class ControllerPersistence {
 
@@ -15,6 +18,7 @@ public class ControllerPersistence {
     ControllerActivityDB CA;
     ControllerUserDB CU;
     ControllerStatisticsDB CS;
+    ControllerCalendarDB CD;
     private final FirebaseFirestore db;
 
     /**
@@ -24,6 +28,7 @@ public class ControllerPersistence {
         CA = new ControllerActivityDB();
         CR = new ControllerRoutineDB();
         CS = new ControllerStatisticsDB();
+        CD = new ControllerCalendarDB();
         db = FirebaseFirestore.getInstance();
     }
 
@@ -94,9 +99,8 @@ public class ControllerPersistence {
      * @param newTheme nou tema de l'activitat
      * @param newBeginTime nova hora d'inici de l'activitat
      * @param newFinishTime nova hora final de l'activitat
-     * @param lastDayDone ultim dia que l'activitat s'ha marcat com a feta
      */
-    public void updateActivity(String userId, String idRoutine, String idActivity, String actName, String description, String newDay, String newTheme,  String newBeginTime, String newFinishTime, String lastDayDone) {
+    public void updateActivity(String userId, String idRoutine, String idActivity, String actName, String description, String newDay, String newTheme,  String newBeginTime, String newFinishTime) {
 
         DocumentReference docRefToActivity = db.collection("users").document(userId).
                 collection("routines").document(idRoutine).
@@ -111,13 +115,25 @@ public class ControllerPersistence {
                     String oldBeginTime = document.get("beginTime").toString();
                     String oldFinishTime = document.get("finishTime").toString();
                     CS.updateDedicatedTimeActivity(userId, idRoutine, newDay, newTheme, newBeginTime, newFinishTime, oldDay, oldTheme, oldBeginTime, oldFinishTime);
-                    CA.updateActivity(userId, idRoutine, actName, description, newTheme, newDay, newBeginTime, newFinishTime, idActivity, lastDayDone);
+                    CA.updateActivity(userId, idRoutine, actName, description, newTheme, newDay, newBeginTime, newFinishTime, idActivity);
 
                 }
             }
         });
     }
 
+    /** Marca una activitat com a feta i actualitza el calendari.
+     * @param userId identificador de l'usuari
+     * @param idRoutine es l'identificador de la rutina ja existent
+     * @param lastDayDone és l'últim dia que l'usuari ha marcat la rutina com a feta en format de data yyyy-mm-dd (la classe StringDateConverter serveix per convertir-la)
+     * @param idActivity és l'identificador de l'activitat
+     */
+    public void markActivityAsDone(String userId, String idRoutine, String lastDayDone, String idActivity)
+    {
+        CA.markActivityAsDone(userId, idRoutine, lastDayDone, idActivity);
+    }
+/*********************************FUNCIONS RELACIONADES AMB RUTINES********************************/
+    /******************************MODIFICADORES DE RUTINES***********************/
     /**
      * Canvia el nom d'una rutina.
      * @param userId identificador de l'usuari
@@ -295,5 +311,65 @@ public class ControllerPersistence {
     public void getStatisticsRoutineByTheme(String userId, String idRoutine, String theme, Method method, Object object){
         CS.getStatisticsRoutineByTheme(userId, idRoutine, theme, method, object);
     }
+    /***************************FUNCIONS RELACIONADES AMB CALENDARI****************************/
+    /*****************************CONSULTORES DE CALENDARI***********************/
+    /**
+     * Executa el metode method amb un hashmap que representa el day de la base de dades si aquest s'ha pogut consultar, o l'excepció que ha saltat si no.
+     * Day tindrà les claus: day, idRoutine, numActivitiesDone, numTotalActivities. Totes son strings
+     * @param userId id de l'usuari del calendari
+     * @param day dia del calendari
+     * @param method metode a executar
+     * @param object objecte del metode a executar
+     */
+    public void getDay(String userId, Date day, Method method, Object object)
+    {
+        CD.getDay(userId, day, method, object);
+    }
+    /**
+     * Retorna els dies de la base de dades del mes indicat
+     * @param userId id de l'usuari del calendari
+     * @param month més que volem seleccionar
+     * @param method metode a executar
+     * @param object objecte del metode a executar
+     */
+    public void getAvailableDays(String userId, int month, Method method, Object object)
+    {
+        CD.getAvailableDays(userId, month, method, object);
+    }
+    /*****************************MODIFICADORES DE CALENDARI***********************/
 
+    /**
+     * Crea un dia al calendari nou.
+     * @param userId identificador de l'usuari
+     * @param day dia a crear.
+     * @param routineId id de la rutina a la que referencia
+     * @param totalActivites nombre d'activitats totals del dia de la rutina que estem afegint.
+     */
+    public String addDay(String userId, Date day, String routineId, int totalActivites)
+    {
+        return CD.addDay(userId, day,  routineId, totalActivites );
+    }
+
+    /**
+     * Actualitza la informació d'un dia
+     * @param userId id de l'usuari del calendari
+     * @param day dia del calendari
+     * @param activitiesDone nou nombre d'activitats fetes (a -1 no actualitzarà res)
+     * @param idRoutine nova id de la rutina a la que referencia
+     */
+    public void updateDay(String userId, Date day, int activitiesDone, String idRoutine)
+    {
+        CD.updateDay(userId, day, activitiesDone, idRoutine);
+    }
+
+    /**
+     * Actualitza la informació d'un dia. ATENCIÓ: Markactivity as done ja llança aquesta funció
+     * @param userId id de l'usuari del calendari
+     * @param day dia del calendari
+     * @param activitiesDoneIncrement incrrement del nombre d'activitats fetes
+     */
+    public void incrementDay(String userId, String day, int activitiesDoneIncrement)
+    {
+        CD.incrementDay(userId, day, activitiesDoneIncrement);
+    }
 }

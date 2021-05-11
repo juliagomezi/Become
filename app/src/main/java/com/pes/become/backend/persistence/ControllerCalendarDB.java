@@ -31,7 +31,7 @@ public class ControllerCalendarDB {
     public ControllerCalendarDB() {
         db = FirebaseFirestore.getInstance();
     }
-
+    /**MODIFICADORES*/
     /**
      * Crea un dia al calendari nou.
      * @param userId identificador de l'usuari
@@ -80,6 +80,9 @@ public class ControllerCalendarDB {
         //Aixo esta posat aixi perque volem actualitzar els camps concrets del document (merge) o crear-lo si no existeix (set)
         docRefToRoutine.set( data, SetOptions.merge());
     }
+
+
+    /**CONSULTORES*/
     /**
      * Executa el metode method amb un hashmap que representa el day de la base de dades si aquest s'ha pogut consultar, o l'excepció que ha saltat si no.
      * Day tindrà les claus: day, idRoutine, numActivitiesDone, numTotalActivities. Totes son strings
@@ -158,7 +161,7 @@ public class ControllerCalendarDB {
         });
     }
 
-
+    /**PRIVADES**/
     /**
      * Retorna la data en format per el dia de la base de dades
      * @param date data

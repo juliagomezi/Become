@@ -1,6 +1,7 @@
 package com.pes.become.backend.persistence;
 
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -147,7 +148,7 @@ public class ControllerActivityDB {
      * @param endT es l'hora d'acabament de l'activitat
      * @param idActivity és l'identificador de l'activitat
      */
-    public void updateActivity(String userId, String idRoutine, String actName, String description, String theme, String day, String iniT, String endT, String idActivity, String lastDayDone) {
+    public void updateActivity(String userId, String idRoutine, String actName, String description, String theme, String day, String iniT, String endT, String idActivity) {
         DocumentReference docRefToActivity = db.collection("users").document(userId).collection("routines").document(idRoutine).collection("activities").document(idActivity);
         if(actName != null) docRefToActivity.update("name", actName);
         if(description != null) docRefToActivity.update("description", description);
@@ -155,12 +156,40 @@ public class ControllerActivityDB {
         if(day != null) docRefToActivity.update("day", day);
         if(iniT != null) docRefToActivity.update("beginTime", iniT);
         if(endT != null) docRefToActivity.update("finishTime", endT);
-        if(lastDayDone != null)
+
+    }
+
+    /**
+     * @param userId identificador de l'usuari
+     * @param idRoutine es l'identificador de la rutina ja existent
+     * @param lastDayDone és l'últim dia que l'usuari ha marcat la rutina com a feta en format de data yyyy-mm-dd (la classe StringDateConverter serveix per convertir-la)
+     * @param idActivity és l'identificador de l'activitat
+     */
+    public void markActivityAsDone(String userId, String idRoutine, String lastDayDone, String idActivity)
+    {
+        DocumentReference docRefToActivity = db.collection("users").document(userId).collection("routines").document(idRoutine).collection("activities").document(idActivity);
+        if(lastDayDone != null || lastDayDone != "null")
         {
             docRefToActivity.update("lastDayDone", lastDayDone).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     ControllerCalendarDB cal = new ControllerCalendarDB();
                     cal.incrementDay(userId, lastDayDone, 1);
+                }
+            });
+        }
+        else
+        {
+            docRefToActivity.get().addOnCompleteListener((task) -> {
+                if(task.isSuccessful())
+                {
+                    DocumentSnapshot document = task.getResult();
+                    String realLastDayDone = document.get("lastDayDone").toString();
+                    docRefToActivity.update("lastDayDone", "null").addOnCompleteListener(task2 -> {
+                        if (task2.isSuccessful()) {
+                            ControllerCalendarDB cal = new ControllerCalendarDB();
+                            cal.incrementDay(userId, realLastDayDone, -1);
+                        }
+                    });
                 }
             });
         }

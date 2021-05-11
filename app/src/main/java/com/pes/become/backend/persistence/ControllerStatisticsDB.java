@@ -7,6 +7,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Transaction;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -117,19 +119,20 @@ public class ControllerStatisticsDB {
 
         DocumentReference docRefToRoutineStatistics = db.collection("users").document(userId).collection("statistics").document(idRoutine);
 
+        db.runTransaction(new Transaction.Function<Void>() {
+            @Override
+            public Void apply(Transaction transaction) throws FirebaseFirestoreException {
+                DocumentSnapshot snapshot = transaction.get(docRefToRoutineStatistics);
 
-        docRefToRoutineStatistics.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                DocumentSnapshot document = task.getResult();
-                if (document.exists()) {
-                    double timeToAdd = timeDifference(beginTime, finishTime);
-                    HashMap<String, Double> mapActTheme = (HashMap) document.get("statistics" + theme);
-                    mapActTheme.put(day, mapActTheme.get(day) + timeToAdd);
-                    docRefToRoutineStatistics.update("statistics" + theme, mapActTheme);
+                double timeToAdd = timeDifference(beginTime, finishTime);
+                HashMap<String, Double> mapActTheme = (HashMap) snapshot.get("statistics" + theme);
+                mapActTheme.put(day, mapActTheme.get(day) + timeToAdd);
+                transaction.update(docRefToRoutineStatistics, "statistics" + theme, mapActTheme);
 
-                }
+                return null;
             }
         });
+
     }
 
     /**
