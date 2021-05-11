@@ -2,6 +2,9 @@ package com.pes.become.backend.adapters;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
 
 import com.pes.become.backend.domain.Achievement;
 import com.pes.become.backend.domain.AchievementController;
@@ -26,6 +29,7 @@ import com.pes.become.frontend.Profile;
 import com.pes.become.frontend.Signup;
 
 import java.lang.reflect.Method;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -226,6 +230,7 @@ public class DomainAdapter {
             }
 
             achievementController.setCurrentUser(currentUser);
+
         }
         else {
             login.loginCallbackFailed();
@@ -275,6 +280,29 @@ public class DomainAdapter {
         }
         else {
             logoScreen.loginCallbackFailed();
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void updateCalendar(int month, int year) {
+        YearMonth object = YearMonth.of(year,month);
+        int daysInMonth = object.lengthOfMonth();
+        currentUser.clearMonth(daysInMonth);
+        try {
+            Method method = DomainAdapter.class.getMethod("calendarCallback", ArrayList.class);
+            controllerPersistence.getAvailableDays(currentUser.getID(), month, year, method, DomainAdapter.getInstance());
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void calendarCallback(ArrayList<HashMap<String,String>> calendar) {
+        for(HashMap<String,String> day : calendar) {
+            int dayOfMonth = Integer.parseInt(day.get("day"));
+            int completition = 0;
+            if(!day.get("numTotalActivities").equals("0"))
+                completition = Integer.parseInt(day.get("numActivitiesDone"))/Integer.parseInt(day.get("numTotalActivities"));
+            currentUser.setDayCalendar(dayOfMonth-1, completition);
         }
     }
 

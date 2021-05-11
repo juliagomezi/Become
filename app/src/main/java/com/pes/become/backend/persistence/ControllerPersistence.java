@@ -128,12 +128,11 @@ public class ControllerPersistence {
      * @param lastDayDone és l'últim dia que l'usuari ha marcat la rutina com a feta en format de data yyyy-mm-dd (la classe StringDateConverter serveix per convertir-la)
      * @param idActivity és l'identificador de l'activitat
      */
-    public void markActivityAsDone(String userId, String idRoutine, String lastDayDone, String idActivity)
+    public void markActivityAsDone(String userId, String idRoutine, String lastDayDone, String idActivity, int totalActivities)
     {
         CA.markActivityAsDone(userId, idRoutine, lastDayDone, idActivity);
     }
-/*********************************FUNCIONS RELACIONADES AMB RUTINES********************************/
-    /******************************MODIFICADORES DE RUTINES***********************/
+
     /**
      * Canvia el nom d'una rutina.
      * @param userId identificador de l'usuari
@@ -311,8 +310,7 @@ public class ControllerPersistence {
     public void getStatisticsRoutineByTheme(String userId, String idRoutine, String theme, Method method, Object object){
         CS.getStatisticsRoutineByTheme(userId, idRoutine, theme, method, object);
     }
-    /***************************FUNCIONS RELACIONADES AMB CALENDARI****************************/
-    /*****************************CONSULTORES DE CALENDARI***********************/
+
     /**
      * Executa el metode method amb un hashmap que representa el day de la base de dades si aquest s'ha pogut consultar, o l'excepció que ha saltat si no.
      * Day tindrà les claus: day, idRoutine, numActivitiesDone, numTotalActivities. Totes son strings
@@ -336,7 +334,6 @@ public class ControllerPersistence {
     {
         CD.getAvailableDays(userId, month, year, method, object);
     }
-    /*****************************MODIFICADORES DE CALENDARI***********************/
 
     /**
      * Crea un dia al calendari nou.

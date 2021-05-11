@@ -285,4 +285,8 @@ public class User {
     public void setCalendarMonth(ArrayList<Integer> calendarMonth) {
         this.calendarMonth = calendarMonth;
     }
+
+    public void setDayCalendar(int day, int completition) {
+        calendarMonth.add(day, completition);
+    }
 }
