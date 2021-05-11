@@ -9,6 +9,7 @@ import com.google.firebase.firestore.CollectionReference;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.lang.reflect.Method;
@@ -165,15 +166,16 @@ public class ControllerActivityDB {
      * @param lastDayDone és l'últim dia que l'usuari ha marcat la rutina com a feta en format de data yyyy-mm-dd (la classe StringDateConverter serveix per convertir-la)
      * @param idActivity és l'identificador de l'activitat
      */
-    public void markActivityAsDone(String userId, String idRoutine, String lastDayDone, String idActivity)
+    public void markActivityAsDone(String userId, String idRoutine, String lastDayDone, String idActivity, int totalActivities)
     {
         DocumentReference docRefToActivity = db.collection("users").document(userId).collection("routines").document(idRoutine).collection("activities").document(idActivity);
-        if(lastDayDone != null || lastDayDone != "null")
+        if(lastDayDone != null && !("null").equals(lastDayDone))
         {
             docRefToActivity.update("lastDayDone", lastDayDone).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     ControllerCalendarDB cal = new ControllerCalendarDB();
-                    cal.incrementDay(userId, lastDayDone, 1);
+                    Date lastDay = StringDateConverter.stringToDate(lastDayDone);
+                    cal.incrementDay(userId, lastDay, 1, totalActivities);
                 }
             });
         }
@@ -187,7 +189,8 @@ public class ControllerActivityDB {
                     docRefToActivity.update("lastDayDone", "null").addOnCompleteListener(task2 -> {
                         if (task2.isSuccessful()) {
                             ControllerCalendarDB cal = new ControllerCalendarDB();
-                            cal.incrementDay(userId, realLastDayDone, -1);
+                            Date lastDay = StringDateConverter.stringToDate(lastDayDone);
+                            cal.incrementDay(userId, lastDay, 1, totalActivities);
                         }
                     });
                 }

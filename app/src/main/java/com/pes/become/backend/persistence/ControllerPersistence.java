@@ -127,10 +127,11 @@ public class ControllerPersistence {
      * @param idRoutine es l'identificador de la rutina ja existent
      * @param lastDayDone és l'últim dia que l'usuari ha marcat la rutina com a feta en format de data yyyy-mm-dd (la classe StringDateConverter serveix per convertir-la)
      * @param idActivity és l'identificador de l'activitat
+     * @param totalActivities nombre total d'activitats del dia per la rutina seleccionada
      */
     public void markActivityAsDone(String userId, String idRoutine, String lastDayDone, String idActivity, int totalActivities)
     {
-        CA.markActivityAsDone(userId, idRoutine, lastDayDone, idActivity);
+        CA.markActivityAsDone(userId, idRoutine, lastDayDone, idActivity, totalActivities);
     }
 
     /**
@@ -363,10 +364,11 @@ public class ControllerPersistence {
      * Actualitza la informació d'un dia. ATENCIÓ: Markactivity as done ja llança aquesta funció
      * @param userId id de l'usuari del calendari
      * @param day dia del calendari
-     * @param activitiesDoneIncrement incrrement del nombre d'activitats fetes
+     * @param activitiesDoneIncrement increment del nombre d'activitats fetes
+     * @param totalActivities nombre total d'activitats del dia per la rutina seleccionada
      */
-    public void incrementDay(String userId, String day, int activitiesDoneIncrement)
+    public void incrementDay(String userId, Date day, int activitiesDoneIncrement, int totalActivities)
     {
-        CD.incrementDay(userId, day, activitiesDoneIncrement);
+        CD.incrementDay(userId, day, activitiesDoneIncrement, totalActivities);
     }
 }

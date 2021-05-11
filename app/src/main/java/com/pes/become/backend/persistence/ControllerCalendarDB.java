@@ -76,10 +76,14 @@ public class ControllerCalendarDB {
      * @param day dia del calendari
      * @param activitiesDoneIncrement incrrement del nombre d'activitats fetes
      */
-    public void incrementDay(String userId, String day, int activitiesDoneIncrement){
+    public void incrementDay(String userId, Date day, int activitiesDoneIncrement, int totalActivites){
         Map<String, Object> data = new HashMap<>();
         data.put("numActivitiesDone", FieldValue.increment(activitiesDoneIncrement));
-        DocumentReference docRefToRoutine = db.collection("users").document(userId).collection("calendar").document(day);
+        data.put("numTotalActivities", totalActivites);
+        data.put("day", getStringDay(day));
+        data.put("month", getStringMonth(day));
+        data.put("year", getStringYear(day));
+        DocumentReference docRefToRoutine = db.collection("users").document(userId).collection("calendar").document(StringDateConverter.dateToString(day));
         //Aixo esta posat aixi perque volem actualitzar els camps concrets del document (merge) o crear-lo si no existeix (set)
         docRefToRoutine.set( data, SetOptions.merge());
     }
