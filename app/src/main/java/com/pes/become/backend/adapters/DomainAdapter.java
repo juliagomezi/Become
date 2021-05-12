@@ -283,29 +283,6 @@ public class DomainAdapter {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public void updateCalendar(int month, int year) {
-        YearMonth object = YearMonth.of(year,month);
-        int daysInMonth = object.lengthOfMonth();
-        currentUser.clearMonth(daysInMonth);
-        try {
-            Method method = DomainAdapter.class.getMethod("calendarCallback", ArrayList.class);
-            controllerPersistence.getAvailableDays(currentUser.getID(), month, year, method, DomainAdapter.getInstance());
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void calendarCallback(ArrayList<HashMap<String,String>> calendar) {
-        for(HashMap<String,String> day : calendar) {
-            int dayOfMonth = Integer.parseInt(day.get("day"));
-            int completition = 0;
-            if(!day.get("numTotalActivities").equals("0"))
-                completition = Integer.parseInt(day.get("numActivitiesDone"))/Integer.parseInt(day.get("numTotalActivities"));
-            currentUser.setDayCalendar(dayOfMonth-1, completition);
-        }
-    }
-
     /**
      * Metode que rep la resposta de registrar un usuari
      * @param success resultat de l'operacio
@@ -441,6 +418,29 @@ public class DomainAdapter {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void updateCalendar(int month, int year) {
+        YearMonth object = YearMonth.of(year,month);
+        int daysInMonth = object.lengthOfMonth();
+        currentUser.clearMonth(daysInMonth);
+        try {
+            Method method = DomainAdapter.class.getMethod("calendarCallback", ArrayList.class);
+            controllerPersistence.getAvailableDays(currentUser.getID(), month, year, method, DomainAdapter.getInstance());
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void calendarCallback(ArrayList<HashMap<String,String>> calendar) {
+        for(HashMap<String,String> day : calendar) {
+            int dayOfMonth = Integer.parseInt(day.get("day"));
+            int completition = 0;
+            if(!day.get("numTotalActivities").equals("0"))
+                completition = Integer.parseInt(day.get("numActivitiesDone"))/Integer.parseInt(day.get("numTotalActivities"));
+            currentUser.setDayCalendar(dayOfMonth-1, completition);
+        }
+    }
+
     /**
      * Metode per seleccionar una rutina ja existent
      * @param infoRoutine llista amb la informacio de la rutina a seleccionar
@@ -470,12 +470,30 @@ public class DomainAdapter {
         try {
             routineAdapter.clearActivities();
             Method method = DomainAdapter.class.getMethod("loadSelectedRoutineCallback", HashMap.class);
-            //Method method1 = DomainAdapter.class.getMethod("loadStatisticsCallback", Map.class);
+            Method method1 = DomainAdapter.class.getMethod("loadStatisticsCallback", Map.class);
             controllerPersistence.getActivitiesRoutine(currentUser.getID(), currentUser.getSelectedRoutine().getId(), method, DomainAdapter.getInstance());
-            //controllerPersistence.getAllStatisticsRoutine(currentUser.getID(), currentUser.getSelectedRoutine().getId(), method1, DomainAdapter.getInstance());
+            controllerPersistence.getAllStatisticsRoutine(currentUser.getID(), currentUser.getSelectedRoutine().getId(), method1, DomainAdapter.getInstance());
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
+    }
+
+    public void loadStatisticsCallback(Map<String, Map<String, Double>> stats){
+        if(stats != null) {
+            Map<Theme,Map<Day, Double>> statistics = new TreeMap<>();
+            for(Map.Entry<String,Map<String,Double>> themeStats : stats.entrySet()) {
+                Map<Day, Double> s = new TreeMap<>();
+                for (Map.Entry<String, Double> dayStats : themeStats.getValue().entrySet()) {
+                    Day day = Day.valueOf(dayStats.getKey());
+                    s.put(day, dayStats.getValue());
+                }
+                Theme theme = Theme.valueOf(themeStats.getKey());
+                statistics.put(theme,s);
+            }
+            currentUser.setStatisticsSelectedRoutine(statistics);
+        }
+        else
+            currentUser.clearStatistics();
     }
 
     /**
