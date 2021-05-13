@@ -82,7 +82,6 @@ public class Stats extends Fragment {
 
         initWidgets();
         selectedDate = LocalDate.now();
-        setMonthView();
 
         mpLineChart = view.findViewById(R.id.linechart);
         ImageButton back = view.findViewById(R.id.previousMonthButton);
@@ -104,6 +103,8 @@ public class Stats extends Fragment {
         if(DA.getSelectedRoutineId().equals(""))
             noRoutineCallback();
 
+        setMonthView();
+
         return view;
     }
 
@@ -118,10 +119,9 @@ public class Stats extends Fragment {
     private void setMonthView()
     {
         monthYearText.setText(monthYearFromDate(selectedDate));
-        ArrayList<String> daysInMonth = daysInMonthArray(selectedDate);
 
         // TEMPORALMENT HARDCODEJAT INICI
-
+        /*
         ArrayList<Integer> dayStats = new ArrayList<>();
         for(int i = 0; i < 31; ++i) {
             if(i == 0) dayStats.add(0);
@@ -135,8 +135,15 @@ public class Stats extends Fragment {
                 dayStats.add(r.nextInt(101));
             }
         }
-
+        */
         //TEMPORALMENT HARDCODEJAT FI
+
+        DA.updateCalendar(selectedDate.getMonthValue(), selectedDate.getYear());
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void callendarCallback(ArrayList<Integer> dayStats){
+        ArrayList<String> daysInMonth = daysInMonthArray(selectedDate);
 
         CalendarAdapter calendarAdapter = new CalendarAdapter(daysInMonth, dayStats);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(global, 7);

@@ -435,6 +435,7 @@ public class DomainAdapter {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void calendarCallback(ArrayList<HashMap<String,String>> calendar) {
         for(HashMap<String,String> day : calendar) {
             int dayOfMonth = Integer.parseInt(day.get("day"));
@@ -443,6 +444,7 @@ public class DomainAdapter {
                 completition = Integer.parseInt(day.get("numActivitiesDone"))/Integer.parseInt(day.get("numTotalActivities"));
             currentUser.setDayCalendar(dayOfMonth-1, completition);
         }
+        this.stats.callendarCallback(currentUser.getCalendarMonth());
     }
 
     /**
