@@ -112,7 +112,8 @@ public class ControllerCalendarDB {
                          hashAux.put("day", document.get("day").toString());
                          hashAux.put("month", document.get("month").toString());
                          hashAux.put("year", document.get("year").toString());
-                         hashAux.put("idRoutine", document.get("idRoutine").toString());
+                         if(document.get("idRoutine") != null)
+                             hashAux.put("idRoutine", document.get("idRoutine").toString());
                          hashAux.put("numActivitiesDone", document.get("numActivitiesDone").toString());
                          hashAux.put("numTotalActivities", document.get("numTotalActivities").toString());
                          params[1] = hashAux;
@@ -152,7 +153,8 @@ public class ControllerCalendarDB {
                     hashAux.put("day", document.get("day").toString());
                     hashAux.put("month", document.get("month").toString());
                     hashAux.put("year", document.get("year").toString());
-                    hashAux.put("idRoutine", document.get("idRoutine").toString());
+                    if(document.get("idRoutine") != null)
+                        hashAux.put("idRoutine", document.get("idRoutine").toString());
                     hashAux.put("numActivitiesDone", document.get("numActivitiesDone").toString());
                     hashAux.put("numTotalActivities", document.get("numTotalActivities").toString());
                     list.add(hashAux);
@@ -187,7 +189,8 @@ public class ControllerCalendarDB {
                     hashAux.put("day", document.get("day").toString());
                     hashAux.put("month", document.get("month").toString());
                     hashAux.put("year", document.get("year").toString());
-                    hashAux.put("idRoutine", document.get("idRoutine").toString());
+                    if(document.get("idRoutine") != null)
+                        hashAux.put("idRoutine", document.get("idRoutine").toString());
                     hashAux.put("numActivitiesDone", document.get("numActivitiesDone").toString());
                     hashAux.put("numTotalActivities", document.get("numTotalActivities").toString());
                     list.add(hashAux);
