@@ -7,7 +7,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Transaction;
 
 import java.lang.reflect.InvocationTargetException;
@@ -40,11 +39,7 @@ public class ControllerStatisticsDB {
      * @param object classe que conte el metode
      */
     public void getAllStatisticsRoutine(String userId, String idRoutine, Method method, Object object){
-
         DocumentReference docRefToRoutineStatistics = db.collection("users").document(userId).collection("statistics").document(idRoutine);
-
-        Object[] params = new Object[1];
-
         HashMap <String, HashMap<String, Double>> mapThemes = new HashMap<>();
 
         docRefToRoutineStatistics.get().addOnCompleteListener(task -> {
@@ -56,16 +51,14 @@ public class ControllerStatisticsDB {
 
                         mapThemes.put(differentThemes[i],(HashMap) document.get("statistics" + differentThemes[i]));
                     }
-                    params[0] = mapThemes;
 
                     try {
-                        method.invoke(object, params);
+                        method.invoke(object, mapThemes);
                     } catch (IllegalAccessException e) {
                         e.printStackTrace();
                     } catch (InvocationTargetException e) {
                         e.printStackTrace();
                     }
-
                 }
             }
         });
@@ -80,34 +73,26 @@ public class ControllerStatisticsDB {
      * @param object classe que conte el metode
      */
     public void getStatisticsRoutineByTheme(String userId, String idRoutine, String theme, Method method, Object object){
-
         DocumentReference docRefToRoutineStatistics = db.collection("users").document(userId).collection("statistics").document(idRoutine);
-
-        Object[] params = new Object[1];
 
         docRefToRoutineStatistics.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
-
-
-                    params[0] = (HashMap) document.get("statistics" + theme);
-
                     try {
-                        method.invoke(object, params);
+                        method.invoke(object, document.get("statistics" + theme));
                     } catch (IllegalAccessException e) {
                         e.printStackTrace();
                     } catch (InvocationTargetException e) {
                         e.printStackTrace();
                     }
-
                 }
             }
         });
     }
 
     /**
-     * Afegeix les estadistiques d'una nova activitat al conjunt d'estadistiques-----AQUESTA SI QUE FUNCIONAAAAAAAAAAAAAAAAAAAAAAAAA
+     * Afegeix les estadistiques d'una nova activitat al conjunt d'estadistiques
      * @param userId identificador de l'usuari
      * @param idRoutine identificador de la rutina
      * @param theme tema de l'activitat
@@ -116,42 +101,30 @@ public class ControllerStatisticsDB {
      * @param finishTime temps d'acabament de l'activitat
      */
     public void addActivityToStatistics(String userId, String idRoutine, String theme, String day, String beginTime, String finishTime) {
-
         DocumentReference docRefToRoutineStatistics = db.collection("users").document(userId).collection("statistics").document(idRoutine);
-
-        db.runTransaction(new Transaction.Function<Void>() {
-            @Override
-            public Void apply(Transaction transaction) throws FirebaseFirestoreException {
-                DocumentSnapshot snapshot = transaction.get(docRefToRoutineStatistics);
-
-                double timeToAdd = timeDifference(beginTime, finishTime);
-                HashMap<String, Double> mapActTheme = (HashMap) snapshot.get("statistics" + theme);
-                mapActTheme.put(day, mapActTheme.get(day) + timeToAdd);
-                transaction.update(docRefToRoutineStatistics, "statistics" + theme, mapActTheme);
-
-                return null;
-            }
+        db.runTransaction((Transaction.Function<Void>) transaction -> {
+            DocumentSnapshot snapshot = transaction.get(docRefToRoutineStatistics);
+            double timeToAdd = timeDifference(beginTime, finishTime);
+            HashMap<String, Double> mapActTheme = (HashMap) snapshot.get("statistics" + theme);
+            mapActTheme.put(day, mapActTheme.get(day) + timeToAdd);
+            transaction.update(docRefToRoutineStatistics, "statistics" + theme, mapActTheme);
+            return null;
         });
-
     }
 
     /**
-     * Es crea les estadistiques de la rutina que s'acaba de crear ----------AQUESTA SI QUE FUNCIONAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+     * Es crea les estadistiques de la rutina que s'acaba de crear
      * @param userId identificador de l'usuari
      * @param idRoutine identificador de la rutina
      */
     public void createRoutineStatistics(String userId, String idRoutine){
-
         DocumentReference docRefToRoutineStatistics = db.collection("users").document(userId).collection("statistics").document(idRoutine);
-
         HashMap <String, Object> dataInput = new HashMap<>();
         HashMap <String, Double> mapStatistics = new HashMap<>();
-
 
         for (int i = 0; i<7; ++i){
             mapStatistics.put(differentDays[i], 0.0);
         }
-
         for (int j = 0; j<numberOfThemes; ++j){
             dataInput.put("statistics" + differentThemes[j], mapStatistics);
         }
@@ -169,32 +142,26 @@ public class ControllerStatisticsDB {
      * @param finishTime hora final de l'activitat que es vol borrar
      */
     public void deleteActivityStatistics(String userId, String idRoutine, String day, String theme, String beginTime, String finishTime){
-
-
         DocumentReference docRefToStatistics = db.collection("users").
                 document(userId).collection("statistics").document(idRoutine);
 
-        docRefToStatistics.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        double hoursToDelete = timeDifference(beginTime, finishTime);
-                        HashMap<String, Double> mapActTheme = (HashMap) document.get("statistics" + theme);
-                        mapActTheme.put(day, mapActTheme.get(day) - hoursToDelete);
-                        docRefToStatistics.update("statistics" + theme, mapActTheme);
-                    }
+        docRefToStatistics.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    double hoursToDelete = timeDifference(beginTime, finishTime);
+                    HashMap<String, Double> mapActTheme = (HashMap) document.get("statistics" + theme);
+                    mapActTheme.put(day, mapActTheme.get(day) - hoursToDelete);
+                    docRefToStatistics.update("statistics" + theme, mapActTheme);
                 }
             }
         });
-
     }
 
     /**
-     *
-     * @param userId
-     * @param idRoutine
+     * Metode per esborrar les estadístiques d'una rutina
+     * @param userId identificador de l'usuari propietari de la rutina
+     * @param idRoutine identificador de la rutina
      */
     public void deleteRoutineStatistics(String userId, String idRoutine){
         DocumentReference docRefToRoutineStatistics = db.collection("users").document(userId).collection("statistics").document(idRoutine);
@@ -220,70 +187,59 @@ public class ControllerStatisticsDB {
         DocumentReference docRefToStatistics = db.collection("users").document(userId).
                 collection("statistics").document(idRoutine);
 
-        docRefToStatistics.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
+        docRefToStatistics.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
 
-                        double newActivityHours = timeDifference(newBeginTime, newFinishTime);
-                        double oldActivityHours = timeDifference(oldBeginTime, oldFinishTime);
-                        boolean sameDay = oldDay.equals(newDay);
-                        boolean sameTheme = oldTheme.equals(newTheme);
+                    double newActivityHours = timeDifference(newBeginTime, newFinishTime);
+                    double oldActivityHours = timeDifference(oldBeginTime, oldFinishTime);
+                    boolean sameDay = oldDay.equals(newDay);
+                    boolean sameTheme = oldTheme.equals(newTheme);
 
-                        HashMap<String, Double> mapOldTheme = (HashMap) document.get("statistics" + oldTheme);
-                        if (sameDay && sameTheme){
-                            double difference = newActivityHours - oldActivityHours;
-                            mapOldTheme.put(oldDay, mapOldTheme.get(oldDay) + difference);
+                    HashMap<String, Double> mapOldTheme = (HashMap) document.get("statistics" + oldTheme);
+                    if (sameDay && sameTheme){
+                        double difference = newActivityHours - oldActivityHours;
+                        mapOldTheme.put(oldDay, mapOldTheme.get(oldDay) + difference);
+                    }
+
+                    else {
+
+                        mapOldTheme.put(oldDay, mapOldTheme.get(oldDay) - oldActivityHours);
+
+                        if (sameTheme){
+                            mapOldTheme.put(newDay, mapOldTheme.get(newDay) + newActivityHours);
                         }
 
                         else {
-
-                            mapOldTheme.put(oldDay, mapOldTheme.get(oldDay) - oldActivityHours);
-
-                            if (sameTheme){
-                                //Posar les noves hores al mateix mapa i al tema diferent corresponent
-                                mapOldTheme.put(newDay, mapOldTheme.get(newDay) + newActivityHours);
-                            }
-
-                            else {
-                                //Posar les noves hores al mapa del dia diferent corresponent i al tema corresponent
-                                HashMap<String, Double> mapNewTheme = (HashMap) document.get("statistics" + newTheme);
-                                mapNewTheme.put(newDay, mapNewTheme.get(newDay) + newActivityHours);
-                                 docRefToStatistics.update("statistics" + newTheme, mapNewTheme);
-                            }
+                            HashMap<String, Double> mapNewTheme = (HashMap) document.get("statistics" + newTheme);
+                            mapNewTheme.put(newDay, mapNewTheme.get(newDay) + newActivityHours);
+                             docRefToStatistics.update("statistics" + newTheme, mapNewTheme);
                         }
-                        docRefToStatistics.update("statistics" + oldTheme, mapOldTheme);
-
                     }
+                    docRefToStatistics.update("statistics" + oldTheme, mapOldTheme);
                 }
             }
         });
     }
 
     /**
-     *
-     * @param beginTime
-     * @param finishTime
-     * @return
+     * Calcula la diferencia de temps
+     * @param beginTime hora d'inici
+     * @param finishTime hora de fi
+     * @return la diferencia entre hora d'inici i hora de fi
      */
     private double timeDifference(String beginTime, String finishTime) {
-        //return finishTime-beginTime
         double beginHour = Double.parseDouble(beginTime.substring(0,2));
         double beginMinute = Double.parseDouble(beginTime.substring(3));
-
         double finishHour = Double.parseDouble(finishTime.substring(0,2));
         double finishMinute = Double.parseDouble(finishTime.substring(3));
-
         double hours = finishHour - beginHour;
         double minutes = (finishMinute - beginMinute)/60.0;
-
         if (minutes<0.0){
             hours = hours - 1.0;
             minutes = minutes * -1.0;
         }
-
         return hours + minutes;
     }
 

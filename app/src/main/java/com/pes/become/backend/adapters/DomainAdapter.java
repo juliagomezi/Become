@@ -496,10 +496,12 @@ public class DomainAdapter {
                 statistics.put(theme,s);
             }
             currentUser.setStatisticsSelectedRoutine(statistics);
+            this.stats.dataCallback();
         }
         else
             currentUser.clearStatistics();
-        this.stats.dataCallback();
+            this.stats.noRoutineCallback();
+
     }
 
     /**

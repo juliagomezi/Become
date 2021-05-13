@@ -3,6 +3,9 @@ package com.pes.become.frontend;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -87,5 +90,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public void setTrophiesScreen() {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_layout, new Trophies()).commit();
+    }
+
+    /**
+     * Metode que mostra el popup per notificar que s'ha guanyat un trofeu
+     */
+    public void showTrophyWon() {
+        Dialog myDialog = new Dialog(this);
+        myDialog.setContentView(R.layout.popup);
+        myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        myDialog.show();
     }
 }
