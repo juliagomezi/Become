@@ -104,5 +104,7 @@
     <string name="newPassword">Nueva contraseña</string>
     <string name="change_username">Cambiar nombre</string>
     <string name="username_changed">Nombre actualizado correctamente.</string>
+    <string name="congrats">Enhorabuena!</string>
+    <string name="new_trophy_won">Has ganado un trofeo</string>
 
 </resources>

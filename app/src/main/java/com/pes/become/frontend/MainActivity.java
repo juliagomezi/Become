@@ -9,10 +9,13 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapter;
+
+import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -98,6 +101,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public void showTrophyWon() {
         Dialog myDialog = new Dialog(this);
         myDialog.setContentView(R.layout.popup);
+
+        TextView OK = myDialog.findViewById(R.id.OKButton);
+        OK.setOnClickListener(v -> myDialog.dismiss());
+
         myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         myDialog.show();
     }

@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId "com.pes.become"
-        minSdkVersion 16
+        minSdkVersion 17
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -68,6 +68,9 @@ dependencies {
 
     //related to charts
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
+    // gifs
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
 
 }
 sonarqube {

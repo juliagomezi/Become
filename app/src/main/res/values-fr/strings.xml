@@ -104,5 +104,7 @@
     <string name="passChanged">Le mot de passe a été modifié avec succès.</string>
     <string name="username_changed">Le nom d\'utilisateur a bien été modifié</string>
     <string name="change_username">Changer le nom d\'utilisateur</string>
+    <string name="congrats">Félicitations!</string>
+    <string name="new_trophy_won">" Nouveau trophée remporté"</string>
 
 </resources>

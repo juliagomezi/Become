@@ -7,6 +7,15 @@
     android:layout_height="match_parent"
     android:layout_gravity="center">
 
+    <pl.droidsonroids.gif.GifImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/confetti"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="wrap_content"
@@ -44,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/sourcesanspro_semibold"
                 android:gravity="center_horizontal"
-                android:text="Congratulations!"
+                android:text="@string/congrats"
                 android:textAlignment="center"
                 android:textColor="@color/orange"
                 android:textSize="24dp" />
@@ -54,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/sourcesanspro_regular"
                 android:gravity="center_horizontal"
-                android:text="New trophy won"
+                android:text="@string/new_trophy_won"
                 android:textAlignment="center"
                 android:textColor="@color/softgray"
                 android:textSize="14dp" />
@@ -68,6 +77,19 @@
                 android:text="Create 3 routines"
                 android:textAlignment="center"
                 android:textColor="@color/black"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/OKButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/sourcesanspro_regular"
+                android:gravity="center_horizontal"
+                android:text="OK"
+                android:clickable="true"
+                android:textAlignment="center"
+                android:textColor="@color/orange"
                 android:textSize="20dp" />
 
         </LinearLayout>

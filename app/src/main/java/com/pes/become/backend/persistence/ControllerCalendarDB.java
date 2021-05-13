@@ -163,7 +163,7 @@ public class ControllerCalendarDB {
 
             }else params[1] = task.getException();
             try {
-                method.invoke(object, params);
+                method.invoke(object, params[1]);
             } catch (IllegalAccessException ignore) {
             } catch (InvocationTargetException ignore) {
             }

@@ -104,5 +104,7 @@
     <string name="passChanged">La contrasenya s\'ha canviat correctament.</string>
     <string name="change_username">Canviar nom</string>
     <string name="username_changed">Nom canviat correctament.</string>
+    <string name="congrats">Enhorabona!</string>
+    <string name="new_trophy_won">Has guanyat un trofeu</string>
 
 </resources>
