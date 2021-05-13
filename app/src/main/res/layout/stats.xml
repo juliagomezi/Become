@@ -78,6 +78,7 @@
             android:background="@android:color/darker_gray"/>
 
         <TextView
+            android:id="@+id/hoursTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -89,6 +90,7 @@
             android:layout_margin="30dp"/>
 
         <TableLayout
+            android:id="@+id/hours"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
@@ -333,6 +335,7 @@
         </TableLayout>
 
         <View
+            android:id="@+id/hoursSeparator"
             android:layout_width="match_parent"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
@@ -341,6 +344,7 @@
             android:background="@android:color/darker_gray"/>
 
         <TextView
+            android:id="@+id/chartTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -361,6 +365,7 @@
             android:layout_marginRight="10dp"/>
 
         <View
+            android:id="@+id/chartSeparator"
             android:layout_width="match_parent"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"

@@ -27,6 +27,7 @@ import com.pes.become.frontend.Login;
 import com.pes.become.frontend.MainActivity;
 import com.pes.become.frontend.Profile;
 import com.pes.become.frontend.Signup;
+import com.pes.become.frontend.Stats;
 
 import java.lang.reflect.Method;
 import java.time.YearMonth;
@@ -83,6 +84,7 @@ public class DomainAdapter {
      * Instancia de la classe profile del frontend
      */
     private Profile profile;
+    private Stats stats;
     /**
      * Indica si l'usuari ha seleccionat directament una rutina o s'ha seleccionat des del codi pel correcte funcionament de l'aplicacio
      */
@@ -382,8 +384,10 @@ public class DomainAdapter {
     /**
      * Metode per obtenir les hores dedicades a cada tema en la rutina seleccionada
      * @return ArrayList on a cada posicio hi han les hores dedicades al tema equivalent a la posicio (i.e. a la posicio 0 hi ha les hores dedicades a Music)
+     * @param statsView
      */
-    public ArrayList<Double> getHoursByTheme(){
+    public ArrayList<Double> getHoursByTheme(Stats statsView){
+        stats = statsView;
         ArrayList<Double> hoursByTheme = new ArrayList<>();
         for(int theme=0; theme<Theme.values().length; ++theme){
             double hours = currentUser.getHoursByTheme(Theme.values()[theme]);
@@ -459,6 +463,7 @@ public class DomainAdapter {
             routineAdapter.setCurrentRoutine(null);
             currentUser.setSelectedRoutine(null);
             currentUser.clearStatistics();
+            this.stats.noRoutineCallback();
             controllerPersistence.setSelectedRoutine(currentUser.getID(),"");
         }
     }
@@ -494,6 +499,7 @@ public class DomainAdapter {
         }
         else
             currentUser.clearStatistics();
+        this.stats.dataCallback();
     }
 
     /**

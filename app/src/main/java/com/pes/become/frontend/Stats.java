@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
@@ -55,11 +56,21 @@ public class Stats extends Fragment {
 
     private final ArrayList<String> label= new ArrayList<>();
 
+    private TableLayout hours;
+    private TextView hoursTitle, chartTitle;
+    private View hoursSeparator, chartSeparator;
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.stats, container, false);
         global = this.getActivity();
+
+        hours = view.findViewById(R.id.hours);
+        hoursTitle = view.findViewById(R.id.hoursTitle);
+        chartTitle = view.findViewById(R.id.chartTitle);
+        hoursSeparator = view.findViewById(R.id.hoursSeparator);
+        chartSeparator = view.findViewById(R.id.chartSeparator);
 
         label.add(getString(R.string.shortMonday));
         label.add(getString(R.string.shortTuesday));
@@ -90,6 +101,8 @@ public class Stats extends Fragment {
 
         setHoursStats();
         setChart();
+        if(DA.getSelectedRoutineId().equals(""))
+            noRoutineCallback();
 
         return view;
     }
@@ -188,7 +201,7 @@ public class Stats extends Fragment {
         TextView plantsHour = view.findViewById(R.id.plantsHour);
         TextView otherHour = view.findViewById(R.id.otherHour);
 
-        ArrayList<Double> hoursTheme = DA.getHoursByTheme();
+        ArrayList<Double> hoursTheme = DA.getHoursByTheme(this);
 
         musicHour.setText(formatHoursMinutes(hoursTheme.get(0)));
         sportHour.setText(formatHoursMinutes(hoursTheme.get(1)));
@@ -281,6 +294,26 @@ public class Stats extends Fragment {
         mpLineChart.setDescription(desc);
         mpLineChart.setData(data);
         mpLineChart.invalidate();
+    }
+
+    public void dataCallback(){
+        hoursTitle.setVisibility(View.VISIBLE);
+        hours.setVisibility(View.VISIBLE);
+        chartTitle.setVisibility(View.VISIBLE);
+        mpLineChart.setVisibility(View.VISIBLE);
+        hoursSeparator.setVisibility(View.VISIBLE);
+        chartSeparator.setVisibility(View.VISIBLE);
+        setChart();
+        setHoursStats();
+    }
+
+    public void noRoutineCallback(){
+        hoursTitle.setVisibility(View.GONE);
+        hours.setVisibility(View.GONE);
+        chartTitle.setVisibility(View.GONE);
+        mpLineChart.setVisibility(View.GONE);
+        hoursSeparator.setVisibility(View.GONE);
+        chartSeparator.setVisibility(View.GONE);
     }
 
     private void setDataValues(){
