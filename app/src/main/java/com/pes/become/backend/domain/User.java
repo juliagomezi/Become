@@ -39,7 +39,6 @@ public class User {
      * Trofeus obtinguts per l'usuari
      */
     private Map<Achievement, Boolean> achievements;
-
     /**
      *
      */
@@ -60,6 +59,10 @@ public class User {
         }
     }
 
+    /**
+     * Metode per inicialitzar el mes del calendari
+     * @param daysMonth dies que te el mes
+     */
     public void clearMonth(int daysMonth) {
         this.calendarMonth = new ArrayList<>(Collections.nCopies(daysMonth, -1));
     }

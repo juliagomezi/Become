@@ -38,7 +38,6 @@ import java.time.YearMonth;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.Random;
 import java.util.regex.Pattern;
 
 public class Stats extends Fragment {
@@ -98,16 +97,76 @@ public class Stats extends Fragment {
         streakText.getPaint().setShader(textShader);
         streakText.setTextColor(Color.parseColor("#12c2e9"));
 
-        setHoursStats();
-        setChart();
-        if(DA.getSelectedRoutineId().equals(""))
-            noRoutineCallback();
+        setRoutineStats();
 
         setMonthView();
 
         return view;
     }
 
+    /**
+     * Metode que comprova si ha de mostrar estadistiques o no
+     */
+    private void setRoutineStats() {
+        if(DA.getSelectedRoutineId().equals("")) noRoutineSelected();
+        else showStats();
+    }
+
+    /**
+     * Metode que amaga les estadistiques
+     */
+    private void noRoutineSelected() {
+        hoursTitle.setVisibility(View.GONE);
+        hours.setVisibility(View.GONE);
+        chartTitle.setVisibility(View.GONE);
+        mpLineChart.setVisibility(View.GONE);
+        hoursSeparator.setVisibility(View.GONE);
+        chartSeparator.setVisibility(View.GONE);
+    }
+
+    /**
+     * Metode que carrega i mostra les estadistiques
+     */
+    private void showStats() {
+        setHoursByTheme();
+        setChart();
+
+        hoursTitle.setVisibility(View.VISIBLE);
+        hours.setVisibility(View.VISIBLE);
+        chartTitle.setVisibility(View.VISIBLE);
+        mpLineChart.setVisibility(View.VISIBLE);
+        hoursSeparator.setVisibility(View.VISIBLE);
+        chartSeparator.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * Metode que carrega les hores per tema de la rutina seleccionada
+     */
+    private void setHoursByTheme() {
+        ArrayList<Double> hoursTheme = DA.getHoursByTheme();
+
+        TextView sportHour = view.findViewById(R.id.sportHour);
+        TextView sleepHour = view.findViewById(R.id.sleepingHour);
+        TextView musicHour = view.findViewById(R.id.musicHour);
+        TextView cookingHour = view.findViewById(R.id.cookingHour);
+        TextView workingHour = view.findViewById(R.id.workingHour);
+        TextView entertainmentHour = view.findViewById(R.id.entertainmentHour);
+        TextView plantsHour = view.findViewById(R.id.plantsHour);
+        TextView otherHour = view.findViewById(R.id.otherHour);
+
+        musicHour.setText(String.valueOf(hoursTheme.get(0)));
+        sportHour.setText(String.valueOf(hoursTheme.get(1)));
+        sleepHour.setText(String.valueOf(hoursTheme.get(2)));
+        cookingHour.setText(String.valueOf(hoursTheme.get(3)));
+        workingHour.setText(String.valueOf(hoursTheme.get(4)));
+        entertainmentHour.setText(String.valueOf(hoursTheme.get(5)));
+        plantsHour.setText(String.valueOf(hoursTheme.get(6)));
+        otherHour.setText(String.valueOf(hoursTheme.get(7)));
+    }
+
+    /**
+     * Metode que inicialitza els components del calendari
+     */
     private void initWidgets()
     {
         calendarRecyclerView = view.findViewById(R.id.calendarRecyclerView);
@@ -115,6 +174,9 @@ public class Stats extends Fragment {
         monthYearText = view.findViewById(R.id.monthYearTV);
     }
 
+    /**
+     * Metode que carrega el mes que es mostra del calendari
+     */
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void setMonthView()
     {
@@ -138,9 +200,13 @@ public class Stats extends Fragment {
         */
         //TEMPORALMENT HARDCODEJAT FI
 
-        DA.updateCalendar(selectedDate.getMonthValue(), selectedDate.getYear());
+        DA.updateCalendar(selectedDate.getMonthValue(), selectedDate.getYear(), this);
     }
 
+    /**
+     * Metode que rep la resposta de carregar el mes seleccionat del calendari
+     * @param dayStats estadistiques del mes
+     */
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void callendarCallback(ArrayList<Integer> dayStats){
         ArrayList<String> daysInMonth = daysInMonthArray(selectedDate);
@@ -151,6 +217,11 @@ public class Stats extends Fragment {
         calendarRecyclerView.setAdapter(calendarAdapter);
     }
 
+    /**
+     * Metode que construeix el mes del calendari
+     * @param date data seleccionada
+     * @return dies del mes
+     */
     @RequiresApi(api = Build.VERSION_CODES.O)
     private ArrayList<String> daysInMonthArray(LocalDate date)
     {
@@ -184,42 +255,29 @@ public class Stats extends Fragment {
         return cap + " " + date.getYear();
     }
 
+    /**
+     * Metode per carregar el mes previ
+     */
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public void previousMonthAction()
+    private void previousMonthAction()
     {
         selectedDate = selectedDate.minusMonths(1);
         setMonthView();
     }
 
+    /**
+     * Metode per carregar el mes seguent
+     */
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public void nextMonthAction()
+    private void nextMonthAction()
     {
         selectedDate = selectedDate.plusMonths(1);
         setMonthView();
     }
 
-    private void setHoursStats() {
-        TextView sportHour = view.findViewById(R.id.sportHour);
-        TextView sleepHour = view.findViewById(R.id.sleepingHour);
-        TextView musicHour = view.findViewById(R.id.musicHour);
-        TextView cookingHour = view.findViewById(R.id.cookingHour);
-        TextView workingHour = view.findViewById(R.id.workingHour);
-        TextView entertainmentHour = view.findViewById(R.id.entertainmentHour);
-        TextView plantsHour = view.findViewById(R.id.plantsHour);
-        TextView otherHour = view.findViewById(R.id.otherHour);
-
-        ArrayList<Double> hoursTheme = DA.getHoursByTheme(this);
-
-        musicHour.setText(formatHoursMinutes(hoursTheme.get(0)));
-        sportHour.setText(formatHoursMinutes(hoursTheme.get(1)));
-        sleepHour.setText(formatHoursMinutes(hoursTheme.get(2)));
-        cookingHour.setText(formatHoursMinutes(hoursTheme.get(3)));
-        workingHour.setText(formatHoursMinutes(hoursTheme.get(4)));
-        entertainmentHour.setText(formatHoursMinutes(hoursTheme.get(5)));
-        plantsHour.setText(formatHoursMinutes(hoursTheme.get(6)));
-        otherHour.setText(formatHoursMinutes(hoursTheme.get(7)));
-    }
-
+    /**
+     * Metode que construeix el grafic
+     */
     private void setChart() {
         setDataValues();
 
@@ -303,26 +361,9 @@ public class Stats extends Fragment {
         mpLineChart.invalidate();
     }
 
-    public void dataCallback(){
-        hoursTitle.setVisibility(View.VISIBLE);
-        hours.setVisibility(View.VISIBLE);
-        chartTitle.setVisibility(View.VISIBLE);
-        mpLineChart.setVisibility(View.VISIBLE);
-        hoursSeparator.setVisibility(View.VISIBLE);
-        chartSeparator.setVisibility(View.VISIBLE);
-        setChart();
-        setHoursStats();
-    }
-
-    public void noRoutineCallback(){
-        hoursTitle.setVisibility(View.GONE);
-        hours.setVisibility(View.GONE);
-        chartTitle.setVisibility(View.GONE);
-        mpLineChart.setVisibility(View.GONE);
-        hoursSeparator.setVisibility(View.GONE);
-        chartSeparator.setVisibility(View.GONE);
-    }
-
+    /**
+     * Metode que carrega les dades del grafic
+     */
     private void setDataValues(){
         ArrayList<ArrayList<Double>> allValues = DA.getStatisticsSelectedRoutine();
         for (int tema=0; tema<8; ++tema) {
@@ -360,12 +401,11 @@ public class Stats extends Fragment {
     private String formatHoursMinutes(double time) {
         String timeString = String.format("%.2f", (float)time);
         String[] hoursMinutes = timeString.split(Pattern.quote("."));
-        double minutes = (double)Integer.valueOf(hoursMinutes[1]);
+        double minutes = Integer.parseInt(hoursMinutes[1]);
         minutes /= 100;
         minutes *= 60;
         String minutesString = String.format("%.0f", (float)minutes);
-        String result = hoursMinutes[0] + ":" + minutesString + "h";
-        return result;
+        return hoursMinutes[0] + ":" + minutesString + "h";
     }
 
 }

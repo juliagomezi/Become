@@ -84,6 +84,9 @@ public class DomainAdapter {
      * Instancia de la classe profile del frontend
      */
     private Profile profile;
+    /**
+     * Instancia de la classe stats del frontend
+     */
     private Stats stats;
     /**
      * Indica si l'usuari ha seleccionat directament una rutina o s'ha seleccionat des del codi pel correcte funcionament de l'aplicacio
@@ -384,10 +387,8 @@ public class DomainAdapter {
     /**
      * Metode per obtenir les hores dedicades a cada tema en la rutina seleccionada
      * @return ArrayList on a cada posicio hi han les hores dedicades al tema equivalent a la posicio (i.e. a la posicio 0 hi ha les hores dedicades a Music)
-     * @param statsView
      */
-    public ArrayList<Double> getHoursByTheme(Stats statsView){
-        stats = statsView;
+    public ArrayList<Double> getHoursByTheme() {
         ArrayList<Double> hoursByTheme = new ArrayList<>();
         for(int theme=0; theme<Theme.values().length; ++theme){
             double hours = currentUser.getHoursByTheme(Theme.values()[theme]);
@@ -423,7 +424,8 @@ public class DomainAdapter {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public void updateCalendar(int month, int year) {
+    public void updateCalendar(int month, int year, Stats s) {
+        stats = s;
         YearMonth object = YearMonth.of(year,month);
         int daysInMonth = object.lengthOfMonth();
         currentUser.clearMonth(daysInMonth);
@@ -444,7 +446,7 @@ public class DomainAdapter {
                 completition = Integer.parseInt(day.get("numActivitiesDone"))/Integer.parseInt(day.get("numTotalActivities"));
             currentUser.setDayCalendar(dayOfMonth-1, completition);
         }
-        this.stats.callendarCallback(currentUser.getCalendarMonth());
+        stats.callendarCallback(currentUser.getCalendarMonth());
     }
 
     /**
@@ -465,7 +467,6 @@ public class DomainAdapter {
             routineAdapter.setCurrentRoutine(null);
             currentUser.setSelectedRoutine(null);
             currentUser.clearStatistics();
-            this.stats.noRoutineCallback();
             controllerPersistence.setSelectedRoutine(currentUser.getID(),"");
         }
     }
@@ -498,12 +499,9 @@ public class DomainAdapter {
                 statistics.put(theme,s);
             }
             currentUser.setStatisticsSelectedRoutine(statistics);
-            this.stats.dataCallback();
         }
         else
             currentUser.clearStatistics();
-            this.stats.noRoutineCallback();
-
     }
 
     /**
