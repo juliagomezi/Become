@@ -460,6 +460,10 @@ public class DomainAdapter {
         stats.calendarCallback(currentUser.getCalendarMonth());
     }
 
+    public int getUserStreak(){
+        return currentUser.getStreak();
+    }
+
     /**
      * Metode per seleccionar una rutina ja existent
      * @param infoRoutine llista amb la informacio de la rutina a seleccionar

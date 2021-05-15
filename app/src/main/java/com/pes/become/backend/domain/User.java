@@ -296,4 +296,12 @@ public class User {
     public void setDayCalendar(int day, int completition) {
         calendarMonth.add(day, completition);
     }
+
+    public int getStreak() {
+        return streak;
+    }
+
+    public void setStreak(int streak) {
+        this.streak = streak;
+    }
 }

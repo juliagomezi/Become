@@ -98,6 +98,9 @@ public class Stats extends Fragment {
         streakText.getPaint().setShader(textShader);
         streakText.setTextColor(Color.parseColor("#12c2e9"));
 
+        TextView streakNum = view.findViewById(R.id.streakNum);
+        streakNum.setText(String.valueOf(DA.getUserStreak()));
+
         setRoutineStats();
 
         setMonthView();
