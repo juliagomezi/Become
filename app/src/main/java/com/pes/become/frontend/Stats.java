@@ -209,7 +209,7 @@ public class Stats extends Fragment {
      * @param dayStats estadistiques del mes
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public void callendarCallback(ArrayList<Integer> dayStats){
+    public void calendarCallback(ArrayList<Integer> dayStats){
         ArrayList<String> daysInMonth = daysInMonthArray(selectedDate);
 
         CalendarAdapter calendarAdapter = new CalendarAdapter(daysInMonth, dayStats);

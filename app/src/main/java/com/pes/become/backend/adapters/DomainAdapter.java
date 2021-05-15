@@ -449,7 +449,7 @@ public class DomainAdapter {
                 completition = Integer.parseInt(day.get("numActivitiesDone"))/Integer.parseInt(day.get("numTotalActivities"));
             currentUser.setDayCalendar(dayOfMonth-1, completition);
         }
-        stats.callendarCallback(currentUser.getCalendarMonth());
+        stats.calendarCallback(currentUser.getCalendarMonth());
     }
 
     /**
@@ -684,6 +684,11 @@ public class DomainAdapter {
         currentUser.updateStatistics(deleted.getTheme(),deleted.getDay(),duration.getHours(),duration.getMinutes(),false);
         routineAdapter.deleteActivity(id, Day.valueOf(day));
         controllerPersistence.deleteActivity(currentUser.getID(), currentUser.getSelectedRoutine().getId(), id);
+    }
+
+    public void markActivityAsDone(String activityID, boolean isDone){
+        routineAdapter.markActivityAsDone(activityID, isDone);
+        //controllerPersistence.markActivityAsDone(currentUser.getID(), currentUser.getSelectedRoutine().getId(), isDone, activityID, currentUser.getSelectedRoutine().getTotalActivities());
     }
 
     /**

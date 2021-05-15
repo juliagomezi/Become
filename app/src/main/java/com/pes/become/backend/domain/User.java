@@ -43,6 +43,10 @@ public class User {
      *
      */
     private ArrayList<Integer> calendarMonth;
+    /**
+     *
+     */
+    private int streak;
 
     /**
      * Creadora de la classe per a un nou usuari
