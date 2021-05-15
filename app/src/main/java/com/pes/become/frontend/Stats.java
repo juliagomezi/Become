@@ -33,6 +33,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapter;
 
+import java.text.DecimalFormatSymbols;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.TextStyle;
@@ -154,14 +155,14 @@ public class Stats extends Fragment {
         TextView plantsHour = view.findViewById(R.id.plantsHour);
         TextView otherHour = view.findViewById(R.id.otherHour);
 
-        musicHour.setText(String.valueOf(hoursTheme.get(0)));
-        sportHour.setText(String.valueOf(hoursTheme.get(1)));
-        sleepHour.setText(String.valueOf(hoursTheme.get(2)));
-        cookingHour.setText(String.valueOf(hoursTheme.get(3)));
-        workingHour.setText(String.valueOf(hoursTheme.get(4)));
-        entertainmentHour.setText(String.valueOf(hoursTheme.get(5)));
-        plantsHour.setText(String.valueOf(hoursTheme.get(6)));
-        otherHour.setText(String.valueOf(hoursTheme.get(7)));
+        musicHour.setText(formatHoursMinutes(hoursTheme.get(0)));
+        sportHour.setText(formatHoursMinutes(hoursTheme.get(1)));
+        sleepHour.setText(formatHoursMinutes(hoursTheme.get(2)));
+        cookingHour.setText(formatHoursMinutes(hoursTheme.get(3)));
+        workingHour.setText(formatHoursMinutes(hoursTheme.get(4)));
+        entertainmentHour.setText(formatHoursMinutes(hoursTheme.get(5)));
+        plantsHour.setText(formatHoursMinutes(hoursTheme.get(6)));
+        otherHour.setText(formatHoursMinutes(hoursTheme.get(7)));
     }
 
     /**
@@ -399,8 +400,9 @@ public class Stats extends Fragment {
      * @return string amb format hh:mm h
      */
     private String formatHoursMinutes(double time) {
+        char decimalSeparator = DecimalFormatSymbols.getInstance().getDecimalSeparator();
         String timeString = String.format("%.2f", (float)time);
-        String[] hoursMinutes = timeString.split(Pattern.quote("."));
+        String[] hoursMinutes = timeString.split(Pattern.quote(String.valueOf(decimalSeparator)));
         double minutes = Integer.parseInt(hoursMinutes[1]);
         minutes /= 100;
         minutes *= 60;
