@@ -153,4 +153,8 @@ public class RoutineAdapter {
     public boolean checkOverlappings(Activity a) {
         return routine.checkOverlappings(a);
     }
+
+    public void markActivityAsDone(String activityID, boolean isDone) {
+        routine.getActivity(activityID).setDoneToday(isDone);
+    }
 }

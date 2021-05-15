@@ -43,6 +43,10 @@ public class User {
      *
      */
     private ArrayList<Integer> calendarMonth;
+    /**
+     *
+     */
+    private int streak;
 
     /**
      * Creadora de la classe per a un nou usuari
@@ -291,5 +295,13 @@ public class User {
 
     public void setDayCalendar(int day, int completition) {
         calendarMonth.add(day, completition);
+    }
+
+    public int getStreak() {
+        return streak;
+    }
+
+    public void setStreak(int streak) {
+        this.streak = streak;
     }
 }

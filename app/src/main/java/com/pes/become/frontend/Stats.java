@@ -98,6 +98,9 @@ public class Stats extends Fragment {
         streakText.getPaint().setShader(textShader);
         streakText.setTextColor(Color.parseColor("#12c2e9"));
 
+        TextView streakNum = view.findViewById(R.id.streakNum);
+        streakNum.setText(String.valueOf(DA.getUserStreak()));
+
         setRoutineStats();
 
         setMonthView();
@@ -209,7 +212,7 @@ public class Stats extends Fragment {
      * @param dayStats estadistiques del mes
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public void callendarCallback(ArrayList<Integer> dayStats){
+    public void calendarCallback(ArrayList<Integer> dayStats){
         ArrayList<String> daysInMonth = daysInMonthArray(selectedDate);
 
         CalendarAdapter calendarAdapter = new CalendarAdapter(daysInMonth, dayStats);
