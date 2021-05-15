@@ -192,6 +192,7 @@ public class DomainAdapter {
         } catch (NoSuchMethodException ignore) {}
     }
 
+    //DB: AQUI FALTA LA RATXA DE L'USUARI I ELS TROFEUS
     /**
      * Metode que rep la resposta a la crida "loginUser" de la base de dades
      * @param success resultat de l'operacio
@@ -245,6 +246,7 @@ public class DomainAdapter {
         }
     }
 
+    //DB: AQUI FALTA LA RATXA DE L'USUARI I ELS TROFEUS
     /**
      * Metode que autentifica un usuari ja loguejat
      * @param success resultat de l'operacio
@@ -285,6 +287,9 @@ public class DomainAdapter {
                 }
 
                 currentUser.setStatisticsSelectedRoutine(statistics);
+            }
+            else{
+                currentUser.clearStatistics();
             }
 
             achievementController.setCurrentUser(currentUser);
@@ -513,6 +518,7 @@ public class DomainAdapter {
         if(this.stats!=null) this.stats.setRoutineStats();
     }
 
+    //DB: AQUI FALTA REBRE SI ESTA FETA O NO
     /**
      * Metode per rebre les activitats de la rutina seleccionada
      * @param activitiesList activitats de la rutina
