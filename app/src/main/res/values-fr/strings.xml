@@ -106,5 +106,6 @@
     <string name="change_username">Changer le nom d\'utilisateur</string>
     <string name="congrats">Félicitations!</string>
     <string name="new_trophy_won">" Nouveau trophée remporté"</string>
+    <string name="deselectToRemove">Désélectionnez cette routine pour la supprimer</string>
 
 </resources>

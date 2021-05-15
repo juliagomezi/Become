@@ -106,5 +106,6 @@
     <string name="username_changed">Nom canviat correctament.</string>
     <string name="congrats">Enhorabona!</string>
     <string name="new_trophy_won">Has guanyat un trofeu</string>
+    <string name="deselectToRemove">Deselecciona aquesta rutina per a eliminarla</string>
 
 </resources>

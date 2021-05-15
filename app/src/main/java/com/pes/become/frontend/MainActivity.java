@@ -14,9 +14,6 @@ import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.pes.become.R;
-import com.pes.become.backend.adapters.DomainAdapter;
-
-import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -111,6 +108,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         myDialog.show();
     }
 
+    /**
+     * Metode que sobreescriu el que es vol fer amb la tecla de "back"
+     */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)  {
         if (keyCode == KeyEvent.KEYCODE_BACK ) {
