@@ -214,7 +214,10 @@ public class DomainAdapter {
                 }
             }
             if(!selectedRoutineId.equals("")) selectRoutine(routine, false);
-            else login.loginCallback();
+            else {
+                login.loginCallback();
+                login = null;
+            }
 
             if(stats != null) {
                 Map<Theme,Map<Day, Double>> statistics = new TreeMap<>();
