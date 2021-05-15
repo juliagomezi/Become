@@ -264,7 +264,10 @@ public class DomainAdapter {
                 }
             }
             if (!selectedRoutineId.equals("")) selectRoutine(routine, false);
-            else logoScreen.loginCallback();
+            else {
+                logoScreen.loginCallback();
+                logoScreen = null;
+            }
 
             if(stats != null) {
                 Map<Theme,Map<Day, Double>> statistics = new TreeMap<>();
@@ -468,6 +471,7 @@ public class DomainAdapter {
             currentUser.setSelectedRoutine(null);
             currentUser.clearStatistics();
             controllerPersistence.setSelectedRoutine(currentUser.getID(),"");
+            if(this.stats!=null) this.stats.setRoutineStats();
         }
     }
 
@@ -502,6 +506,8 @@ public class DomainAdapter {
         }
         else
             currentUser.clearStatistics();
+
+        if(this.stats!=null) this.stats.setRoutineStats();
     }
 
     /**
@@ -532,14 +538,14 @@ public class DomainAdapter {
         if (!selectingRoutine) {
             if (login != null) {
                 login.loginCallback();
-                login = null;
             }
             else if (logoScreen != null) {
                 logoScreen.loginCallback();
-                logoScreen = null;
             } else {
                 MainActivity.getInstance().setEditRoutineScreen(currentUser.getSelectedRoutine().getId(),currentUser.getSelectedRoutine().getName());
             }
+            login = null;
+            logoScreen = null;
         }
     }
 

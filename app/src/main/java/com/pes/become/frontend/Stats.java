@@ -105,9 +105,9 @@ public class Stats extends Fragment {
     }
 
     /**
-     * Metode que comprova si ha de mostrar estadistiques o no
+     * Metode que comprova si ha de mostrar estadistiques o no, en cas afirmatiu les carrega i mostra
      */
-    private void setRoutineStats() {
+    public void setRoutineStats() {
         if(DA.getSelectedRoutineId().equals("")) noRoutineSelected();
         else showStats();
     }
