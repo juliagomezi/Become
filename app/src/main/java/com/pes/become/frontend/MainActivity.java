@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
@@ -97,8 +98,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     /**
      * Metode que mostra el popup per notificar que s'ha guanyat un trofeu
+     * @param text missatge o nom del trofeu guanyat que es mostra al popup
      */
-    public void showTrophyWon() {
+    public void showTrophyWon(String text) {
         Dialog myDialog = new Dialog(this);
         myDialog.setContentView(R.layout.popup);
 
@@ -107,5 +109,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         myDialog.show();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)  {
+        if (keyCode == KeyEvent.KEYCODE_BACK ) {
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }
