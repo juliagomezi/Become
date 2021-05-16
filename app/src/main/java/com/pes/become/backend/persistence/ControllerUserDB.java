@@ -128,7 +128,7 @@ public class ControllerUserDB {
                             params[3] = documentSnapshot.get("selectedRoutine");
                             if (params[3] == null) params[3]="";
                             else params[3] = params[3].toString();
-                            params[7] = Integer.valueOf(documentSnapshot.get("streak").toString());
+                            params[7] = (int) documentSnapshot.get("streak");
                             try {
                                 File localFile = File.createTempFile("images", "jpeg");
                                 StorageReference imageRef = storageRef.child("images/"+userID);
@@ -292,7 +292,7 @@ public class ControllerUserDB {
             params[1] = userID;
             params[2] = documentSnapshot.get("Username").toString();
             params[3] = documentSnapshot.get("selectedRoutine");
-            params[7] = Integer.valueOf(documentSnapshot.get("streak").toString());
+            params[7] = (int) documentSnapshot.get("streak");
 
             try {
                 File localFile = File.createTempFile("images", "jpeg");
@@ -456,7 +456,7 @@ public class ControllerUserDB {
                                 HashMap<String, Object> mapa = new HashMap<>();
                                 mapa.put("Username", user.getDisplayName());
                                 mapa.put("selectedRoutine", "");
-                                mapa.put("streak", "0");
+                                mapa.put("streak", 0);
                                 docRefToUser.set(mapa).addOnCompleteListener(t -> {
                                     params[0] = true;
                                     params[1] = userID;
@@ -483,7 +483,7 @@ public class ControllerUserDB {
                                         params[2] = documentSnapshot.get("Username").toString();
                                         params[3] = documentSnapshot.get("selectedRoutine");
                                         params[4] = BitmapFactory.decodeFile(localFile.getAbsolutePath());
-                                        params[7] = Integer.valueOf(documentSnapshot.get("streak").toString());
+                                        params[7] = (int) documentSnapshot.get("streak");
                                         if (params[3] == null) params[3] = "";
                                         else params[3] = params[3].toString();
 
@@ -549,7 +549,7 @@ public class ControllerUserDB {
                                         params[2] = documentSnapshot.get("Username").toString();
                                         params[3] = documentSnapshot.get("selectedRoutine");
                                         params[4] = null;
-                                        params[7] = Integer.valueOf(documentSnapshot.get("streak").toString());
+                                        params[7] = (int) documentSnapshot.get("streak");
                                         if (params[3] == null) params[3] = "";
                                         else params[3] = params[3].toString();
 
@@ -651,7 +651,7 @@ public class ControllerUserDB {
                         HashMap<String, Object> mapa = new HashMap<>();
                         mapa.put("Username", name);
                         mapa.put("selectedRoutine", "");
-                        mapa.put("streak", "0");
+                        mapa.put("streak", 0);
                         docRefToUser.set(mapa);
                         params[0] = true;
                         params[1] = userID;
