@@ -651,7 +651,7 @@ public class ControllerUserDB {
                         HashMap<String, Object> mapa = new HashMap<>();
                         mapa.put("Username", name);
                         mapa.put("selectedRoutine", "");
-                        mapa.put("streak", "0");
+                        mapa.put("streak", 0);
                         docRefToUser.set(mapa);
                         params[0] = true;
                         params[1] = userID;
