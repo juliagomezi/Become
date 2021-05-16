@@ -252,7 +252,6 @@ public class DomainAdapter {
             }
 
             achievementController.setCurrentUser(currentUser);
-
         }
         else {
             login.loginCallbackFailed();
@@ -719,12 +718,12 @@ public class DomainAdapter {
      * @param activityID identificador de l'activitat
      * @param isDone boolea que indica si es marca o desmarca
      */
-    public void markActivityAsDone(String activityID, boolean isDone) {
+    public void markActivityAsDone(String activityID, boolean isDone, int day) {
         routineAdapter.markActivityAsDone(activityID, isDone);
         if (isDone) {
-            controllerPersistence.markActivityAsDone(currentUser.getID(), currentUser.getSelectedRoutine().getId(), StringDateConverter.dateToString(Calendar.getInstance().getTime()), activityID, currentUser.getSelectedRoutine().getTotalActivities());
+            controllerPersistence.markActivityAsDone(currentUser.getID(), currentUser.getSelectedRoutine().getId(), StringDateConverter.dateToString(Calendar.getInstance().getTime()), activityID, currentUser.getSelectedRoutine().getActivitiesByDay(Day.values()[day]).size());
         } else {
-            controllerPersistence.markActivityAsDone(currentUser.getID(), currentUser.getSelectedRoutine().getId(), null, activityID, currentUser.getSelectedRoutine().getTotalActivities());
+            controllerPersistence.markActivityAsDone(currentUser.getID(), currentUser.getSelectedRoutine().getId(), null, activityID, currentUser.getSelectedRoutine().getActivitiesByDay(Day.values()[day]).size());
         }
     }
 

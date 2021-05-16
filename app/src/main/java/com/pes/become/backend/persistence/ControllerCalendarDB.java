@@ -69,11 +69,13 @@ public class ControllerCalendarDB {
     /**
      * Actualitza la informació d'un dia
      * @param userId id de l'usuari del calendari
-     * @param day dia del calendari
      * @param activitiesDoneIncrement incrrement del nombre d'activitats fetes
      */
-    public void incrementDay(String userId, Date day, int activitiesDoneIncrement, int totalActivities) {
-        DocumentReference docRefToCalendarDay = db.collection("users").document(userId).collection("calendar").document(StringDateConverter.dateToString(day));
+    public void incrementDay(String userId, int activitiesDoneIncrement, int totalActivities) {
+        Calendar cal = Calendar.getInstance();
+        Date day = cal.getTime();
+
+        DocumentReference docRefToCalendarDay = db.collection("users").document(userId).collection("calendar").document(StringDateConverter.dateToString(cal.getTime()));
         DocumentReference docRefToUser = db.collection("users").document(userId);
         docRefToCalendarDay.get().addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
@@ -81,24 +83,41 @@ public class ControllerCalendarDB {
                 if(document.exists()) {
                     int num = Integer.valueOf(document.get("numActivitiesDone").toString());
                     if((num == totalActivities) && (activitiesDoneIncrement < 0)) {
-                        docRefToUser.update("streak", -1);
+                        docRefToUser.update("streak", FieldValue.increment(-1));
                     } else if(num+activitiesDoneIncrement == totalActivities) {
                         docRefToUser.update("streak", FieldValue.increment(1));
                     }
-                }
-                docRefToCalendarDay.update("numActivitiesDone", FieldValue.increment(activitiesDoneIncrement));
-            } else {
-                Map<String, Object> data = new HashMap<>();
-                data.put("numActivitiesDone", FieldValue.increment(activitiesDoneIncrement));
-                data.put("numTotalActivities", totalActivities);
-                data.put("day", getStringDay(day));
-                data.put("month", getStringMonth(day));
-                data.put("year", getStringYear(day));
+                    docRefToCalendarDay.update("numActivitiesDone", FieldValue.increment(activitiesDoneIncrement));
+                } else {
+                    Map<String, Object> data = new HashMap<>();
+                    data.put("numActivitiesDone", FieldValue.increment(activitiesDoneIncrement));
+                    data.put("numTotalActivities", totalActivities);
+                    data.put("day", getStringDay(day));
+                    data.put("month", getStringMonth(day));
+                    data.put("year", getStringYear(day));
 
-                docRefToCalendarDay.set(data, SetOptions.merge());
+                    docRefToCalendarDay.set(data, SetOptions.merge());
 
-                if(activitiesDoneIncrement == totalActivities) {
-                    docRefToUser.update("streak", FieldValue.increment(1));
+                    cal.add(Calendar.DATE, -1);
+                    String yesterday = StringDateConverter.dateToString(cal.getTime());
+                    db.collection("users").document(userId).collection("calendar").document(yesterday).get().addOnCompleteListener(task2 -> {
+                                if (task2.isSuccessful()) {
+                                    DocumentSnapshot document2 = task2.getResult();
+                                    if (document2.exists()) {
+                                        int actsDone = (int) document2.get("numActivitiesDone");
+                                        int total = (int) document2.get("numTotalActivities");
+                                        if(actsDone == total) {
+                                            if(activitiesDoneIncrement == totalActivities) docRefToUser.update("streak", FieldValue.increment(1));
+                                        } else {
+                                            if(activitiesDoneIncrement == totalActivities) docRefToUser.update("streak", 1);
+                                            else docRefToUser.update("streak", 0);
+                                        }
+                                    } else {
+                                        if(activitiesDoneIncrement == totalActivities) docRefToUser.update("streak", 1);
+                                        else docRefToUser.update("streak", 0);
+                                    }
+                                }
+                            });
                 }
             }
         });

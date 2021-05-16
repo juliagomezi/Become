@@ -228,11 +228,11 @@ public class RoutineView extends Fragment implements AdapterView.OnItemSelectedL
                         doneActivityID = activitiesList.get(position).get(0);
                         doneActivityName = activitiesList.get(position).get(1);
 
-                        DA.markActivityAsDone(doneActivityID, true);
+                        DA.markActivityAsDone(doneActivityID, true, seeingDay);
                         updateActivitiesList();
 
                         Snackbar.make(recyclerView, doneActivityName, BaseTransientBottomBar.LENGTH_LONG)
-                                .setAction("Undo", v -> DA.markActivityAsDone(doneActivityID, false)).show();
+                                .setAction("Undo", v -> DA.markActivityAsDone(doneActivityID, false, seeingDay)).show();
                     }
                     break;
 
@@ -241,11 +241,11 @@ public class RoutineView extends Fragment implements AdapterView.OnItemSelectedL
                         doneActivityID = activitiesList.get(position).get(0);
                         doneActivityName = activitiesList.get(position).get(1);
 
-                        DA.markActivityAsDone(doneActivityID, false);
+                        DA.markActivityAsDone(doneActivityID, false, seeingDay);
                         updateActivitiesList();
 
                         Snackbar.make(recyclerView, doneActivityName, BaseTransientBottomBar.LENGTH_LONG)
-                                .setAction("Undo", v -> DA.markActivityAsDone(doneActivityID, true)).show();
+                                .setAction("Undo", v -> DA.markActivityAsDone(doneActivityID, true, seeingDay)).show();
                     }
                     break;
             }
