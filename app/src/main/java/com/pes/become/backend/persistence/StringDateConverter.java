@@ -9,8 +9,8 @@ public class StringDateConverter {
 
     /**
      * Retorna la data en format per la ID de la base de dades
-     * @param date data
-     * @return
+     * @param date data a convertir
+     * @return data convertida a String
      */
     public static String dateToString(Date date)
     {
@@ -19,9 +19,9 @@ public class StringDateConverter {
     }
 
     /**
-     *
-     * @param date
-     * @return
+     * Retorna la el string en format data
+     * @param date la data a convertir
+     * @return string convertit a data
      */
     public static Date stringToDate(String date)
     {

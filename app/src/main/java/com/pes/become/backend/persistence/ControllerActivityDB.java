@@ -9,6 +9,7 @@ import com.google.firebase.firestore.CollectionReference;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -57,11 +58,11 @@ public class ControllerActivityDB {
                     activity.add(activityDay);
                     activity.add(document.get("beginTime").toString());
                     activity.add(document.get("finishTime").toString());
-                    //activity.add(document.get("lastDayDone").toString());
+                    if(!document.get("lastDayDone").toString().equals("null")) {
+                        if (StringDateConverter.dateToString(Calendar.getInstance().getTime()).equals(document.get("lastDayDone").toString())) activity.add("true");
+                        else activity.add("false");
+                    } else activity.add("false");
 
-                    //ArrayList<ArrayList<String>> aux = routineActivities.get(activityDay);
-                    //aux.add(activity);
-                    //routineActivities.put(activityDay,aux);
                     switch (activityDay) {
                         case "Monday":
                             routineActivities.get("Monday").add(activity);
@@ -88,8 +89,11 @@ public class ControllerActivityDB {
                 }
                 try {
                     method.invoke(object, routineActivities);
-                } catch (IllegalAccessException ignore) {
-                } catch (InvocationTargetException ignore) { }
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e2) {
+                    e2.printStackTrace();
+                }
             }
         });
     }
@@ -189,8 +193,8 @@ public class ControllerActivityDB {
                     docRefToActivity.update("lastDayDone", "null").addOnCompleteListener(task2 -> {
                         if (task2.isSuccessful()) {
                             ControllerCalendarDB cal = new ControllerCalendarDB();
-                            Date lastDay = StringDateConverter.stringToDate(lastDayDone);
-                            cal.incrementDay(userId, lastDay, 1, totalActivities);
+                            Date lastDay = StringDateConverter.stringToDate(realLastDayDone);
+                            cal.incrementDay(userId, lastDay, -1, totalActivities);
                         }
                     });
                 }

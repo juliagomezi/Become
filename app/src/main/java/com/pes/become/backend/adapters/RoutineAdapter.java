@@ -85,6 +85,7 @@ public class RoutineAdapter {
             Integer endHour = activity.getInterval().getEndTime().getHours();
             Integer endMinute = activity.getInterval().getEndTime().getMinutes();
             resaux.add(String.format("%02d", endHour) + ":" + String.format("%02d", endMinute));
+            resaux.add(String.valueOf(activity.isDoneToday()));
             res.add(resaux);
         }
         return res;

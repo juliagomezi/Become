@@ -185,25 +185,6 @@ public class Stats extends Fragment {
     private void setMonthView()
     {
         monthYearText.setText(monthYearFromDate(selectedDate));
-
-        // TEMPORALMENT HARDCODEJAT INICI
-        /*
-        ArrayList<Integer> dayStats = new ArrayList<>();
-        for(int i = 0; i < 31; ++i) {
-            if(i == 0) dayStats.add(0);
-            else if(i == 1) dayStats.add(1);
-            else if(i == 2) dayStats.add(25);
-            else if(i == 3) dayStats.add(50);
-            else if(i == 4) dayStats.add(75);
-            else if(i == 5) dayStats.add(-1);
-            else {
-                Random r = new Random();
-                dayStats.add(r.nextInt(101));
-            }
-        }
-        */
-        //TEMPORALMENT HARDCODEJAT FI
-
         DA.updateCalendar(selectedDate.getMonthValue(), selectedDate.getYear(), this);
     }
 

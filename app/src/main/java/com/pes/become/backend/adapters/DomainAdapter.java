@@ -21,6 +21,7 @@ import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
 import com.pes.become.backend.exceptions.NoSelectedRoutineException;
 import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 import com.pes.become.backend.persistence.ControllerPersistence;
+import com.pes.become.backend.persistence.StringDateConverter;
 import com.pes.become.frontend.ForgotPassword;
 import com.pes.become.frontend.LogoScreen;
 import com.pes.become.frontend.Login;
@@ -32,6 +33,7 @@ import com.pes.become.frontend.Stats;
 import java.lang.reflect.Method;
 import java.time.YearMonth;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -454,7 +456,7 @@ public class DomainAdapter {
             int dayOfMonth = Integer.parseInt(day.get("day"));
             int completition = 0;
             if(!day.get("numTotalActivities").equals("0"))
-                completition = Integer.parseInt(day.get("numActivitiesDone"))/Integer.parseInt(day.get("numTotalActivities"));
+                completition = (int)((Double.parseDouble(day.get("numActivitiesDone"))/Double.parseDouble(day.get("numTotalActivities"))) * 100);
             currentUser.setDayCalendar(dayOfMonth-1, completition);
         }
         stats.calendarCallback(currentUser.getCalendarMonth());
@@ -522,7 +524,6 @@ public class DomainAdapter {
         if(this.stats!=null) this.stats.setRoutineStats();
     }
 
-    //DB: AQUI FALTA REBRE SI ESTA FETA O NO
     /**
      * Metode per rebre les activitats de la rutina seleccionada
      * @param activitiesList activitats de la rutina
@@ -542,6 +543,7 @@ public class DomainAdapter {
                     int endM = Integer.parseInt(s2[1]);
                     Activity activity = new Activity(activities.get(i).get(1), activities.get(i).get(2), Theme.valueOf(activities.get(i).get(3)), new TimeInterval(iniH, iniM, endH, endM), Day.valueOf(activities.get(i).get(4)));
                     activity.setId(activities.get(i).get(0));
+                    activity.setDoneToday((activities.get(i).get(7)).equals("true"));
                     acts.add(activity);
                 }
                 routineAdapter.setActivitiesByDay(acts, acts.get(0).getDay());
@@ -699,9 +701,18 @@ public class DomainAdapter {
         controllerPersistence.deleteActivity(currentUser.getID(), currentUser.getSelectedRoutine().getId(), id);
     }
 
-    public void markActivityAsDone(String activityID, boolean isDone){
+    /**
+     * Metode per marcar una activitat com a feta
+     * @param activityID identificador de l'activitat
+     * @param isDone boolea que indica si es marca o desmarca
+     */
+    public void markActivityAsDone(String activityID, boolean isDone) {
         routineAdapter.markActivityAsDone(activityID, isDone);
-        //controllerPersistence.markActivityAsDone(currentUser.getID(), currentUser.getSelectedRoutine().getId(), isDone, activityID, currentUser.getSelectedRoutine().getTotalActivities());
+        if (isDone) {
+            controllerPersistence.markActivityAsDone(currentUser.getID(), currentUser.getSelectedRoutine().getId(), StringDateConverter.dateToString(Calendar.getInstance().getTime()), activityID, currentUser.getSelectedRoutine().getTotalActivities());
+        } else {
+            controllerPersistence.markActivityAsDone(currentUser.getID(), currentUser.getSelectedRoutine().getId(), null, activityID, currentUser.getSelectedRoutine().getTotalActivities());
+        }
     }
 
     /**

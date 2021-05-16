@@ -1,6 +1,5 @@
 package com.pes.become.frontend;
 
-import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,14 +47,15 @@ public class RoutineViewRecyclerAdapter extends RecyclerView.Adapter<RoutineView
      */
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
         holder.activityNameDisplay.setText(activitiesList.get(position).get(1));
         holder.activityDescriptionDisplay.setText(activitiesList.get(position).get(2));
         holder.startTimeDisplay.setText(activitiesList.get(position).get(5));
         holder.endTimeDisplay.setText(activitiesList.get(position).get(6));
         holder.expandableLayout.setVisibility(isExpanded[position] ? View.VISIBLE : View.GONE);
 
+        boolean isDone = activitiesList.get(position).get(7).equals("true");
         String theme = activitiesList.get(position).get(3);
+
         switch (theme) {
             case "Cooking":
                 holder.cardActivityDisplay.setBackgroundResource(R.drawable.theme_cooking_background);
@@ -82,7 +82,7 @@ public class RoutineViewRecyclerAdapter extends RecyclerView.Adapter<RoutineView
                 holder.cardActivityDisplay.setBackgroundResource(R.drawable.theme_other_background);
                 break;
         }
-
+        if(isDone) holder.cardActivityDisplay.setAlpha(0.3f);
     }
 
     /**
