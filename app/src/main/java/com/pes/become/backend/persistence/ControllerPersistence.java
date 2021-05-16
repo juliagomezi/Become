@@ -381,18 +381,6 @@ public class ControllerPersistence {
         CD.updateDay(userId, day, activitiesDone, idRoutine);
     }
 
-    /**
-     * Actualitza la informació d'un dia. ATENCIÓ: Markactivity as done ja llança aquesta funció
-     * @param userId id de l'usuari del calendari
-     * @param day dia del calendari
-     * @param activitiesDoneIncrement increment del nombre d'activitats fetes
-     * @param totalActivities nombre total d'activitats del dia per la rutina seleccionada
-     */
-    public void incrementDay(String userId, Date day, int activitiesDoneIncrement, int totalActivities)
-    {
-        CD.incrementDay(userId, day, activitiesDoneIncrement, totalActivities);
-    }
-
     //*********TROFEUS************
     /**
      * Funcio que crea els trofeus d'un usuari quan aquest es registra

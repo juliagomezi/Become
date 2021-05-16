@@ -115,7 +115,6 @@ public class ControllerUserDB {
         mAuth.signInWithEmailAndPassword(mail, password)
                 .addOnCompleteListener(act, task -> {
                     Object[] params = new Object[8];
-                    params[7] = 0;
 
                     if (task.isSuccessful() && mAuth.getCurrentUser().isEmailVerified()) {
                         FirebaseUser user = mAuth.getCurrentUser();
@@ -127,8 +126,10 @@ public class ControllerUserDB {
                             params[1] = userID;
                             params[2] = documentSnapshot.get("Username").toString();
                             params[3] = documentSnapshot.get("selectedRoutine");
-                            if (params[3] == null){  params[3]="";}
-                            else {params[3] = params[3].toString();}
+                            if (params[3] == null) params[3]="";
+                            else params[3] = params[3].toString();
+                            params[7] = Integer.valueOf(documentSnapshot.get("streak").toString());
+                            if(params[7] == null) params[7] = 0;
 
                             try {
                                 File localFile = File.createTempFile("images", "jpeg");
@@ -286,7 +287,6 @@ public class ControllerUserDB {
         FirebaseUser user = mAuth.getCurrentUser();
         String userID = user.getUid();
         Object[] params = new Object[8];
-        params[7] = 0;
 
         DocumentReference docRefToUser = db.collection("users").document(userID);
         docRefToUser.get().addOnSuccessListener(documentSnapshot -> {
@@ -294,6 +294,8 @@ public class ControllerUserDB {
             params[1] = userID;
             params[2] = documentSnapshot.get("Username").toString();
             params[3] = documentSnapshot.get("selectedRoutine");
+            params[7] = Integer.valueOf(documentSnapshot.get("streak").toString());
+            if(params[7] == null) params[7] = 0;
 
             try {
                 File localFile = File.createTempFile("images", "jpeg");
@@ -445,7 +447,6 @@ public class ControllerUserDB {
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(task -> {
                     Object[] params = new Object[8];
-                    params[7] = 0;
 
                     if (task.isSuccessful()) {
                         FirebaseUser user = mAuth.getCurrentUser();
@@ -484,6 +485,8 @@ public class ControllerUserDB {
                                         params[2] = documentSnapshot.get("Username").toString();
                                         params[3] = documentSnapshot.get("selectedRoutine");
                                         params[4] = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                                        params[7] = Integer.valueOf(documentSnapshot.get("streak").toString());
+                                        if(params[7] == null) params[7] = 0;
 
                                         if (params[3] == null) params[3] = "";
                                         else params[3] = params[3].toString();
@@ -550,6 +553,8 @@ public class ControllerUserDB {
                                         params[2] = documentSnapshot.get("Username").toString();
                                         params[3] = documentSnapshot.get("selectedRoutine");
                                         params[4] = null;
+                                        params[7] = Integer.valueOf(documentSnapshot.get("streak").toString());
+                                        if(params[7] == null) params[7] = 0;
 
                                         if (params[3] == null) params[3] = "";
                                         else params[3] = params[3].toString();

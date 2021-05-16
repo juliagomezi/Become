@@ -72,15 +72,36 @@ public class ControllerCalendarDB {
      * @param day dia del calendari
      * @param activitiesDoneIncrement incrrement del nombre d'activitats fetes
      */
-    public void incrementDay(String userId, Date day, int activitiesDoneIncrement, int totalActivities){
-        Map<String, Object> data = new HashMap<>();
-        data.put("numActivitiesDone", FieldValue.increment(activitiesDoneIncrement));
-        data.put("numTotalActivities", totalActivities);
-        data.put("day", getStringDay(day));
-        data.put("month", getStringMonth(day));
-        data.put("year", getStringYear(day));
-        DocumentReference docRefToRoutine = db.collection("users").document(userId).collection("calendar").document(StringDateConverter.dateToString(day));
-        docRefToRoutine.set(data, SetOptions.merge());
+    public void incrementDay(String userId, Date day, int activitiesDoneIncrement, int totalActivities) {
+        DocumentReference docRefToCalendarDay = db.collection("users").document(userId).collection("calendar").document(StringDateConverter.dateToString(day));
+        DocumentReference docRefToUser = db.collection("users").document(userId);
+        docRefToCalendarDay.get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if(document.exists()) {
+                    int num = Integer.valueOf(document.get("numActivitiesDone").toString());
+                    if((num == totalActivities) && (activitiesDoneIncrement < 0)) {
+                        docRefToUser.update("streak", -1);
+                    } else if(num+activitiesDoneIncrement == totalActivities) {
+                        docRefToUser.update("streak", FieldValue.increment(1));
+                    }
+                }
+                docRefToCalendarDay.update("numActivitiesDone", FieldValue.increment(activitiesDoneIncrement));
+            } else {
+                Map<String, Object> data = new HashMap<>();
+                data.put("numActivitiesDone", FieldValue.increment(activitiesDoneIncrement));
+                data.put("numTotalActivities", totalActivities);
+                data.put("day", getStringDay(day));
+                data.put("month", getStringMonth(day));
+                data.put("year", getStringYear(day));
+
+                docRefToCalendarDay.set(data, SetOptions.merge());
+
+                if(activitiesDoneIncrement == totalActivities) {
+                    docRefToUser.update("streak", FieldValue.increment(1));
+                }
+            }
+        });
     }
 
     /**
@@ -246,7 +267,7 @@ public class ControllerCalendarDB {
                 }
                 params[1] = streak;
 
-            }else params[1] = task.getException();
+            } else params[1] = task.getException();
             try {
                 method.invoke(object, params);
             } catch (IllegalAccessException ignore) {

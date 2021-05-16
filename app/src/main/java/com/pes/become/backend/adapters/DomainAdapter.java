@@ -218,6 +218,7 @@ public class DomainAdapter {
             currentUser = userAdapter.createUser(username);
             currentUser.setID(userId);
             currentUser.setPFP(pfp);
+            currentUser.setStreak(streak);
             if(!routineInfo.isEmpty()) currentUser.setRoutines(routineInfo);
             ArrayList<String> routine = new ArrayList<>();
             for(ArrayList<String> r : routineInfo) {
@@ -273,6 +274,7 @@ public class DomainAdapter {
             currentUser = userAdapter.createUser(username);
             currentUser.setID(userId);
             currentUser.setPFP(pfp);
+            currentUser.setStreak(streak);
             if(!routineInfo.isEmpty()) currentUser.setRoutines(routineInfo);
             ArrayList<String> routine = new ArrayList<>();
             for(ArrayList<String> r : routineInfo) {
