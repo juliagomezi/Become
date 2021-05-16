@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
@@ -89,23 +90,50 @@ public class Stats extends Fragment {
         ImageButton next = view.findViewById(R.id.nextMonthButton);
         next.setOnClickListener(v -> nextMonthAction());
 
-        TextView streakText = view.findViewById(R.id.streakText);
-        TextPaint paint = streakText.getPaint();
-        float width = paint.measureText(getString(R.string.streak));
-        Shader textShader=new LinearGradient(0, 0, width, streakText.getTextSize(),
-                new int[]{Color.parseColor("#12c2e9"),Color.parseColor("#c471ed"),Color.parseColor("#f64f59")},
-                null, Shader.TileMode.CLAMP);
-        streakText.getPaint().setShader(textShader);
-        streakText.setTextColor(Color.parseColor("#12c2e9"));
 
-        TextView streakNum = view.findViewById(R.id.streakNum);
-        streakNum.setText(String.valueOf(DA.getUserStreak()));
+        setStreak();
 
         setRoutineStats();
 
         setMonthView();
 
         return view;
+    }
+
+    /**
+     * Metode que comprova les ratxes i les mostra o no
+     */
+    private void setStreak() {
+        TextView streakText = view.findViewById(R.id.streakText);
+        TextView congrats = view.findViewById(R.id.congrats);
+        TextView streakNum = view.findViewById(R.id.streakNum);
+        ImageView fireIcon = view.findViewById(R.id.fireIcon);
+        View separator = view.findViewById(R.id.streakSeparator);
+
+        int streak = DA.getUserStreak();
+        if(streak > 1) {
+            TextPaint paint = streakText.getPaint();
+            float width = paint.measureText(getString(R.string.streak));
+            Shader textShader=new LinearGradient(0, 0, width, streakText.getTextSize(),
+                    new int[]{Color.parseColor("#12c2e9"),Color.parseColor("#c471ed"),Color.parseColor("#f64f59")},
+                    null, Shader.TileMode.CLAMP);
+            streakText.getPaint().setShader(textShader);
+            streakText.setTextColor(Color.parseColor("#12c2e9"));
+
+            streakNum.setText(String.valueOf(streak));
+
+            streakText.setVisibility(View.VISIBLE);
+            congrats.setVisibility(View.VISIBLE);
+            streakNum.setVisibility(View.VISIBLE);
+            fireIcon.setVisibility(View.VISIBLE);
+            separator.setVisibility(View.VISIBLE);
+        } else {
+            streakText.setVisibility(View.GONE);
+            congrats.setVisibility(View.GONE);
+            streakNum.setVisibility(View.GONE);
+            fireIcon.setVisibility(View.GONE);
+            separator.setVisibility(View.GONE);
+        }
     }
 
     /**

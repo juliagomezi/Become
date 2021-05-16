@@ -1,7 +1,5 @@
 package com.pes.become.backend.persistence;
 
-import android.util.Log;
-
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -9,7 +7,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
-import com.google.firebase.firestore.core.OrderBy;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -29,12 +26,12 @@ public class ControllerCalendarDB {
     final FirebaseFirestore db;
 
     /**
-     * Creadora per defecte.
+     * Creadora per defecte
      */
     public ControllerCalendarDB() {
         db = FirebaseFirestore.getInstance();
     }
-    /**MODIFICADORES*/
+
     /**
      * Crea un dia al calendari nou.
      * @param userId identificador de l'usuari
@@ -43,7 +40,6 @@ public class ControllerCalendarDB {
      * @param totalActivites nombre d'activitats totals del dia de la rutina que estem afegint.
      */
     public String addDay(String userId, Date day, String routineId, int totalActivites) {
-        Log.w("Calendar", "Iniciant operacio addDay");
         Map<String,Object> dataInput = new HashMap<>();
         dataInput.put("idRoutine", routineId);
         dataInput.put("numActivitiesDone", 0);
@@ -52,7 +48,6 @@ public class ControllerCalendarDB {
         dataInput.put("month", getStringMonth(day));
         dataInput.put("year", getStringYear(day));
 
-        Log.w("Calendar", "A punt de crear un nou dia");
         DocumentReference docRefToDay= db.collection("users").document(userId).collection("calendar").document(StringDateConverter.dateToString(day));
         docRefToDay.set(dataInput);
         return docRefToDay.getId();
@@ -70,26 +65,24 @@ public class ControllerCalendarDB {
         if(activitiesDone >= 0)docRefToRoutine.update("numActivitiesDone", activitiesDone);
         if(idRoutine != null && !idRoutine.equals(""))docRefToRoutine.update("idRoutine", idRoutine);
     }
+
     /**
      * Actualitza la informació d'un dia
      * @param userId id de l'usuari del calendari
      * @param day dia del calendari
      * @param activitiesDoneIncrement incrrement del nombre d'activitats fetes
      */
-    public void incrementDay(String userId, Date day, int activitiesDoneIncrement, int totalActivites){
+    public void incrementDay(String userId, Date day, int activitiesDoneIncrement, int totalActivities){
         Map<String, Object> data = new HashMap<>();
         data.put("numActivitiesDone", FieldValue.increment(activitiesDoneIncrement));
-        data.put("numTotalActivities", totalActivites);
+        data.put("numTotalActivities", totalActivities);
         data.put("day", getStringDay(day));
         data.put("month", getStringMonth(day));
         data.put("year", getStringYear(day));
         DocumentReference docRefToRoutine = db.collection("users").document(userId).collection("calendar").document(StringDateConverter.dateToString(day));
-        //Aixo esta posat aixi perque volem actualitzar els camps concrets del document (merge) o crear-lo si no existeix (set)
-        docRefToRoutine.set( data, SetOptions.merge());
+        docRefToRoutine.set(data, SetOptions.merge());
     }
 
-
-    /**CONSULTORES*/
     /**
      * Executa el metode method amb un hashmap que representa el day de la base de dades si aquest s'ha pogut consultar, o l'excepció que ha saltat si no.
      * Day tindrà les claus: day, idRoutine, numActivitiesDone, numTotalActivities. Totes son strings
@@ -169,6 +162,7 @@ public class ControllerCalendarDB {
             }
         });
     }
+
     /**
      * Retorna els dies de la base de dades
      * @param userId id de l'usuari del calendari
@@ -205,6 +199,7 @@ public class ControllerCalendarDB {
             }
         });
     }
+
     /**
      * Retorna un enter amb el nombre de dies en ratxa que porta l'usuari
      * @param userId id de l'usuari del calendari
@@ -259,7 +254,7 @@ public class ControllerCalendarDB {
             }
         });
     }
-    /**PRIVADES**/
+
     /**
      * Retorna la data en format per el dia de la base de dades
      * @param date data
@@ -270,6 +265,7 @@ public class ControllerCalendarDB {
         DateFormat dateFormat = new SimpleDateFormat("dd");
         return dateFormat.format(date);
     }
+
     /**
      * Retorna la data en format pel mes de la base de dades
      * @param date data
@@ -280,6 +276,7 @@ public class ControllerCalendarDB {
         DateFormat dateFormat = new SimpleDateFormat("MM");
         return dateFormat.format(date);
     }
+
     /**
      * Retorna la data en format per l'any de la base de dades
      * @param date data

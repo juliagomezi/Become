@@ -131,7 +131,7 @@ public class DomainAdapter {
      * @param act activitat
      */
     public void loadUser (android.app.Activity act) {
-        Class[] parameterTypes = new Class[7];
+        Class[] parameterTypes = new Class[8];
         parameterTypes[0] = boolean.class;
         parameterTypes[1] = String.class;
         parameterTypes[2] = String.class;
@@ -139,12 +139,15 @@ public class DomainAdapter {
         parameterTypes[4] = Bitmap.class;
         parameterTypes[5] = ArrayList.class;
         parameterTypes[6] = Map.class;
+        parameterTypes[7] = int.class;
         Method method;
         logoScreen = (LogoScreen)act;
         try {
             method = DomainAdapter.class.getMethod("authUser", parameterTypes);
             controllerPersistence.loadUser(method, DomainAdapter.getInstance());
-        } catch(NoSuchMethodException ignore) {}
+        } catch(NoSuchMethodException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -154,7 +157,7 @@ public class DomainAdapter {
      * @param act Activity d'Android necessaria per la execucio del firebase
      */
     public void loginUser(String mail, String password, android.app.Activity act) {
-        Class[] parameterTypes = new Class[7];
+        Class[] parameterTypes = new Class[8];
         parameterTypes[0] = boolean.class;
         parameterTypes[1] = String.class;
         parameterTypes[2] = String.class;
@@ -162,12 +165,15 @@ public class DomainAdapter {
         parameterTypes[4] = Bitmap.class;
         parameterTypes[5] = ArrayList.class;
         parameterTypes[6] = Map.class;
+        parameterTypes[7] = int.class;
         Method method;
         login = (Login)act;
         try {
             method = DomainAdapter.class.getMethod("loginCallback", parameterTypes);
             controllerPersistence.loginUser(mail, password, act, method, DomainAdapter.getInstance());
-        } catch (NoSuchMethodException ignore) {}
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -177,7 +183,7 @@ public class DomainAdapter {
      * @param act activitat
      */
     public void loginGoogleUser(String idToken, android.app.Activity act) {
-        Class[] parameterTypes = new Class[7];
+        Class[] parameterTypes = new Class[8];
         parameterTypes[0] = boolean.class;
         parameterTypes[1] = String.class;
         parameterTypes[2] = String.class;
@@ -185,13 +191,16 @@ public class DomainAdapter {
         parameterTypes[4] = Bitmap.class;
         parameterTypes[5] = ArrayList.class;
         parameterTypes[6] = Map.class;
+        parameterTypes[7] = int.class;
         Method method;
         login = (Login)act;
 
         try {
             method = DomainAdapter.class.getMethod("loginCallback", parameterTypes);
             controllerPersistence.loginUserGoogle(idToken, method, DomainAdapter.getInstance());
-        } catch (NoSuchMethodException ignore) {}
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
     }
 
     //DB: AQUI FALTA LA RATXA DE L'USUARI I ELS TROFEUS
@@ -202,8 +211,9 @@ public class DomainAdapter {
      * @param username nom d'usuari
      * @param selectedRoutineId rutina seleccionada de l'usuari
      * @param pfp imatge de perfil de l'usuari
+     * @param streak dies de ratxa
      */
-    public void loginCallback(boolean success, String userId, String username, String selectedRoutineId, Bitmap pfp, ArrayList<ArrayList<String>> routineInfo, Map<String, Map<String, Double>> stats) {
+    public void loginCallback(boolean success, String userId, String username, String selectedRoutineId, Bitmap pfp, ArrayList<ArrayList<String>> routineInfo, Map<String, Map<String, Double>> stats, int streak) {
         if (success) {
             currentUser = userAdapter.createUser(username);
             currentUser.setID(userId);
@@ -256,8 +266,9 @@ public class DomainAdapter {
      * @param username nom d'usuari
      * @param selectedRoutineId rutina seleccionada de l'usuari
      * @param pfp imatge de perfil de l'usuari
+     * @param streak dies de ratxa
      */
-    public void authUser(boolean success, String userId, String username, String selectedRoutineId, Bitmap pfp, ArrayList<ArrayList<String>> routineInfo, Map<String, Map<String, Double>> stats) {
+    public void authUser(boolean success, String userId, String username, String selectedRoutineId, Bitmap pfp, ArrayList<ArrayList<String>> routineInfo, Map<String, Map<String, Double>> stats, int streak) {
         if (success) {
             currentUser = userAdapter.createUser(username);
             currentUser.setID(userId);
