@@ -719,12 +719,19 @@ public class DomainAdapter {
      * @param isDone boolea que indica si es marca o desmarca
      */
     public void markActivityAsDone(String activityID, boolean isDone, int day) {
+        boolean wasDone = false;
+        if(routineAdapter.isCompleted(Day.values()[day])) wasDone = true;
         routineAdapter.markActivityAsDone(activityID, isDone);
         if (isDone) {
+            if(routineAdapter.isCompleted(Day.values()[day])) {
+                currentUser.setStreak(currentUser.getStreak()+1);
+            }
             controllerPersistence.markActivityAsDone(currentUser.getID(), currentUser.getSelectedRoutine().getId(), StringDateConverter.dateToString(Calendar.getInstance().getTime()), activityID, currentUser.getSelectedRoutine().getActivitiesByDay(Day.values()[day]).size());
         } else {
+            if(wasDone) currentUser.setStreak(currentUser.getStreak()-1);
             controllerPersistence.markActivityAsDone(currentUser.getID(), currentUser.getSelectedRoutine().getId(), null, activityID, currentUser.getSelectedRoutine().getActivitiesByDay(Day.values()[day]).size());
         }
+
     }
 
     /**

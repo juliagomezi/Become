@@ -158,4 +158,14 @@ public class RoutineAdapter {
     public void markActivityAsDone(String activityID, boolean isDone) {
         routine.getActivity(activityID).setDoneToday(isDone);
     }
+
+    public boolean isCompleted(Day day) {
+        ArrayList<Activity> activities = routine.getActivitiesByDay(day);
+        for(Activity a : activities) {
+            if(!a.isDoneToday()) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
