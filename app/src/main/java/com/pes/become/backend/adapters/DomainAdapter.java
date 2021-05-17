@@ -432,6 +432,19 @@ public class DomainAdapter {
     }
 
     /**
+     * Metode per obtenir els trofeus que te l'usuari
+     * @return mapa amb el nom del trofeu com a clau i un boolea que indica si te el trofeu o no com a valor
+     */
+    public Map<String, Boolean> getUserAchievements(){
+        Map<Achievement, Boolean> achievements = currentUser.getAllAchievementsStates();
+        Map<String, Boolean> result = new TreeMap<>();
+        for(Map.Entry<Achievement, Boolean> achievement : achievements.entrySet()){
+            result.put(achievement.getKey().name(), achievement.getValue());
+        }
+        return result;
+    }
+
+    /**
      * Crear una rutina
      * @param name nom de la rutina
      * @throws ExistingRoutineException si l'usuari ja té una altra rutina amb aquest nom
