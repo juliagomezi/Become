@@ -101,6 +101,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Dialog myDialog = new Dialog(this);
         myDialog.setContentView(R.layout.popup);
 
+        TextView trophyName = myDialog.findViewById(R.id.trophyName);
+        trophyName.setText(text);
         TextView OK = myDialog.findViewById(R.id.OKButton);
         OK.setOnClickListener(v -> myDialog.dismiss());
 

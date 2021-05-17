@@ -38,7 +38,7 @@ public class User {
     /**
      * Trofeus obtinguts per l'usuari
      */
-    private Map<Achievement, Boolean> achievements;
+    private TreeMap<Achievement, Boolean> achievements;
     /**
      *
      */
@@ -185,7 +185,7 @@ public class User {
      * Metode per obtenir tots els trofeus de l'usuari
      * @return mapa amb els trofeus de l'usuari on el trofeu es la key i el valor es cert si te el trofeu i fals si no
      */
-    public Map<Achievement, Boolean> getAllAchievementsStates() {
+    public TreeMap<Achievement, Boolean> getAllAchievementsStates() {
         return achievements;
     }
 

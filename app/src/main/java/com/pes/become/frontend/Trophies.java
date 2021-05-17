@@ -20,6 +20,8 @@ import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.TreeMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -38,42 +40,63 @@ public class Trophies extends Fragment {
     public void set() {
         trophiesList = new ArrayList<>();
         ArrayList<String> trophy = new ArrayList<>();
-        trophy.add("CREA LA TEVA 1A RUTINA");
+        trophy.add("Create your first routine");
         trophy.add("S'obté al crear la teva 1a rutina");
         trophiesList.add(trophy);
         trophy = new ArrayList<>();
-        trophy.add("CREA LA TEVA 2A RUTINA");
+        trophy.add("Dedicate 5 hours of your week to musical activities");
         trophy.add("S'obté al crear la teva 2a rutina");
         trophiesList.add(trophy);
         trophy = new ArrayList<>();
-        trophy.add("RATXA SETMANAL");
+        trophy.add("Dedicate 5 hours of your week to sport");
         trophy.add("S'obté al obtenir una ratxa de 7 dies");
         trophiesList.add(trophy);
         trophy = new ArrayList<>();
-        trophy.add("RATXA SETMANAL");
+        trophy.add("Sleep for 5 hours");
         trophy.add("S'obté al obtenir una ratxa de 7 dies");
         trophiesList.add(trophy);
         trophy = new ArrayList<>();
-        trophy.add("RATXA MENSUAL");
+        trophy.add("Dedicate 5 hours to cooking");
+        trophy.add("S'obté al obtenir una ratxa de 30 diesaaaaaaaaaaaaaaaaaaaaaa");
+        trophiesList.add(trophy);
+        trophy = new ArrayList<>();
+        trophy.add("Work for 5 hours");
         trophy.add("S'obté al obtenir una ratxa de 30 diesaaaaaaaaaaaaaaaaaaaaaa");
         trophiesList.add(trophy);
         trophy = new ArrayList<>();
         trophy.add("RATXA MENSUAL");
         trophy.add("S'obté al obtenir una ratxa de 30 diesaaaaaaaaaaaaaaaaaaaaaa");
         trophiesList.add(trophy);
-        trophy = new ArrayList<>();
         trophy.add("RATXA MENSUAL");
         trophy.add("S'obté al obtenir una ratxa de 30 diesaaaaaaaaaaaaaaaaaaaaaa");
         trophiesList.add(trophy);
-
-        obtainedTrophiesList = new ArrayList<>();
-        obtainedTrophiesList.add(true);
-        obtainedTrophiesList.add(true);
-        obtainedTrophiesList.add(false);
-        obtainedTrophiesList.add(true);
-        obtainedTrophiesList.add(false);
-        obtainedTrophiesList.add(false);
-        obtainedTrophiesList.add(false);
+        trophy.add("RATXA MENSUAL");
+        trophy.add("S'obté al obtenir una ratxa de 30 diesaaaaaaaaaaaaaaaaaaaaaa");
+        trophiesList.add(trophy);
+        trophy.add("RATXA MENSUAL");
+        trophy.add("S'obté al obtenir una ratxa de 30 diesaaaaaaaaaaaaaaaaaaaaaa");
+        trophiesList.add(trophy);
+        trophy.add("RATXA MENSUAL");
+        trophy.add("S'obté al obtenir una ratxa de 30 diesaaaaaaaaaaaaaaaaaaaaaa");
+        trophiesList.add(trophy);
+        trophy.add("RATXA MENSUAL");
+        trophy.add("S'obté al obtenir una ratxa de 30 diesaaaaaaaaaaaaaaaaaaaaaa");
+        trophiesList.add(trophy);
+        trophy.add("RATXA MENSUAL");
+        trophy.add("S'obté al obtenir una ratxa de 30 diesaaaaaaaaaaaaaaaaaaaaaa");
+        trophiesList.add(trophy);
+        trophy.add("RATXA MENSUAL");
+        trophy.add("S'obté al obtenir una ratxa de 30 diesaaaaaaaaaaaaaaaaaaaaaa");
+        trophiesList.add(trophy);
+        trophy.add("RATXA MENSUAL");
+        trophy.add("S'obté al obtenir una ratxa de 30 diesaaaaaaaaaaaaaaaaaaaaaa");
+        trophiesList.add(trophy);
+        trophy.add("RATXA MENSUAL");
+        trophy.add("S'obté al obtenir una ratxa de 30 diesaaaaaaaaaaaaaaaaaaaaaa");
+        trophiesList.add(trophy);
+        trophy.add("RATXA MENSUAL");
+        trophy.add("S'obté al obtenir una ratxa de 30 diesaaaaaaaaaaaaaaaaaaaaaa");
+        trophiesList.add(trophy);
     }
 
     TrophiesRecyclerAdapter trophiesRecyclerAdapter;
@@ -104,6 +127,7 @@ public class Trophies extends Fragment {
         recyclerView = view.findViewById(R.id.trophiesList);
 
         set();
+        getTrophyList();
 
         initRecyclerView();
 
@@ -117,6 +141,10 @@ public class Trophies extends Fragment {
         recyclerView.setLayoutManager((new LinearLayoutManager(global)));
         trophiesRecyclerAdapter = new TrophiesRecyclerAdapter(trophiesList, obtainedTrophiesList, global);
         recyclerView.setAdapter(trophiesRecyclerAdapter);
+    }
+
+    private void getTrophyList() {
+        obtainedTrophiesList = DA.getUserAchievements();
     }
 
 }

@@ -11,26 +11,29 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.common.collect.Iterables;
 import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.TreeMap;
 
 public class TrophiesRecyclerAdapter extends RecyclerView.Adapter<TrophiesRecyclerAdapter.ViewHolder> {
 
     private final DomainAdapter DA = DomainAdapter.getInstance();
     ArrayList<ArrayList<String>> trophiesList;
-    ArrayList<Boolean> obtainedThrophiesList;
+    ArrayList<Boolean> obtainedTrophiesList;
     private Context global;
 
     /**
      * Constructora del RecyclerAdapterRoutinesList
      * @param trophiesList llistat de trofeus que es mostren al RecyclerView
-     * @param obtainedThrophiesList boleans que indiquen si l'usuari te o no el trofeu
+     * @param obtainedTrophiesList boleans que indiquen si l'usuari te o no el trofeu
      */
-    public TrophiesRecyclerAdapter(ArrayList<ArrayList<String>> trophiesList, ArrayList<Boolean> obtainedThrophiesList, Context global) {
+    public TrophiesRecyclerAdapter(ArrayList<ArrayList<String>> trophiesList, ArrayList<Boolean> obtainedTrophiesList, Context global) {
         this.trophiesList = trophiesList;
-        this.obtainedThrophiesList = obtainedThrophiesList;
+        this.obtainedTrophiesList = obtainedTrophiesList;
         this.global = global;
     }
 
@@ -57,7 +60,8 @@ public class TrophiesRecyclerAdapter extends RecyclerView.Adapter<TrophiesRecycl
         holder.trophyName.setText(trophiesList.get(position).get(0));
         holder.trophyDescription.setText(trophiesList.get(position).get(1));
 
-        if (obtainedThrophiesList.get(position)) {
+
+        if (obtainedTrophiesList.get(position)) {
             holder.trophyCard.setCardBackgroundColor(global.getResources().getColor(R.color.gold25));
             holder.trophyName.setTextColor(global.getResources().getColor(R.color.gold100));
             holder.trophyWonIcon.setVisibility(View.VISIBLE);
