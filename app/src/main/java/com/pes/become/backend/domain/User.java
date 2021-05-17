@@ -181,6 +181,10 @@ public class User {
         statisticsSelectedRoutine.get(theme).put(day, time);
     }
 
+    public void addAchievement(Achievement achievement) {
+        achievements.put(achievement, true);
+    }
+
     /**
      * Metode per obtenir tots els trofeus de l'usuari
      * @return mapa amb els trofeus de l'usuari on el trofeu es la key i el valor es cert si te el trofeu i fals si no

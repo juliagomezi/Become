@@ -29,6 +29,7 @@ import com.pes.become.frontend.MainActivity;
 import com.pes.become.frontend.Profile;
 import com.pes.become.frontend.Signup;
 import com.pes.become.frontend.Stats;
+import com.pes.become.frontend.Trophies;
 
 import java.lang.reflect.Method;
 import java.time.YearMonth;
@@ -253,7 +254,7 @@ public class DomainAdapter {
             achievementController.setCurrentUser(currentUser);
 
             try {
-                Method method = DomainAdapter.class.getMethod("getAchievementsCallback", HashMap.class);
+                Method method = DomainAdapter.class.getMethod("getAchievementsCallback", ArrayList.class);
                 controllerPersistence.getTrophies(currentUser.getID(), method, DomainAdapter.getInstance());
             } catch (NoSuchMethodException e) {
                 e.printStackTrace();
@@ -314,7 +315,7 @@ public class DomainAdapter {
             achievementController.setCurrentUser(currentUser);
 
             try {
-                Method method = DomainAdapter.class.getMethod("getAchievementsCallback", HashMap.class);
+                Method method = DomainAdapter.class.getMethod("getAchievementsCallback", ArrayList.class);
                 controllerPersistence.getTrophies(currentUser.getID(), method, DomainAdapter.getInstance());
             } catch (NoSuchMethodException e) {
                 e.printStackTrace();
@@ -440,7 +441,11 @@ public class DomainAdapter {
      * @return cert si l'ha guanyat, fals si no o ja el tenia
      */
     public boolean checkAchievement(String achievement){
-        return achievementController.checkAchievement(Achievement.valueOf(achievement));
+        if (achievementController.checkAchievement(Achievement.valueOf(achievement))) {
+            controllerPersistence.addTrophy(currentUser.getID(), achievement);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -473,6 +478,12 @@ public class DomainAdapter {
         }
     }
 
+    /**
+     * Metode per actualitzar el calendari
+     * @param month mes
+     * @param year any
+     * @param s estat
+     */
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void updateCalendar(int month, int year, Stats s) {
         stats = s;
@@ -487,6 +498,10 @@ public class DomainAdapter {
         }
     }
 
+    /**
+     * Metode de callback del calendari
+     * @param calendar calendari
+     */
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void calendarCallback(ArrayList<HashMap<String,String>> calendar) {
         for(HashMap<String,String> day : calendar) {
@@ -499,6 +514,10 @@ public class DomainAdapter {
         stats.calendarCallback(currentUser.getCalendarMonth());
     }
 
+    /**
+     * Metode per obtenir les ratxes de l'usuari
+     * @return la ratxa de l'usuari
+     */
     public int getUserStreak(){
         return currentUser.getStreak();
     }
@@ -541,6 +560,10 @@ public class DomainAdapter {
         }
     }
 
+    /**
+     * Metode de callback dels estadistics
+     * @param stats estadistics
+     */
     public void loadStatisticsCallback(Map<String, Map<String, Double>> stats){
         if(stats != null) {
             Map<Theme,Map<Day, Double>> statistics = new TreeMap<>();
@@ -601,8 +624,15 @@ public class DomainAdapter {
         }
     }
 
-    public void getAchievementsCallback(HashMap<String,HashMap<String,Object>> mapTrophies){
-        String debug = "breakpoint aqui";
+    /**
+     * Metode que es crida quan sobte els trofeus
+     * @param trophies llistat de trofeus obtinguts
+     */
+    public void getAchievementsCallback(ArrayList<String> trophies){
+        for (int i = 0; i < trophies.size(); ++i) {
+            currentUser.addAchievement(Achievement.valueOf(trophies.get(i)));
+        }
+        Trophies.getInstance().getObtainedTrophyList();
     }
 
     /**

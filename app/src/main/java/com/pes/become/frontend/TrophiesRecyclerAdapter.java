@@ -1,6 +1,7 @@
 package com.pes.become.frontend;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +22,6 @@ import java.util.TreeMap;
 
 public class TrophiesRecyclerAdapter extends RecyclerView.Adapter<TrophiesRecyclerAdapter.ViewHolder> {
 
-    private final DomainAdapter DA = DomainAdapter.getInstance();
     ArrayList<ArrayList<String>> trophiesList;
     ArrayList<Boolean> obtainedTrophiesList;
     private Context global;
@@ -60,7 +60,6 @@ public class TrophiesRecyclerAdapter extends RecyclerView.Adapter<TrophiesRecycl
         holder.trophyName.setText(trophiesList.get(position).get(0));
         holder.trophyDescription.setText(trophiesList.get(position).get(1));
 
-
         if (obtainedTrophiesList.get(position)) {
             holder.trophyCard.setCardBackgroundColor(global.getResources().getColor(R.color.gold25));
             holder.trophyName.setTextColor(global.getResources().getColor(R.color.gold100));
@@ -69,6 +68,7 @@ public class TrophiesRecyclerAdapter extends RecyclerView.Adapter<TrophiesRecycl
         }
         else {
             holder.trophyCard.setCardBackgroundColor(global.getResources().getColor(R.color.coldwhite));
+            holder.trophyName.setTextColor(global.getResources().getColor(R.color.softblack));
             holder.trophyWonIcon.setVisibility(View.INVISIBLE);
             holder.trophyNotWonIcon.setVisibility(View.VISIBLE);
         }
