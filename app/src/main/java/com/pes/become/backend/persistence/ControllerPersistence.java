@@ -14,23 +14,38 @@ import java.util.zip.DeflaterOutputStream;
 
 public class ControllerPersistence {
 
-    ControllerRoutineDB CR;
-    ControllerActivityDB CA;
-    ControllerUserDB CU;
-    ControllerStatisticsDB CS;
-    ControllerCalendarDB CD;
-    ControllerTrophiesDB CT;
+    /**
+     * Unica instancia de la classe
+     */
+    private static ControllerPersistence instance;
+    private final ControllerRoutineDB CR;
+    private final ControllerActivityDB CA;
+    private final ControllerUserDB CU;
+    private final ControllerStatisticsDB CS;
+    private final ControllerCalendarDB CD;
+    private final ControllerTrophiesDB CT;
     private final FirebaseFirestore db;
+
+    /**
+     * Obtenir la instancia de la classe
+     * @return instancia
+     */
+    public static ControllerPersistence getInstance(){
+        if(instance == null)
+            instance = new ControllerPersistence();
+        return instance;
+    }
 
     /**
      * Creadora per defecte de la classe ControllerPersistence
      */
-    public ControllerPersistence() {
-        CA = new ControllerActivityDB();
-        CR = new ControllerRoutineDB();
-        CS = new ControllerStatisticsDB();
-        CD = new ControllerCalendarDB();
-        CT = new ControllerTrophiesDB();
+    private ControllerPersistence() {
+        CA = ControllerActivityDB.getInstance();
+        CR = ControllerRoutineDB.getInstance();
+        CU = ControllerUserDB.getInstance();
+        CS = ControllerStatisticsDB.getInstance();
+        CD = ControllerCalendarDB.getInstance();
+        CT = ControllerTrophiesDB.getInstance();
         db = FirebaseFirestore.getInstance();
     }
     //*********ACTIVITY************
@@ -172,7 +187,6 @@ public class ControllerPersistence {
      * @return el provider de l'usuari
      */
     public String getUserProvider() {
-        CU = ControllerUserDB.getInstance();
         return CU.getUserProvider();
     }
 
@@ -182,7 +196,6 @@ public class ControllerPersistence {
      * @param object classe que conté el mètode
      */
     public void loadUser(Method method, Object object) {
-        CU = ControllerUserDB.getInstance();
         CU.loadUser(method, object);
     }
 
@@ -193,7 +206,6 @@ public class ControllerPersistence {
      * @param object instancia de la classe del mètode a executar
      */
     public void changePassword(String oldPassword, String newPassword, Method method, Object object) {
-        CU = ControllerUserDB.getInstance();
         CU.changePassword(oldPassword, newPassword, method, object);
     }
 
@@ -203,7 +215,6 @@ public class ControllerPersistence {
      * @param imageUri uri de la imatge a penjar
      */
     public void updateProfilePic(String userId, Uri imageUri) {
-        CU = ControllerUserDB.getInstance();
         CU.updateProfilePic(userId, imageUri);
     }
 
@@ -213,7 +224,6 @@ public class ControllerPersistence {
      * @param object instancia de la classe del mètode a executar
      */
     public void deleteUser(String password, Method method, Object object) {
-        CU = ControllerUserDB.getInstance();
         CU.deleteUser(password, method, object);
     }
 
@@ -226,7 +236,6 @@ public class ControllerPersistence {
      * @param object classe que conté el mètode
      */
     public void loginUser(String mail, String password, Activity act, Method method, Object object) {
-        CU = ControllerUserDB.getInstance();
         CU.loginUser(mail, password, act, method, object);
     }
 
@@ -237,7 +246,6 @@ public class ControllerPersistence {
      * @param object classe que conté el mètode
      */
     public void loginUserGoogle(String idToken, Method method, Object object ){
-        CU = ControllerUserDB.getInstance();
         CU.loginUserGoogle(idToken, method, object);
     }
 
@@ -251,7 +259,6 @@ public class ControllerPersistence {
      * @param object classe que conté el mètode
      */
     public void registerUser(String mail, String password, String name, Activity act, Method method, Object object) {
-        CU = ControllerUserDB.getInstance();
         CU.registerUser(mail, password, name, act, method, object);
     }
 
@@ -261,7 +268,6 @@ public class ControllerPersistence {
      * @param routineID identificador de la nova rutina seleccionada
      */
     public void setSelectedRoutine(String userID, String routineID) {
-        CU = ControllerUserDB.getInstance();
         CU.setSelectedRoutine(userID, routineID);
     }
 
@@ -269,7 +275,6 @@ public class ControllerPersistence {
      * Metode per tancar la sessió
      */
     public void signOut() {
-        CU = ControllerUserDB.getInstance();
         CU.signOut();
     }
 
@@ -278,7 +283,6 @@ public class ControllerPersistence {
      * @param mail mail del compte a recuperar
      */
     public void sendPassResetEmail(String mail, Method method, Object object) {
-        CU = ControllerUserDB.getInstance();
         CU.sendPassResetEmail(mail, method, object);
     }
 
@@ -287,7 +291,6 @@ public class ControllerPersistence {
      * @param newName nou nom de l'usuari
      */
     public void changeUsername(String userID, String newName) {
-        CU = ControllerUserDB.getInstance();
         CU.changeUsername(userID, newName);
     }
     //*********STATISTICS************

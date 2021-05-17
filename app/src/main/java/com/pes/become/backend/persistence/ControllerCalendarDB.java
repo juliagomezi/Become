@@ -21,6 +21,10 @@ import java.util.Map;
 public class ControllerCalendarDB {
 
     /**
+     * Unica instancia de la classe
+     */
+    private static ControllerCalendarDB instance;
+    /**
      * Instància de la bd
      */
     final FirebaseFirestore db;
@@ -30,6 +34,16 @@ public class ControllerCalendarDB {
      */
     public ControllerCalendarDB() {
         db = FirebaseFirestore.getInstance();
+    }
+
+    /**
+     * Obtenir la instancia de la classe
+     * @return instancia
+     */
+    public static ControllerCalendarDB getInstance() {
+        if(instance == null)
+            instance = new ControllerCalendarDB();
+        return instance;
     }
 
     /**

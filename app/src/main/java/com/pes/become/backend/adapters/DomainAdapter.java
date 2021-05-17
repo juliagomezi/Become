@@ -49,7 +49,7 @@ public class DomainAdapter {
     /**
      * Unica instancia del controlador de persistencia
      */
-    private static final ControllerPersistence controllerPersistence = new ControllerPersistence();
+    private static final ControllerPersistence controllerPersistence = ControllerPersistence.getInstance();
     /**
      * Unica instancia de l'adaptador de la classe Rutina
      */

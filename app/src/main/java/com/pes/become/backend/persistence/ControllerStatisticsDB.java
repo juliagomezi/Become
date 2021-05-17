@@ -11,6 +11,10 @@ import java.util.HashMap;
 
 public class ControllerStatisticsDB {
 
+    /**
+     * Unica instancia de la classe
+     */
+    private static ControllerStatisticsDB instance;
     private final FirebaseFirestore db;
     private final String[] differentThemes;
     private final String[] differentDays;
@@ -19,11 +23,21 @@ public class ControllerStatisticsDB {
     /**
      * Creadora per defecte de la classe ControllerStatisticsDB
      */
-    public ControllerStatisticsDB() {
+    private ControllerStatisticsDB() {
         db = FirebaseFirestore.getInstance();
         differentThemes = new String[]{"Music", "Sport", "Sleeping", "Cooking", "Working", "Entertainment", "Plants", "Other"};
         differentDays = new String[]{"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
         numberOfThemes = 8;
+    }
+
+    /**
+     * Obtenir la instancia de la classe
+     * @return instancia
+     */
+    public static ControllerStatisticsDB getInstance() {
+        if(instance == null)
+            instance = new ControllerStatisticsDB();
+        return instance;
     }
 
     /**

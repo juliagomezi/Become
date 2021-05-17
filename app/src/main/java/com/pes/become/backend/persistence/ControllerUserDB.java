@@ -28,6 +28,9 @@ import java.util.HashMap;
 
 public class ControllerUserDB {
 
+    /**
+     * Unica instancia de la classe
+     */
     private static ControllerUserDB instance;
     private FirebaseAuth mAuth;
     private final FirebaseFirestore db;

@@ -13,16 +13,31 @@ import java.util.Collection;
 import java.util.HashMap;
 
 public class ControllerTrophiesDB {
+
+    /**
+     * Unica instancia de la classe
+     */
+    private static ControllerTrophiesDB instance;
     /**
      * Instància de la bd
      */
-    final FirebaseFirestore db;
+    private final FirebaseFirestore db;
 
     /**
      * Creadora per defecte.
      */
-    public ControllerTrophiesDB() {
+    private ControllerTrophiesDB() {
         db = FirebaseFirestore.getInstance();
+    }
+
+    /**
+     * Obtenir la instancia de la classe
+     * @return instancia
+     */
+    public static ControllerTrophiesDB getInstance() {
+        if(instance == null)
+            instance = new ControllerTrophiesDB();
+        return instance;
     }
 
     /**

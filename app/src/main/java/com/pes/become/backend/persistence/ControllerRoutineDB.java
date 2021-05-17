@@ -12,6 +12,10 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 public class ControllerRoutineDB {
 
     /**
+     * Unica instancia de la classe
+     */
+    private static ControllerRoutineDB instance;
+    /**
      * Instància de la bd
      */
     final FirebaseFirestore db;
@@ -19,8 +23,18 @@ public class ControllerRoutineDB {
     /**
      * Creadora per defecte.
      */
-    public ControllerRoutineDB() {
+    private ControllerRoutineDB() {
         db = FirebaseFirestore.getInstance();
+    }
+
+    /**
+     * Obtenir la instancia de la classe
+     * @return instancia
+     */
+    public static ControllerRoutineDB getInstance() {
+        if(instance == null)
+            instance = new ControllerRoutineDB();
+        return instance;
     }
 
     /**

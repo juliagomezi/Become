@@ -18,14 +18,28 @@ import java.lang.reflect.Method;
 public class ControllerActivityDB {
 
     /**
+     * Unica instancia de la classe
+     */
+    private static ControllerActivityDB instance;
+    /**
      * Instància de la bd
      */
     private final FirebaseFirestore db;
 
     /**
+     * Obtenir la instancia de la classe
+     * @return instancia
+     */
+    public static ControllerActivityDB getInstance(){
+        if(instance == null)
+            instance = new ControllerActivityDB();
+        return instance;
+    }
+
+    /**
      * Creadora per defecte
      */
-    public ControllerActivityDB() {
+    private ControllerActivityDB() {
         db = FirebaseFirestore.getInstance();
     }
 
