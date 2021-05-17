@@ -145,5 +145,7 @@
     <string name="HourEntertainment10Description">Dedicate 10 hours of your week to entertaining activities</string>
     <string name="HourPlants10Description">Dedicate 10 hours of your week to your plants</string>
     <string name="HourOther10Description">Dedicate 10 hours of your week to other activities</string>
+    <string name="DONE">DONE</string>
+    <string name="UNDONE">NOT DONE</string>
 
 </resources>

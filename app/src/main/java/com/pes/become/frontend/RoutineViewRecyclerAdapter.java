@@ -123,6 +123,7 @@ public class RoutineViewRecyclerAdapter extends RecyclerView.Adapter<RoutineView
             });
 
         }
+
     }
 
 }
