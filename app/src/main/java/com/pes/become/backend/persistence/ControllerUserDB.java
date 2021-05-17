@@ -468,6 +468,7 @@ public class ControllerUserDB {
                                     params[4] = null;
                                     params[5] = new ArrayList<>();
                                     params[6] = null;
+                                    ControllerPersistence.getInstance().createTrophies(userID);
                                     try {
                                         method.invoke(object, params);
                                     } catch (IllegalAccessException e) {
@@ -660,6 +661,7 @@ public class ControllerUserDB {
                         params[1] = userID;
                         params[2] = name;
                         params[3] = "";
+                        ControllerPersistence.getInstance().createTrophies(userID);
 
                         user.sendEmailVerification();
                         signOut();

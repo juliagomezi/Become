@@ -203,7 +203,6 @@ public class DomainAdapter {
         }
     }
 
-    //DB: AQUI FALTA LA RATXA DE L'USUARI I ELS TROFEUS
     /**
      * Metode que rep la resposta a la crida "loginUser" de la base de dades
      * @param success resultat de l'operacio
@@ -252,13 +251,19 @@ public class DomainAdapter {
             }
 
             achievementController.setCurrentUser(currentUser);
+
+            try {
+                Method method = DomainAdapter.class.getMethod("getAchievementsCallback", HashMap.class);
+                controllerPersistence.getTrophies(currentUser.getID(), method, DomainAdapter.getInstance());
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            }
         }
         else {
             login.loginCallbackFailed();
         }
     }
 
-    //DB: AQUI FALTA LA RATXA DE L'USUARI I ELS TROFEUS
     /**
      * Metode que autentifica un usuari ja loguejat
      * @param success resultat de l'operacio
@@ -307,6 +312,13 @@ public class DomainAdapter {
             }
 
             achievementController.setCurrentUser(currentUser);
+
+            try {
+                Method method = DomainAdapter.class.getMethod("getAchievementsCallback", HashMap.class);
+                controllerPersistence.getTrophies(currentUser.getID(), method, DomainAdapter.getInstance());
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            }
         }
         else {
             logoScreen.loginCallbackFailed();
@@ -587,6 +599,10 @@ public class DomainAdapter {
             login = null;
             logoScreen = null;
         }
+    }
+
+    public void getAchievementsCallback(HashMap<String,HashMap<String,Object>> mapTrophies){
+        String debug = "breakpoint aqui";
     }
 
     /**
