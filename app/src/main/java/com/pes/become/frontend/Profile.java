@@ -15,14 +15,17 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,7 +55,10 @@ public class Profile extends Fragment {
 
     private BottomSheetDialog optionsSheet;
     private TextView deleteAccount;
-    private EditText passText;
+    private EditText passText, currPass, newPass, confPass, nameText;
+    private Button done, done2;
+
+    private ProgressBar loading;
 
     /**
      * Pestanyes del TabLayout
@@ -86,6 +92,9 @@ public class Profile extends Fragment {
 
         ImageButton settingsButton = view.findViewById(R.id.settingsButton);
         settingsButton.setOnClickListener(v -> createOptionsSheet());
+
+        ImageButton trophiesButton = view.findViewById(R.id.trophiesButton);
+        trophiesButton.setOnClickListener(v -> MainActivity.getInstance().setTrophiesScreen());
 
         TabLayout tabLayout = view.findViewById(R.id.tabLayout);
         ViewPager viewPager = view.findViewById(R.id.viewPager);
@@ -141,18 +150,45 @@ public class Profile extends Fragment {
 
         deleteAccount = sheetView.findViewById(R.id.deleteAcc);
         TextView changePassword = sheetView.findViewById(R.id.changePassword);
+        TextView changeUsername = sheetView.findViewById(R.id.changeUsername);
         if(DA.getUserProvider().equals("google.com")) {
             changePassword.setVisibility(View.GONE);
             deleteAccount.setVisibility(View.GONE);
+            changeUsername.setVisibility(View.GONE);
         } else {
-            changePassword.setOnClickListener(v -> changePassword());
+            changePassword.setOnClickListener(v -> changePasswordSheet());
             deleteAccount.setOnClickListener(v -> askForPassword());
+            changeUsername.setOnClickListener(v -> showChangeName());
         }
 
         TextView logout = sheetView.findViewById(R.id.logout);
         logout.setOnClickListener(v -> logOut());
 
+        nameText = sheetView.findViewById(R.id.newName);
+        done2 = sheetView.findViewById(R.id.doneButton2);
+
         passText = sheetView.findViewById(R.id.passText);
+        done = sheetView.findViewById(R.id.doneButton);
+        loading = sheetView.findViewById(R.id.loading);
+
+        optionsSheet.setContentView(sheetView);
+        optionsSheet.show();
+    }
+
+
+    private void changePasswordSheet() {
+        optionsSheet.dismiss();
+        optionsSheet = new BottomSheetDialog(global,R.style.BottomSheetTheme);
+        View sheetView = LayoutInflater.from(getContext()).inflate(R.layout.change_password, view.findViewById(R.id.bottom_sheet));
+
+        currPass = sheetView.findViewById(R.id.currentPassword);
+        newPass = sheetView.findViewById(R.id.newPassword);
+        confPass = sheetView.findViewById(R.id.confirmedPassword);
+
+        Button done = sheetView.findViewById(R.id.doneButton);
+        done.setOnClickListener(v -> changePassword());
+
+        loading = sheetView.findViewById(R.id.loading);
 
         optionsSheet.setContentView(sheetView);
         optionsSheet.show();
@@ -162,10 +198,37 @@ public class Profile extends Fragment {
      * Metode per canviar la contrasenya d'un usuari
      */
     private void changePassword() {
+        currPass.setError(null);
+        newPass.setError(null);
+        confPass.setError(null);
 
-        //do something
+        String current = currPass.getText().toString();
+        String new1 = newPass.getText().toString();
+        String new2 = confPass.getText().toString();
 
-        optionsSheet.dismiss();
+        if (new1.isEmpty() || new2.isEmpty()) {
+            newPass.setError(getString(R.string.notNull));
+            confPass.setError(getString(R.string.notNull));
+        } else if (!new1.equals(new2)) {
+            newPass.setError(getString(R.string.passwords));
+            confPass.setError(getString(R.string.passwords));
+        } else if (new1.length() < 6) {
+            newPass.setError(getString(R.string.shortPassword));
+            confPass.setError(getString(R.string.shortPassword));
+        } else {
+            loading.setVisibility(View.VISIBLE);
+            DA.changePassword(current,new1,this);
+        }
+    }
+
+    public void changePasswordCallback(boolean success) {
+        loading.setVisibility(View.GONE);
+        if(success) {
+            Toast.makeText(global, getString(R.string.passChanged), Toast.LENGTH_SHORT).show();
+            optionsSheet.dismiss();
+        } else {
+            currPass.setError(getString(R.string.wrongPassword));
+        }
     }
 
     /**
@@ -183,25 +246,41 @@ public class Profile extends Fragment {
      */
     private void askForPassword() {
         passText.setVisibility(View.VISIBLE);
-        deleteAccount.setOnClickListener(v -> deleteUserAccount());
+        done.setVisibility(View.VISIBLE);
+        done.setOnClickListener(v -> deleteUserAccount());
+    }
+
+    private void showChangeName() {
+        nameText.setVisibility(View.VISIBLE);
+        done2.setVisibility(View.VISIBLE);
+        done2.setOnClickListener(v -> changeUsername());
+    }
+
+    private void changeUsername() {
+        String name = nameText.getText().toString();
+        if(name.isEmpty()) nameText.setError(getString(R.string.notNull));
+        else {
+            optionsSheet.dismiss();
+            DA.changeUserName(name);
+            username.setText(name);
+            Toast.makeText(global, getString(R.string.username_changed), Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
      * Metode per solicitar esborrar el compte
      */
-    public void deleteUserAccount() {
+    private void deleteUserAccount() {
+        loading.setVisibility(View.VISIBLE);
         String password = passText.getText().toString();
-        try {
-            DA.deleteUser(password,this);
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }
+        DA.deleteUser(password,this);
     }
 
     /**
      * Metode per rebre la resposta a la sol.licitud d'esborrat d'usuari
      */
     public void deleteCallback(boolean success) {
+        loading.setVisibility(View.GONE);
         if(success) {
             Toast.makeText(global, getString(R.string.accountDeleted), Toast.LENGTH_SHORT).show();
             optionsSheet.dismiss();

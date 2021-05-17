@@ -8,5 +8,30 @@
     <color name="coldwhite">#F2F2F7</color>
     <color name="orange">#cc8424</color>
     <color name="darkred">#8B0000</color>
+    <color name="softgray">#808080</color>
+    <color name="blue">#12c2e9</color>
+
+    <color name="cooking">#F99450</color>
+    <color name="sport">#7777D8</color>
+    <color name="sleep">#7BDDC5</color>
+    <color name="work">#D46B6D</color>
+    <color name="music">#D8D455</color>
+    <color name="entertainment">#DF81C2</color>
+    <color name="plants">#88DB79</color>
+    <color name="other">#A2A2A2</color>
+
+    <color name="softred">#F1948A</color>
+    <color name="green25">#C1E1C1</color>
+    <color name="green50">#9FE2BF</color>
+    <color name="green75">#98FB98</color>
+    <color name="green100">#5bf95b</color>
+
+    <color name="gold25">#ffee9d</color>
+    <color name="gold75">#ffd300</color>
+    <color name="gold100">#A38800</color>
+
+    <color name="softblack">#6c757d</color>
+
+
 
 </resources>

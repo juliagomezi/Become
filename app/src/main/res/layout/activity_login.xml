@@ -67,7 +67,7 @@
                 android:id="@+id/logInButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="15dp"
+                android:layout_marginHorizontal="10dp"
                 android:background="@drawable/custom_button"
                 android:drawableLeft="@drawable/ic_login"
                 android:drawablePadding="10dp"
@@ -83,7 +83,7 @@
                 style="@style/Widget.AppCompat.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="15dp"
+                android:layout_marginHorizontal="10dp"
                 android:background="@drawable/custom_button"
                 android:drawableLeft="@drawable/ic_search"
                 android:drawablePadding="10dp"
@@ -124,12 +124,21 @@
                 android:layout_marginStart="10dp" />
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/forgotPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/sourcesanspro_regular"
+            android:textSize="18sp"
+            android:textColor="@color/softgray"
+            android:text="@string/forgot_password" />
+
         <ProgressBar
             android:id="@+id/loading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:indeterminate="true"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:visibility="invisible" />
 
     </LinearLayout>

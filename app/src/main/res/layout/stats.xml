@@ -1,16 +1,514 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".frontend.Stats">
+    tools:context=".frontend.Stats" >
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textAlignment="center"
-        android:text="THIS IS STATS TAB"
-        android:gravity="center_horizontal" />
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
 
-</FrameLayout>
+        <TextView
+            android:id="@+id/congrats"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/congratsStreak"
+            android:gravity="center_horizontal"
+            android:fontFamily="@font/sourcesanspro_regular"
+            android:textSize="22sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="30dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/streakNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/sourcesanspro_semibold"
+                android:gravity="center_horizontal"
+                android:textAlignment="center"
+                android:text="5"
+                android:textColor="@color/blue"
+                android:textSize="36sp" />
+
+            <Space
+                android:layout_width="10dp"
+                android:layout_height="0dp"/>
+
+            <TextView
+                android:id="@+id/streakText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/sourcesanspro_semibold"
+                android:gravity="center_horizontal"
+                android:textAlignment="center"
+                android:text="@string/streak"
+                android:textColor="@color/black"
+                android:textSize="36sp" />
+
+            <ImageView
+                android:id="@+id/fireIcon"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center_horizontal"
+                android:src="@drawable/ic_fire" />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/streakSeparator"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="30dp"
+            android:background="@android:color/darker_gray"/>
+
+        <TextView
+            android:id="@+id/hoursTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/hours_of_dedication"
+            android:gravity="center_horizontal"
+            android:fontFamily="@font/sourcesanspro_regular"
+            android:textSize="22sp"
+            android:textColor="@color/black"
+            android:layout_margin="30dp"/>
+
+        <TableLayout
+            android:id="@+id/hours"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/sportText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/sport"
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:fontFamily="@font/sourcesanspro_regular"
+                    android:textColor="@color/sport"
+                    android:textSize="20sp"/>
+
+                <TextView
+                    android:id="@+id/sleepingText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/sleeping"
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:fontFamily="@font/sourcesanspro_regular"
+                    android:textColor="@color/sleep"
+                    android:textSize="20sp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <TextView
+                    android:id="@+id/sportHour"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="0"
+                    android:gravity="center_horizontal"
+                    android:fontFamily="@font/sourcesanspro_semibold"
+                    android:textSize="40sp"
+                    android:textColor="@color/sport"
+                    android:layout_margin="10dp"/>
+
+                <TextView
+                    android:id="@+id/sleepingHour"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="0"
+                    android:gravity="center_horizontal"
+                    android:fontFamily="@font/sourcesanspro_semibold"
+                    android:textSize="40sp"
+                    android:textColor="@color/sleep"
+                    android:layout_margin="10dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/cookingText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/cooking"
+                    android:textColor="@color/cooking"
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:fontFamily="@font/sourcesanspro_regular"
+                    android:textSize="20sp"/>
+
+                <TextView
+                    android:id="@+id/workingText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/working"
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:textColor="@color/work"
+                    android:fontFamily="@font/sourcesanspro_regular"
+                    android:textSize="20sp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <TextView
+                    android:id="@+id/cookingHour"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="0"
+                    android:gravity="center_horizontal"
+                    android:fontFamily="@font/sourcesanspro_semibold"
+                    android:textSize="40sp"
+                    android:textColor="@color/cooking"
+                    android:layout_margin="10dp"/>
+
+                <TextView
+                    android:id="@+id/workingHour"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="0"
+                    android:gravity="center_horizontal"
+                    android:fontFamily="@font/sourcesanspro_semibold"
+                    android:textSize="40sp"
+                    android:textColor="@color/work"
+                    android:layout_margin="10dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/musicText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/music"
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:fontFamily="@font/sourcesanspro_regular"
+                    android:textColor="@color/music"
+                    android:textSize="20sp"/>
+
+                <TextView
+                    android:id="@+id/entertainmentText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/entertainment"
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:fontFamily="@font/sourcesanspro_regular"
+                    android:textColor="@color/entertainment"
+                    android:textSize="20sp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <TextView
+                    android:id="@+id/musicHour"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="0"
+                    android:gravity="center_horizontal"
+                    android:fontFamily="@font/sourcesanspro_semibold"
+                    android:textSize="40sp"
+                    android:textColor="@color/music"
+                    android:layout_margin="10dp"/>
+
+                <TextView
+                    android:id="@+id/entertainmentHour"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="0"
+                    android:gravity="center_horizontal"
+                    android:fontFamily="@font/sourcesanspro_semibold"
+                    android:textSize="40sp"
+                    android:textColor="@color/entertainment"
+                    android:layout_margin="10dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/plantsText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/plants"
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:fontFamily="@font/sourcesanspro_regular"
+                    android:textColor="@color/plants"
+                    android:textSize="20sp"/>
+
+                <TextView
+                    android:id="@+id/otherText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/other"
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:fontFamily="@font/sourcesanspro_regular"
+                    android:textColor="@color/other"
+                    android:textSize="20sp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <TextView
+                    android:id="@+id/plantsHour"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="0"
+                    android:gravity="center_horizontal"
+                    android:fontFamily="@font/sourcesanspro_semibold"
+                    android:textSize="40sp"
+                    android:textColor="@color/plants"
+                    android:layout_margin="10dp"/>
+
+                <TextView
+                    android:id="@+id/otherHour"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="0"
+                    android:gravity="center_horizontal"
+                    android:fontFamily="@font/sourcesanspro_semibold"
+                    android:textSize="40sp"
+                    android:textColor="@color/other"
+                    android:layout_margin="10dp"/>
+
+            </LinearLayout>
+
+        </TableLayout>
+
+        <View
+            android:id="@+id/hoursSeparator"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="30dp"
+            android:background="@android:color/darker_gray"/>
+
+        <TextView
+            android:id="@+id/chartTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/routine_distribution"
+            android:gravity="center_horizontal"
+            android:fontFamily="@font/sourcesanspro_regular"
+            android:textSize="22sp"
+            android:textColor="@color/black"
+            android:layout_margin="30dp"/>
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/linechart"
+            android:layout_height="250dp"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
+
+        <View
+            android:id="@+id/chartSeparator"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/darker_gray"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="30dp">
+
+                <ImageButton
+                    android:id="@+id/previousMonthButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/ic_arrow_back"
+                    tools:ignore="VectorDrawableCompat"
+                    android:textColor="@color/black"
+                    android:background="@null"
+                    android:textStyle="bold"
+                    android:textSize="20sp"/>
+
+                <TextView
+                    android:id="@+id/monthYearTV"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="wrap_content"
+                    android:text="Feb 2021"
+                    android:textSize="20sp"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:gravity="center_horizontal" />
+
+                <ImageButton
+                    android:id="@+id/nextMonthButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_arrow_forward"
+                    tools:ignore="VectorDrawableCompat"
+                    android:layout_weight="1"
+                    android:textColor="@color/black"
+                    android:background="@null"
+                    android:textStyle="bold"
+                    android:textSize="20sp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/shortMonday"
+                    android:textColor="@color/black"
+                    android:textAlignment="center"
+                    android:textSize="16sp"
+                    android:gravity="center_horizontal" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/shortTuesday"
+                    android:textColor="@color/black"
+                    android:textAlignment="center"
+                    android:textSize="16sp"
+                    android:gravity="center_horizontal" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/shortWednesday"
+                    android:textColor="@color/black"
+                    android:textAlignment="center"
+                    android:textSize="16sp"
+                    android:gravity="center_horizontal" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/shortThursday"
+                    android:textColor="@color/black"
+                    android:textAlignment="center"
+                    android:textSize="16sp"
+                    android:gravity="center_horizontal" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/shortFriday"
+                    android:textColor="@color/black"
+                    android:textAlignment="center"
+                    android:textSize="16sp"
+                    android:gravity="center_horizontal" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/shortSaturday"
+                    android:textColor="@color/black"
+                    android:textAlignment="center"
+                    android:textSize="16sp"
+                    android:gravity="center_horizontal" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/shortSunday"
+                    android:textColor="@color/black"
+                    android:textAlignment="center"
+                    android:textSize="16sp"
+                    android:gravity="center_horizontal" />
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/calendarRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_height="250dp"/>
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

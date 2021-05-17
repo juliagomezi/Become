@@ -51,6 +51,16 @@ public class TimeInterval implements Comparable<TimeInterval>{
     }
 
     /**
+     * Funcio per obtenir la durada de l'interval
+     * @return durada de l'interval
+     */
+    public Time getIntervalDuration(){
+        int durationHours = endTime.getHours() - startTime.getHours();
+        int durationMins = endTime.getMinutes() - startTime.getMinutes();
+        return new Time(durationHours, durationMins);
+    }
+
+    /**
      * Funcio que compara un interval de temps amb un altre
      * @param tI2 interval de temps amb que comparem
      * @return 0 si hi ha solapament, 1 altrament

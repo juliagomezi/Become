@@ -11,23 +11,28 @@ public class Activity implements Comparable<Activity>{
     /**
      * Nom de l'activitat
      */
-    private String name;
+    private final String name;
     /**
      * Descripcio de l'activitat
      */
-    private String description;
+    private final String description;
     /**
      * Tema de l'activitat
      */
-    private Theme theme;
+    private final Theme theme;
     /**
      * Interval de temps de l'activitat
      */
-    private TimeInterval interval;
+    private final TimeInterval interval;
     /**
      * Dia de l'activitat
      */
-    private Day day;
+    private final Day day;
+
+    /**
+     * Activitat feta avui
+     */
+    private boolean doneToday;
 
     /**
      * Creadora de l'activitat amb descripcio
@@ -44,6 +49,7 @@ public class Activity implements Comparable<Activity>{
         this.theme = theme;
         this.interval = ti;
         this.day = day;
+        this.doneToday = false;
     }
 
     /**
@@ -71,27 +77,11 @@ public class Activity implements Comparable<Activity>{
     }
 
     /**
-     * Setter del nom
-     * @param name nou nom de l'activitat
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
      * Getter de la descripcio
      * @return descripcio de l'activitat
      */
     public String getDescription() {
         return description;
-    }
-
-    /**
-     * Setter de la descripcio
-     * @param description nova descripcio de l'activitat
-     */
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     /**
@@ -103,27 +93,11 @@ public class Activity implements Comparable<Activity>{
     }
 
     /**
-     * Setter del tema
-     * @param theme nou tema de l'activitat
-     */
-    public void setTheme(Theme theme) {
-        this.theme = theme;
-    }
-
-    /**
      * Getter de l'interval de temps
      * @return interval de temps de l'activitat
      */
     public TimeInterval getInterval() {
         return interval;
-    }
-
-    /**
-     * Setter de l'interval de temps que crea un nou interval
-     * @param ti nou interval de temps
-     */
-    public void setInterval(TimeInterval ti) {
-        this.interval = ti;
     }
 
     /**
@@ -134,12 +108,12 @@ public class Activity implements Comparable<Activity>{
         return day;
     }
 
-    /**
-     * Setter del dia
-     * @param day nou dia de l'activitat
-     */
-    public void setDay(Day day) {
-        this.day = day;
+    public boolean isDoneToday() {
+        return doneToday;
+    }
+
+    public void setDoneToday(boolean doneToday) {
+        this.doneToday = doneToday;
     }
 
     /**

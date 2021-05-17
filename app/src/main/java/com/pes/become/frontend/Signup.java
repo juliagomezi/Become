@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapter;
@@ -72,8 +73,9 @@ public class Signup extends AppCompatActivity {
     /**
      * Funcio a executar despres de crear un usuari amb exit
      */
-    public void registerCallback(){
-        startActivity(new Intent(this, MainActivity.class));
+    public void registerCallback() {
+        Toast.makeText(this, getString(R.string.verifyEmail), Toast.LENGTH_LONG).show();
+        startActivity(new Intent(this, Login.class));
         finish();
     }
 

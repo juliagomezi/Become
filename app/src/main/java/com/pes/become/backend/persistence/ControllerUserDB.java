@@ -3,18 +3,14 @@ package com.pes.become.backend.persistence;
 import android.app.Activity;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.util.Log;
 
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.UserInfo;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -29,10 +25,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class ControllerUserDB {
 
+    /**
+     * Unica instancia de la classe
+     */
     private static ControllerUserDB instance;
     private FirebaseAuth mAuth;
     private final FirebaseFirestore db;
@@ -63,24 +61,33 @@ public class ControllerUserDB {
      * @param method mètode a executar de forma asíncrona un cop acabada la reautentificació (el paràmetre és un boolea que retorna true si la reautentificació ha anat bé o false si no)
      * @param object instancia de la classe del mètode a executar
      */
-    public void changePassword(String newPassword, Method method, Object object) {
+    public void changePassword(String oldPassword, String newPassword, Method method, Object object) {
         FirebaseUser user = mAuth.getCurrentUser();
+        AuthCredential credential = EmailAuthProvider
+                .getCredential(user.getEmail(), oldPassword);
 
-        user.updatePassword(newPassword)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    boolean success;
-
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            success = true;
-                        }
-
+        user.reauthenticate(credential)
+                .addOnCompleteListener(task -> {
+                    if(task.isSuccessful()) {
+                        user.updatePassword(newPassword)
+                                .addOnCompleteListener(task1 -> {
+                                    if (task1.isSuccessful()) {
+                                        try {
+                                            method.invoke(object, true);
+                                        } catch (IllegalAccessException ignore) {
+                                        } catch (InvocationTargetException ignore) {}
+                                    } else {
+                                        try {
+                                            method.invoke(object, false);
+                                        } catch (IllegalAccessException ignore) {
+                                        } catch (InvocationTargetException ignore) {}
+                                    }
+                                });
+                    } else {
                         try {
-                            method.invoke(object, success);
+                            method.invoke(object, false);
                         } catch (IllegalAccessException ignore) {
-                        } catch (InvocationTargetException ignore) {
-                        }
+                        } catch (InvocationTargetException ignore) {}
                     }
                 });
     }
@@ -110,9 +117,9 @@ public class ControllerUserDB {
     public void loginUser(String mail, String password, Activity act, Method method, Object object) {
         mAuth.signInWithEmailAndPassword(mail, password)
                 .addOnCompleteListener(act, task -> {
-                    Object[] params = new Object[6];
+                    Object[] params = new Object[8];
 
-                    if (task.isSuccessful()) {
+                    if (task.isSuccessful() && mAuth.getCurrentUser().isEmailVerified()) {
                         FirebaseUser user = mAuth.getCurrentUser();
                         String userID = user.getUid();
 
@@ -122,7 +129,9 @@ public class ControllerUserDB {
                             params[1] = userID;
                             params[2] = documentSnapshot.get("Username").toString();
                             params[3] = documentSnapshot.get("selectedRoutine");
-
+                            if (params[3] == null) params[3]="";
+                            else params[3] = params[3].toString();
+                            params[7] = Integer.valueOf(documentSnapshot.get("streak").toString());
                             try {
                                 File localFile = File.createTempFile("images", "jpeg");
                                 StorageReference imageRef = storageRef.child("images/"+userID);
@@ -130,8 +139,7 @@ public class ControllerUserDB {
                                         .addOnSuccessListener(taskSnapshot -> {
                                             params[4] = BitmapFactory.decodeFile(localFile.getAbsolutePath());
 
-                                            if (params[3] == null) params[3]="";
-                                            else params[3] = params[3].toString();
+
 
                                             ArrayList<ArrayList<String>> routineIds = new ArrayList();
                                             docRefToUser.collection("routines").orderBy("timestamp", Query.Direction.DESCENDING).get().addOnCompleteListener(task2 -> {
@@ -144,36 +152,114 @@ public class ControllerUserDB {
                                                     }
                                                 }
                                                 params[5] = routineIds;
-                                                try {
-                                                    method.invoke(object, params);
-                                                } catch (IllegalAccessException ignore) {
-                                                } catch (InvocationTargetException ignore) {
+                                                if(params[3].equals("")) {
+                                                    params[6]=null;
+                                                    try {
+                                                        method.invoke(object, params);
+                                                    } catch (IllegalAccessException ignore) {
+                                                    } catch (InvocationTargetException ignore) {
+                                                    }
+                                                }
+                                                else {
+                                                    String sRoutine = params[3].toString();
+                                                    DocumentReference docRefToRoutineStatistics = docRefToUser.collection("statistics").document(sRoutine);
+                                                    docRefToRoutineStatistics.get().addOnCompleteListener(task23 -> {
+                                                        if (task23.isSuccessful()) {
+                                                            DocumentSnapshot document = task23.getResult();
+                                                            if (document.exists()) {
+                                                                String[] differentThemes = {"Music", "Sport", "Sleeping", "Cooking", "Working", "Entertainment", "Plants", "Other"};
+                                                                HashMap<String, HashMap<String, Double>> mapThemes = new HashMap<>();
+                                                                for (int i = 0; i < 8; ++i) {
+                                                                    mapThemes.put(differentThemes[i], (HashMap) document.get("statistics" + differentThemes[i]));
+                                                                }
+                                                                params[6] = mapThemes;
+                                                                try {
+                                                                    method.invoke(object, params);
+                                                                } catch (IllegalAccessException ignore) {
+                                                                } catch (InvocationTargetException ignore) {
+                                                                }
+
+                                                            } else {
+                                                                params[6] = null;
+                                                                try {
+                                                                    method.invoke(object, params);
+                                                                } catch (IllegalAccessException ignore) {
+                                                                } catch (InvocationTargetException ignore) {
+                                                                }
+                                                            }
+                                                        } else {
+                                                            params[6] = null;
+                                                            try {
+                                                                method.invoke(object, params);
+                                                            } catch (IllegalAccessException ignore) {
+                                                            } catch (InvocationTargetException ignore) {
+                                                            }
+                                                        }
+                                                    });
                                                 }
                                             });
                                         }).addOnFailureListener(exception -> {
-                                            params[4] = null;
+                                    params[4] = null;
 
-                                            if (params[3] == null) params[3]="";
-                                            else params[3] = params[3].toString();
+                                    ArrayList<ArrayList<String>> routineIds = new ArrayList();
+                                    docRefToUser.collection("routines").orderBy("timestamp", Query.Direction.DESCENDING).get().addOnCompleteListener(task3 -> {
+                                        if (task3.isSuccessful()) {
+                                            for (QueryDocumentSnapshot  document : task3.getResult()) {
+                                                ArrayList<String> routinesResult = new ArrayList<>();
+                                                routinesResult.add(document.getId());
+                                                routinesResult.add(document.get("name").toString());
+                                                routineIds.add(routinesResult);
+                                            }
+                                        }
+                                        params[5] = routineIds;
+                                        if(params[3].equals("")) {
+                                            params[6]=null;
+                                            try {
+                                                method.invoke(object, params);
+                                            } catch (IllegalAccessException ignore) {
+                                            } catch (InvocationTargetException ignore) {
+                                            }
+                                        }
+                                        else {
+                                            String sRoutine = params[3].toString();
+                                            DocumentReference docRefToRoutineStatistics = docRefToUser.collection("statistics").document(sRoutine);
+                                            docRefToRoutineStatistics.get().addOnCompleteListener(task23 -> {
+                                                if (task23.isSuccessful()) {
+                                                    DocumentSnapshot document = task23.getResult();
+                                                    if (document.exists()) {
+                                                        String[] differentThemes = {"Music", "Sport", "Sleeping", "Cooking", "Working", "Entertainment", "Plants", "Other"};
+                                                        HashMap<String, HashMap<String, Double>> mapThemes = new HashMap<>();
+                                                        for (int i = 0; i < 8; ++i) {
+                                                            mapThemes.put(differentThemes[i], (HashMap) document.get("statistics" + differentThemes[i]));
+                                                        }
+                                                        params[6] = mapThemes;
+                                                        try {
+                                                            method.invoke(object, params);
+                                                        } catch (IllegalAccessException ignore) {
+                                                        } catch (InvocationTargetException ignore) {
+                                                        }
 
-                                            ArrayList<ArrayList<String>> routineIds = new ArrayList();
-                                            docRefToUser.collection("routines").orderBy("timestamp", Query.Direction.DESCENDING).get().addOnCompleteListener(task3 -> {
-                                                if (task3.isSuccessful()) {
-                                                    for (QueryDocumentSnapshot  document : task3.getResult()) {
-                                                        ArrayList<String> routinesResult = new ArrayList<>();
-                                                        routinesResult.add(document.getId());
-                                                        routinesResult.add(document.get("name").toString());
-                                                        routineIds.add(routinesResult);
+                                                    } else {
+                                                        params[6] = null;
+                                                        try {
+                                                            method.invoke(object, params);
+                                                        } catch (IllegalAccessException ignore) {
+                                                        } catch (InvocationTargetException ignore) {
+                                                        }
+                                                    }
+                                                } else {
+                                                    params[6] = null;
+                                                    try {
+                                                        method.invoke(object, params);
+                                                    } catch (IllegalAccessException ignore) {
+                                                    } catch (InvocationTargetException ignore) {
                                                     }
                                                 }
-                                                params[5] = routineIds;
-                                                try {
-                                                    method.invoke(object, params);
-                                                } catch (IllegalAccessException ignore) {
-                                                } catch (InvocationTargetException ignore) {
-                                                }
                                             });
-                                        });
+                                        }
+
+                                    });
+                                });
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -201,7 +287,7 @@ public class ControllerUserDB {
     public void loadUser(Method method, Object object) {
         FirebaseUser user = mAuth.getCurrentUser();
         String userID = user.getUid();
-        Object[] params = new Object[6];
+        Object[] params = new Object[8];
 
         DocumentReference docRefToUser = db.collection("users").document(userID);
         docRefToUser.get().addOnSuccessListener(documentSnapshot -> {
@@ -209,6 +295,7 @@ public class ControllerUserDB {
             params[1] = userID;
             params[2] = documentSnapshot.get("Username").toString();
             params[3] = documentSnapshot.get("selectedRoutine");
+            params[7] = Integer.valueOf(documentSnapshot.get("streak").toString());
 
             try {
                 File localFile = File.createTempFile("images", "jpeg");
@@ -216,29 +303,6 @@ public class ControllerUserDB {
                 imageRef.getFile(localFile)
                         .addOnSuccessListener(taskSnapshot -> {
                             params[4] = BitmapFactory.decodeFile(localFile.getAbsolutePath());
-
-                            if (params[3] == null) params[3]="";
-                            else params[3] = params[3].toString();
-
-                            ArrayList<ArrayList<String>> routineIds = new ArrayList();
-                            docRefToUser.collection("routines").orderBy("timestamp", Query.Direction.DESCENDING).get().addOnCompleteListener(task -> {
-                                if (task.isSuccessful()) {
-                                    for (QueryDocumentSnapshot  document : task.getResult()) {
-                                        ArrayList<String> routinesResult = new ArrayList<>();
-                                        routinesResult.add(document.getId());
-                                        routinesResult.add(document.get("name").toString());
-                                        routineIds.add(routinesResult);
-                                    }
-                                }
-                                params[5] = routineIds;
-                                try {
-                                    method.invoke(object, params);
-                                } catch (IllegalAccessException ignore) {
-                                } catch (InvocationTargetException ignore) {
-                                }
-                            });
-                        }).addOnFailureListener(exception -> {
-                            params[4] = null;
 
                             if (params[3] == null) params[3]="";
                             else params[3] = params[3].toString();
@@ -254,13 +318,117 @@ public class ControllerUserDB {
                                     }
                                 }
                                 params[5] = routineIds;
-                                try {
-                                    method.invoke(object, params);
-                                } catch (IllegalAccessException ignore) {
-                                } catch (InvocationTargetException ignore) {
+                                if(params[3].equals("")) {
+                                    params[6]=null;
+                                    try {
+                                        method.invoke(object, params);
+                                    } catch (IllegalAccessException ignore) {
+                                    } catch (InvocationTargetException ignore) {
+                                    }
+                                }
+                                else {
+                                    String sRoutine = params[3].toString();
+                                    DocumentReference docRefToRoutineStatistics = docRefToUser.collection("statistics").document(sRoutine);
+                                    docRefToRoutineStatistics.get().addOnCompleteListener(task23 -> {
+                                        if (task23.isSuccessful()) {
+                                            DocumentSnapshot document = task23.getResult();
+                                            if (document.exists()) {
+                                                String[] differentThemes = {"Music", "Sport", "Sleeping", "Cooking", "Working", "Entertainment", "Plants", "Other"};
+                                                HashMap<String, HashMap<String, Double>> mapThemes = new HashMap<>();
+                                                for (int i = 0; i < 8; ++i) {
+                                                    mapThemes.put(differentThemes[i], (HashMap) document.get("statistics" + differentThemes[i]));
+                                                }
+                                                params[6] = mapThemes;
+                                                try {
+                                                    method.invoke(object, params);
+                                                } catch (IllegalAccessException ignore) {
+                                                } catch (InvocationTargetException ignore) {
+                                                }
+
+                                            } else {
+                                                params[6] = null;
+                                                try {
+                                                    method.invoke(object, params);
+                                                } catch (IllegalAccessException ignore) {
+                                                } catch (InvocationTargetException ignore) {
+                                                }
+                                            }
+                                        } else {
+                                            params[6] = null;
+                                            try {
+                                                method.invoke(object, params);
+                                            } catch (IllegalAccessException ignore) {
+                                            } catch (InvocationTargetException ignore) {
+                                            }
+                                        }
+                                    });
                                 }
                             });
-                        });
+
+                        }).addOnFailureListener(exception -> {
+                    params[4] = null;
+
+                    if (params[3] == null) params[3]="";
+                    else params[3] = params[3].toString();
+
+                    ArrayList<ArrayList<String>> routineIds = new ArrayList();
+                    docRefToUser.collection("routines").orderBy("timestamp", Query.Direction.DESCENDING).get().addOnCompleteListener(task3 -> {
+                        if (task3.isSuccessful()) {
+                            for (QueryDocumentSnapshot  document : task3.getResult()) {
+                                ArrayList<String> routinesResult = new ArrayList<>();
+                                routinesResult.add(document.getId());
+                                routinesResult.add(document.get("name").toString());
+                                routineIds.add(routinesResult);
+                            }
+                        }
+                        params[5] = routineIds;
+                        if(params[3].equals("")) {
+                            params[6]=null;
+                            try {
+                                method.invoke(object, params);
+                            } catch (IllegalAccessException ignore) {
+                            } catch (InvocationTargetException ignore) {
+                            }
+                        }
+                        else {
+                            String sRoutine = params[3].toString();
+                            DocumentReference docRefToRoutineStatistics = docRefToUser.collection("statistics").document(sRoutine);
+                            docRefToRoutineStatistics.get().addOnCompleteListener(task23 -> {
+                                if (task23.isSuccessful()) {
+                                    DocumentSnapshot document = task23.getResult();
+                                    if (document.exists()) {
+                                        String[] differentThemes = {"Music", "Sport", "Sleeping", "Cooking", "Working", "Entertainment", "Plants", "Other"};
+                                        HashMap<String, HashMap<String, Double>> mapThemes = new HashMap<>();
+                                        for (int i = 0; i < 8; ++i) {
+                                            mapThemes.put(differentThemes[i], (HashMap) document.get("statistics" + differentThemes[i]));
+                                        }
+                                        params[6] = mapThemes;
+                                        try {
+                                            method.invoke(object, params);
+                                        } catch (IllegalAccessException ignore) {
+                                        } catch (InvocationTargetException ignore) {
+                                        }
+
+                                    } else {
+                                        params[6] = null;
+                                        try {
+                                            method.invoke(object, params);
+                                        } catch (IllegalAccessException ignore) {
+                                        } catch (InvocationTargetException ignore) {
+                                        }
+                                    }
+                                } else {
+                                    params[6] = null;
+                                    try {
+                                        method.invoke(object, params);
+                                    } catch (IllegalAccessException ignore) {
+                                    } catch (InvocationTargetException ignore) {
+                                    }
+                                }
+                            });
+                        }
+                    });
+                });
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -278,7 +446,7 @@ public class ControllerUserDB {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(task -> {
-                    Object[] params = new Object[6];
+                    Object[] params = new Object[8];
 
                     if (task.isSuccessful()) {
                         FirebaseUser user = mAuth.getCurrentUser();
@@ -288,71 +456,166 @@ public class ControllerUserDB {
                         docRefToUser.get().addOnSuccessListener(documentSnapshot -> {
 
                             if(!documentSnapshot.exists()) {
-                                DocumentReference docRefToUser1 =  db.collection("users").document(userID);
                                 HashMap<String, Object> mapa = new HashMap<>();
                                 mapa.put("Username", user.getDisplayName());
                                 mapa.put("selectedRoutine", "");
-                                docRefToUser1.set(mapa);
-                            }
+                                mapa.put("streak", 0);
+                                docRefToUser.set(mapa).addOnCompleteListener(t -> {
+                                    params[0] = true;
+                                    params[1] = userID;
+                                    params[2] = user.getDisplayName();
+                                    params[3] = "";
+                                    params[4] = null;
+                                    params[5] = new ArrayList<>();
+                                    params[6] = null;
+                                    try {
+                                        method.invoke(object, params);
+                                    } catch (IllegalAccessException e) {
+                                        e.printStackTrace();
+                                    } catch (InvocationTargetException e2) {
+                                        e2.printStackTrace();
+                                    }
+                                });
+                            } else {
+                                try {
+                                    File localFile = File.createTempFile("images", "jpeg");
+                                    StorageReference imageRef = storageRef.child("images/" + userID);
+                                    imageRef.getFile(localFile).addOnSuccessListener(taskSnapshot -> {
+                                        params[0] = true;
+                                        params[1] = userID;
+                                        params[2] = documentSnapshot.get("Username").toString();
+                                        params[3] = documentSnapshot.get("selectedRoutine");
+                                        params[4] = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                                        params[7] = Integer.valueOf(documentSnapshot.get("streak").toString());
+                                        if (params[3] == null) params[3] = "";
+                                        else params[3] = params[3].toString();
 
-                            params[0] = true;
-                            params[1] = userID;
-                            params[2] = documentSnapshot.get("Username").toString();
-                            params[3] = documentSnapshot.get("selectedRoutine");
-
-                            try {
-                                File localFile = File.createTempFile("images", "jpeg");
-                                StorageReference imageRef = storageRef.child("images/"+userID);
-                                imageRef.getFile(localFile)
-                                        .addOnSuccessListener(taskSnapshot -> {
-                                            params[4] = BitmapFactory.decodeFile(localFile.getAbsolutePath());
-
-                                            if (params[3] == null) params[3]="";
-                                            else params[3] = params[3].toString();
-
-                                            ArrayList<ArrayList<String>> routineIds = new ArrayList();
-                                            docRefToUser.collection("routines").orderBy("timestamp", Query.Direction.DESCENDING).get().addOnCompleteListener(task2 -> {
-                                                if (task2.isSuccessful()) {
-                                                    for (QueryDocumentSnapshot  document : task2.getResult()) {
-                                                        ArrayList<String> routinesResult = new ArrayList<>();
-                                                        routinesResult.add(document.getId());
-                                                        routinesResult.add(document.get("name").toString());
-                                                        routineIds.add(routinesResult);
-                                                    }
+                                        ArrayList<ArrayList<String>> routineIds = new ArrayList();
+                                        docRefToUser.collection("routines").orderBy("timestamp", Query.Direction.DESCENDING).get().addOnCompleteListener(task2 -> {
+                                            if (task2.isSuccessful()) {
+                                                for (QueryDocumentSnapshot document : task2.getResult()) {
+                                                    ArrayList<String> routinesResult = new ArrayList<>();
+                                                    routinesResult.add(document.getId());
+                                                    routinesResult.add(document.get("name").toString());
+                                                    routineIds.add(routinesResult);
                                                 }
-                                                params[5] = routineIds;
+                                            }
+                                            params[5] = routineIds;
+                                            if (params[3].equals("")) {
+                                                params[6] = null;
                                                 try {
                                                     method.invoke(object, params);
                                                 } catch (IllegalAccessException ignore) {
                                                 } catch (InvocationTargetException ignore) {
                                                 }
-                                            });
-                                        }).addOnFailureListener(exception -> {
-                                            params[4] = null;
+                                            } else {
+                                                String sRoutine = params[3].toString();
+                                                DocumentReference docRefToRoutineStatistics = docRefToUser.collection("statistics").document(sRoutine);
+                                                docRefToRoutineStatistics.get().addOnCompleteListener(task23 -> {
+                                                    if (task23.isSuccessful()) {
+                                                        DocumentSnapshot document = task23.getResult();
+                                                        if (document.exists()) {
+                                                            String[] differentThemes = {"Music", "Sport", "Sleeping", "Cooking", "Working", "Entertainment", "Plants", "Other"};
+                                                            HashMap<String, HashMap<String, Double>> mapThemes = new HashMap<>();
+                                                            for (int i = 0; i < 8; ++i) {
+                                                                mapThemes.put(differentThemes[i], (HashMap) document.get("statistics" + differentThemes[i]));
+                                                            }
+                                                            params[6] = mapThemes;
+                                                            try {
+                                                                method.invoke(object, params);
+                                                            } catch (IllegalAccessException ignore) {
+                                                            } catch (InvocationTargetException ignore) {
+                                                            }
 
-                                            if (params[3] == null) params[3]="";
-                                            else params[3] = params[3].toString();
-
-                                            ArrayList<ArrayList<String>> routineIds = new ArrayList();
-                                            docRefToUser.collection("routines").orderBy("timestamp", Query.Direction.DESCENDING).get().addOnCompleteListener(task3 -> {
-                                                if (task3.isSuccessful()) {
-                                                    for (QueryDocumentSnapshot  document : task3.getResult()) {
-                                                        ArrayList<String> routinesResult = new ArrayList<>();
-                                                        routinesResult.add(document.getId());
-                                                        routinesResult.add(document.get("name").toString());
-                                                        routineIds.add(routinesResult);
+                                                        } else {
+                                                            params[6] = null;
+                                                            try {
+                                                                method.invoke(object, params);
+                                                            } catch (IllegalAccessException ignore) {
+                                                            } catch (InvocationTargetException ignore) {
+                                                            }
+                                                        }
+                                                    } else {
+                                                        params[6] = null;
+                                                        try {
+                                                            method.invoke(object, params);
+                                                        } catch (IllegalAccessException ignore) {
+                                                        } catch (InvocationTargetException ignore) {
+                                                        }
                                                     }
-                                                }
-                                                params[5] = routineIds;
-                                                try {
-                                                    method.invoke(object, params);
-                                                } catch (IllegalAccessException ignore) {
-                                                } catch (InvocationTargetException ignore) {
-                                                }
-                                            });
+                                                });
+                                            }
                                         });
-                            } catch (IOException e) {
-                                e.printStackTrace();
+                                    }).addOnFailureListener(exception -> {
+                                        params[0] = true;
+                                        params[1] = userID;
+                                        params[2] = documentSnapshot.get("Username").toString();
+                                        params[3] = documentSnapshot.get("selectedRoutine");
+                                        params[4] = null;
+                                        params[7] = Integer.valueOf(documentSnapshot.get("streak").toString());
+                                        if (params[3] == null) params[3] = "";
+                                        else params[3] = params[3].toString();
+
+                                        ArrayList<ArrayList<String>> routineIds = new ArrayList();
+                                        docRefToUser.collection("routines").orderBy("timestamp", Query.Direction.DESCENDING).get().addOnCompleteListener(task3 -> {
+                                            if (task3.isSuccessful()) {
+                                                for (QueryDocumentSnapshot document : task3.getResult()) {
+                                                    ArrayList<String> routinesResult = new ArrayList<>();
+                                                    routinesResult.add(document.getId());
+                                                    routinesResult.add(document.get("name").toString());
+                                                    routineIds.add(routinesResult);
+                                                }
+                                            }
+                                            params[5] = routineIds;
+                                            if (params[3].equals("")) {
+                                                params[6] = null;
+                                                try {
+                                                    method.invoke(object, params);
+                                                } catch (IllegalAccessException ignore) {
+                                                } catch (InvocationTargetException ignore) {
+                                                }
+                                            } else {
+                                                String sRoutine = params[3].toString();
+                                                DocumentReference docRefToRoutineStatistics = docRefToUser.collection("statistics").document(sRoutine);
+                                                docRefToRoutineStatistics.get().addOnCompleteListener(task23 -> {
+                                                    if (task23.isSuccessful()) {
+                                                        DocumentSnapshot document = task23.getResult();
+                                                        if (document.exists()) {
+                                                            String[] differentThemes = {"Music", "Sport", "Sleeping", "Cooking", "Working", "Entertainment", "Plants", "Other"};
+                                                            HashMap<String, HashMap<String, Double>> mapThemes = new HashMap<>();
+                                                            for (int i = 0; i < 8; ++i) {
+                                                                mapThemes.put(differentThemes[i], (HashMap) document.get("statistics" + differentThemes[i]));
+                                                            }
+                                                            params[6] = mapThemes;
+                                                            try {
+                                                                method.invoke(object, params);
+                                                            } catch (IllegalAccessException ignore) {
+                                                            } catch (InvocationTargetException ignore) {
+                                                            }
+
+                                                        } else {
+                                                            params[6] = null;
+                                                            try {
+                                                                method.invoke(object, params);
+                                                            } catch (IllegalAccessException ignore) {
+                                                            } catch (InvocationTargetException ignore) {
+                                                            }
+                                                        }
+                                                    } else {
+                                                        params[6] = null;
+                                                        try {
+                                                            method.invoke(object, params);
+                                                        } catch (IllegalAccessException ignore) {
+                                                        } catch (InvocationTargetException ignore) {
+                                                        }
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    });
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         });
                     }
@@ -391,11 +654,15 @@ public class ControllerUserDB {
                         HashMap<String, Object> mapa = new HashMap<>();
                         mapa.put("Username", name);
                         mapa.put("selectedRoutine", "");
+                        mapa.put("streak", 0);
                         docRefToUser.set(mapa);
                         params[0] = true;
                         params[1] = userID;
                         params[2] = name;
                         params[3] = "";
+
+                        user.sendEmailVerification();
+                        signOut();
                     }
                     else {
                         params[0] = false;
@@ -420,6 +687,16 @@ public class ControllerUserDB {
     }
 
     /**
+     * Canvia el nom d'usuari
+     * @param userID identificador de l'usuari
+     * @param name nou nom d'usuari
+     */
+    public void changeUsername(String userID, String name) {
+        DocumentReference docRefToUser = db.collection("users").document(userID);
+        docRefToUser.update("Username",name);
+    }
+
+    /**
      * Metode per fer sign out de l'usuari actual
      */
     public void signOut() {
@@ -433,6 +710,7 @@ public class ControllerUserDB {
         FirebaseUser user = mAuth.getCurrentUser();
         AuthCredential credential = EmailAuthProvider
                 .getCredential(user.getEmail(), password);
+
 
         String id = user.getUid();
         user.reauthenticate(credential)
@@ -481,7 +759,10 @@ public class ControllerUserDB {
      */
     private void deleteUserData(DocumentReference docRefToUser) {
 
-        docRefToUser.collection("routines").get()
+        CollectionReference colRefToRoutines = docRefToUser.collection("routines");
+        CollectionReference colRefToStatistics = docRefToUser.collection("statistics");
+
+        colRefToRoutines.get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot documentSnap : task.getResult()) {
@@ -490,8 +771,19 @@ public class ControllerUserDB {
 
                         }
                     }
-                    docRefToUser.delete();
                 });
+
+        colRefToStatistics.get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot documentSnap : task.getResult()) {
+                            DocumentReference docRefToStatistic = documentSnap.getReference();
+                            docRefToStatistic.delete();
+
+                        }
+                    }
+                });
+        docRefToUser.delete();
     }
 
     /**
@@ -508,6 +800,29 @@ public class ControllerUserDB {
                         }
                     }
                     docRefToRoutine.delete();
+                });
+    }
+
+    /**
+     * Metode per recuperar la contrasenya d'un usuari
+     * @param mail mail del compte a recuperar
+     */
+    public void sendPassResetEmail(String mail, Method method, Object object) {
+        FirebaseAuth.getInstance().fetchSignInMethodsForEmail(mail)
+                .addOnCompleteListener(task -> {
+                    boolean isNewUser = task.getResult().getSignInMethods().isEmpty();
+                    boolean google = false;
+                    if (!isNewUser) {
+                        google = task.getResult().getSignInMethods().get(0).equals("google.com");
+                        if(!google) FirebaseAuth.getInstance().sendPasswordResetEmail(mail);
+                    }
+                    boolean sent = true;
+                    if(isNewUser || google) sent = false;
+                    try {
+                        method.invoke(object, sent);
+                    } catch (IllegalAccessException ignore) {
+                    } catch (InvocationTargetException ignore) {
+                    }
                 });
     }
 

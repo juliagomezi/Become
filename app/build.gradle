@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId "com.pes.become"
-        minSdkVersion 16
+        minSdkVersion 17
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -51,6 +51,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.3.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
+    implementation 'it.xabaras.android:recyclerview-swipedecorator:1.2.3'
 
     //All related to cloud firestore
     implementation platform('com.google.cloud:libraries-bom:19.0.0')
@@ -64,6 +65,12 @@ dependencies {
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'com.google.android.gms:play-services-auth:19.0.0'
     implementation platform('com.google.firebase:firebase-bom:26.8.0')
+
+    //related to charts
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
+    // gifs
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
 
 }
 sonarqube {

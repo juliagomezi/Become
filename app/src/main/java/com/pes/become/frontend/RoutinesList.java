@@ -1,6 +1,7 @@
 package com.pes.become.frontend;
 
 import android.content.Context;
+import android.graphics.Rect;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -42,6 +43,18 @@ public class RoutinesList extends Fragment {
     private EditText routineName;
 
     /**
+     * Classe per afegir padding al final del recycler view
+     */
+    class BottomItemDecoration  extends RecyclerView.ItemDecoration {
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            super.getItemOffsets(outRect, view, parent, state);
+            if (parent.getChildAdapterPosition(view) == state.getItemCount() - 1)
+                outRect.bottom = 250;
+        }
+    }
+
+    /**
      * Constructora per defecte de RoutinesList
      */
     public RoutinesList() {}
@@ -78,11 +91,13 @@ public class RoutinesList extends Fragment {
      * Funció per inicialitzar l'element que mostra el llistat d'activitats
      */
     private void initRecyclerView() {
-        recyclerView.setVisibility(View.VISIBLE);
         emptyView.setVisibility(View.INVISIBLE);
+        recyclerView.setVisibility(View.VISIBLE);
+
         recyclerView.setLayoutManager((new LinearLayoutManager(global)));
-        routinesListRecyclerAdapter = new RoutinesListRecyclerAdapter(routinesList, selectedRoutineID);
+        routinesListRecyclerAdapter = new RoutinesListRecyclerAdapter(routinesList, selectedRoutineID, global);
         recyclerView.setAdapter(routinesListRecyclerAdapter);
+        recyclerView.addItemDecoration(new BottomItemDecoration());
     }
 
     /**
@@ -103,6 +118,9 @@ public class RoutinesList extends Fragment {
         if(routinesList.isEmpty()) initEmptyView();
     }
 
+    /**
+     * Funció per crear la pestanya de creacio de rutina
+     */
     public void createRoutineSheet() {
         routineSheet = new BottomSheetDialog(global,R.style.BottomSheetTheme);
         View sheetView = LayoutInflater.from(getContext()).inflate(R.layout.routines_list_edit, view.findViewById(R.id.bottom_sheet));
@@ -117,6 +135,9 @@ public class RoutinesList extends Fragment {
         routineSheet.show();
     }
 
+    /**
+     * Funció per crear una nova rutina
+     */
     private void createRoutine() {
         String name = routineName.getText().toString();
         if (name.isEmpty()) routineName.setError(getString(R.string.notNull));
@@ -127,6 +148,7 @@ public class RoutinesList extends Fragment {
                 routinesListRecyclerAdapter.notifyDataSetChanged();
                 Toast.makeText(getContext(), getString(R.string.routineCreated), Toast.LENGTH_SHORT).show();
                 routineSheet.dismiss();
+                if (DA.checkAchievement("CreateFirstRoutine")) MainActivity.getInstance().showTrophyWon("CreateFirstRoutine");
             } catch (ExistingRoutineException e) {
                 routineName.setError(getString(R.string.existingRoutineName));
             }

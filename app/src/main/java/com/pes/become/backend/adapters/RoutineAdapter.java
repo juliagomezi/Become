@@ -85,6 +85,7 @@ public class RoutineAdapter {
             Integer endHour = activity.getInterval().getEndTime().getHours();
             Integer endMinute = activity.getInterval().getEndTime().getMinutes();
             resaux.add(String.format("%02d", endHour) + ":" + String.format("%02d", endMinute));
+            resaux.add(String.valueOf(activity.isDoneToday()));
             res.add(resaux);
         }
         return res;
@@ -105,14 +106,15 @@ public class RoutineAdapter {
 
     /**
      * Actualitzar els parametres d'una activitat d'una rutina
+     * @param activity activitat actualitzada
      * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
      * @throws NoSelectedRoutineException si l'usuari no te cap rutina seleccionada
      */
-    public void updateActivity(Activity a) throws OverlappingActivitiesException, NoSelectedRoutineException {
+    public void updateActivity(Activity activity) throws OverlappingActivitiesException, NoSelectedRoutineException {
         if(routine == null){
             throw new NoSelectedRoutineException();
         }
-        routine.updateActivity(a);
+        routine.updateActivity(activity);
     }
 
     /**
@@ -137,6 +139,8 @@ public class RoutineAdapter {
 
     /**
      * Setter de totes les activitats d'un dia d'una rutina
+     * @param acts llista de les activitats
+     * @param day dia de les activitats
      */
     public void setActivitiesByDay(ArrayList<Activity> acts, Day day) {
         routine.setActivitiesByDay(acts,day);
@@ -149,5 +153,19 @@ public class RoutineAdapter {
      */
     public boolean checkOverlappings(Activity a) {
         return routine.checkOverlappings(a);
+    }
+
+    public void markActivityAsDone(String activityID, boolean isDone) {
+        routine.getActivity(activityID).setDoneToday(isDone);
+    }
+
+    public boolean isCompleted(Day day) {
+        ArrayList<Activity> activities = routine.getActivitiesByDay(day);
+        for(Activity a : activities) {
+            if(!a.isDoneToday()) {
+                return false;
+            }
+        }
+        return true;
     }
 }

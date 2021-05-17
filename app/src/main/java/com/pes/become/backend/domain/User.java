@@ -3,6 +3,9 @@ package com.pes.become.backend.domain;
 import android.graphics.Bitmap;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Classe que defineix els usuaris de l'aplicacio
@@ -25,9 +28,25 @@ public class User {
      */
     private Routine selectedRoutine;
     /**
+     * Estadistiques de la rutina seleccionada de l'usuari
+     */
+    private Map<Theme, Map<Day, Double>> statisticsSelectedRoutine;
+    /**
      * ID i nom de les rutines de l'usuari
      */
     private ArrayList<ArrayList<String>> routines;
+    /**
+     * Trofeus obtinguts per l'usuari
+     */
+    private TreeMap<Achievement, Boolean> achievements;
+    /**
+     *
+     */
+    private ArrayList<Integer> calendarMonth;
+    /**
+     *
+     */
+    private int streak;
 
     /**
      * Creadora de la classe per a un nou usuari
@@ -37,6 +56,19 @@ public class User {
         this.name = name;
         this.selectedRoutine = null;
         this.routines = new ArrayList<>();
+        clearStatistics();
+        achievements = new TreeMap<>();
+        for(int a = 0; a<Achievement.values().length; ++a){
+            achievements.put(Achievement.values()[a], false);
+        }
+    }
+
+    /**
+     * Metode per inicialitzar el mes del calendari
+     * @param daysMonth dies que te el mes
+     */
+    public void clearMonth(int daysMonth) {
+        this.calendarMonth = new ArrayList<>(Collections.nCopies(daysMonth, -1));
     }
 
     /**
@@ -104,6 +136,86 @@ public class User {
     }
 
     /**
+     * Getter de les estadistiques de la rutina seleccionada
+     * @return Array d'Arrays d'enters on la primera array representa els temes, la segona els dies i la tercera les hores
+     */
+    public ArrayList<ArrayList<Double>> getStatisticsSelectedRoutine() {
+        ArrayList<ArrayList<Double>> result = new ArrayList<>();
+        for(Map.Entry<Theme, Map<Day, Double>> themeEntry : statisticsSelectedRoutine.entrySet()){
+            ArrayList<Double> hoursByDay = new ArrayList<>();
+            for(Map.Entry<Day, Double> dayEntry : themeEntry.getValue().entrySet()){
+                hoursByDay.add(dayEntry.getKey().ordinal(), dayEntry.getValue());
+            }
+            result.add(themeEntry.getKey().ordinal(), hoursByDay);
+        }
+        return result;
+    }
+
+    /**
+     * Metode per obtenir totes les hores que hi han dedicades a un tema en la rutina seleccionada
+     * @param theme tema del que es volen les hores
+     * @return hores setmanals dedicades al tema
+     */
+    public double getHoursByTheme(Theme theme){
+        Map<Day, Double> themeStats = statisticsSelectedRoutine.get(theme);
+        double total = 0.0;
+        for(Map.Entry<Day, Double> dayStats : themeStats.entrySet()){
+            total += dayStats.getValue();
+        }
+        return total;
+    }
+
+    /**
+     * Setter de les estadistiques de la rutina seleccionada
+     * @param statisticsSelectedRoutine mapa que representa les estadistiques amb Tema com a clau i un segon mapa com a valor, amb Dia com a clau i les hores dedicades com a valor
+     */
+    public void setStatisticsSelectedRoutine(Map<Theme, Map<Day, Double>> statisticsSelectedRoutine) {
+        this.statisticsSelectedRoutine = statisticsSelectedRoutine;
+    }
+
+    public void updateStatistics(Theme theme, Day day, int hours, int minutes, boolean add) {
+        double time = (double)hours + (double)minutes/60.0;
+        if(!add)
+            time *= -1;
+        time += statisticsSelectedRoutine.get(theme).get(day);
+        statisticsSelectedRoutine.get(theme).put(day, time);
+    }
+
+    public void addAchievement(Achievement achievement) {
+        achievements.put(achievement, true);
+    }
+
+    /**
+     * Metode per obtenir tots els trofeus de l'usuari
+     * @return mapa amb els trofeus de l'usuari on el trofeu es la key i el valor es cert si te el trofeu i fals si no
+     */
+    public TreeMap<Achievement, Boolean> getAllAchievementsStates() {
+        return achievements;
+    }
+
+    /**
+     * Metode per saber l'estat d'un trofeu de l'usuari
+     * @param achievement trofeu del que es vol l'estat
+     * @return cert si te el trofeu, fals si no
+     */
+    public boolean getAchievementState(Achievement achievement){
+        return achievements.get(achievement);
+    }
+
+    /**
+     * Metode perque l'usuari obtingui un trofeu
+     * @param achievement trofeu a obtenir
+     * @return cert si no tenia el trofeu i per tant l'ha guanyat, fals si ja el tenia
+     */
+    public boolean gainAchievement(Achievement achievement){
+        if(!achievements.get(achievement)){
+            achievements.put(achievement, true);
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Getter de les rutines
      * @return les rutines de l'usuari
      */
@@ -166,4 +278,34 @@ public class User {
         return false;
     }
 
+    public void clearStatistics() {
+        this.statisticsSelectedRoutine = new TreeMap<>();
+        for(int t=0; t<Theme.values().length; ++t){
+            Map<Day, Double> emptyMap = new TreeMap<>();
+            for(int d=0; d<Day.values().length; ++d){
+                emptyMap.put(Day.values()[d], 0.0);
+            }
+            statisticsSelectedRoutine.put(Theme.values()[t], emptyMap);
+        }
+    }
+
+    public ArrayList<Integer> getCalendarMonth() {
+        return calendarMonth;
+    }
+
+    public void setCalendarMonth(ArrayList<Integer> calendarMonth) {
+        this.calendarMonth = calendarMonth;
+    }
+
+    public void setDayCalendar(int day, int completition) {
+        calendarMonth.add(day, completition);
+    }
+
+    public int getStreak() {
+        return streak;
+    }
+
+    public void setStreak(int streak) {
+        this.streak = streak;
+    }
 }

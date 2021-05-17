@@ -69,6 +69,21 @@ public class Routine {
     }
 
     /**
+     *
+     * @param id
+     * @return
+     */
+    public Activity getActivity(String id) {
+        for(Map.Entry<Day, ArrayList<Activity>> actsDay : activities.entrySet()) {
+            for(Activity act : actsDay.getValue()) {
+                if(act.getId().equals(id))
+                    return act;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Metode que afegeix una activitat a la rutina
      * @param activity activitat a afegir
      * @throws OverlappingActivitiesException la nova activitat es solapa amb altres
@@ -88,6 +103,14 @@ public class Routine {
      */
     public ArrayList<Activity> getActivitiesByDay(Day day) {
         return activities.get(day);
+    }
+
+    public int getTotalActivities(){
+        int result = 0;
+        for(Map.Entry<Day, ArrayList<Activity>> day : activities.entrySet()){
+            result += day.getValue().size();
+        }
+        return result;
     }
 
     /**
