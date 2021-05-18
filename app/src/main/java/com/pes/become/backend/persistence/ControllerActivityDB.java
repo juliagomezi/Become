@@ -175,7 +175,15 @@ public class ControllerActivityDB {
         if(day != null) docRefToActivity.update("day", day);
         if(iniT != null) docRefToActivity.update("beginTime", iniT);
         if(endT != null) docRefToActivity.update("finishTime", endT);
-
+        DocumentReference sharedActivityReference = db.collection("sharedRoutines").document(userId+"_"+idRoutine).collection("activities").document(idActivity);
+        sharedActivityReference.get().addOnSuccessListener(task -> {
+            if(actName != null) sharedActivityReference.update("name", actName);
+            if(description != null) sharedActivityReference.update("description", description);
+            if(theme != null) sharedActivityReference.update("theme", theme);
+            if(day != null) sharedActivityReference.update("day", day);
+            if(iniT != null) sharedActivityReference.update("beginTime", iniT);
+            if(endT != null) sharedActivityReference.update("finishTime", endT);
+        });
     }
 
     /**
