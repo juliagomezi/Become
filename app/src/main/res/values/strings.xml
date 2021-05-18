@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name" translatable="false">Become</string>
+    <string name="facebook_app_id" translatable="false">1513592482314414</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb1513592482314414</string>
     <string name="new_activityLabel">New Activity</string>
     <string name="descriptionLabel">Description (optional)</string>
     <string name="activity_nameLabel">Name</string>
@@ -147,5 +149,6 @@
     <string name="HourOther10Description">Dedicate 10 hours of your week to other activities</string>
     <string name="DONE">DONE</string>
     <string name="UNDONE">NOT DONE</string>
+    <string name="facebook" translatable="false">Facebook</string>
 
 </resources>

@@ -6,6 +6,7 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
+import com.facebook.AccessToken;
 import com.pes.become.backend.domain.Achievement;
 import com.pes.become.backend.domain.AchievementController;
 import com.pes.become.backend.domain.Activity;
@@ -23,8 +24,8 @@ import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 import com.pes.become.backend.persistence.ControllerPersistence;
 import com.pes.become.backend.persistence.StringDateConverter;
 import com.pes.become.frontend.ForgotPassword;
-import com.pes.become.frontend.LogoScreen;
 import com.pes.become.frontend.Login;
+import com.pes.become.frontend.LogoScreen;
 import com.pes.become.frontend.MainActivity;
 import com.pes.become.frontend.Profile;
 import com.pes.become.frontend.Signup;
@@ -176,6 +177,27 @@ public class DomainAdapter {
             e.printStackTrace();
         }
 
+    }
+
+    public void loginFacebookUser(AccessToken accessToken, android.app.Activity act) {
+        Class[] parameterTypes = new Class[8];
+        parameterTypes[0] = boolean.class;
+        parameterTypes[1] = String.class;
+        parameterTypes[2] = String.class;
+        parameterTypes[3] = String.class;
+        parameterTypes[4] = Bitmap.class;
+        parameterTypes[5] = ArrayList.class;
+        parameterTypes[6] = Map.class;
+        parameterTypes[7] = int.class;
+        Method method;
+        login = (Login)act;
+
+        try {
+            method = DomainAdapter.class.getMethod("loginCallback", parameterTypes);
+            controllerPersistence.loginUserFacebook(accessToken, method, DomainAdapter.getInstance());
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -886,4 +908,6 @@ public class DomainAdapter {
     public void passResetCallback(boolean success) {
         forgotPass.passResetCallback(success);
     }
+
+
 }
