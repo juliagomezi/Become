@@ -95,7 +95,7 @@ public class ControllerCalendarDB {
             if(task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if(document.exists()) {
-                    int num = Integer.valueOf(document.get("numActivitiesDone").toString());
+                    int num = Integer.parseInt(document.get("numActivitiesDone").toString());
                     if((num == totalActivities) && (activitiesDoneIncrement < 0)) {
                         docRefToUser.update("streak", FieldValue.increment(-1));
                     } else if(num+activitiesDoneIncrement == totalActivities) {
@@ -118,8 +118,8 @@ public class ControllerCalendarDB {
                                 if (task2.isSuccessful()) {
                                     DocumentSnapshot document2 = task2.getResult();
                                     if (document2.exists()) {
-                                        int actsDone = (int) document2.get("numActivitiesDone");
-                                        int total = (int) document2.get("numTotalActivities");
+                                        int actsDone = Integer.parseInt(document2.get("numActivitiesDone").toString());
+                                        int total = Integer.parseInt(document2.get("numTotalActivities").toString());
                                         if(actsDone == total) {
                                             if(activitiesDoneIncrement == totalActivities) docRefToUser.update("streak", FieldValue.increment(1));
                                         } else {
@@ -275,10 +275,9 @@ public class ControllerCalendarDB {
                     String dayAux =  document.get("day").toString();
                     String monthAux =   document.get("month").toString();
                     String yearAux =   document.get("year").toString();
-                    int numActivitiesDone = (int) document.get("numActivitiesDone");
-                    int numTotalActivities = (int) document.get("numTotalActivities");
-                    if(numTotalActivities == numActivitiesDone)
-                    {
+                    int numActivitiesDone = Integer.parseInt(document.get("numActivitiesDone").toString());
+                    int numTotalActivities = Integer.parseInt(document.get("numTotalActivities").toString());
+                    if(numTotalActivities == numActivitiesDone) {
                         Date date = StringDateConverter.stringToDate(dayAux+"-"+monthAux+"-"+yearAux);
                         list.add(date);
                         //A la llista es queden els dies que la rutina està complerta
