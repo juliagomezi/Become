@@ -148,6 +148,7 @@ public class ControllerUserDB {
                                                         ArrayList<String> routinesResult = new ArrayList<>();
                                                         routinesResult.add(document.getId());
                                                         routinesResult.add(document.get("name").toString());
+                                                        //routinesResult.add(document.get("shared").toString());
                                                         routineIds.add(routinesResult);
                                                     }
                                                 }
