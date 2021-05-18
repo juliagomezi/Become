@@ -49,6 +49,8 @@ public class ControllerPersistence {
         db = FirebaseFirestore.getInstance();
     }
 
+    ////////////////////////////////FUNCIONS RELACIONADES AMB LA CLASSE ACTIVITAT///////////////////
+    ///////////CONSULTORES DE LA CLASSE ACTIVITAT
     /**
      * Obtenir les activitats d'una rutina
      * @param userId identificador de l'usuari
@@ -60,6 +62,7 @@ public class ControllerPersistence {
         CA.getActivities(userId, idRoutine, method, object);
     }
 
+    //////////MODIFICADORES DE LA CLASSE ACTIVITAT
     /**
      * Afegir una nova activitat a una certa rutina de la base de dades
      * @param userId identificador de l'usuari
@@ -70,20 +73,22 @@ public class ControllerPersistence {
      * @param actDay és el dia on es vol posar l'actiivtat
      * @param beginTime és l'hora d'inici de l'activitat
      * @param finishTime és l'hora de finalització de l'activitat
+     * @param shared bool que indica si la rutina es publica o no.
      * @return el valor del id de l'activitat creada
      */
-    public String createActivity(String userId, String idRoutine, String activityName, String actTheme,String actDescription, String actDay, String beginTime, String finishTime) {
+    public String createActivity(String userId, String idRoutine, String activityName, String actTheme,String actDescription, String actDay, String beginTime, String finishTime, boolean shared) {
         CS.addActivityToStatistics(userId, idRoutine, actTheme, actDay, beginTime, finishTime);
-        return CA.createActivity(userId, idRoutine, activityName,actTheme,actDescription, actDay, beginTime, finishTime, "null");
+        return CA.createActivity(userId, idRoutine, activityName,actTheme,actDescription, actDay, beginTime, finishTime, "null", shared);
     }
 
     /**
-     * Esborrar una activitat d'una rutina
+     * Esborrar una activitat d'una rutina i de la rutina publica equivalent (si existeix)
      * @param userId identificador de l'usuari
      * @param idRoutine identificador de la rutina
      * @param idActivity identificador de l'activitat
+     * @param shared bool que indica si la rutina es publica o no.
      */
-    public void deleteActivity(String userId, String idRoutine, String idActivity) {
+    public void deleteActivity(String userId, String idRoutine, String idActivity, boolean shared) {
 
         DocumentReference docRefToActivity = db.collection("users").document(userId).
                 collection("routines").document(idRoutine).
@@ -98,7 +103,7 @@ public class ControllerPersistence {
                     String beginTime = document.get("beginTime").toString();
                     String finishTime = document.get("finishTime").toString();
                     CS.deleteActivityStatistics(userId, idRoutine, day, theme, beginTime, finishTime);
-                    CA.deleteActivity(userId, idRoutine, idActivity);
+                    CA.deleteActivity(userId, idRoutine, idActivity, shared);
 
                 }
             }
@@ -116,8 +121,9 @@ public class ControllerPersistence {
      * @param newTheme nou tema de l'activitat
      * @param newBeginTime nova hora d'inici de l'activitat
      * @param newFinishTime nova hora final de l'activitat
+     * @param shared bool que indica si la rutina es publica o no.
      */
-    public void updateActivity(String userId, String idRoutine, String idActivity, String actName, String description, String newDay, String newTheme,  String newBeginTime, String newFinishTime) {
+    public void updateActivity(String userId, String idRoutine, String idActivity, String actName, String description, String newDay, String newTheme,  String newBeginTime, String newFinishTime, boolean shared) {
 
         DocumentReference docRefToActivity = db.collection("users").document(userId).
                 collection("routines").document(idRoutine).
@@ -132,7 +138,7 @@ public class ControllerPersistence {
                     String oldBeginTime = document.get("beginTime").toString();
                     String oldFinishTime = document.get("finishTime").toString();
                     CS.updateDedicatedTimeActivity(userId, idRoutine, newDay, newTheme, newBeginTime, newFinishTime, oldDay, oldTheme, oldBeginTime, oldFinishTime);
-                    CA.updateActivity(userId, idRoutine, actName, description, newTheme, newDay, newBeginTime, newFinishTime, idActivity);
+                    CA.updateActivity(userId, idRoutine, actName, description, newTheme, newDay, newBeginTime, newFinishTime, idActivity, shared);
 
                 }
             }
@@ -150,15 +156,16 @@ public class ControllerPersistence {
     {
         CA.markActivityAsDone(userId, idRoutine, lastDayDone, idActivity, totalActivities);
     }
-
+    ////////////////////////////////FUNCIONS RELACIONADES AMB LA CLASSE RUTINA//////////////////////
     /**
      * Canvia el nom d'una rutina.
      * @param userId identificador de l'usuari
      * @param idRoutine l'identificador de la rutina.
      * @param newName el nom que se li vol posar a la rutina.
+     * @param shared bool que indica si la rutina es publica o no.
      */
-    public void changeRoutineName(String userId, String idRoutine, String newName) {
-        CR.changeName(userId, idRoutine, newName);
+    public void changeRoutineName(String userId, String idRoutine, String newName, boolean shared) {
+        CR.changeName(userId, idRoutine, newName, shared);
     }
 
     /**
@@ -176,12 +183,14 @@ public class ControllerPersistence {
      * Esborra la rutina indicada i les seves activitats
      * @param userId identificador de l'usuari
      * @param idRoutine és l'identificador de la rutina que es vol esborrar
+     * @param shared bool que indica si la rutina es publica o no.
      */
-    public void deleteRoutine(String userId, String idRoutine) {
-        CR.deleteRoutine(userId, idRoutine);
+    public void deleteRoutine(String userId, String idRoutine, boolean shared) {
+        CR.deleteRoutine(userId, idRoutine, shared);
         CS.deleteRoutineStatistics(userId, idRoutine);
     }
 
+    ////////////////////////////////FUNCIONS RELACIONADES AMB LA CLASSE USUARI//////////////////////
     /**
      * Metode per obtenir el provider de l'usuari
      * @return el provider de l'usuari
@@ -294,6 +303,7 @@ public class ControllerPersistence {
         CU.changeUsername(userID, newName);
     }
 
+    ///////////////////////////////FUNCIONS RELACIONADES AMB LA CLASSE STATISTICS///////////////////
     /**
      * Funcio per aconseguir totes les estadistiques d'una rutina
      * @param userId identificador de l'usuari
@@ -316,7 +326,7 @@ public class ControllerPersistence {
     public void getStatisticsRoutineByTheme(String userId, String idRoutine, String theme, Method method, Object object){
         CS.getStatisticsRoutineByTheme(userId, idRoutine, theme, method, object);
     }
-
+    ///////////////////////////FUNCIONS RELACIONADES AMB LA CLASSE CALENDAR/////////////////////////
     /**
      * Executa el metode method amb un hashmap que representa el day de la base de dades si aquest s'ha pogut consultar, o l'excepció que ha saltat si no.
      * Day tindrà les claus: day, idRoutine, numActivitiesDone, numTotalActivities. Totes son strings
@@ -386,7 +396,7 @@ public class ControllerPersistence {
     public void updateDay(String userId, Date day, int activitiesDone, String idRoutine) {
         CD.updateDay(userId, day, activitiesDone, idRoutine);
     }
-
+    //////////////////////////////FUNCIONS RELACIONADES AMB LA CLASSE TROPHIES//////////////////////
     /**
      * Funcio que retorna els trofeus de l'usuari i un bool que indica per cada un si l'ha aconseguit
      * @param userId identificador de l'usuari

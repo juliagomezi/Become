@@ -40,15 +40,20 @@ public class ControllerRoutineDB {
         return instance;
     }
 
+    //////////////////////////////MODIFICADORES/////////////////////////////////////////////////////
     /**
      * Canvia el nom d'una rutina.
      * @param userId identificador de l'usuari
      * @param idRoutine l'identificador de la rutina.
      * @param newName el nom que se li vol posar a la rutina.
+     * @param shared bool que indica si la rutina es publica o no.
      */
-    public void changeName(String userId, String idRoutine, String newName){
+    public void changeName(String userId, String idRoutine, String newName, boolean shared){
         DocumentReference docRefToRoutine = db.collection("users").document(userId).collection("routines").document(idRoutine);
         docRefToRoutine.update("name", newName);
+        if (shared){
+            db.collection("sharedRoutines").document(userId+"_"+idRoutine).update("name", newName);
+        }
     }
 
     /**
@@ -67,12 +72,16 @@ public class ControllerRoutineDB {
     }
 
     /**
-     * Eliminar una rutina existent.
-     * @param userId identificador de l'usuari
+     * Eliminar una rutina existent i la rutina equivalent publica (si estava publicada).
+     * @param userId identificador de l'usuari.
      * @param idRoutine identificador de la rutina a eliminar.
+     * @param shared bool que indica si la rutina es publica o no.
      */
-    public void deleteRoutine( String userId, String idRoutine) {
-        unShareRoutinePriv(userId, idRoutine);
+    public void deleteRoutine(String userId, String idRoutine, boolean shared) {
+        if (shared){
+            unShareRoutinePriv(userId, idRoutine);
+        }
+
         DocumentReference routineReference = db.collection("users").document(userId).collection("routines").document(idRoutine);
         routineReference.collection("activities").get()
                 .addOnCompleteListener(task -> {
@@ -86,43 +95,57 @@ public class ControllerRoutineDB {
                 });
     }
 
-    public void shareRoutine(String userId, String idRoutine)
-    {
+    /**
+     * Funcio que fa que una rutina passi a ser publica.
+     * @param userId identificador de l'usuari.
+     * @param idRoutine l'identificador de la rutina.
+     */
+    public void shareRoutine(String userId, String idRoutine) {
         DocumentReference routineReference = db.collection("users").document(userId).collection("routines").document(idRoutine);
         DocumentReference sharedRoutineReference = db.collection("sharedRoutines").document(userId+"_"+idRoutine);
         routineReference.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                DocumentSnapshot doc = task.getResult();
-                Map<String,Object> rutina = new HashMap<>();
-                rutina = doc.getData();
-                rutina.remove("shared");
                 routineReference.update("shared", true);
-                rutina.put("totalPoints",0.0);
-                rutina.put("numRates", 0);
-                sharedRoutineReference.set(rutina, SetOptions.merge());
+                DocumentSnapshot docRoutine = task.getResult();
+                Map<String,Object> routineData = new HashMap<>();
+                routineData = docRoutine.getData();
+                routineData.remove("shared");
+                routineData.put("totalPoints",0.0);
+                routineData.put("numRates", 0);
+                sharedRoutineReference.set(routineData, SetOptions.merge());
+
                 routineReference.collection("activities").get()
                         .addOnCompleteListener(task2 -> {
                             if (task2.isSuccessful()) {
                                 for (QueryDocumentSnapshot documentSnap : Objects.requireNonNull(task2.getResult())) {
                                     Map<String,Object> activitat = new HashMap<>();
                                     activitat = documentSnap.getData();
-                                    String aux = documentSnap.getId();
-                                    sharedRoutineReference.collection("activities").document(aux).set(activitat);
+                                    String idActivity = documentSnap.getId();
+                                    sharedRoutineReference.collection("activities").document(idActivity).set(activitat);
                                 }
                             }
                         });
             }
         });
     }
-    public void unShareRoutine(String userId, String idRoutine)
-    {
+
+    /**
+     * Funcio que fa que l'atribut shared de la rutina "local" sigui false i esborra la rutina publica.
+     * @param userId identificador de l'usuari.
+     * @param idRoutine l'identificador de la rutina.
+     */
+    public void unShareRoutine(String userId, String idRoutine) {
         DocumentReference ogRoutineReference = db.collection("users").document(userId).collection("routines").document(idRoutine);
         ogRoutineReference.update("shared", false);
         unShareRoutinePriv(userId, idRoutine);
     }
 
-    private void unShareRoutinePriv(String userId, String idRoutine)
-    {
+    /**
+     * Funcio que esborra una rutina de la col·leccio de rutines publiques.
+     * @param userId identificador de l'usuari.
+     * @param idRoutine l'identificador de la rutina.
+     */
+    private void unShareRoutinePriv(String userId, String idRoutine) {
         DocumentReference routineReference = db.collection("sharedRoutines").document(userId+"_"+idRoutine);
         routineReference.collection("activities").get()
                 .addOnCompleteListener(task -> {
@@ -135,6 +158,7 @@ public class ControllerRoutineDB {
                     routineReference.delete();
                 });
     }
+
 }
 
 

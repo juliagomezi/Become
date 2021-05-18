@@ -42,7 +42,7 @@ public class ControllerActivityDB {
     private ControllerActivityDB() {
         db = FirebaseFirestore.getInstance();
     }
-
+    ///////////////////////////CONSULTORES//////////////////////////////////////////////////////////
     /**
      * Obtenir les activitats d'una rutina
      * @param userId identificador de l'usuari
@@ -113,7 +113,7 @@ public class ControllerActivityDB {
     }
 
     /**
-     * Crear una activitat en una rutina existent
+     * Crear una activitat en una rutina existent i en la rutina publica equivalent (si existeix)
      * @param userId identificador de l'usuari
      * @param idRoutine es l'identificador de la rutina ja existent
      * @param activityName es el nom de l'activitat que es vol crear
@@ -122,10 +122,12 @@ public class ControllerActivityDB {
      * @param actDay es el dia on es vol col·locar l'activitat
      * @param beginTime es l'hora d'inici de l'activitat
      * @param finishTime es l'hora d'acabament de l'activitat
-     * @return el valor del id de l'activitat creada
      * @param lastDayDone és l'últim dia que l'usuari ha marcat la rutina com a feta en format de data Standard del firebase
+     * @param shared bool que expressa si la rutina es publica o no
+     * @return el valor del id de l'activitat creada
      */
-    public String createActivity( String userId, String idRoutine, String activityName, String actTheme,String actDescription, String actDay, String beginTime, String finishTime, String lastDayDone) {
+    public String createActivity( String userId, String idRoutine, String activityName, String actTheme,String actDescription,
+                                  String actDay, String beginTime, String finishTime, String lastDayDone, boolean shared) {
         CollectionReference refToActivities = db.collection("users").document(userId).collection("routines").document(idRoutine).collection("activities");
         Map<String,Object> dataInput = new HashMap<>();
         dataInput.put("name",activityName);
@@ -137,24 +139,35 @@ public class ControllerActivityDB {
         dataInput.put("lastDayDone", lastDayDone);
         DocumentReference refToNewActivity = refToActivities.document();
         String ID = refToNewActivity.getId();
-
         refToNewActivity.set(dataInput);
+
+        if (shared){
+            DocumentReference docRefToSharedRoutineAct = db.collection("sharedRoutines").document(userId+"_"+idRoutine).collection("activities").document(ID);
+            docRefToSharedRoutineAct.set(dataInput);
+        }
 
         return ID;
     }
 
     /**
-     * Eliminar una activitat existent d'una rutina existent
+     * Eliminar una activitat d'una rutina existent i de la rutina publica equivalent (si existeix)
      * @param userId identificador de l'usuari
      * @param idRoutine es l'identificador de la rutina ja existent
      * @param idActivity es l'identificador de l'activitat
+     * @param shared bool que expressa si la rutina es publica o no
      */
-    public void deleteActivity(String userId, String idRoutine, String idActivity) {
+    public void deleteActivity(String userId, String idRoutine, String idActivity, boolean shared) {
         DocumentReference docRefToActivity;
         docRefToActivity = db.collection("users").document(userId).collection("routines").document(idRoutine).collection("activities").document(idActivity);
         docRefToActivity.delete();
+
+        if (shared){
+            DocumentReference docRefToSharedRoutineAct = db.collection("sharedRoutines").document(userId+"_"+idRoutine).collection("activities").document(idActivity);
+            docRefToSharedRoutineAct.delete();
+        }
     }
 
+    //TROBAR LA MANERA DE NO HAVER DE FER MIL UPDATES/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /**
      * Actualitzar una activitat existent d'una rutina existent
      * @param userId identificador de l'usuari
@@ -166,8 +179,9 @@ public class ControllerActivityDB {
      * @param iniT es l'hora d'inici de l'activitat
      * @param endT es l'hora d'acabament de l'activitat
      * @param idActivity és l'identificador de l'activitat
+     * @param shared bool que expressa si la rutina es publica o no
      */
-    public void updateActivity(String userId, String idRoutine, String actName, String description, String theme, String day, String iniT, String endT, String idActivity) {
+    public void updateActivity(String userId, String idRoutine, String actName, String description, String theme, String day, String iniT, String endT, String idActivity, boolean shared) {
         DocumentReference docRefToActivity = db.collection("users").document(userId).collection("routines").document(idRoutine).collection("activities").document(idActivity);
         if(actName != null) docRefToActivity.update("name", actName);
         if(description != null) docRefToActivity.update("description", description);
@@ -175,15 +189,19 @@ public class ControllerActivityDB {
         if(day != null) docRefToActivity.update("day", day);
         if(iniT != null) docRefToActivity.update("beginTime", iniT);
         if(endT != null) docRefToActivity.update("finishTime", endT);
-        DocumentReference sharedActivityReference = db.collection("sharedRoutines").document(userId+"_"+idRoutine).collection("activities").document(idActivity);
-        sharedActivityReference.get().addOnSuccessListener(task -> {
+
+
+        if (shared){
+            DocumentReference sharedActivityReference = db.collection("sharedRoutines").document(userId+"_"+idRoutine).collection("activities").document(idActivity);
             if(actName != null) sharedActivityReference.update("name", actName);
             if(description != null) sharedActivityReference.update("description", description);
             if(theme != null) sharedActivityReference.update("theme", theme);
             if(day != null) sharedActivityReference.update("day", day);
             if(iniT != null) sharedActivityReference.update("beginTime", iniT);
             if(endT != null) sharedActivityReference.update("finishTime", endT);
-        });
+        }
+
+
     }
 
     /**
