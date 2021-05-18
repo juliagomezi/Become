@@ -8,22 +8,44 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.lang.reflect.Method;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.zip.DeflaterOutputStream;
 
 public class ControllerPersistence {
 
-    ControllerRoutineDB CR;
-    ControllerActivityDB CA;
-    ControllerUserDB CU;
-    ControllerStatisticsDB CS;
+    /**
+     * Unica instancia de la classe
+     */
+    private static ControllerPersistence instance;
+    private final ControllerRoutineDB CR;
+    private final ControllerActivityDB CA;
+    private final ControllerUserDB CU;
+    private final ControllerStatisticsDB CS;
+    private final ControllerCalendarDB CD;
+    private final ControllerTrophiesDB CT;
     private final FirebaseFirestore db;
+
+    /**
+     * Obtenir la instancia de la classe
+     * @return instancia
+     */
+    public static ControllerPersistence getInstance(){
+        if(instance == null)
+            instance = new ControllerPersistence();
+        return instance;
+    }
 
     /**
      * Creadora per defecte de la classe ControllerPersistence
      */
-    public ControllerPersistence() {
-        CA = new ControllerActivityDB();
-        CR = new ControllerRoutineDB();
-        CS = new ControllerStatisticsDB();
+    private ControllerPersistence() {
+        CA = ControllerActivityDB.getInstance();
+        CR = ControllerRoutineDB.getInstance();
+        CU = ControllerUserDB.getInstance();
+        CS = ControllerStatisticsDB.getInstance();
+        CD = ControllerCalendarDB.getInstance();
+        CT = ControllerTrophiesDB.getInstance();
         db = FirebaseFirestore.getInstance();
     }
 
@@ -94,9 +116,8 @@ public class ControllerPersistence {
      * @param newTheme nou tema de l'activitat
      * @param newBeginTime nova hora d'inici de l'activitat
      * @param newFinishTime nova hora final de l'activitat
-     * @param lastDayDone ultim dia que l'activitat s'ha marcat com a feta
      */
-    public void updateActivity(String userId, String idRoutine, String idActivity, String actName, String description, String newDay, String newTheme,  String newBeginTime, String newFinishTime, String lastDayDone) {
+    public void updateActivity(String userId, String idRoutine, String idActivity, String actName, String description, String newDay, String newTheme,  String newBeginTime, String newFinishTime) {
 
         DocumentReference docRefToActivity = db.collection("users").document(userId).
                 collection("routines").document(idRoutine).
@@ -111,11 +132,23 @@ public class ControllerPersistence {
                     String oldBeginTime = document.get("beginTime").toString();
                     String oldFinishTime = document.get("finishTime").toString();
                     CS.updateDedicatedTimeActivity(userId, idRoutine, newDay, newTheme, newBeginTime, newFinishTime, oldDay, oldTheme, oldBeginTime, oldFinishTime);
-                    CA.updateActivity(userId, idRoutine, actName, description, newTheme, newDay, newBeginTime, newFinishTime, idActivity, lastDayDone);
+                    CA.updateActivity(userId, idRoutine, actName, description, newTheme, newDay, newBeginTime, newFinishTime, idActivity);
 
                 }
             }
         });
+    }
+
+    /** Marca una activitat com a feta i actualitza el calendari.
+     * @param userId identificador de l'usuari
+     * @param idRoutine es l'identificador de la rutina ja existent
+     * @param lastDayDone és l'últim dia que l'usuari ha marcat la rutina com a feta en format de data yyyy-mm-dd (la classe StringDateConverter serveix per convertir-la)
+     * @param idActivity és l'identificador de l'activitat
+     * @param totalActivities nombre total d'activitats del dia per la rutina seleccionada
+     */
+    public void markActivityAsDone(String userId, String idRoutine, String lastDayDone, String idActivity, int totalActivities)
+    {
+        CA.markActivityAsDone(userId, idRoutine, lastDayDone, idActivity, totalActivities);
     }
 
     /**
@@ -154,7 +187,6 @@ public class ControllerPersistence {
      * @return el provider de l'usuari
      */
     public String getUserProvider() {
-        CU = ControllerUserDB.getInstance();
         return CU.getUserProvider();
     }
 
@@ -164,7 +196,6 @@ public class ControllerPersistence {
      * @param object classe que conté el mètode
      */
     public void loadUser(Method method, Object object) {
-        CU = ControllerUserDB.getInstance();
         CU.loadUser(method, object);
     }
 
@@ -175,7 +206,6 @@ public class ControllerPersistence {
      * @param object instancia de la classe del mètode a executar
      */
     public void changePassword(String oldPassword, String newPassword, Method method, Object object) {
-        CU = ControllerUserDB.getInstance();
         CU.changePassword(oldPassword, newPassword, method, object);
     }
 
@@ -185,7 +215,6 @@ public class ControllerPersistence {
      * @param imageUri uri de la imatge a penjar
      */
     public void updateProfilePic(String userId, Uri imageUri) {
-        CU = ControllerUserDB.getInstance();
         CU.updateProfilePic(userId, imageUri);
     }
 
@@ -195,7 +224,6 @@ public class ControllerPersistence {
      * @param object instancia de la classe del mètode a executar
      */
     public void deleteUser(String password, Method method, Object object) {
-        CU = ControllerUserDB.getInstance();
         CU.deleteUser(password, method, object);
     }
 
@@ -208,7 +236,6 @@ public class ControllerPersistence {
      * @param object classe que conté el mètode
      */
     public void loginUser(String mail, String password, Activity act, Method method, Object object) {
-        CU = ControllerUserDB.getInstance();
         CU.loginUser(mail, password, act, method, object);
     }
 
@@ -219,7 +246,6 @@ public class ControllerPersistence {
      * @param object classe que conté el mètode
      */
     public void loginUserGoogle(String idToken, Method method, Object object ){
-        CU = ControllerUserDB.getInstance();
         CU.loginUserGoogle(idToken, method, object);
     }
 
@@ -233,7 +259,6 @@ public class ControllerPersistence {
      * @param object classe que conté el mètode
      */
     public void registerUser(String mail, String password, String name, Activity act, Method method, Object object) {
-        CU = ControllerUserDB.getInstance();
         CU.registerUser(mail, password, name, act, method, object);
     }
 
@@ -243,7 +268,6 @@ public class ControllerPersistence {
      * @param routineID identificador de la nova rutina seleccionada
      */
     public void setSelectedRoutine(String userID, String routineID) {
-        CU = ControllerUserDB.getInstance();
         CU.setSelectedRoutine(userID, routineID);
     }
 
@@ -251,7 +275,6 @@ public class ControllerPersistence {
      * Metode per tancar la sessió
      */
     public void signOut() {
-        CU = ControllerUserDB.getInstance();
         CU.signOut();
     }
 
@@ -260,7 +283,6 @@ public class ControllerPersistence {
      * @param mail mail del compte a recuperar
      */
     public void sendPassResetEmail(String mail, Method method, Object object) {
-        CU = ControllerUserDB.getInstance();
         CU.sendPassResetEmail(mail, method, object);
     }
 
@@ -269,7 +291,6 @@ public class ControllerPersistence {
      * @param newName nou nom de l'usuari
      */
     public void changeUsername(String userID, String newName) {
-        CU = ControllerUserDB.getInstance();
         CU.changeUsername(userID, newName);
     }
 
@@ -294,6 +315,95 @@ public class ControllerPersistence {
      */
     public void getStatisticsRoutineByTheme(String userId, String idRoutine, String theme, Method method, Object object){
         CS.getStatisticsRoutineByTheme(userId, idRoutine, theme, method, object);
+    }
+
+    /**
+     * Executa el metode method amb un hashmap que representa el day de la base de dades si aquest s'ha pogut consultar, o l'excepció que ha saltat si no.
+     * Day tindrà les claus: day, idRoutine, numActivitiesDone, numTotalActivities. Totes son strings
+     * @param userId id de l'usuari del calendari
+     * @param day dia del calendari
+     * @param method metode a executar
+     * @param object objecte del metode a executar
+     */
+    public void getDay(String userId, Date day, Method method, Object object)
+    {
+        CD.getDay(userId, day, method, object);
+    }
+
+    /**
+     * Retorna els dies de la base de dades del mes indicat
+     * @param userId id de l'usuari del calendari
+     * @param month més que volem seleccionar
+     * @param method metode a executar
+     * @param object objecte del metode a executar
+     */
+    public void getAvailableDays(String userId, int month, int year, Method method, Object object)
+    {
+        CD.getAvailableDays(userId, month, year, method, object);
+    }
+
+    /**
+     * Retorna els dies de la base de dades
+     * @param userId id de l'usuari del calendari
+     * @param method metode a executar
+     * @param object objecte del metode a executar
+     */
+    public void getAllDays(String userId, Method method, Object object)
+    {
+        CD.getAllDays(userId, method, object);
+    }
+
+    /**
+     * Retorna un enter amb el nombre de dies en ratxa que porta l'usuari
+     * @param userId id de l'usuari del calendari
+     * @param method metode a executar
+     * @param object objecte del metode a executar
+     */
+    public void getStreak(String userId, Method method, Object object)
+    {
+        CD.getStreak(userId,method,object);
+    }
+
+    /**
+     * Crea un dia al calendari nou.
+     * @param userId identificador de l'usuari
+     * @param day dia a crear.
+     * @param routineId id de la rutina a la que referencia
+     * @param totalActivities nombre d'activitats totals del dia de la rutina que estem afegint.
+     */
+    public String addDay(String userId, Date day, String routineId, int totalActivities)
+    {
+        return CD.addDay(userId, day,  routineId, totalActivities );
+    }
+
+    /**
+     * Actualitza la informació d'un dia
+     * @param userId id de l'usuari del calendari
+     * @param day dia del calendari
+     * @param activitiesDone nou nombre d'activitats fetes (a -1 no actualitzarà res)
+     * @param idRoutine nova id de la rutina a la que referencia
+     */
+    public void updateDay(String userId, Date day, int activitiesDone, String idRoutine) {
+        CD.updateDay(userId, day, activitiesDone, idRoutine);
+    }
+
+    /**
+     * Funcio que retorna els trofeus de l'usuari i un bool que indica per cada un si l'ha aconseguit
+     * @param userId identificador de l'usuari
+     * @param method metode que recull les dades
+     * @param object classe que conte el metode
+     */
+    public void getTrophies(String userId, Method method, Object object) {
+        CT.getTrophies(userId, method,object);
+    }
+
+    /**
+     * Funcio que afegeix un trofeu a l'usuari
+     * @param userId nom de l'usuari
+     * @param trophyName nom del trofeu
+     */
+    public void addTrophy(String userId, String trophyName) {
+        CT.addTrophy(userId, trophyName);
     }
 
 }

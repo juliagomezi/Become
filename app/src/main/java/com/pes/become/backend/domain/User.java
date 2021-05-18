@@ -3,6 +3,7 @@ package com.pes.become.backend.domain;
 import android.graphics.Bitmap;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -37,7 +38,15 @@ public class User {
     /**
      * Trofeus obtinguts per l'usuari
      */
-    private Map<Achievement, Boolean> achievements;
+    private TreeMap<Achievement, Boolean> achievements;
+    /**
+     *
+     */
+    private ArrayList<Integer> calendarMonth;
+    /**
+     *
+     */
+    private int streak;
 
     /**
      * Creadora de la classe per a un nou usuari
@@ -52,6 +61,14 @@ public class User {
         for(int a = 0; a<Achievement.values().length; ++a){
             achievements.put(Achievement.values()[a], false);
         }
+    }
+
+    /**
+     * Metode per inicialitzar el mes del calendari
+     * @param daysMonth dies que te el mes
+     */
+    public void clearMonth(int daysMonth) {
+        this.calendarMonth = new ArrayList<>(Collections.nCopies(daysMonth, -1));
     }
 
     /**
@@ -164,11 +181,15 @@ public class User {
         statisticsSelectedRoutine.get(theme).put(day, time);
     }
 
+    public void addAchievement(Achievement achievement) {
+        achievements.put(achievement, true);
+    }
+
     /**
      * Metode per obtenir tots els trofeus de l'usuari
      * @return mapa amb els trofeus de l'usuari on el trofeu es la key i el valor es cert si te el trofeu i fals si no
      */
-    public Map<Achievement, Boolean> getAllAchievementsStates() {
+    public TreeMap<Achievement, Boolean> getAllAchievementsStates() {
         return achievements;
     }
 
@@ -266,5 +287,25 @@ public class User {
             }
             statisticsSelectedRoutine.put(Theme.values()[t], emptyMap);
         }
+    }
+
+    public ArrayList<Integer> getCalendarMonth() {
+        return calendarMonth;
+    }
+
+    public void setCalendarMonth(ArrayList<Integer> calendarMonth) {
+        this.calendarMonth = calendarMonth;
+    }
+
+    public void setDayCalendar(int day, int completition) {
+        calendarMonth.add(day, completition);
+    }
+
+    public int getStreak() {
+        return streak;
+    }
+
+    public void setStreak(int streak) {
+        this.streak = streak;
     }
 }

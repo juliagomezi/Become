@@ -2,6 +2,7 @@ package com.pes.become.frontend;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,8 +18,6 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.snackbar.BaseTransientBottomBar;
-import com.google.android.material.snackbar.Snackbar;
 import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapter;
 import com.pes.become.backend.exceptions.NoSelectedRoutineException;
@@ -28,7 +27,7 @@ import java.util.Calendar;
 
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
-public class RoutineView extends Fragment implements AdapterView.OnItemSelectedListener{
+public class RoutineView extends Fragment implements AdapterView.OnItemSelectedListener {
 
     private static RoutineView instance;
 
@@ -69,7 +68,7 @@ public class RoutineView extends Fragment implements AdapterView.OnItemSelectedL
         nextDayButton.setOnClickListener(v -> showNextDay());
 
         seeingDay = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
-        translateSeeingDay();
+        seeingDay = translateDay(seeingDay);
         setDay();
 
         updateActivitiesList();
@@ -87,10 +86,11 @@ public class RoutineView extends Fragment implements AdapterView.OnItemSelectedL
     /**
      * Funcio per transformar el numero del dia
      */
-    private void translateSeeingDay() {
-        seeingDay -= 2;
-        if(seeingDay == -1)
-            seeingDay = 6;
+    private int translateDay(int day) {
+        day -= 2;
+        if(day == -1)
+            day = 6;
+        return day;
     }
 
     /**
@@ -198,9 +198,6 @@ public class RoutineView extends Fragment implements AdapterView.OnItemSelectedL
         }
     }
 
-    String doneActivityID = null;
-    String doneActivityName = null;
-
     /**
      * Implementacio del que es fa quan es fa swipe right i left als elements del recycler view
      */
@@ -213,71 +210,50 @@ public class RoutineView extends Fragment implements AdapterView.OnItemSelectedL
 
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-
             int position = viewHolder.getAdapterPosition();
-
             switch (direction) {
-
-                case ItemTouchHelper.LEFT: // <-
-                    doneActivityID = activitiesList.get(position).get(0);
-                    doneActivityName = activitiesList.get(position).get(1);
-
-                    // marcar com a feta
-
-                    Snackbar.make(recyclerView, doneActivityName, BaseTransientBottomBar.LENGTH_LONG)
-                            .setAction("Undo", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    // marcar com a no feta
-                                }
-                            }).show();
+                case ItemTouchHelper.LEFT:
+                    if(!Boolean.parseBoolean(activitiesList.get(position).get(7))) {
+                        String doneActivityID = activitiesList.get(position).get(0);
+                        DA.markActivityAsDone(doneActivityID, true, seeingDay);
+                        updateActivitiesList();
+                    }
                     break;
-
-                case ItemTouchHelper.RIGHT: // ->
-                    doneActivityID = activitiesList.get(position).get(0);
-                    doneActivityName = activitiesList.get(position).get(1);
-                    // marcar com a no feta
-
-                    Snackbar.make(recyclerView, doneActivityName, BaseTransientBottomBar.LENGTH_LONG)
-                            .setAction("Undo", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    // marcar com a feta
-                                }
-                            }).show();
+                case ItemTouchHelper.RIGHT:
+                    if(Boolean.parseBoolean(activitiesList.get(position).get(7))) {
+                        String doneActivityID = activitiesList.get(position).get(0);
+                        DA.markActivityAsDone(doneActivityID, false, seeingDay);
+                        updateActivitiesList();
+                    }
                     break;
             }
+        }
+
+        @Override
+        public int getSwipeDirs(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+            int position = viewHolder.getAdapterPosition();
+            int swipeDirs = 0;
+            Calendar calendar = Calendar.getInstance();
+            int today = calendar.get(Calendar.DAY_OF_WEEK);
+            today = translateDay(today);
+
+            if (activitiesList.get(position).get(4).equals(getWeekDay(today))) {
+                if (!Boolean.parseBoolean(activitiesList.get(position).get(7))) swipeDirs = ItemTouchHelper.LEFT;
+                else swipeDirs = ItemTouchHelper.RIGHT;
+            }
+            return swipeDirs;
         }
 
         @Override
         public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
             new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
                     .addSwipeLeftBackgroundColor(ContextCompat.getColor(global, R.color.green25))
-                    .addSwipeLeftLabel("DONE")
+                    .addSwipeLeftLabel(getString(R.string.DONE))
                     .addSwipeRightBackgroundColor(ContextCompat.getColor(global, R.color.softred))
-                    .addSwipeRightLabel("UNDONE")
+                    .addSwipeRightLabel(getString(R.string.UNDONE))
                     .create()
                     .decorate();
             super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-            /*try {
-                Bitmap icon;
-
-                View itemView = viewHolder.itemView;
-                float height = (float) itemView.getBottom() - (float) itemView.getTop();
-                float width = height / 5;
-                viewHolder.itemView.setTranslationX(dX / 5);
-
-                Paint paint = new Paint(Color.parseColor("#ccffcc"));
-                RectF background = new RectF((float) itemView.getRight() + dX / 5, (float) itemView.getTop(), (float) itemView.getRight(), (float) itemView.getBottom());
-                c.drawRect(background, paint);
-                icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_email);
-                RectF icon_dest = new RectF((float) (itemView.getRight() + dX /7), (float) itemView.getTop()+width, (float) itemView.getRight()+dX/20, (float) itemView.getBottom()-width);
-                c.drawBitmap(icon, null, icon_dest, paint);
-
-                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }*/
         }
     };
 
@@ -292,6 +268,5 @@ public class RoutineView extends Fragment implements AdapterView.OnItemSelectedL
      */
     @Override
     public void onNothingSelected(AdapterView<?> parent) { }
-
 
 }

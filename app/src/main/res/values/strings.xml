@@ -108,5 +108,44 @@
     <string name="passChanged">Password was changed successfully.</string>
     <string name="change_username">Change username</string>
     <string name="username_changed">Username changed successfully</string>
+    <string name="congrats">Congratulations!</string>
+    <string name="new_trophy_won">New trophy won</string>
+    <string name="deselectToRemove">Deselect this routine to remove it</string>
+    <string name="CreateFirstRoutine">Rookie</string>
+    <string name="HourMusic5">A star is born</string>
+    <string name="HourSport5">Slow walker</string>
+    <string name="HourSleeping5">Student life</string>
+    <string name="HourCooking5">Baguette supporter</string>
+    <string name="HourWorking5" >Slothful</string>
+    <string name="HourEntertainment5" >The Little Prince</string>
+    <string name="HourPlants5" >Cactuses killer</string>
+    <string name="HourOther5" translatable="false">Bohemian Rhapsody</string>
+    <string name="HourSport10" >Kobe Bryant</string>
+    <string name="HourSleeping10" >Sleep like a baby</string>
+    <string name="HourCooking10" >Fish and Chips</string>
+    <string name="HourWorking10" >Capitalism slave</string>
+    <string name="HourEntertainment10" >The Lord of the Films</string>
+    <string name="HourOther10" >Divergent</string>
+    <string name="HourMusic10">Little Mozart</string>
+    <string name="HourPlants10">Vertical garden</string>
+    <string name="CreateFirstRoutineDescription">Create your first routine</string>
+    <string name="HourMusic5Description">Dedicate 5 hours of your week to musical activities</string>
+    <string name="HourSport5Description">Dedicate 5 hours of your week to sport</string>
+    <string name="HourSleeping5Description">Dedicate 5 hours of your week to sleep</string>
+    <string name="HourCooking5Description">Dedicate 5 hours of your week to cook</string>
+    <string name="HourWorking5Description">Dedicate 5 hours of your week to work</string>
+    <string name="HourEntertainment5Description">Dedicate 5 hours of your week to entertaining activities</string>
+    <string name="HourPlants5Description">Dedicate 5 hours of your week to your plants</string>
+    <string name="HourOther5Description">Dedicate 5 hours of your week to other activities</string>
+    <string name="HourMusic10Description">Dedicate 10 hours of your week to musical activities</string>
+    <string name="HourSport10Description">Dedicate 10 hours of your week to sport</string>
+    <string name="HourSleeping10Description">Dedicate 10 hours of your week to sleep</string>
+    <string name="HourCooking10Description">Dedicate 10 hours of your week to cook</string>
+    <string name="HourWorking10Description">Dedicate 10 hours of your week to work</string>
+    <string name="HourEntertainment10Description">Dedicate 10 hours of your week to entertaining activities</string>
+    <string name="HourPlants10Description">Dedicate 10 hours of your week to your plants</string>
+    <string name="HourOther10Description">Dedicate 10 hours of your week to other activities</string>
+    <string name="DONE">DONE</string>
+    <string name="UNDONE">NOT DONE</string>
 
 </resources>

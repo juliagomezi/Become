@@ -15,6 +15,7 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/congrats"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -34,6 +35,7 @@
             android:gravity="center">
 
             <TextView
+                android:id="@+id/streakNum"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -61,6 +63,7 @@
                 android:textSize="36sp" />
 
             <ImageView
+                android:id="@+id/fireIcon"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_marginLeft="10dp"
@@ -70,6 +73,7 @@
         </LinearLayout>
 
         <View
+            android:id="@+id/streakSeparator"
             android:layout_width="match_parent"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
@@ -78,6 +82,7 @@
             android:background="@android:color/darker_gray"/>
 
         <TextView
+            android:id="@+id/hoursTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -89,6 +94,7 @@
             android:layout_margin="30dp"/>
 
         <TableLayout
+            android:id="@+id/hours"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
@@ -333,6 +339,7 @@
         </TableLayout>
 
         <View
+            android:id="@+id/hoursSeparator"
             android:layout_width="match_parent"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
@@ -341,6 +348,7 @@
             android:background="@android:color/darker_gray"/>
 
         <TextView
+            android:id="@+id/chartTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -361,6 +369,7 @@
             android:layout_marginRight="10dp"/>
 
         <View
+            android:id="@+id/chartSeparator"
             android:layout_width="match_parent"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"

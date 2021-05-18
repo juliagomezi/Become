@@ -105,6 +105,14 @@ public class Routine {
         return activities.get(day);
     }
 
+    public int getTotalActivities(){
+        int result = 0;
+        for(Map.Entry<Day, ArrayList<Activity>> day : activities.entrySet()){
+            result += day.getValue().size();
+        }
+        return result;
+    }
+
     /**
      * Metode per actualitzar els parametres d'una activitat de la rutina
      * @param updatedActivity activitat actualitzada

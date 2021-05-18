@@ -85,6 +85,7 @@ public class RoutineAdapter {
             Integer endHour = activity.getInterval().getEndTime().getHours();
             Integer endMinute = activity.getInterval().getEndTime().getMinutes();
             resaux.add(String.format("%02d", endHour) + ":" + String.format("%02d", endMinute));
+            resaux.add(String.valueOf(activity.isDoneToday()));
             res.add(resaux);
         }
         return res;
@@ -152,5 +153,19 @@ public class RoutineAdapter {
      */
     public boolean checkOverlappings(Activity a) {
         return routine.checkOverlappings(a);
+    }
+
+    public void markActivityAsDone(String activityID, boolean isDone) {
+        routine.getActivity(activityID).setDoneToday(isDone);
+    }
+
+    public boolean isCompleted(Day day) {
+        ArrayList<Activity> activities = routine.getActivitiesByDay(day);
+        for(Activity a : activities) {
+            if(!a.isDoneToday()) {
+                return false;
+            }
+        }
+        return true;
     }
 }

@@ -1,11 +1,10 @@
 package com.pes.become.backend.persistence;
 
-import android.util.Log;
-
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 
@@ -14,6 +13,7 @@ import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,15 +21,29 @@ import java.util.Map;
 public class ControllerCalendarDB {
 
     /**
+     * Unica instancia de la classe
+     */
+    private static ControllerCalendarDB instance;
+    /**
      * Instància de la bd
      */
     final FirebaseFirestore db;
 
     /**
-     * Creadora per defecte.
+     * Creadora per defecte
      */
     public ControllerCalendarDB() {
         db = FirebaseFirestore.getInstance();
+    }
+
+    /**
+     * Obtenir la instancia de la classe
+     * @return instancia
+     */
+    public static ControllerCalendarDB getInstance() {
+        if(instance == null)
+            instance = new ControllerCalendarDB();
+        return instance;
     }
 
     /**
@@ -40,7 +54,6 @@ public class ControllerCalendarDB {
      * @param totalActivites nombre d'activitats totals del dia de la rutina que estem afegint.
      */
     public String addDay(String userId, Date day, String routineId, int totalActivites) {
-        Log.w("Calendar", "Iniciant operacio addDay");
         Map<String,Object> dataInput = new HashMap<>();
         dataInput.put("idRoutine", routineId);
         dataInput.put("numActivitiesDone", 0);
@@ -49,7 +62,6 @@ public class ControllerCalendarDB {
         dataInput.put("month", getStringMonth(day));
         dataInput.put("year", getStringYear(day));
 
-        Log.w("Calendar", "A punt de crear un nou dia");
         DocumentReference docRefToDay= db.collection("users").document(userId).collection("calendar").document(StringDateConverter.dateToString(day));
         docRefToDay.set(dataInput);
         return docRefToDay.getId();
@@ -67,19 +79,64 @@ public class ControllerCalendarDB {
         if(activitiesDone >= 0)docRefToRoutine.update("numActivitiesDone", activitiesDone);
         if(idRoutine != null && !idRoutine.equals(""))docRefToRoutine.update("idRoutine", idRoutine);
     }
+
     /**
      * Actualitza la informació d'un dia
      * @param userId id de l'usuari del calendari
-     * @param day dia del calendari
      * @param activitiesDoneIncrement incrrement del nombre d'activitats fetes
      */
-    public void incrementDay(String userId, String day, int activitiesDoneIncrement){
-        Map<String, Object> data = new HashMap<>();
-        data.put("numActivitiesDone", FieldValue.increment(activitiesDoneIncrement));
-        DocumentReference docRefToRoutine = db.collection("users").document(userId).collection("calendar").document(day);
-        //Aixo esta posat aixi perque volem actualitzar els camps concrets del document (merge) o crear-lo si no existeix (set)
-        docRefToRoutine.set( data, SetOptions.merge());
+    public void incrementDay(String userId, int activitiesDoneIncrement, int totalActivities) {
+        Calendar cal = Calendar.getInstance();
+        Date day = cal.getTime();
+
+        DocumentReference docRefToCalendarDay = db.collection("users").document(userId).collection("calendar").document(StringDateConverter.dateToString(cal.getTime()));
+        DocumentReference docRefToUser = db.collection("users").document(userId);
+        docRefToCalendarDay.get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if(document.exists()) {
+                    int num = Integer.parseInt(document.get("numActivitiesDone").toString());
+                    if((num == totalActivities) && (activitiesDoneIncrement < 0)) {
+                        docRefToUser.update("streak", FieldValue.increment(-1));
+                    } else if(num+activitiesDoneIncrement == totalActivities) {
+                        docRefToUser.update("streak", FieldValue.increment(1));
+                    }
+                    docRefToCalendarDay.update("numActivitiesDone", FieldValue.increment(activitiesDoneIncrement));
+                } else {
+                    Map<String, Object> data = new HashMap<>();
+                    data.put("numActivitiesDone", FieldValue.increment(activitiesDoneIncrement));
+                    data.put("numTotalActivities", totalActivities);
+                    data.put("day", getStringDay(day));
+                    data.put("month", getStringMonth(day));
+                    data.put("year", getStringYear(day));
+
+                    docRefToCalendarDay.set(data, SetOptions.merge());
+
+                    cal.add(Calendar.DATE, -1);
+                    String yesterday = StringDateConverter.dateToString(cal.getTime());
+                    db.collection("users").document(userId).collection("calendar").document(yesterday).get().addOnCompleteListener(task2 -> {
+                                if (task2.isSuccessful()) {
+                                    DocumentSnapshot document2 = task2.getResult();
+                                    if (document2.exists()) {
+                                        int actsDone = Integer.parseInt(document2.get("numActivitiesDone").toString());
+                                        int total = Integer.parseInt(document2.get("numTotalActivities").toString());
+                                        if(actsDone == total) {
+                                            if(activitiesDoneIncrement == totalActivities) docRefToUser.update("streak", FieldValue.increment(1));
+                                        } else {
+                                            if(activitiesDoneIncrement == totalActivities) docRefToUser.update("streak", 1);
+                                            else docRefToUser.update("streak", 0);
+                                        }
+                                    } else {
+                                        if(activitiesDoneIncrement == totalActivities) docRefToUser.update("streak", 1);
+                                        else docRefToUser.update("streak", 0);
+                                    }
+                                }
+                            });
+                }
+            }
+        });
     }
+
     /**
      * Executa el metode method amb un hashmap que representa el day de la base de dades si aquest s'ha pogut consultar, o l'excepció que ha saltat si no.
      * Day tindrà les claus: day, idRoutine, numActivitiesDone, numTotalActivities. Totes son strings
@@ -102,7 +159,8 @@ public class ControllerCalendarDB {
                          hashAux.put("day", document.get("day").toString());
                          hashAux.put("month", document.get("month").toString());
                          hashAux.put("year", document.get("year").toString());
-                         hashAux.put("idRoutine", document.get("idRoutine").toString());
+                         if(document.get("idRoutine") != null)
+                             hashAux.put("idRoutine", document.get("idRoutine").toString());
                          hashAux.put("numActivitiesDone", document.get("numActivitiesDone").toString());
                          hashAux.put("numTotalActivities", document.get("numTotalActivities").toString());
                          params[1] = hashAux;
@@ -128,9 +186,9 @@ public class ControllerCalendarDB {
      * @param method metode a executar
      * @param object objecte del metode a executar
      */
-    public void getAvailableDays(String userId, int month, Method method, Object object)
+    public void getAvailableDays(String userId, int month, int year, Method method, Object object)
     {
-        db.collection("users").document(userId).collection("calendar").whereEqualTo("month", String.format("%02d", month))
+        db.collection("users").document(userId).collection("calendar").whereEqualTo("month", String.format("%02d", month)).whereEqualTo("year", String.valueOf(year))
                 .get().addOnCompleteListener(task -> {
             Object[] params = new Object[2];
             params[0] = task.isSuccessful();
@@ -142,7 +200,45 @@ public class ControllerCalendarDB {
                     hashAux.put("day", document.get("day").toString());
                     hashAux.put("month", document.get("month").toString());
                     hashAux.put("year", document.get("year").toString());
-                    hashAux.put("idRoutine", document.get("idRoutine").toString());
+                    if(document.get("idRoutine") != null)
+                        hashAux.put("idRoutine", document.get("idRoutine").toString());
+                    hashAux.put("numActivitiesDone", document.get("numActivitiesDone").toString());
+                    hashAux.put("numTotalActivities", document.get("numTotalActivities").toString());
+                    list.add(hashAux);
+                }
+                params[1] = list;
+
+            }else params[1] = task.getException();
+            try {
+                method.invoke(object, params[1]);
+            } catch (IllegalAccessException ignore) {
+            } catch (InvocationTargetException ignore) {
+            }
+        });
+    }
+
+    /**
+     * Retorna els dies de la base de dades
+     * @param userId id de l'usuari del calendari
+     * @param method metode a executar
+     * @param object objecte del metode a executar
+     */
+    public void getAllDays(String userId, Method method, Object object)
+    {
+        db.collection("users").document(userId).collection("calendar")
+                .get().addOnCompleteListener(task -> {
+            Object[] params = new Object[2];
+            params[0] = task.isSuccessful();
+            if (task.isSuccessful()) {
+                ArrayList<HashMap<String,String>> list = new  ArrayList<>();
+                QuerySnapshot documents = task.getResult();
+                for(DocumentSnapshot document: documents) {
+                    HashMap<String, String> hashAux = new HashMap<>();
+                    hashAux.put("day", document.get("day").toString());
+                    hashAux.put("month", document.get("month").toString());
+                    hashAux.put("year", document.get("year").toString());
+                    if(document.get("idRoutine") != null)
+                        hashAux.put("idRoutine", document.get("idRoutine").toString());
                     hashAux.put("numActivitiesDone", document.get("numActivitiesDone").toString());
                     hashAux.put("numTotalActivities", document.get("numTotalActivities").toString());
                     list.add(hashAux);
@@ -158,6 +254,59 @@ public class ControllerCalendarDB {
         });
     }
 
+    /**
+     * Retorna un enter amb el nombre de dies en ratxa que porta l'usuari
+     * @param userId id de l'usuari del calendari
+     * @param method metode a executar
+     * @param object objecte del metode a executar
+     */
+    public void getStreak(String userId, Method method, Object object)
+    {
+        db.collection("users").document(userId).collection("calendar").orderBy("year", Query.Direction.DESCENDING)
+                .orderBy("month", Query.Direction.DESCENDING).orderBy("day", Query.Direction.DESCENDING)
+                .get().addOnCompleteListener(task -> {
+            Object[] params = new Object[2];
+            params[0] = task.isSuccessful();
+            if (task.isSuccessful()) {
+                ArrayList<Date> list = new  ArrayList<>();
+                QuerySnapshot documents = task.getResult();
+                for(DocumentSnapshot document: documents) {
+                    HashMap<String, String> hashAux = new HashMap<>();
+                    String dayAux =  document.get("day").toString();
+                    String monthAux =   document.get("month").toString();
+                    String yearAux =   document.get("year").toString();
+                    int numActivitiesDone = Integer.parseInt(document.get("numActivitiesDone").toString());
+                    int numTotalActivities = Integer.parseInt(document.get("numTotalActivities").toString());
+                    if(numTotalActivities == numActivitiesDone) {
+                        Date date = StringDateConverter.stringToDate(dayAux+"-"+monthAux+"-"+yearAux);
+                        list.add(date);
+                        //A la llista es queden els dies que la rutina està complerta
+                    }
+                }
+                Calendar cal = Calendar.getInstance();
+                Date iterador = cal.getTime();
+                cal.add(Calendar.DATE, -1);
+                iterador.setTime( cal.getTime().getTime() );
+                int streak = 0;
+                while(list.lastIndexOf(iterador) != -1)
+                {
+                    list.remove(iterador);
+                    streak++;
+                    //restem un al dia iterador
+                    cal.setTime(iterador);
+                    cal.add(Calendar.DATE, -1);
+                    iterador.setTime( cal.getTime().getTime() );
+                }
+                params[1] = streak;
+
+            } else params[1] = task.getException();
+            try {
+                method.invoke(object, params);
+            } catch (IllegalAccessException ignore) {
+            } catch (InvocationTargetException ignore) {
+            }
+        });
+    }
 
     /**
      * Retorna la data en format per el dia de la base de dades
@@ -169,6 +318,7 @@ public class ControllerCalendarDB {
         DateFormat dateFormat = new SimpleDateFormat("dd");
         return dateFormat.format(date);
     }
+
     /**
      * Retorna la data en format pel mes de la base de dades
      * @param date data
@@ -179,6 +329,7 @@ public class ControllerCalendarDB {
         DateFormat dateFormat = new SimpleDateFormat("MM");
         return dateFormat.format(date);
     }
+
     /**
      * Retorna la data en format per l'any de la base de dades
      * @param date data
