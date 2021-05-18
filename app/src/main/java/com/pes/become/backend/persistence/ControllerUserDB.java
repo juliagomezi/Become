@@ -71,17 +71,14 @@ public class ControllerUserDB {
                     if(task.isSuccessful()) {
                         user.updatePassword(newPassword)
                                 .addOnCompleteListener(task1 -> {
+                                    boolean success = false;
                                     if (task1.isSuccessful()) {
-                                        try {
-                                            method.invoke(object, true);
-                                        } catch (IllegalAccessException ignore) {
-                                        } catch (InvocationTargetException ignore) {}
-                                    } else {
-                                        try {
-                                            method.invoke(object, false);
-                                        } catch (IllegalAccessException ignore) {
-                                        } catch (InvocationTargetException ignore) {}
+                                        success = true;
                                     }
+                                    try {
+                                        method.invoke(object, success);
+                                    } catch (IllegalAccessException ignore) {
+                                    } catch (InvocationTargetException ignore) {}
                                 });
                     } else {
                         try {
@@ -762,7 +759,21 @@ public class ControllerUserDB {
 
         CollectionReference colRefToRoutines = docRefToUser.collection("routines");
         CollectionReference colRefToStatistics = docRefToUser.collection("statistics");
+        CollectionReference colRefToTrophies = docRefToUser.collection("trophies");
 
+        //CollectionReference colRefToSharedRoutines = db.collection("sharedRoutines");
+        /*
+        colRefToSharedRoutines.whereEqualTo("ownerID","XXX").get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot documentSnap : task.getResult()) {
+                            DocumentReference docRefToRoutine = documentSnap.getReference();
+                            deleteRoutineData(docRefToRoutine);
+
+                        }
+                    }
+                });
+        */
         colRefToRoutines.get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -784,6 +795,18 @@ public class ControllerUserDB {
                         }
                     }
                 });
+
+        colRefToTrophies.get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot documentSnap : task.getResult()) {
+                            DocumentReference docRefToTrophy = documentSnap.getReference();
+                            docRefToTrophy.delete();
+
+                        }
+                    }
+                });
+
         docRefToUser.delete();
     }
 
