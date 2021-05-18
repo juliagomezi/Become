@@ -468,6 +468,7 @@ public class ControllerUserDB {
                                     params[4] = null;
                                     params[5] = new ArrayList<>();
                                     params[6] = null;
+                                    params[7] = Integer.valueOf("0");
                                     try {
                                         method.invoke(object, params);
                                     } catch (IllegalAccessException e) {
