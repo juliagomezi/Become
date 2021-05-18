@@ -140,5 +140,7 @@
     <string name="HourSport5Description">Dedica 10 hores de la setmana a fer esport</string>
     <string name="HourWorking10Description">Dedica 10 hores de la setmana a treballar</string>
     <string name="HourWorking5Description">Dedica 5 hores de la setmana a treballar</string>
+    <string name="DONE">FET</string>
+    <string name="UNDONE">NO FET</string>
 
 </resources>

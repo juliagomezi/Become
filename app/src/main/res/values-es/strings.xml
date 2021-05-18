@@ -140,5 +140,7 @@
     <string name="HourSport5Description">Dedica 10 horas de tu semana al deporte</string>
     <string name="HourWorking10Description">Dedica 10 horas de tu semana a trabajar</string>
     <string name="HourWorking5Description">Dedica 5 horas de tu semana a trabajar</string>
+    <string name="DONE">HECHO</string>
+    <string name="UNDONE">NO HECHO</string>
 
 </resources>

@@ -140,5 +140,7 @@
     <string name="HourMusic10Description">Dedicate 10 hours of your week to musical activities</string>
     <string name="HourMusic5Description">Dedicate 5 hours of your week to musical activities</string>
     <string name="HourOther10Description">Dedicate 10 hours of your week to other activities</string>
+    <string name="DONE">DONE</string>
+    <string name="UNDONE">UNDONE</string>
 
 </resources>
