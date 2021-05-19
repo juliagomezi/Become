@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 selectedFragment = new RoutineView();
                 break;
             case R.id.communityView:
-                selectedFragment = new RoutineView();
+                selectedFragment = new Community();
                 break;
             case R.id.profileView:
                 selectedFragment = new Profile();
