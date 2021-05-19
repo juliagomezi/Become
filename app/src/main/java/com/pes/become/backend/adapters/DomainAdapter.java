@@ -909,5 +909,8 @@ public class DomainAdapter {
         forgotPass.passResetCallback(success);
     }
 
-
+    // ESBORRAR
+    public Bitmap getProfilePic() {
+        return currentUser.getProfilePic();
+    }
 }
