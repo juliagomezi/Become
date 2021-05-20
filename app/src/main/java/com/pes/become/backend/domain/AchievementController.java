@@ -41,9 +41,6 @@ public class AchievementController {
             case CreateFirstRoutine: //aquest no te logica complexa
                 return currentUser.gainAchievement(Achievement.CreateFirstRoutine);
 
-            case UpdateRoutine:
-                return currentUser.gainAchievement(Achievement.UpdateRoutine);
-
             case HourMusic5:
                 if(checkHoursPerTheme(Theme.Music, 5))
                     return currentUser.gainAchievement(Achievement.HourMusic5);
