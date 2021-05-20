@@ -400,6 +400,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
                 activitySheet.dismiss();
                 seeingDay = spinnerStartDay.getSelectedItemPosition();
                 setDay();
+                updateActivitiesList();
             } catch (InvalidTimeIntervalException e) {
                 Toast.makeText(getContext(), getString(R.string.errorTime), Toast.LENGTH_SHORT).show();
                 startTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
