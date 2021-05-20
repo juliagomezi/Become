@@ -148,6 +148,7 @@ public class RoutinesList extends Fragment {
                 routinesListRecyclerAdapter.notifyDataSetChanged();
                 Toast.makeText(getContext(), getString(R.string.routineCreated), Toast.LENGTH_SHORT).show();
                 routineSheet.dismiss();
+                if (DA.checkAchievement("CreateFirstRoutine")) MainActivity.getInstance().showTrophyWon("CreateFirstRoutine");
             } catch (ExistingRoutineException e) {
                 routineName.setError(getString(R.string.existingRoutineName));
             }

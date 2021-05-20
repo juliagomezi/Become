@@ -2,7 +2,6 @@ package com.pes.become.frontend;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapter;
-import com.pes.become.backend.domain.Routine;
 
 import java.util.ArrayList;
-
-import static android.provider.Settings.System.getString;
-import static java.security.AccessController.getContext;
 
 public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesListRecyclerAdapter.ViewHolder> {
 
@@ -51,11 +46,7 @@ public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesLi
         View view = layoutInflater.inflate(R.layout.routines_list_element, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
 
-        viewHolder.switchButton.setOnClickListener(view1 -> {
-            try {
-                selectRoutine(viewHolder.getAdapterPosition());
-            } catch (NoSuchMethodException ignore) { }
-        });
+        viewHolder.switchButton.setOnClickListener(view1 -> selectRoutine(viewHolder.getAdapterPosition()));
 
         return viewHolder;
     }
@@ -68,27 +59,29 @@ public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesLi
         holder.routineName.setText(routinesList.get(position).get(1));
 
         holder.editButton.setOnClickListener(view -> {
-            DA.selectRoutine(routinesList.get(position));
-
+            DA.selectRoutine(routinesList.get(position), false);
             MainActivity.getInstance().setEditRoutineScreen(routinesList.get(position).get(0),routinesList.get(position).get(1));
         });
 
         holder.deleteButton.setOnClickListener(view -> {
-
-            new AlertDialog.Builder(global)
-                    .setTitle(R.string.deleteRoutine)
-                    .setMessage(R.string.deleteRoutineConfirmation)
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> {
-                        String currentId = routinesList.get(position).get(0);
-                        if(!currentId.equals(selectedRoutineID)) {
-                            DA.deleteRoutine(currentId);
-                            notifyDataSetChanged();
-                            if (routinesList.isEmpty()) RoutinesList.getInstance().initEmptyView();
-                        }
-                    })
-                    .setNegativeButton(android.R.string.no, null).show();
-
+            if(routinesList.get(position).get(0).equals(selectedRoutineID)) {
+                Toast.makeText(global, global.getApplicationContext().getString(R.string.deselectToRemove), Toast.LENGTH_SHORT).show();
+            } else {
+                new AlertDialog.Builder(global)
+                        .setTitle(R.string.deleteRoutine)
+                        .setMessage(R.string.deleteRoutineConfirmation)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> {
+                            String currentId = routinesList.get(position).get(0);
+                            if (!currentId.equals(selectedRoutineID)) {
+                                DA.deleteRoutine(currentId);
+                                notifyDataSetChanged();
+                                if (routinesList.isEmpty())
+                                    RoutinesList.getInstance().initEmptyView();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, null).show();
+            }
         });
 
         boolean isSelected = routinesList.get(position).get(0).equals(selectedRoutineID);
@@ -126,12 +119,12 @@ public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesLi
         }
     }
 
-    private void selectRoutine(int position) throws NoSuchMethodException {
+    private void selectRoutine(int position) {
         if(routinesList.get(position).get(0).equals(selectedRoutineID)) {
-            DA.selectRoutine(null);
+            DA.selectRoutine(null, true);
             selectedRoutineID = "";
         } else {
-            DA.selectRoutine(routinesList.get(position));
+            DA.selectRoutine(routinesList.get(position), true);
             selectedRoutineID = routinesList.get(position).get(0);
         }
         notifyDataSetChanged();

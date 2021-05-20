@@ -38,8 +38,8 @@ public class AchievementController {
      */
     public boolean checkAchievement(Achievement achievement){
         switch (achievement){
-            case CreateRoutine: //aquest no te logica complexa
-                return currentUser.gainAchievement(Achievement.CreateRoutine);
+            case CreateFirstRoutine: //aquest no te logica complexa
+                return currentUser.gainAchievement(Achievement.CreateFirstRoutine);
 
             case UpdateRoutine:
                 return currentUser.gainAchievement(Achievement.UpdateRoutine);

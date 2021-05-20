@@ -2,6 +2,9 @@ package com.pes.become.backend.adapters;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
 
 import com.pes.become.backend.domain.Achievement;
 import com.pes.become.backend.domain.AchievementController;
@@ -9,6 +12,7 @@ import com.pes.become.backend.domain.Activity;
 import com.pes.become.backend.domain.Day;
 import com.pes.become.backend.domain.Routine;
 import com.pes.become.backend.domain.Theme;
+import com.pes.become.backend.domain.Time;
 import com.pes.become.backend.domain.TimeInterval;
 import com.pes.become.backend.domain.User;
 import com.pes.become.backend.exceptions.ExistingRoutineException;
@@ -17,13 +21,21 @@ import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
 import com.pes.become.backend.exceptions.NoSelectedRoutineException;
 import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 import com.pes.become.backend.persistence.ControllerPersistence;
+import com.pes.become.backend.persistence.StringDateConverter;
+import com.pes.become.frontend.ForgotPassword;
 import com.pes.become.frontend.LogoScreen;
 import com.pes.become.frontend.Login;
+import com.pes.become.frontend.MainActivity;
 import com.pes.become.frontend.Profile;
 import com.pes.become.frontend.Signup;
+import com.pes.become.frontend.Stats;
+import com.pes.become.frontend.Trophies;
 
 import java.lang.reflect.Method;
+import java.time.YearMonth;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -38,7 +50,7 @@ public class DomainAdapter {
     /**
      * Unica instancia del controlador de persistencia
      */
-    private static final ControllerPersistence controllerPersistence = new ControllerPersistence();
+    private static final ControllerPersistence controllerPersistence = ControllerPersistence.getInstance();
     /**
      * Unica instancia de l'adaptador de la classe Rutina
      */
@@ -64,6 +76,10 @@ public class DomainAdapter {
      */
     private Signup signup;
     /**
+     * Instancia de la classe forgotPassword del frontend
+     */
+    private ForgotPassword forgotPass;
+    /**
      * Usuari autenticat que esta usant l'aplicació actualment
      */
     private static User currentUser;
@@ -71,6 +87,14 @@ public class DomainAdapter {
      * Instancia de la classe profile del frontend
      */
     private Profile profile;
+    /**
+     * Instancia de la classe stats del frontend
+     */
+    private Stats stats;
+    /**
+     * Indica si l'usuari ha seleccionat directament una rutina o s'ha seleccionat des del codi pel correcte funcionament de l'aplicacio
+     */
+    private boolean selectingRoutine;
 
     /**
      * Obtenir la instancia de la classe
@@ -108,19 +132,23 @@ public class DomainAdapter {
      * @param act activitat
      */
     public void loadUser (android.app.Activity act) {
-        Class[] parameterTypes = new Class[6];
+        Class[] parameterTypes = new Class[8];
         parameterTypes[0] = boolean.class;
         parameterTypes[1] = String.class;
         parameterTypes[2] = String.class;
         parameterTypes[3] = String.class;
         parameterTypes[4] = Bitmap.class;
         parameterTypes[5] = ArrayList.class;
+        parameterTypes[6] = Map.class;
+        parameterTypes[7] = int.class;
         Method method;
         logoScreen = (LogoScreen)act;
         try {
             method = DomainAdapter.class.getMethod("authUser", parameterTypes);
             controllerPersistence.loadUser(method, DomainAdapter.getInstance());
-        } catch(NoSuchMethodException ignore) {}
+        } catch(NoSuchMethodException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -130,19 +158,23 @@ public class DomainAdapter {
      * @param act Activity d'Android necessaria per la execucio del firebase
      */
     public void loginUser(String mail, String password, android.app.Activity act) {
-        Class[] parameterTypes = new Class[6];
+        Class[] parameterTypes = new Class[8];
         parameterTypes[0] = boolean.class;
         parameterTypes[1] = String.class;
         parameterTypes[2] = String.class;
         parameterTypes[3] = String.class;
         parameterTypes[4] = Bitmap.class;
         parameterTypes[5] = ArrayList.class;
+        parameterTypes[6] = Map.class;
+        parameterTypes[7] = int.class;
         Method method;
         login = (Login)act;
         try {
             method = DomainAdapter.class.getMethod("loginCallback", parameterTypes);
             controllerPersistence.loginUser(mail, password, act, method, DomainAdapter.getInstance());
-        } catch (NoSuchMethodException ignore) {}
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -152,20 +184,24 @@ public class DomainAdapter {
      * @param act activitat
      */
     public void loginGoogleUser(String idToken, android.app.Activity act) {
-        Class[] parameterTypes = new Class[6];
+        Class[] parameterTypes = new Class[8];
         parameterTypes[0] = boolean.class;
         parameterTypes[1] = String.class;
         parameterTypes[2] = String.class;
         parameterTypes[3] = String.class;
         parameterTypes[4] = Bitmap.class;
         parameterTypes[5] = ArrayList.class;
+        parameterTypes[6] = Map.class;
+        parameterTypes[7] = int.class;
         Method method;
         login = (Login)act;
 
         try {
             method = DomainAdapter.class.getMethod("loginCallback", parameterTypes);
             controllerPersistence.loginUserGoogle(idToken, method, DomainAdapter.getInstance());
-        } catch (NoSuchMethodException ignore) {}
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -175,12 +211,14 @@ public class DomainAdapter {
      * @param username nom d'usuari
      * @param selectedRoutineId rutina seleccionada de l'usuari
      * @param pfp imatge de perfil de l'usuari
+     * @param streak dies de ratxa
      */
-    public void loginCallback(boolean success, String userId, String username, String selectedRoutineId, Bitmap pfp, ArrayList<ArrayList<String>> routineInfo) {
+    public void loginCallback(boolean success, String userId, String username, String selectedRoutineId, Bitmap pfp, ArrayList<ArrayList<String>> routineInfo, Map<String, Map<String, Double>> stats, int streak) {
         if (success) {
             currentUser = userAdapter.createUser(username);
             currentUser.setID(userId);
             currentUser.setPFP(pfp);
+            currentUser.setStreak(streak);
             if(!routineInfo.isEmpty()) currentUser.setRoutines(routineInfo);
             ArrayList<String> routine = new ArrayList<>();
             for(ArrayList<String> r : routineInfo) {
@@ -189,23 +227,38 @@ public class DomainAdapter {
                     break;
                 }
             }
-            if(!selectedRoutineId.equals("")) selectRoutine(routine);
-
-            //stats hardcoded
-            Map<Theme, Map<Day, Integer>> stats = new TreeMap<>();
-            for(int t=0; t<Theme.values().length; ++t){
-                Map<Day, Integer> emptyMap = new TreeMap<>();
-                for(int d = 0; d< Day.values().length; ++d){
-                    emptyMap.put(Day.values()[d], t*d);
-                }
-                stats.put(Theme.values()[t], emptyMap);
+            if(!selectedRoutineId.equals("")) selectRoutine(routine, false);
+            else {
+                login.loginCallback();
+                login = null;
             }
-            currentUser.setStatisticsSelectedRoutine(stats);
-            //fi stats hardcoded
+
+            if(stats != null) {
+                Map<Theme,Map<Day, Double>> statistics = new TreeMap<>();
+                for(Map.Entry<String,Map<String,Double>> themeStats : stats.entrySet()) {
+                    Map<Day, Double> s = new TreeMap<>();
+                    for (Map.Entry<String, Double> dayStats : themeStats.getValue().entrySet()) {
+                        Day day = Day.valueOf(dayStats.getKey());
+                        s.put(day, dayStats.getValue());
+                    }
+                    Theme theme = Theme.valueOf(themeStats.getKey());
+                    statistics.put(theme,s);
+                }
+
+                currentUser.setStatisticsSelectedRoutine(statistics);
+            }
+            else{
+                currentUser.clearStatistics();
+            }
 
             achievementController.setCurrentUser(currentUser);
 
-            login.loginCallback();
+            try {
+                Method method = DomainAdapter.class.getMethod("getAchievementsCallback", ArrayList.class);
+                controllerPersistence.getTrophies(currentUser.getID(), method, DomainAdapter.getInstance());
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            }
         }
         else {
             login.loginCallbackFailed();
@@ -219,12 +272,14 @@ public class DomainAdapter {
      * @param username nom d'usuari
      * @param selectedRoutineId rutina seleccionada de l'usuari
      * @param pfp imatge de perfil de l'usuari
+     * @param streak dies de ratxa
      */
-    public void authUser(boolean success, String userId, String username, String selectedRoutineId, Bitmap pfp, ArrayList<ArrayList<String>> routineInfo) {
+    public void authUser(boolean success, String userId, String username, String selectedRoutineId, Bitmap pfp, ArrayList<ArrayList<String>> routineInfo, Map<String, Map<String, Double>> stats, int streak) {
         if (success) {
             currentUser = userAdapter.createUser(username);
             currentUser.setID(userId);
             currentUser.setPFP(pfp);
+            currentUser.setStreak(streak);
             if(!routineInfo.isEmpty()) currentUser.setRoutines(routineInfo);
             ArrayList<String> routine = new ArrayList<>();
             for(ArrayList<String> r : routineInfo) {
@@ -233,11 +288,38 @@ public class DomainAdapter {
                     break;
                 }
             }
-            if(!selectedRoutineId.equals("")) selectRoutine(routine);
+            if (!selectedRoutineId.equals("")) selectRoutine(routine, false);
+            else {
+                logoScreen.loginCallback();
+                logoScreen = null;
+            }
+
+            if(stats != null) {
+                Map<Theme,Map<Day, Double>> statistics = new TreeMap<>();
+                for(Map.Entry<String,Map<String,Double>> themeStats : stats.entrySet()) {
+                    Map<Day, Double> s = new TreeMap<>();
+                    for (Map.Entry<String, Double> dayStats : themeStats.getValue().entrySet()) {
+                        Day day = Day.valueOf(dayStats.getKey());
+                        s.put(day, dayStats.getValue());
+                    }
+                    Theme theme = Theme.valueOf(themeStats.getKey());
+                    statistics.put(theme,s);
+                }
+
+                currentUser.setStatisticsSelectedRoutine(statistics);
+            }
+            else{
+                currentUser.clearStatistics();
+            }
 
             achievementController.setCurrentUser(currentUser);
 
-            logoScreen.loginCallback();
+            try {
+                Method method = DomainAdapter.class.getMethod("getAchievementsCallback", ArrayList.class);
+                controllerPersistence.getTrophies(currentUser.getID(), method, DomainAdapter.getInstance());
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            }
         }
         else {
             logoScreen.loginCallbackFailed();
@@ -307,8 +389,20 @@ public class DomainAdapter {
      * @param oldPassword contrasenya antiga
      * @param newPassword contrasenya nova
      */
-    public void changePassword(String oldPassword, String newPassword) {
-        //controllerPersistence.changePassword(oldPassword, newPassword);
+    public void changePassword(String oldPassword, String newPassword, Profile profile) {
+        this.profile = profile;
+        try {
+            Method method = DomainAdapter.class.getMethod("changePasswordCallback", boolean.class);
+            controllerPersistence.changePassword(oldPassword, newPassword, method, this);
+        } catch(Exception ignore) {}
+    }
+
+    /**
+     * Metode per rebre el resultat del canvi de contrasenya
+     * @param success resultat de la operacio
+     */
+    public void changePasswordCallback(boolean success) {
+        profile.changePasswordCallback(success);
     }
 
     /**
@@ -316,6 +410,7 @@ public class DomainAdapter {
      * @param newName nou nom de l'usuari
      */
     public void changeUserName(String newName) {
+        controllerPersistence.changeUsername(currentUser.getID(),newName);
         currentUser.setName(newName);
     }
 
@@ -323,7 +418,7 @@ public class DomainAdapter {
      * Metode per obtenir les estadistiques de la rutina seleccionada de l'usuari
      * @return Array d'Arrays d'enters on la primera array representa els temes, la segona els dies i la tercera les hores
      */
-    public ArrayList<ArrayList<Integer>> getStatisticsSelectedRoutine(){
+    public ArrayList<ArrayList<Double>> getStatisticsSelectedRoutine(){
         return currentUser.getStatisticsSelectedRoutine();
     }
 
@@ -331,10 +426,10 @@ public class DomainAdapter {
      * Metode per obtenir les hores dedicades a cada tema en la rutina seleccionada
      * @return ArrayList on a cada posicio hi han les hores dedicades al tema equivalent a la posicio (i.e. a la posicio 0 hi ha les hores dedicades a Music)
      */
-    public ArrayList<Integer> getHoursByTheme(){
-        ArrayList<Integer> hoursByTheme = new ArrayList<>();
+    public ArrayList<Double> getHoursByTheme() {
+        ArrayList<Double> hoursByTheme = new ArrayList<>();
         for(int theme=0; theme<Theme.values().length; ++theme){
-            int hours = currentUser.getHoursByTheme(Theme.values()[theme]);
+            double hours = currentUser.getHoursByTheme(Theme.values()[theme]);
             hoursByTheme.add(theme, hours);
         }
         return hoursByTheme;
@@ -342,11 +437,28 @@ public class DomainAdapter {
 
     /**
      * Metode per comprovar si l'usuari ha guanyat un trofeu
-     * @param achievement ordinal del trofeu que volem comprovar
+     * @param achievement nom del trofeu que volem comprovar
      * @return cert si l'ha guanyat, fals si no o ja el tenia
      */
-    public boolean checkAchievement(int achievement){
-        return achievementController.checkAchievement(Achievement.values()[achievement]);
+    public boolean checkAchievement(String achievement){
+        if (achievementController.checkAchievement(Achievement.valueOf(achievement))) {
+            controllerPersistence.addTrophy(currentUser.getID(), achievement);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Metode per obtenir els trofeus que te l'usuari
+     * @return mapa amb el nom del trofeu com a clau i un boolea que indica si te el trofeu o no com a valor
+     */
+    public ArrayList<Boolean> getUserAchievements(){
+        TreeMap<Achievement, Boolean> achievements = currentUser.getAllAchievementsStates();
+        ArrayList<Boolean> result = new ArrayList<>();
+        for(TreeMap.Entry<Achievement, Boolean> achievement : achievements.entrySet()){
+            result.add(achievement.getValue());
+        }
+        return result;
     }
 
     /**
@@ -367,10 +479,56 @@ public class DomainAdapter {
     }
 
     /**
+     * Metode per actualitzar el calendari
+     * @param month mes
+     * @param year any
+     * @param s estat
+     */
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void updateCalendar(int month, int year, Stats s) {
+        stats = s;
+        YearMonth object = YearMonth.of(year,month);
+        int daysInMonth = object.lengthOfMonth();
+        currentUser.clearMonth(daysInMonth);
+        try {
+            Method method = DomainAdapter.class.getMethod("calendarCallback", ArrayList.class);
+            controllerPersistence.getAvailableDays(currentUser.getID(), month, year, method, DomainAdapter.getInstance());
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Metode de callback del calendari
+     * @param calendar calendari
+     */
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void calendarCallback(ArrayList<HashMap<String,String>> calendar) {
+        for(HashMap<String,String> day : calendar) {
+            int dayOfMonth = Integer.parseInt(day.get("day"));
+            int completition = 0;
+            if(!day.get("numTotalActivities").equals("0"))
+                completition = (int)((Double.parseDouble(day.get("numActivitiesDone"))/Double.parseDouble(day.get("numTotalActivities"))) * 100);
+            currentUser.setDayCalendar(dayOfMonth-1, completition);
+        }
+        stats.calendarCallback(currentUser.getCalendarMonth());
+    }
+
+    /**
+     * Metode per obtenir les ratxes de l'usuari
+     * @return la ratxa de l'usuari
+     */
+    public int getUserStreak(){
+        return currentUser.getStreak();
+    }
+
+    /**
      * Metode per seleccionar una rutina ja existent
      * @param infoRoutine llista amb la informacio de la rutina a seleccionar
+     * @param selecting true si la rutina esta sent seleccionada directament per l'usuari, false altrament
      */
-    public void selectRoutine(ArrayList<String> infoRoutine) {
+    public void selectRoutine(ArrayList<String> infoRoutine, boolean selecting) {
+        selectingRoutine = selecting;
         if(infoRoutine!=null) {
             Routine routine = routineAdapter.createRoutine(infoRoutine.get(1));
             routine.setId(infoRoutine.get(0));
@@ -381,7 +539,9 @@ public class DomainAdapter {
         } else {
             routineAdapter.setCurrentRoutine(null);
             currentUser.setSelectedRoutine(null);
+            currentUser.clearStatistics();
             controllerPersistence.setSelectedRoutine(currentUser.getID(),"");
+            if(this.stats!=null) this.stats.setRoutineStats();
         }
     }
 
@@ -391,37 +551,88 @@ public class DomainAdapter {
     public void loadSelectedRoutine() {
         try {
             routineAdapter.clearActivities();
-            Class[] parameterTypes = new Class[1];
-            parameterTypes[0] = ArrayList.class;
-            Method method = DomainAdapter.class.getMethod("loadSelectedRoutineCallback", parameterTypes);
-            for(int d = 0; d < 7; ++d) {
-                controllerPersistence.getActivitiesByDay(currentUser.getID(), currentUser.getSelectedRoutine().getId(), Day.values()[d].toString(), method, DomainAdapter.getInstance());
-            }
-        } catch (NoSuchMethodException ignore) {
+            Method method = DomainAdapter.class.getMethod("loadSelectedRoutineCallback", HashMap.class);
+            Method method1 = DomainAdapter.class.getMethod("loadStatisticsCallback", Map.class);
+            controllerPersistence.getActivitiesRoutine(currentUser.getID(), currentUser.getSelectedRoutine().getId(), method, DomainAdapter.getInstance());
+            controllerPersistence.getAllStatisticsRoutine(currentUser.getID(), currentUser.getSelectedRoutine().getId(), method1, DomainAdapter.getInstance());
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
         }
     }
 
     /**
+     * Metode de callback dels estadistics
+     * @param stats estadistics
+     */
+    public void loadStatisticsCallback(Map<String, Map<String, Double>> stats){
+        if(stats != null) {
+            Map<Theme,Map<Day, Double>> statistics = new TreeMap<>();
+            for(Map.Entry<String,Map<String,Double>> themeStats : stats.entrySet()) {
+                Map<Day, Double> s = new TreeMap<>();
+                for (Map.Entry<String, Double> dayStats : themeStats.getValue().entrySet()) {
+                    Day day = Day.valueOf(dayStats.getKey());
+                    s.put(day, dayStats.getValue());
+                }
+                Theme theme = Theme.valueOf(themeStats.getKey());
+                statistics.put(theme,s);
+            }
+            currentUser.setStatisticsSelectedRoutine(statistics);
+        }
+        else
+            currentUser.clearStatistics();
+
+        if(this.stats!=null) this.stats.setRoutineStats();
+    }
+
+    /**
      * Metode per rebre les activitats de la rutina seleccionada
-     * @param activities activitats de la rutina
+     * @param activitiesList activitats de la rutina
      * @throws InvalidTimeIntervalException si l'interval de temps no és valid
      */
-    public void loadSelectedRoutineCallback(ArrayList<ArrayList<String>> activities) throws InvalidTimeIntervalException {
-        if(!activities.isEmpty()) {
-            ArrayList<Activity> acts = new ArrayList<>();
-            for (int i = 0; i < activities.size(); ++i) {
-                String[] s = activities.get(i).get(5).split(":");
-                String[] s2 = activities.get(i).get(6).split(":");
-                int iniH = Integer.parseInt(s[0]);
-                int iniM = Integer.parseInt(s[1]);
-                int endH = Integer.parseInt(s2[0]);
-                int endM = Integer.parseInt(s2[1]);
-                Activity activity = new Activity(activities.get(i).get(1), activities.get(i).get(2), Theme.valueOf(activities.get(i).get(3)), new TimeInterval(iniH, iniM, endH, endM), Day.valueOf(activities.get(i).get(4)));
-                activity.setId(activities.get(i).get(0));
-                acts.add(activity);
+    public void loadSelectedRoutineCallback(HashMap<String, ArrayList<ArrayList<String>>> activitiesList) throws InvalidTimeIntervalException {
+        for (HashMap.Entry<String, ArrayList<ArrayList<String>>> dayActivities : activitiesList.entrySet()) {
+            ArrayList<ArrayList<String>> activities = dayActivities.getValue();
+            if (!activities.isEmpty()) {
+                ArrayList<Activity> acts = new ArrayList<>();
+                for (int i = 0; i < activities.size(); ++i) {
+                    String[] s = activities.get(i).get(5).split(":");
+                    String[] s2 = activities.get(i).get(6).split(":");
+                    int iniH = Integer.parseInt(s[0]);
+                    int iniM = Integer.parseInt(s[1]);
+                    int endH = Integer.parseInt(s2[0]);
+                    int endM = Integer.parseInt(s2[1]);
+                    Activity activity = new Activity(activities.get(i).get(1), activities.get(i).get(2), Theme.valueOf(activities.get(i).get(3)), new TimeInterval(iniH, iniM, endH, endM), Day.valueOf(activities.get(i).get(4)));
+                    activity.setId(activities.get(i).get(0));
+                    activity.setDoneToday((activities.get(i).get(7)).equals("true"));
+                    acts.add(activity);
+                }
+                routineAdapter.setActivitiesByDay(acts, acts.get(0).getDay());
             }
-            routineAdapter.setActivitiesByDay(acts, acts.get(0).getDay());
         }
+
+        if (!selectingRoutine) {
+            if (login != null) {
+                login.loginCallback();
+            }
+            else if (logoScreen != null) {
+                logoScreen.loginCallback();
+            } else {
+                MainActivity.getInstance().setEditRoutineScreen(currentUser.getSelectedRoutine().getId(),currentUser.getSelectedRoutine().getName());
+            }
+            login = null;
+            logoScreen = null;
+        }
+    }
+
+    /**
+     * Metode que es crida quan sobte els trofeus
+     * @param trophies llistat de trofeus obtinguts
+     */
+    public void getAchievementsCallback(ArrayList<String> trophies){
+        for (int i = 0; i < trophies.size(); ++i) {
+            currentUser.addAchievement(Achievement.valueOf(trophies.get(i)));
+        }
+        Trophies.getInstance().getObtainedTrophyList();
     }
 
     /**
@@ -478,11 +689,13 @@ public class DomainAdapter {
                 String id = controllerPersistence.createActivity(currentUser.getID(), currentUser.getSelectedRoutine().getId(), name, Theme.values()[Integer.parseInt(theme)].toString(), description, startDay.toString(), beginTime, endTime);
                 newActDay1.setId(id);
                 routineAdapter.createActivity(newActDay1);
+                currentUser.updateStatistics(Theme.values()[Integer.parseInt(theme)],startDay, 23-Integer.parseInt(iniH), 59-Integer.parseInt(iniM), true);
                 beginTime = "00:00";
                 endTime = endH + ":" + endM;
                 id = controllerPersistence.createActivity(currentUser.getID(), currentUser.getSelectedRoutine().getId(), name, Theme.values()[Integer.parseInt(theme)].toString(), description, endDay.toString(), beginTime, endTime);
                 newActDay2.setId(id);
                 routineAdapter.createActivity(newActDay2);
+                currentUser.updateStatistics(Theme.values()[Integer.parseInt(theme)],endDay, Integer.parseInt(endH), Integer.parseInt(endM), true);
             } else throw new OverlappingActivitiesException();
         }
         else if (comparison == 0) {
@@ -493,6 +706,7 @@ public class DomainAdapter {
                 String id = controllerPersistence.createActivity(currentUser.getID(), currentUser.getSelectedRoutine().getId(), name, Theme.values()[Integer.parseInt(theme)].toString(), description, startDay.toString(), beginTime, endTime);
                 a.setId(id);
                 routineAdapter.createActivity(a);
+                currentUser.updateStatistics(Theme.values()[Integer.parseInt(theme)],startDay, Integer.parseInt(endH)-Integer.parseInt(iniH), Integer.parseInt(endM)-Integer.parseInt(iniM), true);
             } else throw new OverlappingActivitiesException();
         }
         else throw new InvalidDayIntervalException();
@@ -519,22 +733,27 @@ public class DomainAdapter {
         Day startDay = Day.values()[Integer.parseInt(startDayString)];
         Day endDay = Day.values()[Integer.parseInt(endDayString)];
         int comparison = startDay.compareTo(endDay);
+        Activity oldActivity = currentUser.getSelectedRoutine().getActivity(id);
+        Time duration = oldActivity.getInterval().getIntervalDuration();
+        currentUser.updateStatistics(oldActivity.getTheme(),oldActivity.getDay(),duration.getHours(),duration.getMinutes(),false);
         if (comparison < 0) {
             Activity updatedActivity1 = new Activity(name, description, Theme.values()[Integer.parseInt(theme)], new TimeInterval(Integer.parseInt(iniH), Integer.parseInt(iniM), 23, 59), startDay);
             updatedActivity1.setId(id);
             routineAdapter.updateActivity(updatedActivity1);
+            currentUser.updateStatistics(Theme.values()[Integer.parseInt(theme)],startDay, 23-Integer.parseInt(iniH), 59-Integer.parseInt(iniM), true);
             String beginTime = iniH + ":" + iniM;
             String endTime = "23:59";
-            controllerPersistence.updateActivity(currentUser.getID(), currentUser.getSelectedRoutine().getId(), name, description, Theme.values()[Integer.parseInt(theme)].toString(), beginTime, endTime, startDay.toString(), id);
+            controllerPersistence.updateActivity(currentUser.getID(), currentUser.getSelectedRoutine().getId(), id, name, description, startDay.toString(), Theme.values()[Integer.parseInt(theme)].toString(), beginTime, endTime);
             createActivity(name, description, theme, endDayString, endDayString, "0","0", endH, endM);
         }
         else if (comparison == 0) {
             Activity updatedActivity = new Activity(name, description, Theme.values()[Integer.parseInt(theme)], new TimeInterval(Integer.parseInt(iniH), Integer.parseInt(iniM), Integer.parseInt(endH), Integer.parseInt(endM)), startDay);
             updatedActivity.setId(id);
             routineAdapter.updateActivity(updatedActivity);
+            currentUser.updateStatistics(Theme.values()[Integer.parseInt(theme)],startDay, Integer.parseInt(endH)-Integer.parseInt(iniH), Integer.parseInt(endM)-Integer.parseInt(iniM), true);
             String beginTime = iniH + ":" + iniM;
             String endTime = endH + ":" + endM;
-            controllerPersistence.updateActivity(currentUser.getID(), currentUser.getSelectedRoutine().getId(), name, description, Theme.values()[Integer.parseInt(theme)].toString(), beginTime, endTime, startDay.toString(), id);
+            controllerPersistence.updateActivity(currentUser.getID(), currentUser.getSelectedRoutine().getId(), id, name, description, startDay.toString(), Theme.values()[Integer.parseInt(theme)].toString(), beginTime, endTime);
         }
         else throw new InvalidDayIntervalException();
     }
@@ -546,8 +765,32 @@ public class DomainAdapter {
      * @throws NoSelectedRoutineException si l'usuari no té cap rutina seleccionada
      */
     public void deleteActivity(String id, String day) throws NoSelectedRoutineException {
+        Activity deleted = currentUser.getSelectedRoutine().getActivity(id);
+        Time duration = deleted.getInterval().getIntervalDuration();
+        currentUser.updateStatistics(deleted.getTheme(),deleted.getDay(),duration.getHours(),duration.getMinutes(),false);
         routineAdapter.deleteActivity(id, Day.valueOf(day));
         controllerPersistence.deleteActivity(currentUser.getID(), currentUser.getSelectedRoutine().getId(), id);
+    }
+
+    /**
+     * Metode per marcar una activitat com a feta
+     * @param activityID identificador de l'activitat
+     * @param isDone boolea que indica si es marca o desmarca
+     */
+    public void markActivityAsDone(String activityID, boolean isDone, int day) {
+        boolean wasDone = false;
+        if(routineAdapter.isCompleted(Day.values()[day])) wasDone = true;
+        routineAdapter.markActivityAsDone(activityID, isDone);
+        if (isDone) {
+            if(routineAdapter.isCompleted(Day.values()[day])) {
+                currentUser.setStreak(currentUser.getStreak()+1);
+            }
+            controllerPersistence.markActivityAsDone(currentUser.getID(), currentUser.getSelectedRoutine().getId(), StringDateConverter.dateToString(Calendar.getInstance().getTime()), activityID, currentUser.getSelectedRoutine().getActivitiesByDay(Day.values()[day]).size());
+        } else {
+            if(wasDone) currentUser.setStreak(currentUser.getStreak()-1);
+            controllerPersistence.markActivityAsDone(currentUser.getID(), currentUser.getSelectedRoutine().getId(), null, activityID, currentUser.getSelectedRoutine().getActivitiesByDay(Day.values()[day]).size());
+        }
+
     }
 
     /**
@@ -593,17 +836,6 @@ public class DomainAdapter {
         res.add(currentUser.getName());
         Bitmap pfp = currentUser.getProfilePic();
         res.add(pfp);
-        //stats hardcoded
-        Map<Theme, Map<Day, Integer>> stats = new TreeMap<>();
-        for(int t=0; t<Theme.values().length; ++t){
-            Map<Day, Integer> emptyMap = new TreeMap<>();
-            for(int d = 0; d< Day.values().length; ++d){
-                emptyMap.put(Day.values()[d], t*d);
-            }
-            stats.put(Theme.values()[t], emptyMap);
-        }
-        currentUser.setStatisticsSelectedRoutine(stats);
-        //fi stats hardcoded
         return res;
     }
 
@@ -637,10 +869,10 @@ public class DomainAdapter {
     /**
      * Metode per recuperar la contrasenya d'un usuari
      * @param mail mail del compte a recuperar
-     * @return true si el mail pertany a un usuari registrat i es pot enviar el correu, false altrament
+     * @param act instància de l'activitat que solicita la recuperació de contrasenya
      */
     public void sendPassResetEmail(String mail, android.app.Activity act) {
-        login = (Login)act;
+        forgotPass = (ForgotPassword)act;
         try {
             Method method = DomainAdapter.class.getMethod("passResetCallback", boolean.class);
             controllerPersistence.sendPassResetEmail(mail, method, this);
@@ -652,6 +884,6 @@ public class DomainAdapter {
      * @param success resultat de l'operacio
      */
     public void passResetCallback(boolean success) {
-        login.passResetCallback(success);
+        forgotPass.passResetCallback(success);
     }
 }

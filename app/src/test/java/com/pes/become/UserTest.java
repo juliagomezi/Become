@@ -83,11 +83,11 @@ public class UserTest {
     @Test
     public void testStatisticsInitialize(){
         User user = new User("test");
-        ArrayList<ArrayList<Integer>> expected = new ArrayList<>();
+        ArrayList<ArrayList<Double>> expected = new ArrayList<>();
         for(int i=0; i<8; ++i){
-            ArrayList<Integer> hoursByDay = new ArrayList<>();
+            ArrayList<Double> hoursByDay = new ArrayList<>();
             for(int j=0; j<7; ++j){
-                hoursByDay.add(j, 0);
+                hoursByDay.add(j, 0.0);
             }
             expected.add(i, hoursByDay);
         }
@@ -97,21 +97,81 @@ public class UserTest {
     @Test
     public void testStatisticsWithContent(){
         User user = new User("test");
-        Map<Theme, Map<Day, Integer>> stats = new TreeMap<>();
+        Map<Theme, Map<Day, Double>> stats = new TreeMap<>();
         for(int t=0; t<Theme.values().length; ++t){
-            Map<Day, Integer> emptyMap = new TreeMap<>();
+            Map<Day, Double> emptyMap = new TreeMap<>();
             for(int d = 0; d< Day.values().length; ++d){
-                emptyMap.put(Day.values()[d], t*d);
+                emptyMap.put(Day.values()[d], (double)t*d);
             }
             stats.put(Theme.values()[t], emptyMap);
         }
         user.setStatisticsSelectedRoutine(stats);
 
-        ArrayList<ArrayList<Integer>> expected = new ArrayList<>();
+        ArrayList<ArrayList<Double>> expected = new ArrayList<>();
         for(int i=0; i<8; ++i){
-            ArrayList<Integer> hoursByDay = new ArrayList<>();
+            ArrayList<Double> hoursByDay = new ArrayList<>();
             for(int j=0; j<7; ++j){
-                hoursByDay.add(j, j*i);
+                hoursByDay.add(j, (double)j*i);
+            }
+            expected.add(i, hoursByDay);
+        }
+        assertEquals(expected, user.getStatisticsSelectedRoutine());
+    }
+
+    @Test
+    public void testUpdateStatisticsPositive(){
+        User user = new User("test");
+        Map<Theme, Map<Day, Double>> stats = new TreeMap<>();
+        for(int t=0; t<Theme.values().length; ++t){
+            Map<Day, Double> emptyMap = new TreeMap<>();
+            for(int d = 0; d< Day.values().length; ++d){
+                emptyMap.put(Day.values()[d], (double)t*d);
+            }
+            stats.put(Theme.values()[t], emptyMap);
+        }
+
+        user.setStatisticsSelectedRoutine(stats);
+
+        user.updateStatistics(Theme.Other, Day.Monday, 4, 15, true);
+
+        ArrayList<ArrayList<Double>> expected = new ArrayList<>();
+        for(int i=0; i<8; ++i){
+            ArrayList<Double> hoursByDay = new ArrayList<>();
+            for(int j=0; j<7; ++j){
+                if(i == 7 && j == 0)
+                    hoursByDay.add(j, (double)j*i+4.25);
+                else
+                    hoursByDay.add(j, (double)j*i);
+            }
+            expected.add(i, hoursByDay);
+        }
+        assertEquals(expected, user.getStatisticsSelectedRoutine());
+    }
+
+    @Test
+    public void testUpdateStatisticsNegative() {
+        User user = new User("test");
+        Map<Theme, Map<Day, Double>> stats = new TreeMap<>();
+        for(int t=0; t<Theme.values().length; ++t){
+            Map<Day, Double> emptyMap = new TreeMap<>();
+            for(int d = 0; d< Day.values().length; ++d){
+                emptyMap.put(Day.values()[d], (double)t*d);
+            }
+            stats.put(Theme.values()[t], emptyMap);
+        }
+
+        user.setStatisticsSelectedRoutine(stats);
+
+        user.updateStatistics(Theme.Other, Day.Friday, 4, 30, false);
+
+        ArrayList<ArrayList<Double>> expected = new ArrayList<>();
+        for(int i=0; i<8; ++i){
+            ArrayList<Double> hoursByDay = new ArrayList<>();
+            for(int j=0; j<7; ++j){
+                if(i == 7 && j == 4)
+                    hoursByDay.add(j, (double)j*i-4.5);
+                else
+                    hoursByDay.add(j, (double)j*i);
             }
             expected.add(i, hoursByDay);
         }

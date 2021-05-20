@@ -1,10 +1,14 @@
 package com.pes.become.frontend;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -25,7 +29,6 @@ import java.util.regex.Pattern;
 
 public class Login extends AppCompatActivity {
 
-
     private final DomainAdapter DA = DomainAdapter.getInstance();
     private EditText userText, passwordText;
     private GoogleSignInClient mGoogleSignInClient;
@@ -33,6 +36,7 @@ public class Login extends AppCompatActivity {
 
     private ProgressBar loading;
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +57,10 @@ public class Login extends AppCompatActivity {
 
         signUp.setOnClickListener(v -> startActivity(new Intent(Login.this, Signup.class)));
 
-        forgotPassword.setOnClickListener(v -> sendPassResetEmail());
+        forgotPassword.setOnClickListener(v -> {
+            startActivity(new Intent(this, ForgotPassword.class));
+            finish();
+        });
     }
 
     private void createRequest() {
@@ -65,7 +72,13 @@ public class Login extends AppCompatActivity {
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     private void loginUser() {
+        InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (null != this.getCurrentFocus())
+            imm.hideSoftInputFromWindow(this.getCurrentFocus()
+                    .getApplicationWindowToken(), 0);
+
         String user = userText.getText().toString();
         String password = passwordText.getText().toString();
 
@@ -117,33 +130,7 @@ public class Login extends AppCompatActivity {
         finish();
     }
 
-    /**
-     * Metode per recuperar la contrasenya
-     */
-    private void sendPassResetEmail() {
-        String user = userText.getText().toString();
-        if (user.isEmpty()) userText.setError(getString(R.string.notNull));
-        else if(!isEmailValid(user)) userText.setError(getString(R.string.notAValidEmail));
-        else {
-            loading.setVisibility(View.VISIBLE);
-            DA.sendPassResetEmail(user,this);
-        }
-    }
-
-    /**
-     * Metode per rebre la resposta de la base de dades del mail de recuperacio de la contrasenya
-     * @param success resultat de l'operacio
-     */
-    public void passResetCallback(boolean success) {
-        loading.setVisibility(View.INVISIBLE);
-        if(success) {
-            userText.setText("");
-            Toast.makeText(this, getString(R.string.emailSent), Toast.LENGTH_SHORT).show();
-        }
-        else userText.setError(getString(R.string.emailNotRegistered));
-    }
-
-    public static boolean isEmailValid(String email) {
+    private static boolean isEmailValid(String email) {
         String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
         Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(email);

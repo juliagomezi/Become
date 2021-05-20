@@ -1,6 +1,7 @@
 package com.pes.become.backend.persistence;
 
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -8,6 +9,8 @@ import com.google.firebase.firestore.CollectionReference;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.lang.reflect.Method;
@@ -15,17 +18,30 @@ import java.lang.reflect.Method;
 public class ControllerActivityDB {
 
     /**
+     * Unica instancia de la classe
+     */
+    private static ControllerActivityDB instance;
+    /**
      * Instància de la bd
      */
     private final FirebaseFirestore db;
 
     /**
-     * Creadora per defecte
+     * Obtenir la instancia de la classe
+     * @return instancia
      */
-    public ControllerActivityDB() {
-        db = FirebaseFirestore.getInstance();
+    public static ControllerActivityDB getInstance(){
+        if(instance == null)
+            instance = new ControllerActivityDB();
+        return instance;
     }
 
+    /**
+     * Creadora per defecte
+     */
+    private ControllerActivityDB() {
+        db = FirebaseFirestore.getInstance();
+    }
 
     /**
      * Obtenir les activitats d'una rutina
@@ -35,65 +51,63 @@ public class ControllerActivityDB {
      * @param object classe que conté el mètode
      */
     public void getActivities(String userId, String idRoutine, Method method, Object object) {
-        db.collection("users").document(userId).collection("routines").document(idRoutine).collection("activities").addSnapshotListener((value, e) -> {
-            if (e != null) {
-                return;
-            }
-            HashMap <String, ArrayList<ArrayList<String>> > routineActivities = new HashMap<>();
+        db.collection("users").document(userId).collection("routines").document(idRoutine).collection("activities").get().addOnCompleteListener(task -> {
+            HashMap<String, ArrayList<ArrayList<String>>> routineActivities = new HashMap<>();
+            routineActivities.put("Monday",  new ArrayList<>());
+            routineActivities.put("Tuesday",  new ArrayList<>());
+            routineActivities.put("Wednesday",  new ArrayList<>());
+            routineActivities.put("Thursday",  new ArrayList<>());
+            routineActivities.put("Friday",  new ArrayList<>());
+            routineActivities.put("Saturday",  new ArrayList<>());
+            routineActivities.put("Sunday",  new ArrayList<>());
 
-            for (QueryDocumentSnapshot document : value) {
-                ArrayList<String> activity = new ArrayList<>();
-                activity.add(document.getId());
-                activity.add(document.get("name").toString());
-                activity.add(document.get("description").toString());
-                activity.add(document.get("theme").toString());
-                String activityDay = document.get("day").toString();
-                activity.add(activityDay);
-                activity.add(document.get("beginTime").toString());
-                activity.add(document.get("finishTime").toString());
+            if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    ArrayList<String> activity = new ArrayList<>();
+                    activity.add(document.getId());
+                    activity.add(document.get("name").toString());
+                    activity.add(document.get("description").toString());
+                    activity.add(document.get("theme").toString());
+                    String activityDay = document.get("day").toString();
+                    activity.add(activityDay);
+                    activity.add(document.get("beginTime").toString());
+                    activity.add(document.get("finishTime").toString());
+                    if(!document.get("lastDayDone").toString().equals("null")) {
+                        if (StringDateConverter.dateToString(Calendar.getInstance().getTime()).equals(document.get("lastDayDone").toString())) activity.add("true");
+                        else activity.add("false");
+                    } else activity.add("false");
 
-                ArrayList<ArrayList<String>> aux = routineActivities.get(activityDay);
-                aux.add(activity);
-                routineActivities.put(activityDay,aux);
-            }
-            try {
-                method.invoke(object, routineActivities);
-            } catch (IllegalAccessException ignore) {
-            } catch (InvocationTargetException ignore) {
-            }
-        });
-    }
-
-    /**
-     * Obtenir les activitats d'una rutina i un dia indicats
-     * @param userId identificador de l'usuari
-     * @param idRoutine l'identificador de la rutina
-     * @param day dia a consultar
-     * @param method metode a cridar quan es retornin les dades
-     * @param object classe que conté el mètode
-     */
-    public void getActivitiesByDay(String userId, String idRoutine, String day, Method method, Object object) {
-        db.collection("users").document(userId).collection("routines").document(idRoutine).collection("activities").whereEqualTo("day", day).addSnapshotListener((value, e) -> {
-            if (e != null) {
-                return;
-            }
-
-            ArrayList<ArrayList<String>> activitiesResult = new ArrayList<>();
-            for (QueryDocumentSnapshot document : value) {
-                ArrayList<String> activity = new ArrayList<>();
-                activity.add(document.getId());
-                activity.add(document.get("name").toString());
-                activity.add(document.get("description").toString());
-                activity.add(document.get("theme").toString());
-                activity.add(document.get("day").toString());
-                activity.add(document.get("beginTime").toString());
-                activity.add(document.get("finishTime").toString());
-                activitiesResult.add(activity);
-            }
-            try {
-                method.invoke(object, activitiesResult);
-            } catch (IllegalAccessException ignore) {
-            } catch (InvocationTargetException ignore) {
+                    switch (activityDay) {
+                        case "Monday":
+                            routineActivities.get("Monday").add(activity);
+                            break;
+                        case "Tuesday":
+                            routineActivities.get("Tuesday").add(activity);
+                            break;
+                        case "Wednesday":
+                            routineActivities.get("Wednesday").add(activity);
+                            break;
+                        case "Thursday":
+                            routineActivities.get("Thursday").add(activity);
+                            break;
+                        case "Friday":
+                            routineActivities.get("Friday").add(activity);
+                            break;
+                        case "Saturday":
+                            routineActivities.get("Saturday").add(activity);
+                            break;
+                        case "Sunday":
+                            routineActivities.get("Sunday").add(activity);
+                            break;
+                    }
+                }
+                try {
+                    method.invoke(object, routineActivities);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e2) {
+                    e2.printStackTrace();
+                }
             }
         });
     }
@@ -109,8 +123,9 @@ public class ControllerActivityDB {
      * @param beginTime es l'hora d'inici de l'activitat
      * @param finishTime es l'hora d'acabament de l'activitat
      * @return el valor del id de l'activitat creada
+     * @param lastDayDone és l'últim dia que l'usuari ha marcat la rutina com a feta en format de data Standard del firebase
      */
-    public String createActivity( String userId, String idRoutine, String activityName, String actTheme,String actDescription, String actDay, String beginTime, String finishTime) {
+    public String createActivity( String userId, String idRoutine, String activityName, String actTheme,String actDescription, String actDay, String beginTime, String finishTime, String lastDayDone) {
         CollectionReference refToActivities = db.collection("users").document(userId).collection("routines").document(idRoutine).collection("activities");
         Map<String,Object> dataInput = new HashMap<>();
         dataInput.put("name",activityName);
@@ -119,7 +134,7 @@ public class ControllerActivityDB {
         dataInput.put("beginTime",beginTime);
         dataInput.put("finishTime",finishTime);
         dataInput.put("day",actDay);
-
+        dataInput.put("lastDayDone", lastDayDone);
         DocumentReference refToNewActivity = refToActivities.document();
         String ID = refToNewActivity.getId();
 
@@ -152,14 +167,52 @@ public class ControllerActivityDB {
      * @param endT es l'hora d'acabament de l'activitat
      * @param idActivity és l'identificador de l'activitat
      */
-    public void updateActivity(String userId, String idRoutine, String actName, String description, String theme, String day, String iniT, String endT,  String idActivity) {
+    public void updateActivity(String userId, String idRoutine, String actName, String description, String theme, String day, String iniT, String endT, String idActivity) {
         DocumentReference docRefToActivity = db.collection("users").document(userId).collection("routines").document(idRoutine).collection("activities").document(idActivity);
-        docRefToActivity.update("name", actName);
-        docRefToActivity.update("description", description);
-        docRefToActivity.update("theme", theme);
-        docRefToActivity.update("day", day);
-        docRefToActivity.update("beginTime", iniT);
-        docRefToActivity.update("finishTime", endT);
+        if(actName != null) docRefToActivity.update("name", actName);
+        if(description != null) docRefToActivity.update("description", description);
+        if(theme != null) docRefToActivity.update("theme", theme);
+        if(day != null) docRefToActivity.update("day", day);
+        if(iniT != null) docRefToActivity.update("beginTime", iniT);
+        if(endT != null) docRefToActivity.update("finishTime", endT);
+
+    }
+
+    /**
+     * @param userId identificador de l'usuari
+     * @param idRoutine es l'identificador de la rutina ja existent
+     * @param lastDayDone és l'últim dia que l'usuari ha marcat la rutina com a feta en format de data yyyy-mm-dd (la classe StringDateConverter serveix per convertir-la)
+     * @param idActivity és l'identificador de l'activitat
+     */
+    public void markActivityAsDone(String userId, String idRoutine, String lastDayDone, String idActivity, int totalActivities)
+    {
+        DocumentReference docRefToActivity = db.collection("users").document(userId).collection("routines").document(idRoutine).collection("activities").document(idActivity);
+        if(lastDayDone != null && !("null").equals(lastDayDone))
+        {
+            docRefToActivity.update("lastDayDone", lastDayDone).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    ControllerCalendarDB cal = new ControllerCalendarDB();
+                    cal.incrementDay(userId, 1, totalActivities);
+                }
+            });
+        }
+        else
+        {
+            docRefToActivity.get().addOnCompleteListener((task) -> {
+                if(task.isSuccessful())
+                {
+                    DocumentSnapshot document = task.getResult();
+                    String realLastDayDone = document.get("lastDayDone").toString();
+                    docRefToActivity.update("lastDayDone", "null").addOnCompleteListener(task2 -> {
+                        if (task2.isSuccessful()) {
+                            ControllerCalendarDB cal = new ControllerCalendarDB();
+                            Date lastDay = StringDateConverter.stringToDate(realLastDayDone);
+                            cal.incrementDay(userId, -1, totalActivities);
+                        }
+                    });
+                }
+            });
+        }
     }
 
 }
