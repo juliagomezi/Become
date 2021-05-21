@@ -183,22 +183,18 @@ public class ControllerActivityDB {
      */
     public void updateActivity(String userId, String idRoutine, String actName, String description, String theme, String day, String iniT, String endT, String idActivity, boolean shared) {
         DocumentReference docRefToActivity = db.collection("users").document(userId).collection("routines").document(idRoutine).collection("activities").document(idActivity);
-        if(actName != null) docRefToActivity.update("name", actName);
-        if(description != null) docRefToActivity.update("description", description);
-        if(theme != null) docRefToActivity.update("theme", theme);
-        if(day != null) docRefToActivity.update("day", day);
-        if(iniT != null) docRefToActivity.update("beginTime", iniT);
-        if(endT != null) docRefToActivity.update("finishTime", endT);
+        HashMap <String, Object> dataUp = new HashMap<>();
+        if(actName != null) dataUp.put("name", actName);
+        if(description != null) dataUp.put("description", description);
+        if(theme != null) dataUp.put("theme", theme);
+        if(day != null) dataUp.put("day", day);
+        if(iniT != null) dataUp.put("beginTime", iniT);
+        if(endT != null) dataUp.put("finishTime", endT);
 
-
+        docRefToActivity.update(dataUp);
         if (shared){
             DocumentReference sharedActivityReference = db.collection("sharedRoutines").document(userId+"_"+idRoutine).collection("activities").document(idActivity);
-            if(actName != null) sharedActivityReference.update("name", actName);
-            if(description != null) sharedActivityReference.update("description", description);
-            if(theme != null) sharedActivityReference.update("theme", theme);
-            if(day != null) sharedActivityReference.update("day", day);
-            if(iniT != null) sharedActivityReference.update("beginTime", iniT);
-            if(endT != null) sharedActivityReference.update("finishTime", endT);
+            sharedActivityReference.update(dataUp);
         }
 
 

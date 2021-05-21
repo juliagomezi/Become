@@ -11,6 +11,7 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.firestore.Transaction;
 
 import org.w3c.dom.Document;
 
@@ -104,71 +105,76 @@ public class ControllerRoutineDB {
      */
     public void downloadSharedRoutine(String userId, String idSharedRoutine){
         DocumentReference docRefToSharedRoutine = db.collection("sharedRoutines").document(idSharedRoutine);
-        docRefToSharedRoutine.get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot routineDoc = task.getResult();
-                        String sharedRoutineName = routineDoc.get("name").toString();
-                        String newId = createRoutine(userId, sharedRoutineName);
 
-                        HashMap <String, Object> dataInput = new HashMap<>();
 
-                        HashMap <String, Double> mapMusic, mapSport, mapSleeping, mapCooking, mapWorking, mapEntertainment, mapPlants, mapOther;
-                        mapMusic = mapSport = mapSleeping = mapCooking = mapWorking = mapEntertainment = mapPlants = mapOther = new HashMap<>();
+        db.runTransaction((Transaction.Function<Void>) transaction -> {
+            DocumentSnapshot routineSharedDoc = transaction.get(docRefToSharedRoutine);
 
-                        String[] differentDays = new String[]{"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+            String sharedRoutineName = routineSharedDoc.get("name").toString();
+            String newId = createRoutine(userId, sharedRoutineName);
 
-                        for (int i = 0; i<7; ++i){
-                            double zero = 0.0;
-                            mapMusic.put(differentDays[i], zero);
-                            mapSport.put(differentDays[i], zero);
-                            mapSleeping.put(differentDays[i], zero);
-                            mapCooking.put(differentDays[i], zero);
-                            mapWorking.put(differentDays[i], zero);
-                            mapEntertainment.put(differentDays[i], zero);
-                            mapPlants.put(differentDays[i], zero);
-                            mapOther.put(differentDays[i], zero);
+            HashMap <String, Object> dataInput = new HashMap<>();
+
+            HashMap <String, Double> mapMusic, mapSport, mapSleeping, mapCooking, mapWorking, mapEntertainment, mapPlants, mapOther;
+            mapMusic = mapSport = mapSleeping = mapCooking = mapWorking = mapEntertainment = mapPlants = mapOther = new HashMap<>();
+
+            String[] differentDays = new String[]{"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+
+            for (int i = 0; i<7; ++i){
+                double zero = 0.0;
+                mapMusic.put(differentDays[i], zero);
+                mapSport.put(differentDays[i], zero);
+                mapSleeping.put(differentDays[i], zero);
+                mapCooking.put(differentDays[i], zero);
+                mapWorking.put(differentDays[i], zero);
+                mapEntertainment.put(differentDays[i], zero);
+                mapPlants.put(differentDays[i], zero);
+                mapOther.put(differentDays[i], zero);
+            }
+
+            DocumentReference docRefToNewRoutine = db.collection("users").document(userId).collection("routines").document(newId);
+
+            docRefToSharedRoutine.collection("activities").get().addOnCompleteListener(task2 -> {
+                if (task2.isSuccessful()) {
+
+                    for (QueryDocumentSnapshot actDoc : task2.getResult()) {
+                        String activityId = actDoc.getId();
+                        Map<String, Object> activity = actDoc.getData();
+
+
+                        String theme = activity.get("theme").toString();
+                        String day = activity.get("day").toString();
+                        double timeActivity = timeDifference(activity.get("beginTime").toString(), activity.get("finishTime").toString());
+
+                        docRefToNewRoutine.collection("activities").document(activityId).set(activity);
+
+
+                        switch (theme) {
+                            case "Music":
+                                mapMusic.put(day, mapMusic.get(day) + timeActivity);
+                                break;
+                            case "Sport":
+                                mapSport.put(day, mapSport.get(day) + timeActivity);
+                                break;
+                            case "Sleeping":
+                                mapSleeping.put(day, mapSleeping.get(day) + timeActivity);
+                                break;
+                            case "Cooking":
+                                mapCooking.put(day, mapCooking.get(day) + timeActivity);
+                                break;
+                            case "Working":
+                                mapWorking.put(day, mapWorking.get(day) + timeActivity);
+                                break;
+                            case "Entertainment":
+                                mapEntertainment.put(day, mapEntertainment.get(day) + timeActivity);
+                                break;
+                            case "Plants":
+                                mapPlants.put(day, mapPlants.get(day) + timeActivity);
+                                break;
+                            case "Other":
+                                mapOther.put(day, mapOther.get(day) + timeActivity);
+                                break;
                         }
-
-                        DocumentReference docRefToNewRoutine = db.collection("users").document(userId).collection("routines").document(newId);
-
-                        docRefToSharedRoutine.collection("activities").get().addOnCompleteListener(task2 -> {
-                            if (task2.isSuccessful()) {
-                                for (QueryDocumentSnapshot actDoc : task2.getResult()) {
-                                    Map<String, Object> activity = actDoc.getData();
-                                    String theme = activity.get("theme").toString();
-                                    String day = activity.get("day").toString();
-                                    double timeActivity = timeDifference(activity.get("beginTime").toString(), activity.get("finishTime").toString());
-                                    String activityId = actDoc.getId();
-                                    docRefToNewRoutine.collection("activities").document(activityId).set(activity);
-
-
-                                    switch (theme) {
-                                        case "Music":
-                                            mapMusic.put(day, mapMusic.get(day) + timeActivity);
-                                            break;
-                                        case "Sport":
-                                            mapSport.put(day, mapSport.get(day) + timeActivity);
-                                            break;
-                                        case "Sleeping":
-                                            mapSleeping.put(day, mapSleeping.get(day) + timeActivity);
-                                            break;
-                                        case "Cooking":
-                                            mapCooking.put(day, mapCooking.get(day) + timeActivity);
-                                            break;
-                                        case "Working":
-                                            mapWorking.put(day, mapWorking.get(day) + timeActivity);
-                                            break;
-                                        case "Entertainment":
-                                            mapEntertainment.put(day, mapEntertainment.get(day) + timeActivity);
-                                            break;
-                                        case "Plants":
-                                            mapPlants.put(day, mapPlants.get(day) + timeActivity);
-                                            break;
-                                        case "Other":
-                                            mapOther.put(day, mapOther.get(day) + timeActivity);
-                                            break;
-                                    }
 
                                 }
                                 dataInput.put("statisticsMusic", mapMusic);
@@ -183,8 +189,8 @@ public class ControllerRoutineDB {
 
                             }
                         });
-                    }
-                });
+            return null;
+        });
 
 
     }
@@ -205,7 +211,8 @@ public class ControllerRoutineDB {
                 routineData.remove("shared");
                 routineData.put("avgPoints",0.0);
                 routineData.put("numRates", 0);
-                routineData.put("ownerId",userId);
+                routineData.put("ownerId", userId);
+                routineData.put("voters", new ArrayList<>());
                 sharedRoutineReference.set(routineData, SetOptions.merge());
 
                 routineReference.collection("activities").get()
@@ -254,13 +261,23 @@ public class ControllerRoutineDB {
 
     /**
      * Funcio per a votar una certa rutina publica
+     * @param userId identificador de l'usuari que vol votar
      * @param idSharedRoutine identificador de la rutina publica
      * @param average la nova mitjana de puntuacio de la rutina publca
      */
-    public void voteRoutine(String idSharedRoutine, double average){
+    public void voteRoutine(String userId, String idSharedRoutine, double average){
         DocumentReference docRefToSharedRoutine = db.collection("sharedRoutines").document(idSharedRoutine);
-        docRefToSharedRoutine.update("avgPoints", average);
-        docRefToSharedRoutine.update("numRates", FieldValue.increment(1));
+        db.runTransaction((Transaction.Function<Void>) transaction -> {
+            DocumentSnapshot sharedRoutineDoc = transaction.get(docRefToSharedRoutine);
+            ArrayList<String> usersList = (ArrayList<String>) sharedRoutineDoc.get("voters");
+
+            if (!usersList.contains(userId)) {
+                usersList.add(userId);
+                transaction.update(docRefToSharedRoutine, "avgPoints", average, "numRates", FieldValue.increment(1), "voters", usersList);
+            }
+            return null;
+        });
+
     }
 
 

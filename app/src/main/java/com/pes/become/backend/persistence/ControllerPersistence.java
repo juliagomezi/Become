@@ -190,6 +190,43 @@ public class ControllerPersistence {
         CS.deleteRoutineStatistics(userId, idRoutine);
     }
 
+    /**
+     * Afegeix la rutina compartida a la col·leccio de rutines de l'usuari
+     * @param userId identificador de l'usuari que vol descarregar la rutina
+     * @param idSharedRoutine identificador de la rutina publica
+     */
+    public void downloadSharedRoutine(String userId, String idSharedRoutine){
+        CR.downloadSharedRoutine(userId, idSharedRoutine);
+    }
+
+    /**
+     * Funcio que fa que una rutina passi a ser publica.
+     * @param userId identificador de l'usuari.
+     * @param idRoutine l'identificador de la rutina.
+     */
+    public void shareRoutine(String userId, String idRoutine) {
+        CR.shareRoutine(userId, idRoutine);
+    }
+
+    /**
+     * Funcio que fa que l'atribut shared de la rutina "local" sigui false i esborra la rutina publica.
+     * @param userId identificador de l'usuari.
+     * @param idRoutine l'identificador de la rutina.
+     */
+    public void unShareRoutine(String userId, String idRoutine) {
+        CR.unShareRoutine(userId, idRoutine);
+    }
+
+    /**
+     * Funcio per a votar una certa rutina publica
+     * @param userId identificador de l'usuari que vol votar
+     * @param idSharedRoutine identificador de la rutina publica
+     * @param average la nova mitjana de puntuacio de la rutina publca
+     */
+    public void voteRoutine(String userId, String idSharedRoutine, double average){
+        CR.voteRoutine(userId, idSharedRoutine, average);
+    }
+
     ////////////////////////////////FUNCIONS RELACIONADES AMB LA CLASSE USUARI//////////////////////
     /**
      * Metode per obtenir el provider de l'usuari
