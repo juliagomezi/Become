@@ -2,6 +2,7 @@
 .gradle
 
 /local.properties
+/.idea/
 /.idea/caches
 /.idea/libraries
 /.idea/modules.xml
@@ -9,6 +10,8 @@
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
 /.idea/misc.xml
+/.idea/runConfigurations.xml
+/.idea/compiler.xml
 .DS_Store
 /build
 /captures
