@@ -192,6 +192,7 @@ public class DomainAdapter {
         }
     }
 
+    //DB: routineInfo ha de tenir tambe una String "true" o "false"
     /**
      * Metode que rep la resposta a la crida "loginUser" de la base de dades
      * @param success resultat de l'operacio
@@ -253,6 +254,7 @@ public class DomainAdapter {
         }
     }
 
+    //DB: routineInfo ha de tenir tambe una String "true" o "false"
     /**
      * Metode que autentifica un usuari ja loguejat
      * @param success resultat de l'operacio
@@ -873,5 +875,65 @@ public class DomainAdapter {
      */
     public void passResetCallback(boolean success) {
         forgotPass.passResetCallback(success);
+    }
+
+    /**
+     * Metode per obtenir totes les rutines compartides del sistema
+     */
+    public void getSharedRoutines(){
+        try {
+            Method method = DomainAdapter.class.getMethod("sharedRoutinesCallback", ArrayList.class);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Metode que rep la resposta a la crida que "getSharedRoutines" fa a la base de dades
+     * @param sharedRoutinesInfo ArrayList de informacio de les rutines compartides, representada com una ArrayList d'Objects que conte a cada posicio:
+     *                           0 - String amb la ID de l'autor de la rutina
+     *                           1 - Bitmap de la foto de perfil de l'autor
+     *                           2 - String amb la ID de la rutina
+     *                           3 - String amb el nom de la rutina
+     *                           4 - Puntuacio total de la rutina
+     *                           5 - Nombre d'usuaris que han votat la rutina
+     */
+    public void sharedRoutinesCallback(ArrayList<ArrayList<Object>> sharedRoutinesInfo){
+        for(ArrayList<Object> routineInfo : sharedRoutinesInfo){
+            int totalPoints = (int) routineInfo.get(4); //assumim que la puntuacio es un int
+            int totalUsers = (int) routineInfo.get(5);
+            routineInfo.remove(4);
+            routineInfo.remove(5);
+            double meanPoints = ((double) totalPoints)/((double) totalUsers);
+            routineInfo.add(4, meanPoints);
+        }
+        //cridem el callback de frontend
+    }
+
+    /**
+     * Metode per descarregar una rutina compartida al sistema
+     * @param authorID ID de l'autor de la rutina a descarregar
+     * @param routineID ID de la rutina a descarregar
+     */
+    public void downloadSharedRoutine(String authorID, String routineID){
+        //metode de persistencia que suposem necessita currentUser.ID, authorID, routineID
+    }
+
+    /**
+     * Metode per valorar una rutina compartida al sistema
+     * @param authorID ID de l'autor de la rutina a descarregar
+     * @param routineID ID de la rutina a descarregar
+     * @param points puntuacio donada
+     */
+    public void rateRoutine(String authorID, String routineID, int points){ //assumim que la puntuacio es un int
+
+    }
+
+    /**
+     * Metode per compartir una rutina
+     * @param routineID ID de la rutina a compartir
+     */
+    public void shareRoutine(String routineID){
+
     }
 }
