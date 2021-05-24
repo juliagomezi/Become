@@ -132,10 +132,10 @@
     <string name="HourMusic5Description">Consacrez 5 heures de votre semaine à des activités musicales</string>
     <string name="HourOther10Description">Consacrez 10 heures de votre semaine à d\'autres activités</string>
     <string name="HourOther5Description">Consacrez 5 heures de votre semaine à d\'autres activités</string>
-    <string name="HourPlants10Description">Consacrez 10 heures de votre semaine à vos plantes</string>
-    <string name="HourPlants5Description">Consacrez 5 heures de votre semaine à vos plantes</string>
-    <string name="HourSleeping10Description">Consacrez 10 heures de votre semaine à dormir</string>
-    <string name="HourSleeping5Description">Consacrez 5 heures de votre semaine à dormir</string>
+    <string name="HourPlants10Description">Consacrez 5 heures de votre semaine à vos plantes</string>
+    <string name="HourPlants5Description">Consacrez 1 heure de votre semaine à vos plantes</string>
+    <string name="HourSleeping10Description">Consacrez 56 heures de votre semaine à dormir</string>
+    <string name="HourSleeping5Description">Consacrez 30 heures de votre semaine à dormir</string>
     <string name="HourSport10Description">Consacrez 10 heures de votre semaine au sport</string>
     <string name="HourSport5Description">Consacrez 10 heures de votre semaine au sport</string>
     <string name="HourWorking10Description">Consacrez 10 heures de votre semaine au travail</string>

@@ -130,10 +130,10 @@
     <string name="HourWorking10Description">Dedicate 10 hours of your week to work</string>
     <string name="HourSport5Description">Dedicate 5 hours of your week to sport</string>
     <string name="HourSport10Description">Dedicate 10 hours of your week to sport</string>
-    <string name="HourSleeping5Description">Dedicate 5 hours of your week to sleep</string>
-    <string name="HourSleeping10Description">Dedicate 10 hours of your week to sleep</string>
-    <string name="HourPlants5Description">Dedicate 5 hours of your week to your plants</string>
-    <string name="HourPlants10Description">Dedicate 10 hours of your week to your plants</string>
+    <string name="HourSleeping5Description">Dedicate 30 hours of your week to sleep</string>
+    <string name="HourSleeping10Description">Dedicate 56 hours of your week to sleep</string>
+    <string name="HourPlants5Description">Dedicate 1 hour of your week to your plants</string>
+    <string name="HourPlants10Description">Dedicate 5 hours of your week to your plants</string>
     <string name="HourOther5Description">Dedicate 5 hours of your week to other activities</string>
     <string name="HourEntertainment10Description">Dedicate 10 hours of your week to entertaining activities</string>
     <string name="HourEntertainment5Description">Dedicate 5 hours of your week to entertaining activities</string>
