@@ -40,6 +40,7 @@ import java.time.YearMonth;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 public class Stats extends Fragment {
@@ -295,7 +296,7 @@ public class Stats extends Fragment {
         setDataValues();
 
         LineDataSet dataSport = new LineDataSet(sportValues,"Sport");
-        dataSport.setColor(ContextCompat.getColor(getContext(), R.color.sport));
+        dataSport.setColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.sport));
         dataSport.setCircleColor(ContextCompat.getColor(getContext(), R.color.sport));
         dataSport.setDrawCircleHole(false);
         dataSport.setLineWidth(2);

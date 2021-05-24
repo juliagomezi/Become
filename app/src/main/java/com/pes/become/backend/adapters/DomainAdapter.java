@@ -462,10 +462,13 @@ public class DomainAdapter {
      * @param achievement nom del trofeu que volem comprovar
      * @return cert si l'ha guanyat, fals si no o ja el tenia
      */
-    public boolean checkAchievement(String achievement){
-        if (achievementController.checkAchievement(Achievement.valueOf(achievement))) {
-            controllerPersistence.addTrophy(currentUser.getID(), achievement);
-            return true;
+    public boolean checkAchievement(String achievement) {
+        if(!currentUser.getAchievementState(Achievement.valueOf(achievement))) {
+            if (achievementController.checkAchievement(Achievement.valueOf(achievement))) {
+                controllerPersistence.addTrophy(currentUser.getID(), achievement);
+                currentUser.addAchievement(Achievement.valueOf(achievement));
+                return true;
+            }
         }
         return false;
     }
