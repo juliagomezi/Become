@@ -18,7 +18,7 @@
             android:id="@+id/iconbecome"
             android:layout_width="match_parent"
             android:layout_height="57dp"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="70dp"
             android:layout_marginBottom="50dp"
             app:srcCompat="@drawable/logo_title"
             tools:ignore="VectorDrawableCompat" />
@@ -56,15 +56,9 @@
             android:drawableLeft="@drawable/ic_padlock"
             android:drawablePadding="10dp"/>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginVertical="15dp"
-            android:layout_marginHorizontal="50dp">
-
             <Button
                 android:id="@+id/logInButton"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
@@ -77,49 +71,6 @@
                 android:textAllCaps="false"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="388dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="50dp"
-            android:layout_marginVertical="15dp"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/googleLoginButton"
-                style="@style/Widget.AppCompat.Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
-                android:background="@drawable/custom_button"
-                android:drawableLeft="@drawable/ic_search"
-                android:drawablePadding="10dp"
-                android:fontFamily="@font/sourcesanspro_regular"
-                android:paddingHorizontal="20dp"
-                android:text="@string/google"
-                android:textAllCaps="false"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
-
-            <com.facebook.login.widget.LoginButton
-                android:id="@+id/facebookLoginButton"
-                style="@style/Widget.AppCompat.Button"
-                android:layout_width="229dp"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="10dp"
-                android:background="@drawable/custom_button"
-                android:drawableLeft="@drawable/ic_search"
-                android:drawablePadding="10dp"
-                android:fontFamily="@font/sourcesanspro_regular"
-                android:paddingHorizontal="20dp"
-                android:text="@string/facebook"
-                android:textAllCaps="false"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
-        </LinearLayout>
-
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -159,12 +110,43 @@
             android:textColor="@color/softgray"
             android:text="@string/forgot_password" />
 
+        <Button
+            android:id="@+id/googleLoginButton"
+
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="247dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:layout_marginHorizontal="10dp"
+            android:background="@drawable/custom_button"
+            android:drawableLeft="@drawable/ic_search"
+            android:drawablePadding="10dp"
+            android:fontFamily="@font/sourcesanspro_regular"
+            android:paddingHorizontal="20dp"
+            android:text="@string/google"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/facebookLoginButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:drawablePadding="10dp"
+            android:fontFamily="@font/sourcesanspro_regular"
+            android:paddingHorizontal="20dp"
+            android:text="@string/facebook"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
         <ProgressBar
             android:id="@+id/loading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:indeterminate="true"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:visibility="invisible" />
 
     </LinearLayout>

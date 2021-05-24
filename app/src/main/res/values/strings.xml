@@ -21,7 +21,7 @@
     <string name="log_in">Log in</string>
     <string name="not_registered_yet">Not registered yet?</string>
     <string name="signup">Sign up!</string>
-    <string name="google" translatable="false">Google</string>
+    <string name="google">Continue with Google</string>
     <string name="community">Community</string>
     <string name="home">Home</string>
     <string name="profile">Profile</string>
