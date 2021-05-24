@@ -142,5 +142,7 @@
     <string name="HourWorking5Description">Dedica 5 horas de tu semana a trabajar</string>
     <string name="DONE">HECHO</string>
     <string name="UNDONE">NO HECHO</string>
+    <string name="changeVisibility">Hacer privada una rutina</string>
+    <string name="changeVisibilityDescription">Cambiar la visibilidad de esta rutina a privada hará que deje de aparecer en la pestaña de la comunidad y borrará sus valoraciones, ¿quieres continuar?</string>
 
 </resources>

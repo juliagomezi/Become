@@ -142,5 +142,7 @@
     <string name="HourWorking5Description">Consacrez 5 heures de votre semaine au travail</string>
     <string name="DONE">VALIDE</string>
     <string name="UNDONE">ANNULER</string>
+    <string name="changeVisibility">" Définir une routine privée"</string>
+    <string name="changeVisibilityDescription">" Changer la visibilité de cette routine en privé la fera cesser d'apparaître dans l'onglet de la communauté et effacera ses notes, voulez-vous continuer?"</string>
 
 </resources>
