@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="@color/white"
+        android:background="@color/coldwhite"
         android:paddingLeft="4dp"
         android:paddingRight="4dp" >
 
@@ -21,17 +21,17 @@
             android:id="@+id/cardActivityDisplay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/coldwhite"
+            android:background="@color/white"
             app:cardCornerRadius="20dp"
-            android:outlineSpotShadowColor="@color/white"
-            android:outlineAmbientShadowColor="@color/white"
+            android:outlineSpotShadowColor="@color/coldwhite"
+            android:outlineAmbientShadowColor="@color/coldwhite"
             android:padding="8dp" >
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/coldwhite" >
+                android:background="@color/white" >
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/profilePic"
