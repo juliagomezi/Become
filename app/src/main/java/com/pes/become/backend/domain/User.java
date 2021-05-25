@@ -194,15 +194,6 @@ public class User {
     }
 
     /**
-     * Metode per saber l'estat d'un trofeu de l'usuari
-     * @param achievement trofeu del que es vol l'estat
-     * @return cert si te el trofeu, fals si no
-     */
-    public boolean getAchievementState(Achievement achievement){
-        return achievements.get(achievement);
-    }
-
-    /**
      * Metode perque l'usuari obtingui un trofeu
      * @param achievement trofeu a obtenir
      * @return cert si no tenia el trofeu i per tant l'ha guanyat, fals si ja el tenia
