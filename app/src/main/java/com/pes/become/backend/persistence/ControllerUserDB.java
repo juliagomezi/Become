@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 
 import com.facebook.AccessToken;
+import com.facebook.login.LoginManager;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FacebookAuthProvider;
@@ -904,6 +905,10 @@ public class ControllerUserDB {
      * Metode per fer sign out de l'usuari actual
      */
     public void signOut() {
+        for(UserInfo prov :  mAuth.getCurrentUser().getProviderData()) {
+            if (prov.getProviderId().equals("facebook.com"))
+                LoginManager.getInstance().logOut();
+        }
         mAuth.getInstance().signOut();
     }
 
@@ -952,6 +957,9 @@ public class ControllerUserDB {
         for(UserInfo prov :  mAuth.getCurrentUser().getProviderData()) {
             if(prov.getProviderId().equals("google.com")) {
                 return "google.com";
+            }
+            if(prov.getProviderId().equals("facebook.com")) {
+                return "facebook.com";
             }
         }
         return mAuth.getCurrentUser().getProviderId();
