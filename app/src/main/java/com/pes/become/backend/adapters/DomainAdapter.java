@@ -633,7 +633,7 @@ public class DomainAdapter {
      */
     public void changeRoutineName(String id, String name) throws ExistingRoutineException {
         if(!currentUser.existsRoutine(name)) {
-            controllerPersistence.changeRoutineName(currentUser.getID(), id, name);
+            controllerPersistence.changeRoutineName(currentUser.getID(), id, name, currentUser.getSelectedRoutine().isShared());
             routineAdapter.changeName(id, name);
             currentUser.changeRoutineName(id,name);
         } else {
@@ -647,7 +647,7 @@ public class DomainAdapter {
      */
     public void deleteRoutine(String routineId) {
         currentUser.deleteRoutine(routineId);
-        controllerPersistence.deleteRoutine(currentUser.getID(), routineId);
+        controllerPersistence.deleteRoutine(currentUser.getID(), routineId, currentUser.getSelectedRoutine().isShared());
     }
 
     /**
@@ -676,13 +676,13 @@ public class DomainAdapter {
             if(!routineAdapter.checkOverlappings(newActDay1) && !routineAdapter.checkOverlappings(newActDay2)) {
                 String beginTime = iniH + ":" + iniM;
                 String endTime = "23:59";
-                String id = controllerPersistence.createActivity(currentUser.getID(), currentUser.getSelectedRoutine().getId(), name, Theme.values()[Integer.parseInt(theme)].toString(), description, startDay.toString(), beginTime, endTime);
+                String id = controllerPersistence.createActivity(currentUser.getID(), currentUser.getSelectedRoutine().getId(), name, Theme.values()[Integer.parseInt(theme)].toString(), description, startDay.toString(), beginTime, endTime, currentUser.getSelectedRoutine().isShared());
                 newActDay1.setId(id);
                 routineAdapter.createActivity(newActDay1);
                 currentUser.updateStatistics(Theme.values()[Integer.parseInt(theme)],startDay, 23-Integer.parseInt(iniH), 59-Integer.parseInt(iniM), true);
                 beginTime = "00:00";
                 endTime = endH + ":" + endM;
-                id = controllerPersistence.createActivity(currentUser.getID(), currentUser.getSelectedRoutine().getId(), name, Theme.values()[Integer.parseInt(theme)].toString(), description, endDay.toString(), beginTime, endTime);
+                id = controllerPersistence.createActivity(currentUser.getID(), currentUser.getSelectedRoutine().getId(), name, Theme.values()[Integer.parseInt(theme)].toString(), description, endDay.toString(), beginTime, endTime, currentUser.getSelectedRoutine().isShared());
                 newActDay2.setId(id);
                 routineAdapter.createActivity(newActDay2);
                 currentUser.updateStatistics(Theme.values()[Integer.parseInt(theme)],endDay, Integer.parseInt(endH), Integer.parseInt(endM), true);
@@ -693,7 +693,7 @@ public class DomainAdapter {
             if(!routineAdapter.checkOverlappings(a)) {
                 String beginTime = iniH + ":" + iniM;
                 String endTime = endH + ":" + endM;
-                String id = controllerPersistence.createActivity(currentUser.getID(), currentUser.getSelectedRoutine().getId(), name, Theme.values()[Integer.parseInt(theme)].toString(), description, startDay.toString(), beginTime, endTime);
+                String id = controllerPersistence.createActivity(currentUser.getID(), currentUser.getSelectedRoutine().getId(), name, Theme.values()[Integer.parseInt(theme)].toString(), description, startDay.toString(), beginTime, endTime, currentUser.getSelectedRoutine().isShared());
                 a.setId(id);
                 routineAdapter.createActivity(a);
                 currentUser.updateStatistics(Theme.values()[Integer.parseInt(theme)],startDay, Integer.parseInt(endH)-Integer.parseInt(iniH), Integer.parseInt(endM)-Integer.parseInt(iniM), true);
@@ -733,7 +733,7 @@ public class DomainAdapter {
             currentUser.updateStatistics(Theme.values()[Integer.parseInt(theme)],startDay, 23-Integer.parseInt(iniH), 59-Integer.parseInt(iniM), true);
             String beginTime = iniH + ":" + iniM;
             String endTime = "23:59";
-            controllerPersistence.updateActivity(currentUser.getID(), currentUser.getSelectedRoutine().getId(), id, name, description, startDay.toString(), Theme.values()[Integer.parseInt(theme)].toString(), beginTime, endTime);
+            controllerPersistence.updateActivity(currentUser.getID(), currentUser.getSelectedRoutine().getId(), id, name, description, startDay.toString(), Theme.values()[Integer.parseInt(theme)].toString(), beginTime, endTime, currentUser.getSelectedRoutine().isShared());
             createActivity(name, description, theme, endDayString, endDayString, "0","0", endH, endM);
         }
         else if (comparison == 0) {
@@ -743,7 +743,7 @@ public class DomainAdapter {
             currentUser.updateStatistics(Theme.values()[Integer.parseInt(theme)],startDay, Integer.parseInt(endH)-Integer.parseInt(iniH), Integer.parseInt(endM)-Integer.parseInt(iniM), true);
             String beginTime = iniH + ":" + iniM;
             String endTime = endH + ":" + endM;
-            controllerPersistence.updateActivity(currentUser.getID(), currentUser.getSelectedRoutine().getId(), id, name, description, startDay.toString(), Theme.values()[Integer.parseInt(theme)].toString(), beginTime, endTime);
+            controllerPersistence.updateActivity(currentUser.getID(), currentUser.getSelectedRoutine().getId(), id, name, description, startDay.toString(), Theme.values()[Integer.parseInt(theme)].toString(), beginTime, endTime, currentUser.getSelectedRoutine().isShared());
         }
         else throw new InvalidDayIntervalException();
     }
@@ -759,7 +759,7 @@ public class DomainAdapter {
         Time duration = deleted.getInterval().getIntervalDuration();
         currentUser.updateStatistics(deleted.getTheme(),deleted.getDay(),duration.getHours(),duration.getMinutes(),false);
         routineAdapter.deleteActivity(id, Day.valueOf(day));
-        controllerPersistence.deleteActivity(currentUser.getID(), currentUser.getSelectedRoutine().getId(), id);
+        controllerPersistence.deleteActivity(currentUser.getID(), currentUser.getSelectedRoutine().getId(), id, currentUser.getSelectedRoutine().isShared());
     }
 
     /**
