@@ -891,49 +891,50 @@ public class DomainAdapter {
     /**
      * Metode que rep la resposta a la crida que "getSharedRoutines" fa a la base de dades
      * @param sharedRoutinesInfo ArrayList de informacio de les rutines compartides, representada com una ArrayList d'Objects que conte a cada posicio:
-     *                           0 - String amb la ID de l'autor de la rutina
+     *                           0 - String dmb la ID de la rutina compartida (ID autor + ID rutina)
      *                           1 - Bitmap de la foto de perfil de l'autor
-     *                           2 - String amb la ID de la rutina
-     *                           3 - String amb el nom de la rutina
-     *                           4 - Puntuacio total de la rutina
+     *                           2 - String amb el nom de la rutina
+     *                           3 - Array amb les IDs dels usuaris que han votat la rutina
+     *                           4 - Puntacio mitjana de la rutina
      *                           5 - Nombre d'usuaris que han votat la rutina
      */
     public void sharedRoutinesCallback(ArrayList<ArrayList<Object>> sharedRoutinesInfo){
         for(ArrayList<Object> routineInfo : sharedRoutinesInfo){
-            int totalPoints = (int) routineInfo.get(4); //assumim que la puntuacio es un int
-            int totalUsers = (int) routineInfo.get(5);
-            routineInfo.remove(4);
-            routineInfo.remove(5);
-            double meanPoints = ((double) totalPoints)/((double) totalUsers);
-            routineInfo.add(4, meanPoints);
+            //int totalPoints = (int) routineInfo.get(4); //assumim que la puntuacio es un int
+            //int totalUsers = (int) routineInfo.get(5);
+            //routineInfo.remove(4);
+            //routineInfo.remove(5);
+            //double meanPoints = ((double) totalPoints)/((double) totalUsers);
+            //routineInfo.add(4, meanPoints);
+            //convertir array a bool
         }
         //cridem el callback de frontend
     }
 
     /**
      * Metode per descarregar una rutina compartida al sistema
-     * @param authorID ID de l'autor de la rutina a descarregar
-     * @param routineID ID de la rutina a descarregar
+     * @param sharedRoutineID ID de la rutina a descarregar
      */
-    public void downloadSharedRoutine(String authorID, String routineID){
-        //metode de persistencia que suposem necessita currentUser.ID, authorID, routineID
+    public void downloadSharedRoutine(String sharedRoutineID){
+        //metode de persistencia que suposem necessita currentUser.ID, sharedRoutineID
     }
 
     /**
      * Metode per valorar una rutina compartida al sistema
-     * @param authorID ID de l'autor de la rutina a descarregar
-     * @param routineID ID de la rutina a descarregar
+     * @param sharedRoutineID ID de la rutina a descarregar
      * @param points puntuacio donada
+     * @param numberOfUsersVoted usuaris que han votat la rutina
      */
-    public void rateRoutine(String authorID, String routineID, int points){ //assumim que la puntuacio es un int
+    public void voteRoutine(String sharedRoutineID, int points, int numberOfUsersVoted){ //assumim que la puntuacio es un int
 
     }
 
     /**
      * Metode per compartir una rutina
      * @param routineID ID de la rutina a compartir
+     * @param isPublic boolea que es cert si es publica la rutina i fals si es fa privada
      */
-    public void shareRoutine(String routineID){
+    public void shareRoutine(String routineID, boolean isPublic){
 
     }
 }
