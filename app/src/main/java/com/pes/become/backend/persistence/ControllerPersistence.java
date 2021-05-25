@@ -3,14 +3,14 @@ package com.pes.become.backend.persistence;
 import android.app.Activity;
 import android.net.Uri;
 
+import com.facebook.AccessToken;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.pes.become.backend.adapters.DomainAdapter;
 
 import java.lang.reflect.Method;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.zip.DeflaterOutputStream;
 
 public class ControllerPersistence {
 
@@ -293,6 +293,10 @@ public class ControllerPersistence {
      */
     public void loginUserGoogle(String idToken, Method method, Object object ){
         CU.loginUserGoogle(idToken, method, object);
+    }
+
+    public void loginUserFacebook(AccessToken accessToken, Method method, Object object) {
+        CU.loginUserFacebook(accessToken, method, object);
     }
 
     /**

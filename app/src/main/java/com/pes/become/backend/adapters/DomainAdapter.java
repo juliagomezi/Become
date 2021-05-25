@@ -8,11 +8,26 @@ import androidx.annotation.RequiresApi;
 
 import com.pes.become.backend.domain.*;
 import com.pes.become.backend.exceptions.*;
+import com.facebook.AccessToken;
+import com.pes.become.backend.domain.Achievement;
+import com.pes.become.backend.domain.AchievementController;
+import com.pes.become.backend.domain.Activity;
+import com.pes.become.backend.domain.Day;
+import com.pes.become.backend.domain.Routine;
+import com.pes.become.backend.domain.Theme;
+import com.pes.become.backend.domain.Time;
+import com.pes.become.backend.domain.TimeInterval;
+import com.pes.become.backend.domain.User;
+import com.pes.become.backend.exceptions.ExistingRoutineException;
+import com.pes.become.backend.exceptions.InvalidDayIntervalException;
+import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
+import com.pes.become.backend.exceptions.NoSelectedRoutineException;
+import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 import com.pes.become.backend.persistence.ControllerPersistence;
 import com.pes.become.backend.persistence.StringDateConverter;
 import com.pes.become.frontend.ForgotPassword;
-import com.pes.become.frontend.LogoScreen;
 import com.pes.become.frontend.Login;
+import com.pes.become.frontend.LogoScreen;
 import com.pes.become.frontend.MainActivity;
 import com.pes.become.frontend.Profile;
 import com.pes.become.frontend.Signup;
@@ -166,6 +181,27 @@ public class DomainAdapter {
 
     }
 
+    public void loginFacebookUser(AccessToken accessToken, android.app.Activity act) {
+        Class[] parameterTypes = new Class[8];
+        parameterTypes[0] = boolean.class;
+        parameterTypes[1] = String.class;
+        parameterTypes[2] = String.class;
+        parameterTypes[3] = String.class;
+        parameterTypes[4] = Bitmap.class;
+        parameterTypes[5] = ArrayList.class;
+        parameterTypes[6] = Map.class;
+        parameterTypes[7] = int.class;
+        Method method;
+        login = (Login)act;
+
+        try {
+            method = DomainAdapter.class.getMethod("loginCallback", parameterTypes);
+            controllerPersistence.loginUserFacebook(accessToken, method, DomainAdapter.getInstance());
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Metode per iniciar sessio amb un compte de Google
      * @param idToken token
@@ -192,7 +228,6 @@ public class DomainAdapter {
         }
     }
 
-    //DB: routineInfo ha de tenir tambe una String "true" o "false"
     /**
      * Metode que rep la resposta a la crida "loginUser" de la base de dades
      * @param success resultat de l'operacio
@@ -254,7 +289,6 @@ public class DomainAdapter {
         }
     }
 
-    //DB: routineInfo ha de tenir tambe una String "true" o "false"
     /**
      * Metode que autentifica un usuari ja loguejat
      * @param success resultat de l'operacio
