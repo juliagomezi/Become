@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +50,6 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
     private int seeingDay;
     private ArrayList<ArrayList<String>> activitiesList;
 
-    private RoutineEditRecyclerAdapter routineEditRecyclerAdapter;
     private RecyclerView recyclerView;
     private TextView emptyView;
 
@@ -212,7 +210,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         recyclerView.setVisibility(View.VISIBLE);
 
         recyclerView.setLayoutManager((new LinearLayoutManager(global)));
-        routineEditRecyclerAdapter = new RoutineEditRecyclerAdapter(activitiesList);
+        RoutineEditRecyclerAdapter routineEditRecyclerAdapter = new RoutineEditRecyclerAdapter(activitiesList);
         recyclerView.setAdapter(routineEditRecyclerAdapter);
         recyclerView.addItemDecoration(new BottomItemDecoration());
     }
@@ -397,9 +395,11 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
                 DA.createActivity(name, description, theme, startDay, endDay, String.format("%02d", startHour), String.format("%02d", startMinute), String.format("%02d", endHour), String.format("%02d",endMinute));
                 updateActivitiesList();
                 Toast.makeText(getContext(), getString(R.string.activityCreated), Toast.LENGTH_SHORT).show();
+                checkTrophies();
                 activitySheet.dismiss();
                 seeingDay = spinnerStartDay.getSelectedItemPosition();
                 setDay();
+                updateActivitiesList();
             } catch (InvalidTimeIntervalException e) {
                 Toast.makeText(getContext(), getString(R.string.errorTime), Toast.LENGTH_SHORT).show();
                 startTime.setBackground(getContext().getResources().getDrawable(R.drawable.spinner_background_error));
@@ -436,6 +436,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         try {
             DA.updateActivity(id, name, description, theme, startDay, endDay, startHour, startMinute, endHour, endMinute);
             Toast.makeText(getContext(), getString(R.string.activityModified), Toast.LENGTH_SHORT).show();
+            checkTrophies();
             activitySheet.dismiss();
             seeingDay = spinnerStartDay.getSelectedItemPosition();
             setDay();
@@ -463,11 +464,29 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
             activitiesList = DA.getActivitiesByDay(getWeekDay(seeingDay));
             initRecyclerView();
             if (activitiesList.isEmpty()) {
-                Log.d("updateActivitiesList","updateActivitiesList");
                 initEmptyView(getString(R.string.noActivities));
             }
         } catch (NoSelectedRoutineException e) {
             initEmptyView(getString(R.string.noRoutineSelected));
         }
+    }
+
+    private void checkTrophies() {
+        if(DA.checkAchievement("HourMusic5")) MainActivity.getInstance().showTrophyWon(getString(R.string.HourMusic5));
+        if(DA.checkAchievement("HourSport5")) MainActivity.getInstance().showTrophyWon(getString(R.string.HourSport5));
+        if(DA.checkAchievement("HourSleeping5")) MainActivity.getInstance().showTrophyWon(getString(R.string.HourSleeping5));
+        if(DA.checkAchievement("HourCooking5")) MainActivity.getInstance().showTrophyWon(getString(R.string.HourCooking5));
+        if(DA.checkAchievement("HourWorking5")) MainActivity.getInstance().showTrophyWon(getString(R.string.HourWorking5));
+        if(DA.checkAchievement("HourEntertainment5")) MainActivity.getInstance().showTrophyWon(getString(R.string.HourEntertainment5));
+        if(DA.checkAchievement("HourPlants5")) MainActivity.getInstance().showTrophyWon(getString(R.string.HourPlants5));
+        if(DA.checkAchievement("HourOther5")) MainActivity.getInstance().showTrophyWon(getString(R.string.HourOther5));
+        if(DA.checkAchievement("HourMusic10")) MainActivity.getInstance().showTrophyWon(getString(R.string.HourMusic10));
+        if(DA.checkAchievement("HourSport10")) MainActivity.getInstance().showTrophyWon(getString(R.string.HourSport10));
+        if(DA.checkAchievement("HourSleeping10")) MainActivity.getInstance().showTrophyWon(getString(R.string.HourSleeping10));
+        if(DA.checkAchievement("HourCooking10")) MainActivity.getInstance().showTrophyWon(getString(R.string.HourCooking10));
+        if(DA.checkAchievement("HourWorking10")) MainActivity.getInstance().showTrophyWon(getString(R.string.HourWorking10));
+        if(DA.checkAchievement("HourEntertainment10")) MainActivity.getInstance().showTrophyWon(getString(R.string.HourEntertainment10));
+        if(DA.checkAchievement("HourPlants10")) MainActivity.getInstance().showTrophyWon(getString(R.string.HourPlants10));
+        if(DA.checkAchievement("HourOther10")) MainActivity.getInstance().showTrophyWon(getString(R.string.HourOther10));
     }
 }

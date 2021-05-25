@@ -9,20 +9,6 @@ import androidx.annotation.RequiresApi;
 import com.pes.become.backend.domain.*;
 import com.pes.become.backend.exceptions.*;
 import com.facebook.AccessToken;
-import com.pes.become.backend.domain.Achievement;
-import com.pes.become.backend.domain.AchievementController;
-import com.pes.become.backend.domain.Activity;
-import com.pes.become.backend.domain.Day;
-import com.pes.become.backend.domain.Routine;
-import com.pes.become.backend.domain.Theme;
-import com.pes.become.backend.domain.Time;
-import com.pes.become.backend.domain.TimeInterval;
-import com.pes.become.backend.domain.User;
-import com.pes.become.backend.exceptions.ExistingRoutineException;
-import com.pes.become.backend.exceptions.InvalidDayIntervalException;
-import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
-import com.pes.become.backend.exceptions.NoSelectedRoutineException;
-import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 import com.pes.become.backend.persistence.ControllerPersistence;
 import com.pes.become.backend.persistence.StringDateConverter;
 import com.pes.become.frontend.ForgotPassword;
@@ -970,5 +956,11 @@ public class DomainAdapter {
      */
     public void shareRoutine(String routineID, boolean isPublic){
 
+    }
+
+    //ESBORRAR
+
+    public Bitmap getProfilePic(){
+        return currentUser.getProfilePic();
     }
 }
