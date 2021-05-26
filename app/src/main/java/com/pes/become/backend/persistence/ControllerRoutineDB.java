@@ -1,10 +1,18 @@
 package com.pes.become.backend.persistence;
 
+import android.graphics.BitmapFactory;
+
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -12,8 +20,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.Transaction;
-
-import org.w3c.dom.Document;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public class ControllerRoutineDB {
 
@@ -43,6 +51,65 @@ public class ControllerRoutineDB {
         return instance;
     }
 
+    ////////////////////////////////////CONSULTORES/////////////////////////////////////////////////
+
+    /**
+     * Funcio que aconsegueix les rutines compartides
+     * @param method metode a invocar per a retornar les dades
+     * @param object classe que conte el metode
+     */
+    public void getSharedRoutines(Method method, Object object) {
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+        CollectionReference colRefToSharedRoutines = db.collection("sharedRoutines");
+        colRefToSharedRoutines.get().addOnCompleteListener(task -> {
+            ArrayList<ArrayList<Object>> routines = new ArrayList<>();
+            if (task.isSuccessful()) {
+                AtomicInteger notFinished = new AtomicInteger(Objects.requireNonNull(task.getResult()).size());
+                for (QueryDocumentSnapshot routineDoc : Objects.requireNonNull(task.getResult())) {
+                    ArrayList<Object> routine = new ArrayList<>();
+                    routine.add(routineDoc.getId());
+                    routine.add(routineDoc.get("foto"));
+                    routine.add(routineDoc.get("name").toString());
+                    routine.add(routineDoc.get("voters"));
+                    routine.add(routineDoc.get("avgPoints"));
+                    routine.add(routineDoc.get("numRates"));
+                    routine.add(routineDoc.get("timestamp"));
+
+                    try {
+                        File localFile = File.createTempFile("images", "jpeg");
+                        String ownerID = routineDoc.get("ownerID").toString();
+                        StorageReference imageRef = storageRef.child("images/" + ownerID);
+                        imageRef.getFile(localFile)
+                                .addOnSuccessListener(taskSnapshot -> {
+                                    routine.add(BitmapFactory.decodeFile(localFile.getAbsolutePath()));
+                                    routines.add(routine);
+                                    notFinished.decrementAndGet();
+                                }).addOnFailureListener(exception -> {
+                                    routines.add(routine);
+                                    notFinished.decrementAndGet();
+                                    });
+
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+                while (notFinished.get() >=1){}
+
+                try {
+                    method.invoke(object, routines);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e2) {
+                    e2.printStackTrace();
+                }
+
+            }
+
+
+        });
+    }
     //////////////////////////////MODIFICADORES/////////////////////////////////////////////////////
     /**
      * Canvia el nom d'una rutina.

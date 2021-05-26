@@ -157,6 +157,16 @@ public class ControllerPersistence {
         CA.markActivityAsDone(userId, idRoutine, lastDayDone, idActivity, totalActivities);
     }
     ////////////////////////////////FUNCIONS RELACIONADES AMB LA CLASSE RUTINA//////////////////////
+
+    /**
+     * Funcio que aconsegueix les rutines compartides
+     * @param method metode a invocar per a retornar les dades
+     * @param object classe que conte el metode
+     */
+    public void getSharedRoutines(Method method, Object object){
+        CR.getSharedRoutines(method, object);
+    }
+
     /**
      * Canvia el nom d'una rutina.
      * @param userId identificador de l'usuari
