@@ -68,7 +68,6 @@ public class ControllerRoutineDB {
                 for (QueryDocumentSnapshot routineDoc : Objects.requireNonNull(task.getResult())) {
                     ArrayList<Object> routine = new ArrayList<>();
                     routine.add(routineDoc.getId());
-                    routine.add(routineDoc.get("foto"));
                     routine.add(routineDoc.get("name").toString());
                     routine.add(routineDoc.get("voters"));
                     routine.add(routineDoc.get("avgPoints"));
@@ -85,6 +84,7 @@ public class ControllerRoutineDB {
                                     routines.add(routine);
                                     notFinished.decrementAndGet();
                                 }).addOnFailureListener(exception -> {
+                                    routine.add(null);
                                     routines.add(routine);
                                     notFinished.decrementAndGet();
                                     });
