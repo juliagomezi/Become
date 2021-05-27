@@ -362,6 +362,7 @@ public class DomainAdapter {
      */
     public void logoutUser() {
         currentUser = null;
+        routineAdapter.setCurrentRoutine(null);
         controllerPersistence.signOut();
     }
 
