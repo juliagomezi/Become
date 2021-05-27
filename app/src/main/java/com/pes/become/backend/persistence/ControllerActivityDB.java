@@ -113,6 +113,71 @@ public class ControllerActivityDB {
     }
 
     /**
+     * Obtenir les activitats d'una rutina
+     * @param idRoutine l'identificador de la rutina
+     * @param method metode a cridar quan es retornin les dades
+     * @param object classe que conté el mètode
+     */
+    public void getActivitiesSharedRoutine(String idRoutine, Method method, Object object) {
+        db.collection("sharedRoutines").document(idRoutine).collection("activities").get().addOnCompleteListener(task -> {
+            HashMap<String, ArrayList<ArrayList<String>>> routineActivities = new HashMap<>();
+            routineActivities.put("Monday",  new ArrayList<>());
+            routineActivities.put("Tuesday",  new ArrayList<>());
+            routineActivities.put("Wednesday",  new ArrayList<>());
+            routineActivities.put("Thursday",  new ArrayList<>());
+            routineActivities.put("Friday",  new ArrayList<>());
+            routineActivities.put("Saturday",  new ArrayList<>());
+            routineActivities.put("Sunday",  new ArrayList<>());
+
+            if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    ArrayList<String> activity = new ArrayList<>();
+                    activity.add(document.getId());
+                    activity.add(document.get("name").toString());
+                    activity.add(document.get("description").toString());
+                    activity.add(document.get("theme").toString());
+                    String activityDay = document.get("day").toString();
+                    activity.add(activityDay);
+                    activity.add(document.get("beginTime").toString());
+                    activity.add(document.get("finishTime").toString());
+
+                    switch (activityDay) {
+                        case "Monday":
+                            routineActivities.get("Monday").add(activity);
+                            break;
+                        case "Tuesday":
+                            routineActivities.get("Tuesday").add(activity);
+                            break;
+                        case "Wednesday":
+                            routineActivities.get("Wednesday").add(activity);
+                            break;
+                        case "Thursday":
+                            routineActivities.get("Thursday").add(activity);
+                            break;
+                        case "Friday":
+                            routineActivities.get("Friday").add(activity);
+                            break;
+                        case "Saturday":
+                            routineActivities.get("Saturday").add(activity);
+                            break;
+                        case "Sunday":
+                            routineActivities.get("Sunday").add(activity);
+                            break;
+                    }
+                }
+                try {
+                    method.invoke(object, routineActivities);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e2) {
+                    e2.printStackTrace();
+                }
+            }
+        });
+    }
+
+
+    /**
      * Crear una activitat en una rutina existent i en la rutina publica equivalent (si existeix)
      * @param userId identificador de l'usuari
      * @param idRoutine es l'identificador de la rutina ja existent

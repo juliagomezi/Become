@@ -920,13 +920,10 @@ public class DomainAdapter {
      */
     public void sharedRoutinesCallback(ArrayList<ArrayList<Object>> sharedRoutinesInfo){
         for(ArrayList<Object> routineInfo : sharedRoutinesInfo){
-            //int totalPoints = (int) routineInfo.get(4); //assumim que la puntuacio es un int
-            //int totalUsers = (int) routineInfo.get(5);
-            //routineInfo.remove(4);
-            //routineInfo.remove(5);
-            //double meanPoints = ((double) totalPoints)/((double) totalUsers);
-            //routineInfo.add(4, meanPoints);
-            //convertir array a bool
+            ArrayList<String> usersVoted = (ArrayList<String>) routineInfo.get(3);
+            boolean hasVoted = usersVoted.contains(currentUser.getID());
+            routineInfo.remove(3);
+            routineInfo.add(3, hasVoted);
         }
         //cridem el callback de frontend
     }
@@ -936,17 +933,19 @@ public class DomainAdapter {
      * @param sharedRoutineID ID de la rutina a descarregar
      */
     public void downloadSharedRoutine(String sharedRoutineID){
-        //metode de persistencia que suposem necessita currentUser.ID, sharedRoutineID
+        controllerPersistence.downloadSharedRoutine(currentUser.getID(), sharedRoutineID);
     }
 
     /**
      * Metode per valorar una rutina compartida al sistema
      * @param sharedRoutineID ID de la rutina a descarregar
      * @param points puntuacio donada
-     * @param numberOfUsersVoted usuaris que han votat la rutina
+     * @param currentAverage puntacio mitjana de la rutina abans d'aquesta votacio
+     * @param numberOfUsersVoted usuaris que han votat la rutina abams d'aquesta votacio
      */
-    public void voteRoutine(String sharedRoutineID, int points, int numberOfUsersVoted){ //assumim que la puntuacio es un int
-
+    public void voteRoutine(String sharedRoutineID, int points, double currentAverage, int numberOfUsersVoted){
+        double average = ((currentAverage * numberOfUsersVoted) + points) / (numberOfUsersVoted + 1);
+        controllerPersistence.voteRoutine(currentUser.getID(), sharedRoutineID, average);
     }
 
     /**
@@ -955,7 +954,12 @@ public class DomainAdapter {
      * @param isPublic boolea que es cert si es publica la rutina i fals si es fa privada
      */
     public void shareRoutine(String routineID, boolean isPublic){
-
+        if(isPublic){
+            controllerPersistence.shareRoutine(currentUser.getID(), routineID);
+        }
+        else{
+            controllerPersistence.unShareRoutine(currentUser.getID(), routineID);
+        }
     }
 
     //ESBORRAR

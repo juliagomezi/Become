@@ -138,7 +138,6 @@ public class ControllerStatisticsDB {
         for (int j = 0; j<numberOfThemes; ++j){
             dataInput.put("statistics" + differentThemes[j], mapStatistics);
         }
-
         docRefToRoutineStatistics.set(dataInput);
     }
 

@@ -148,7 +148,7 @@ public class ControllerUserDB {
                                                         ArrayList<String> routinesResult = new ArrayList<>();
                                                         routinesResult.add(document.getId());
                                                         routinesResult.add(document.get("name").toString());
-                                                        //routinesResult.add(document.get("shared").toString());
+                                                        routinesResult.add(document.get("shared").toString());
                                                         routineIds.add(routinesResult);
                                                     }
                                                 }
@@ -209,6 +209,7 @@ public class ControllerUserDB {
                                                 ArrayList<String> routinesResult = new ArrayList<>();
                                                 routinesResult.add(document.getId());
                                                 routinesResult.add(document.get("name").toString());
+                                                routinesResult.add(document.get("shared").toString());
                                                 routineIds.add(routinesResult);
                                             }
                                         }
@@ -315,6 +316,7 @@ public class ControllerUserDB {
                                         ArrayList<String> routinesResult = new ArrayList<>();
                                         routinesResult.add(document.getId());
                                         routinesResult.add(document.get("name").toString());
+                                        routinesResult.add(document.get("shared").toString());
                                         routineIds.add(routinesResult);
                                     }
                                 }
@@ -379,6 +381,7 @@ public class ControllerUserDB {
                                 ArrayList<String> routinesResult = new ArrayList<>();
                                 routinesResult.add(document.getId());
                                 routinesResult.add(document.get("name").toString());
+                                routinesResult.add(document.get("shared").toString());
                                 routineIds.add(routinesResult);
                             }
                         }
@@ -670,7 +673,7 @@ public class ControllerUserDB {
                                     params[4] = null;
                                     params[5] = new ArrayList<>();
                                     params[6] = null;
-                                    params[7] = Integer.valueOf("0");
+                                    params[7] = Integer.valueOf(documentSnapshot.get("streak").toString());
                                     try {
                                         method.invoke(object, params);
                                     } catch (IllegalAccessException e) {
@@ -700,6 +703,7 @@ public class ControllerUserDB {
                                                     ArrayList<String> routinesResult = new ArrayList<>();
                                                     routinesResult.add(document.getId());
                                                     routinesResult.add(document.get("name").toString());
+                                                    routinesResult.add(document.get("shared").toString());
                                                     routineIds.add(routinesResult);
                                                 }
                                             }
@@ -766,6 +770,7 @@ public class ControllerUserDB {
                                                     ArrayList<String> routinesResult = new ArrayList<>();
                                                     routinesResult.add(document.getId());
                                                     routinesResult.add(document.get("name").toString());
+                                                    routinesResult.add(document.get("shared").toString());
                                                     routineIds.add(routinesResult);
                                                 }
                                             }
@@ -825,6 +830,7 @@ public class ControllerUserDB {
                     else {
                         params[0] = false;
                         params[1] = params[2] = params[3] = "";
+                        params[7] = 0;
                         try {
                             method.invoke(object, params);
                         } catch (IllegalAccessException ignore) {
@@ -973,9 +979,9 @@ public class ControllerUserDB {
         CollectionReference colRefToStatistics = docRefToUser.collection("statistics");
         CollectionReference colRefToTrophies = docRefToUser.collection("trophies");
 
-        //CollectionReference colRefToSharedRoutines = db.collection("sharedRoutines");
-        /*
-        colRefToSharedRoutines.whereEqualTo("ownerID","XXX").get()
+        CollectionReference colRefToSharedRoutines = db.collection("sharedRoutines");
+
+        colRefToSharedRoutines.whereEqualTo("ownerID",docRefToUser.getId()).get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot documentSnap : task.getResult()) {
@@ -985,7 +991,7 @@ public class ControllerUserDB {
                         }
                     }
                 });
-        */
+
         colRefToRoutines.get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {

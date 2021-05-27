@@ -288,8 +288,16 @@ public class User {
         this.calendarMonth = calendarMonth;
     }
 
-    public void setDayCalendar(int day, int completition) {
-        calendarMonth.add(day, completition);
+    public void setDayCalendar(int day, int completion) {
+        calendarMonth.set(day, completion);
+        for(int i = day-1; i >= 0; --i) {
+            if(calendarMonth.get(i) != -1) {
+                for(int j = i+1; j < day; ++j) {
+                    calendarMonth.set(j,0);
+                }
+                return;
+            }
+        }
     }
 
     public int getStreak() {
