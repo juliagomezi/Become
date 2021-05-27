@@ -207,6 +207,7 @@ public class ControllerRoutineDB {
                     for (QueryDocumentSnapshot actDoc : task2.getResult()) {
                         String activityId = actDoc.getId();
                         Map<String, Object> activity = actDoc.getData();
+                        activity.remove("lastDayDone");
 
 
                         String theme = activity.get("theme").toString();

@@ -62,6 +62,16 @@ public class ControllerPersistence {
         CA.getActivities(userId, idRoutine, method, object);
     }
 
+    /**
+     * Obtenir les activitats d'una rutina publica
+     * @param idRoutine identificador de la rutina publica
+     * @param method metode a cridar quan es retornin les dades
+     * @param object classe que conté el mètode
+     */
+    public void getActivitiesSharedRoutine(String idRoutine, Method method, Object object) {
+        CA.getActivitiesSharedRoutine(idRoutine, method, object);
+    }
+
     //////////MODIFICADORES DE LA CLASSE ACTIVITAT
     /**
      * Afegir una nova activitat a una certa rutina de la base de dades
