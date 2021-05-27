@@ -48,7 +48,6 @@ public class ControllerPersistence {
         CT = ControllerTrophiesDB.getInstance();
         db = FirebaseFirestore.getInstance();
     }
-
     ////////////////////////////////FUNCIONS RELACIONADES AMB LA CLASSE ACTIVITAT///////////////////
     ///////////CONSULTORES DE LA CLASSE ACTIVITAT
     /**

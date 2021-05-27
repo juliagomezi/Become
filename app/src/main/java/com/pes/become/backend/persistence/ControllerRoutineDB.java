@@ -209,7 +209,6 @@ public class ControllerRoutineDB {
                         Map<String, Object> activity = actDoc.getData();
                         activity.remove("lastDayDone");
 
-
                         String theme = activity.get("theme").toString();
                         String day = activity.get("day").toString();
                         double timeActivity = timeDifference(activity.get("beginTime").toString(), activity.get("finishTime").toString());

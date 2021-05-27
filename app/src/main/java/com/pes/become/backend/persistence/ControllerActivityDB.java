@@ -177,7 +177,6 @@ public class ControllerActivityDB {
     }
 
 
-
     /**
      * Crear una activitat en una rutina existent i en la rutina publica equivalent (si existeix)
      * @param userId identificador de l'usuari
