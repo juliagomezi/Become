@@ -1,12 +1,10 @@
 package com.pes.become.frontend;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -15,6 +13,15 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -24,6 +31,7 @@ import com.google.android.gms.tasks.Task;
 import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapter;
 
+import java.util.Collections;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,6 +41,8 @@ public class Login extends AppCompatActivity {
     private EditText userText, passwordText;
     private GoogleSignInClient mGoogleSignInClient;
     private final static int RC_SIGN_IN = 123;
+
+    private CallbackManager callbackManager = CallbackManager.Factory.create();
 
     private ProgressBar loading;
 
@@ -47,6 +57,7 @@ public class Login extends AppCompatActivity {
         passwordText = findViewById(R.id.passText);
         Button login = findViewById(R.id.logInButton);
         Button googleLogin = findViewById(R.id.googleLoginButton);
+        LoginButton facebooklogin = findViewById(R.id.facebookLoginButton);
         TextView signUp = findViewById(R.id.signUp);
         TextView forgotPassword = findViewById(R.id.forgotPassword);
         loading = findViewById(R.id.loading);
@@ -54,6 +65,11 @@ public class Login extends AppCompatActivity {
         login.setOnClickListener(v-> loginUser());
 
         googleLogin.setOnClickListener(v -> googleLoginUser());
+
+        facebooklogin.setOnClickListener(v-> {
+            Log.d("Boto", "click al boto");
+            facebookLoginUser();
+        });
 
         signUp.setOnClickListener(v -> startActivity(new Intent(Login.this, Signup.class)));
 
@@ -99,6 +115,8 @@ public class Login extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == RC_SIGN_IN) {
@@ -112,6 +130,30 @@ public class Login extends AppCompatActivity {
             }
         }
     }
+
+    private void facebookLoginUser() {
+        Log.d("login", "intent de login");
+        LoginManager.getInstance().logInWithReadPermissions(this, Collections.singleton("name"));
+        LoginManager.getInstance().registerCallback(callbackManager,
+                new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        Log.d("successFacebook", "facebook:onSuccess:" + loginResult);
+                        DA.loginFacebookUser(loginResult.getAccessToken(), Login.this);
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        Log.d("cancelFacebook", "facebook:onCancel");
+                    }
+
+                    @Override
+                    public void onError(FacebookException error) {
+                        Log.d("errorFacebook", "facebook:onError", error);
+                    }
+                });
+    }
+
 
     /**
      * Funcio de callback per loguejar l'usuari sense exit

@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapter;
+import com.pes.become.backend.domain.Achievement;
 import com.pes.become.backend.exceptions.ExistingRoutineException;
 
 import java.util.ArrayList;
@@ -148,7 +149,7 @@ public class RoutinesList extends Fragment {
                 routinesListRecyclerAdapter.notifyDataSetChanged();
                 Toast.makeText(getContext(), getString(R.string.routineCreated), Toast.LENGTH_SHORT).show();
                 routineSheet.dismiss();
-                if (DA.checkAchievement("CreateFirstRoutine")) MainActivity.getInstance().showTrophyWon("CreateFirstRoutine");
+                if (DA.checkAchievement(Achievement.values()[0].toString())) MainActivity.getInstance().showTrophyWon(getString(R.string.CreateFirstRoutine));
             } catch (ExistingRoutineException e) {
                 routineName.setError(getString(R.string.existingRoutineName));
             }

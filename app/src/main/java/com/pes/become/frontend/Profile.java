@@ -8,16 +8,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.viewpager.widget.ViewPager;
-
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +18,14 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.tabs.TabLayout;
@@ -151,7 +149,7 @@ public class Profile extends Fragment {
         deleteAccount = sheetView.findViewById(R.id.deleteAcc);
         TextView changePassword = sheetView.findViewById(R.id.changePassword);
         TextView changeUsername = sheetView.findViewById(R.id.changeUsername);
-        if(DA.getUserProvider().equals("google.com")) {
+        if(DA.getUserProvider().equals("google.com") || DA.getUserProvider().equals("facebook.com")) {
             changePassword.setVisibility(View.GONE);
             deleteAccount.setVisibility(View.GONE);
             changeUsername.setVisibility(View.GONE);
