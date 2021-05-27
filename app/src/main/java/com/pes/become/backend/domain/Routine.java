@@ -24,6 +24,7 @@ public class Routine {
      * Mapa amb totes les activitats ordenades temporalment
      */
     private SortedMap<Day, ArrayList<Activity>> activities;
+    private boolean shared;
 
     /**
      * Creadora de la rutina
@@ -34,6 +35,7 @@ public class Routine {
         this.name = name;
         activities = new TreeMap<>();
         clearActivities();
+        shared = false;
     }
 
     /**
@@ -176,5 +178,13 @@ public class Routine {
             if(!activity.getId().equals(a.getId()) && activity.compareTo(a) == 0) return true;
         }
         return false;
+    }
+
+    public boolean isShared() {
+        return shared;
+    }
+
+    public void setShared(boolean shared) {
+        this.shared = shared;
     }
 }

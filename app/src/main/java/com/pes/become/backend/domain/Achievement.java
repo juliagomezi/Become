@@ -1,6 +1,6 @@
 package com.pes.become.backend.domain;
 
-// NO CANVIAR ORDRE!!!!!! SI ES VOL AFEGIR ALGUN SAFEGEIX A BAIX :)
+// NO CANVIAR ORDRE!!!!!! SI ES VOL AFEGIR ALGUN SAFEGEIX ABAIX :)
 public enum Achievement {
     CreateFirstRoutine,
     HourMusic5,
@@ -18,5 +18,9 @@ public enum Achievement {
     HourWorking10,
     HourEntertainment10,
     HourPlants10,
-    HourOther10
+    HourOther10,
+    ActivitiesPerDay1,
+    ActivitiesPerDay5,
+    HoursPerDay5,
+    HoursPerDay10
 }

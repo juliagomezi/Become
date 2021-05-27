@@ -6,25 +6,14 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
-import com.pes.become.backend.domain.Achievement;
-import com.pes.become.backend.domain.AchievementController;
-import com.pes.become.backend.domain.Activity;
-import com.pes.become.backend.domain.Day;
-import com.pes.become.backend.domain.Routine;
-import com.pes.become.backend.domain.Theme;
-import com.pes.become.backend.domain.Time;
-import com.pes.become.backend.domain.TimeInterval;
-import com.pes.become.backend.domain.User;
-import com.pes.become.backend.exceptions.ExistingRoutineException;
-import com.pes.become.backend.exceptions.InvalidDayIntervalException;
-import com.pes.become.backend.exceptions.InvalidTimeIntervalException;
-import com.pes.become.backend.exceptions.NoSelectedRoutineException;
-import com.pes.become.backend.exceptions.OverlappingActivitiesException;
+import com.pes.become.backend.domain.*;
+import com.pes.become.backend.exceptions.*;
+import com.facebook.AccessToken;
 import com.pes.become.backend.persistence.ControllerPersistence;
 import com.pes.become.backend.persistence.StringDateConverter;
 import com.pes.become.frontend.ForgotPassword;
-import com.pes.become.frontend.LogoScreen;
 import com.pes.become.frontend.Login;
+import com.pes.become.frontend.LogoScreen;
 import com.pes.become.frontend.MainActivity;
 import com.pes.become.frontend.Profile;
 import com.pes.become.frontend.Signup;
@@ -176,6 +165,27 @@ public class DomainAdapter {
             e.printStackTrace();
         }
 
+    }
+
+    public void loginFacebookUser(AccessToken accessToken, android.app.Activity act) {
+        Class[] parameterTypes = new Class[8];
+        parameterTypes[0] = boolean.class;
+        parameterTypes[1] = String.class;
+        parameterTypes[2] = String.class;
+        parameterTypes[3] = String.class;
+        parameterTypes[4] = Bitmap.class;
+        parameterTypes[5] = ArrayList.class;
+        parameterTypes[6] = Map.class;
+        parameterTypes[7] = int.class;
+        Method method;
+        login = (Login)act;
+
+        try {
+            method = DomainAdapter.class.getMethod("loginCallback", parameterTypes);
+            controllerPersistence.loginUserFacebook(accessToken, method, DomainAdapter.getInstance());
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -643,7 +653,7 @@ public class DomainAdapter {
      */
     public void changeRoutineName(String id, String name) throws ExistingRoutineException {
         if(!currentUser.existsRoutine(name)) {
-            controllerPersistence.changeRoutineName(currentUser.getID(), id, name);
+            controllerPersistence.changeRoutineName(currentUser.getID(), id, name, currentUser.getSelectedRoutine().isShared());
             routineAdapter.changeName(id, name);
             currentUser.changeRoutineName(id,name);
         } else {
@@ -657,7 +667,7 @@ public class DomainAdapter {
      */
     public void deleteRoutine(String routineId) {
         currentUser.deleteRoutine(routineId);
-        controllerPersistence.deleteRoutine(currentUser.getID(), routineId);
+        controllerPersistence.deleteRoutine(currentUser.getID(), routineId, currentUser.getSelectedRoutine().isShared());
     }
 
     /**
@@ -686,13 +696,13 @@ public class DomainAdapter {
             if(!routineAdapter.checkOverlappings(newActDay1) && !routineAdapter.checkOverlappings(newActDay2)) {
                 String beginTime = iniH + ":" + iniM;
                 String endTime = "23:59";
-                String id = controllerPersistence.createActivity(currentUser.getID(), currentUser.getSelectedRoutine().getId(), name, Theme.values()[Integer.parseInt(theme)].toString(), description, startDay.toString(), beginTime, endTime);
+                String id = controllerPersistence.createActivity(currentUser.getID(), currentUser.getSelectedRoutine().getId(), name, Theme.values()[Integer.parseInt(theme)].toString(), description, startDay.toString(), beginTime, endTime, currentUser.getSelectedRoutine().isShared());
                 newActDay1.setId(id);
                 routineAdapter.createActivity(newActDay1);
                 currentUser.updateStatistics(Theme.values()[Integer.parseInt(theme)],startDay, 23-Integer.parseInt(iniH), 59-Integer.parseInt(iniM), true);
                 beginTime = "00:00";
                 endTime = endH + ":" + endM;
-                id = controllerPersistence.createActivity(currentUser.getID(), currentUser.getSelectedRoutine().getId(), name, Theme.values()[Integer.parseInt(theme)].toString(), description, endDay.toString(), beginTime, endTime);
+                id = controllerPersistence.createActivity(currentUser.getID(), currentUser.getSelectedRoutine().getId(), name, Theme.values()[Integer.parseInt(theme)].toString(), description, endDay.toString(), beginTime, endTime, currentUser.getSelectedRoutine().isShared());
                 newActDay2.setId(id);
                 routineAdapter.createActivity(newActDay2);
                 currentUser.updateStatistics(Theme.values()[Integer.parseInt(theme)],endDay, Integer.parseInt(endH), Integer.parseInt(endM), true);
@@ -703,7 +713,7 @@ public class DomainAdapter {
             if(!routineAdapter.checkOverlappings(a)) {
                 String beginTime = iniH + ":" + iniM;
                 String endTime = endH + ":" + endM;
-                String id = controllerPersistence.createActivity(currentUser.getID(), currentUser.getSelectedRoutine().getId(), name, Theme.values()[Integer.parseInt(theme)].toString(), description, startDay.toString(), beginTime, endTime);
+                String id = controllerPersistence.createActivity(currentUser.getID(), currentUser.getSelectedRoutine().getId(), name, Theme.values()[Integer.parseInt(theme)].toString(), description, startDay.toString(), beginTime, endTime, currentUser.getSelectedRoutine().isShared());
                 a.setId(id);
                 routineAdapter.createActivity(a);
                 currentUser.updateStatistics(Theme.values()[Integer.parseInt(theme)],startDay, Integer.parseInt(endH)-Integer.parseInt(iniH), Integer.parseInt(endM)-Integer.parseInt(iniM), true);
@@ -743,7 +753,7 @@ public class DomainAdapter {
             currentUser.updateStatistics(Theme.values()[Integer.parseInt(theme)],startDay, 23-Integer.parseInt(iniH), 59-Integer.parseInt(iniM), true);
             String beginTime = iniH + ":" + iniM;
             String endTime = "23:59";
-            controllerPersistence.updateActivity(currentUser.getID(), currentUser.getSelectedRoutine().getId(), id, name, description, startDay.toString(), Theme.values()[Integer.parseInt(theme)].toString(), beginTime, endTime);
+            controllerPersistence.updateActivity(currentUser.getID(), currentUser.getSelectedRoutine().getId(), id, name, description, startDay.toString(), Theme.values()[Integer.parseInt(theme)].toString(), beginTime, endTime, currentUser.getSelectedRoutine().isShared());
             createActivity(name, description, theme, endDayString, endDayString, "0","0", endH, endM);
         }
         else if (comparison == 0) {
@@ -753,7 +763,7 @@ public class DomainAdapter {
             currentUser.updateStatistics(Theme.values()[Integer.parseInt(theme)],startDay, Integer.parseInt(endH)-Integer.parseInt(iniH), Integer.parseInt(endM)-Integer.parseInt(iniM), true);
             String beginTime = iniH + ":" + iniM;
             String endTime = endH + ":" + endM;
-            controllerPersistence.updateActivity(currentUser.getID(), currentUser.getSelectedRoutine().getId(), id, name, description, startDay.toString(), Theme.values()[Integer.parseInt(theme)].toString(), beginTime, endTime);
+            controllerPersistence.updateActivity(currentUser.getID(), currentUser.getSelectedRoutine().getId(), id, name, description, startDay.toString(), Theme.values()[Integer.parseInt(theme)].toString(), beginTime, endTime, currentUser.getSelectedRoutine().isShared());
         }
         else throw new InvalidDayIntervalException();
     }
@@ -769,7 +779,7 @@ public class DomainAdapter {
         Time duration = deleted.getInterval().getIntervalDuration();
         currentUser.updateStatistics(deleted.getTheme(),deleted.getDay(),duration.getHours(),duration.getMinutes(),false);
         routineAdapter.deleteActivity(id, Day.valueOf(day));
-        controllerPersistence.deleteActivity(currentUser.getID(), currentUser.getSelectedRoutine().getId(), id);
+        controllerPersistence.deleteActivity(currentUser.getID(), currentUser.getSelectedRoutine().getId(), id, currentUser.getSelectedRoutine().isShared());
     }
 
     /**
@@ -885,5 +895,76 @@ public class DomainAdapter {
      */
     public void passResetCallback(boolean success) {
         forgotPass.passResetCallback(success);
+    }
+
+    /**
+     * Metode per obtenir totes les rutines compartides del sistema
+     */
+    public void getSharedRoutines(){
+        try {
+            Method method = DomainAdapter.class.getMethod("sharedRoutinesCallback", ArrayList.class);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Metode que rep la resposta a la crida que "getSharedRoutines" fa a la base de dades
+     * @param sharedRoutinesInfo ArrayList de informacio de les rutines compartides, representada com una ArrayList d'Objects que conte a cada posicio:
+     *                           0 - String dmb la ID de la rutina compartida (ID autor + ID rutina)
+     *                           1 - Bitmap de la foto de perfil de l'autor
+     *                           2 - String amb el nom de la rutina
+     *                           3 - Array amb les IDs dels usuaris que han votat la rutina
+     *                           4 - Puntacio mitjana de la rutina
+     *                           5 - Nombre d'usuaris que han votat la rutina
+     */
+    public void sharedRoutinesCallback(ArrayList<ArrayList<Object>> sharedRoutinesInfo){
+        for(ArrayList<Object> routineInfo : sharedRoutinesInfo){
+            ArrayList<String> usersVoted = (ArrayList<String>) routineInfo.get(3);
+            boolean hasVoted = usersVoted.contains(currentUser.getID());
+            routineInfo.remove(3);
+            routineInfo.add(3, hasVoted);
+        }
+        //cridem el callback de frontend
+    }
+
+    /**
+     * Metode per descarregar una rutina compartida al sistema
+     * @param sharedRoutineID ID de la rutina a descarregar
+     */
+    public void downloadSharedRoutine(String sharedRoutineID){
+        controllerPersistence.downloadSharedRoutine(currentUser.getID(), sharedRoutineID);
+    }
+
+    /**
+     * Metode per valorar una rutina compartida al sistema
+     * @param sharedRoutineID ID de la rutina a descarregar
+     * @param points puntuacio donada
+     * @param currentAverage puntacio mitjana de la rutina abans d'aquesta votacio
+     * @param numberOfUsersVoted usuaris que han votat la rutina abams d'aquesta votacio
+     */
+    public void voteRoutine(String sharedRoutineID, int points, double currentAverage, int numberOfUsersVoted){
+        double average = ((currentAverage * numberOfUsersVoted) + points) / (numberOfUsersVoted + 1);
+        controllerPersistence.voteRoutine(currentUser.getID(), sharedRoutineID, average);
+    }
+
+    /**
+     * Metode per compartir una rutina
+     * @param routineID ID de la rutina a compartir
+     * @param isPublic boolea que es cert si es publica la rutina i fals si es fa privada
+     */
+    public void shareRoutine(String routineID, boolean isPublic){
+        if(isPublic){
+            controllerPersistence.shareRoutine(currentUser.getID(), routineID);
+        }
+        else{
+            controllerPersistence.unShareRoutine(currentUser.getID(), routineID);
+        }
+    }
+
+    //ESBORRAR
+
+    public Bitmap getProfilePic(){
+        return currentUser.getProfilePic();
     }
 }
