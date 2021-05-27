@@ -214,6 +214,7 @@ public class DomainAdapter {
         }
     }
 
+    //falta boolea shared a routineInfo
     /**
      * Metode que rep la resposta a la crida "loginUser" de la base de dades
      * @param success resultat de l'operacio
@@ -275,6 +276,7 @@ public class DomainAdapter {
         }
     }
 
+    //falta boolea shared a routineInfo
     /**
      * Metode que autentifica un usuari ja loguejat
      * @param success resultat de l'operacio
@@ -903,6 +905,7 @@ public class DomainAdapter {
     public void getSharedRoutines(){
         try {
             Method method = DomainAdapter.class.getMethod("sharedRoutinesCallback", ArrayList.class);
+            //crida persistencia
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
@@ -912,18 +915,17 @@ public class DomainAdapter {
      * Metode que rep la resposta a la crida que "getSharedRoutines" fa a la base de dades
      * @param sharedRoutinesInfo ArrayList de informacio de les rutines compartides, representada com una ArrayList d'Objects que conte a cada posicio:
      *                           0 - String dmb la ID de la rutina compartida (ID autor + ID rutina)
-     *                           1 - Bitmap de la foto de perfil de l'autor
-     *                           2 - String amb el nom de la rutina
-     *                           3 - Array amb les IDs dels usuaris que han votat la rutina
-     *                           4 - Puntacio mitjana de la rutina
-     *                           5 - Nombre d'usuaris que han votat la rutina
+     *                           1 - String amb el nom de la rutina
+     *                           2 - Array amb les IDs dels usuaris que han votat la rutina
+     *                           3 - Puntacio mitjana de la rutina
+     *                           4 - Nombre d'usuaris que han votat la rutina
+     *                           5 - Bitmap de la foto de perfil de l'autor
      */
     public void sharedRoutinesCallback(ArrayList<ArrayList<Object>> sharedRoutinesInfo){
         for(ArrayList<Object> routineInfo : sharedRoutinesInfo){
-            ArrayList<String> usersVoted = (ArrayList<String>) routineInfo.get(3);
+            ArrayList<String> usersVoted = (ArrayList<String>) routineInfo.get(2);
             boolean hasVoted = usersVoted.contains(currentUser.getID());
-            routineInfo.remove(3);
-            routineInfo.add(3, hasVoted);
+            routineInfo.set(2, hasVoted);
         }
         //cridem el callback de frontend
     }
@@ -960,6 +962,51 @@ public class DomainAdapter {
         else{
             controllerPersistence.unShareRoutine(currentUser.getID(), routineID);
         }
+    }
+
+    public void getSharedRoutineActivities(String sharedRoutineID){
+        try {
+            Method method = DomainAdapter.class.getMethod("getSharedRoutineActivitiesCallback", HashMap.class);
+            //crida persistencia
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getSharedRoutineActivitiesCallback(HashMap<String, ArrayList<ArrayList<String>>> activitiesList) throws InvalidTimeIntervalException {
+        for (HashMap.Entry<String, ArrayList<ArrayList<String>>> dayActivities : activitiesList.entrySet()) {
+            ArrayList<ArrayList<String>> activities = dayActivities.getValue();
+            if (!activities.isEmpty()) {
+                ArrayList<Activity> acts = new ArrayList<>();
+                for (int i = 0; i < activities.size(); ++i) {
+                    String[] s = activities.get(i).get(5).split(":");
+                    String[] s2 = activities.get(i).get(6).split(":");
+                    int iniH = Integer.parseInt(s[0]);
+                    int iniM = Integer.parseInt(s[1]);
+                    int endH = Integer.parseInt(s2[0]);
+                    int endM = Integer.parseInt(s2[1]);
+                    Activity activity = new Activity(activities.get(i).get(1), activities.get(i).get(2), Theme.valueOf(activities.get(i).get(3)), new TimeInterval(iniH, iniM, endH, endM), Day.valueOf(activities.get(i).get(4)));
+                    activity.setId(activities.get(i).get(0));
+                    activity.setDoneToday((activities.get(i).get(7)).equals("true"));
+                    acts.add(activity);
+                }
+                routineAdapter.setActivitiesByDay(acts, acts.get(0).getDay());
+            }
+        }
+
+        /*
+        if (!selectingRoutine) {
+            if (login != null) {
+                login.loginCallback();
+            } else if (logoScreen != null) {
+                logoScreen.loginCallback();
+            } else {
+                MainActivity.getInstance().setEditRoutineScreen(currentUser.getSelectedRoutine().getId(), currentUser.getSelectedRoutine().getName());
+            }
+            login = null;
+            logoScreen = null;
+        }
+        */
     }
 
     //ESBORRAR

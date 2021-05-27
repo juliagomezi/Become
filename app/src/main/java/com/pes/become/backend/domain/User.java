@@ -32,7 +32,7 @@ public class User {
      */
     private Map<Theme, Map<Day, Double>> statisticsSelectedRoutine;
     /**
-     * ID i nom de les rutines de l'usuari
+     * ID i nom de les rutines de l'usuari i un boolea indicant si la rutina esta publicada o no
      */
     private ArrayList<ArrayList<String>> routines;
     /**
