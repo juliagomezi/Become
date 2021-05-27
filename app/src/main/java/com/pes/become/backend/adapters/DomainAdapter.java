@@ -905,7 +905,7 @@ public class DomainAdapter {
     public void getSharedRoutines(){
         try {
             Method method = DomainAdapter.class.getMethod("sharedRoutinesCallback", ArrayList.class);
-            //crida persistencia
+            controllerPersistence.getSharedRoutines(method, DomainAdapter.getInstance());
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
@@ -967,7 +967,7 @@ public class DomainAdapter {
     public void getSharedRoutineActivities(String sharedRoutineID){
         try {
             Method method = DomainAdapter.class.getMethod("getSharedRoutineActivitiesCallback", HashMap.class);
-            //crida persistencia
+            controllerPersistence.getActivitiesSharedRoutine(sharedRoutineID,method,DomainAdapter.getInstance());
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
@@ -1014,4 +1014,6 @@ public class DomainAdapter {
     public Bitmap getProfilePic(){
         return currentUser.getProfilePic();
     }
+
+
 }
