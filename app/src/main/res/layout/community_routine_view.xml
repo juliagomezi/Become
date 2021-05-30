@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/coldwhite"
+    tools:context=".frontend.CommunityRoutineView">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="10dp"
+        android:background="@color/coldwhite"
+        tools:context=".frontend.MainActivity">
+
+        <LinearLayout
+            android:id="@+id/controls"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            tools:layout_editor_absoluteY="10dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/activityList" >
+
+            <ImageButton
+                android:id="@+id/previousDayButton"
+                android:layout_width="25dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="?selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:tint="@color/black"
+                app:iconTint="@color/black"
+                app:srcCompat="@drawable/ic_arrow_back"
+                tools:ignore="VectorDrawableCompat" />
+
+            <TextView
+                android:id="@+id/routineDay"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:gravity="center"
+                android:text="RoutineDay" />
+
+
+            <ImageButton
+                android:id="@+id/nextDayButton"
+                android:layout_width="25dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="?selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:tint="@color/black"
+                app:iconTint="@color/black"
+                app:srcCompat="@drawable/ic_arrow_forward"
+                tools:ignore="VectorDrawableCompat" />
+        </LinearLayout>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/activityList"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:animationCache="true"
+            android:layout_marginTop="10dp"
+            android:background="@color/coldwhite"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/controls" />
+
+        <TextView
+            android:id="@+id/emptyView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:animationCache="true"
+            android:visibility="invisible"
+            android:text="You don't have any activity programmed"
+            android:background="@color/coldwhite"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/controls"/>
+
+        <TextView
+            android:id="@+id/saveRoutine"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/round_button_save"
+            app:iconPadding="0dp"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

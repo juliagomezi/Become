@@ -11,6 +11,7 @@ import com.pes.become.backend.exceptions.*;
 import com.facebook.AccessToken;
 import com.pes.become.backend.persistence.ControllerPersistence;
 import com.pes.become.backend.persistence.StringDateConverter;
+import com.pes.become.frontend.Community;
 import com.pes.become.frontend.ForgotPassword;
 import com.pes.become.frontend.Login;
 import com.pes.become.frontend.LogoScreen;
@@ -926,6 +927,7 @@ public class DomainAdapter {
             routineInfo.add(3, hasVoted);
         }
         //cridem el callback de frontend
+        Community.getInstance().getSharedRoutinesCallback(sharedRoutinesInfo);
     }
 
     /**

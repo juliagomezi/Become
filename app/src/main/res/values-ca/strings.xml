@@ -145,5 +145,6 @@
     <string name="changeVisibility">Fer privada una rutina</string>
     <string name="changeVisibilityDescription">Si canvieu la visibilitat d\'aquesta rutina a privada, deixarà d\'aparèixer a la pestanya de la comunitat i esborrarà les seves valoracions, voleu continuar?</string>
     <string name="google">Continuar amb Google</string>
+    <string name="voteRoutine">Vota</string>
 
 </resources>

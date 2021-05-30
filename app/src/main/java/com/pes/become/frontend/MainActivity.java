@@ -15,6 +15,8 @@ import android.widget.TextView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.pes.become.R;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private static MainActivity instance;
@@ -78,19 +80,48 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void onNothingSelected(AdapterView<?> parent) { }
 
+    /**
+     * Funcio per mostrar la vista de editar rutina
+     * @param id id de al rutina
+     * @param routineName nom de la rutina
+     */
     public void setEditRoutineScreen(String id, String routineName) {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_layout, new RoutineEdit(id, routineName)).commit();
     }
 
+    /**
+     * Funcio per mostrar la vista del perfil
+     */
     public void setProfileScreen() {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_layout, new Profile()).commit();
     }
 
+    /**
+     * Funcio per mostrar la vista dels trofeus
+     */
     public void setTrophiesScreen() {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_layout, new Trophies()).commit();
+    }
+
+    /**
+     * Funcio per mostrar la vista del comunitat
+     */
+    public void setCommunityScreen() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_layout, new Community()).commit();
+    }
+
+    /**
+     * Funcio per mostrar la vista de rutina de la comunitat
+     * @param routineId id de al rutina de la comunitat
+     * @param activitiesList llistat d'activitats de la rutina
+     */
+    public void setCommunityRoutineViewScreen(String routineId, ArrayList<ArrayList<String>> activitiesList) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_layout, new CommunityRoutineView(routineId, activitiesList)).commit();
     }
 
     /**
