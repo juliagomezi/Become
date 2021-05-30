@@ -256,6 +256,14 @@ public class ControllerPersistence {
     }
 
     /**
+     *
+     * @param userId
+     * @param method
+     * @param object
+     */
+    public void getProfilePic(String userId, Method method, Object object){ CU.getProfilePic(userId, method, object); }
+
+    /**
      * Metode per carregar un usuari
      * @param method metode a cridar quan es retornin les dades
      * @param object classe que conté el mètode
