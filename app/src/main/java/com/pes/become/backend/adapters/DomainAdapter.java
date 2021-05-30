@@ -966,6 +966,7 @@ public class DomainAdapter {
         }
         else{
             controllerPersistence.unShareRoutine(currentUser.getID(), routineID);
+            currentUser.removeRoutinePoints(routineID);
         }
     }
 

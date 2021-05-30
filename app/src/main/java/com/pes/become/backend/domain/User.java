@@ -257,6 +257,15 @@ public class User {
         }
     }
 
+    public void removeRoutinePoints(String id){
+        for(int i = 0; i < routines.size(); ++i) {
+            if(routines.get(i).get(0).equals(id)) {
+                routines.get(i).set(3, "");
+                break;
+            }
+        }
+    }
+
     /**
      * Metode per saber si l'usuari ja te una rutina amb aquest nom existent
      * @param name nom a comprovar si ja exiteix
