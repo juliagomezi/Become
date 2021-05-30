@@ -319,9 +319,9 @@ public class ControllerRoutineDB {
             ArrayList<String> usersList = (ArrayList<String>) sharedRoutineDoc.get("voters");
 
             if (!usersList.contains(userId)) {
-                transaction.update(docRefToPrivateRoutine,"avgPoints", average);
                 usersList.add(userId);
-                transaction.update(docRefToSharedRoutine, "avgPoints", average, "numRates", FieldValue.increment(1), "voters", usersList);
+                docRefToPrivateRoutine.update("avgPoints", average);
+                docRefToSharedRoutine.update("avgPoints", average, "numRates", FieldValue.increment(1), "voters", usersList);
             }
             return null;
         });

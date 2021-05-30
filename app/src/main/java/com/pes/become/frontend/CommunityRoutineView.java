@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapter;
 import com.pes.become.backend.exceptions.NoSelectedRoutineException;
+import com.pes.become.backend.exceptions.RoutinePrimaryKeyException;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -205,7 +207,11 @@ public class CommunityRoutineView extends Fragment {
      * Funcio per guardar una rutina
      */
     private void saveRoutine() {
-        DA.downloadSharedRoutine(routineId, routineName);
-        MainActivity.getInstance().setProfileScreen();
+        try {
+            DA.downloadSharedRoutine(routineId, routineName);
+            MainActivity.getInstance().setProfileScreen();
+        } catch (RoutinePrimaryKeyException e) {
+            Toast.makeText(global, getString(R.string.existingRoutineName), Toast.LENGTH_SHORT).show();
+        }
     }
 }

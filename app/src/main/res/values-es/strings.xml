@@ -146,5 +146,6 @@
     <string name="changeVisibilityDescription">Cambiar la visibilidad de esta rutina a privada hará que deje de aparecer en la pestaña de la comunidad y borrará sus valoraciones, ¿quieres continuar?</string>
     <string name="google">Continuar con Google</string>
     <string name="voteRoutine">Vota</string>
+    <string name="routineAlreadyVoted">Ya has votado esta rutina</string>
 
 </resources>

@@ -145,5 +145,7 @@
     <string name="changeVisibility">" Définir une routine privée"</string>
     <string name="changeVisibilityDescription">" Changer la visibilité de cette routine en privé la fera cesser d'apparaître dans l'onglet de la communauté et effacera ses notes, voulez-vous continuer?"</string>
     <string name="google">Continue avec Google</string>
+    <string name="routineAlreadyVoted">Vous avez déjà voté cette routine</string>
+    <string name="voteRoutine">Vote</string>
 
 </resources>

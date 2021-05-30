@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapter;
+import com.pes.become.backend.exceptions.RoutinePrimaryKeyException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -73,7 +75,6 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<CommunityRecy
      */
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        communityRoutinesList.get(position).get(5);
         //holder.profilePic.setImageBitmap((Bitmap)communityRoutinesList.get(position).get(5));
         holder.routineName.setText((String)communityRoutinesList.get(position).get(1));
 
@@ -128,8 +129,13 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<CommunityRecy
      * @param position posicio de la rutina dins l'array
      */
     private void saveRoutine(int position) {
-        DA.downloadSharedRoutine(String.valueOf(communityRoutinesList.get(position).get(0)), String.valueOf(communityRoutinesList.get(position).get(1)));
-        MainActivity.getInstance().setProfileScreen();
+        try {
+            DA.downloadSharedRoutine(String.valueOf(communityRoutinesList.get(position).get(0)), String.valueOf(communityRoutinesList.get(position).get(1)));
+            MainActivity.getInstance().setProfileScreen();
+        } catch (RoutinePrimaryKeyException e) {
+            Toast.makeText(global, global.getApplicationContext().getString(R.string.existingRoutineName), Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     /**
@@ -151,19 +157,24 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<CommunityRecy
      * @param position posicio de la rutina al llistat
      */
     public void createVoteRoutineSheet(int position) {
-        voteRoutineSheet = new BottomSheetDialog(global,R.style.BottomSheetTheme);
-        View sheetView = LayoutInflater.from(parent.getContext()).inflate(R.layout.community_routine_vote, view.findViewById(R.id.bottom_sheet));
+        if (!(boolean)communityRoutinesList.get(position).get(2)) {
+            voteRoutineSheet = new BottomSheetDialog(global, R.style.BottomSheetTheme);
+            View sheetView = LayoutInflater.from(parent.getContext()).inflate(R.layout.community_routine_vote, view.findViewById(R.id.bottom_sheet));
 
-        routineVote = sheetView.findViewById(R.id.routineVote);
-        routineVote.setMaxValue(10);
-        routineVote.setMinValue(0);
-        Button doneButton = sheetView.findViewById(R.id.doneButton);
-        Button cancelButton = sheetView.findViewById(R.id.cancelButton);
-        doneButton.setOnClickListener(v -> voteRoutine(position));
-        cancelButton.setOnClickListener(v -> voteRoutineSheet.dismiss());
+            routineVote = sheetView.findViewById(R.id.routineVote);
+            routineVote.setMaxValue(10);
+            routineVote.setMinValue(0);
+            Button doneButton = sheetView.findViewById(R.id.doneButton);
+            Button cancelButton = sheetView.findViewById(R.id.cancelButton);
+            doneButton.setOnClickListener(v -> voteRoutine(position));
+            cancelButton.setOnClickListener(v -> voteRoutineSheet.dismiss());
 
-        voteRoutineSheet.setContentView(sheetView);
-        voteRoutineSheet.show();
+            voteRoutineSheet.setContentView(sheetView);
+            voteRoutineSheet.show();
+        }
+        else {
+            Toast.makeText(global, global.getApplicationContext().getString(R.string.routineAlreadyVoted), Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
@@ -171,9 +182,11 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<CommunityRecy
      * @param position posicio de la rutina al llistat
      */
     private void voteRoutine(int position) {
-        //DA.voteRoutine((String) communityRoutinesList.get(position).get(0), routineVote.getValue(), Double.parseDouble((String) communityRoutinesList.get(position).get(4)), (Integer)communityRoutinesList.get(position).get(5));
+        double currentAverage;
+        if (communityRoutinesList.get(position).get(3) == null) currentAverage = 0;
+        else currentAverage = Double.parseDouble(communityRoutinesList.get(position).get(3).toString());
+        DA.voteRoutine((String) communityRoutinesList.get(position).get(0), routineVote.getValue(), currentAverage, Integer.parseInt(communityRoutinesList.get(position).get(4).toString()));
         voteRoutineSheet.dismiss();
-        communityRoutinesList.get(position).set(4, 10);
         MainActivity.getInstance().setCommunityScreen();
     }
 }
