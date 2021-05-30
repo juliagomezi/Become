@@ -963,10 +963,11 @@ public class DomainAdapter {
     public void shareRoutine(String routineID, boolean isPublic){
         if(isPublic){
             controllerPersistence.shareRoutine(currentUser.getID(), routineID);
+            currentUser.shareRoutine(routineID);
         }
         else{
             controllerPersistence.unShareRoutine(currentUser.getID(), routineID);
-            currentUser.removeRoutinePoints(routineID);
+            currentUser.unShareRoutine(routineID);
         }
     }
 

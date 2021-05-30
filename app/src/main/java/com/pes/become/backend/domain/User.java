@@ -257,9 +257,20 @@ public class User {
         }
     }
 
-    public void removeRoutinePoints(String id){
+    public void shareRoutine(String id){
         for(int i = 0; i < routines.size(); ++i) {
             if(routines.get(i).get(0).equals(id)) {
+                routines.get(i).set(2, "true");
+                routines.get(i).set(3, "");
+                break;
+            }
+        }
+    }
+
+    public void unShareRoutine(String id){
+        for(int i = 0; i < routines.size(); ++i) {
+            if(routines.get(i).get(0).equals(id)) {
+                routines.get(i).set(2, "false");
                 routines.get(i).set(3, "");
                 break;
             }
