@@ -1,6 +1,7 @@
 package com.pes.become.frontend;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,6 +73,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<CommunityRecy
      */
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        communityRoutinesList.get(position).get(5);
         //holder.profilePic.setImageBitmap((Bitmap)communityRoutinesList.get(position).get(5));
         holder.routineName.setText((String)communityRoutinesList.get(position).get(1));
 
@@ -81,7 +83,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<CommunityRecy
         holder.valorationIcon.setOnClickListener(view -> createVoteRoutineSheet(position));
 
         if (communityRoutinesList.get(position).get(3) != null) holder.valorationText.setText(String.valueOf(communityRoutinesList.get(position).get(3)));
-        else holder.valorationText.setText("");
+        else holder.valorationText.setText("--");
 
         holder.saveButton.setOnClickListener(view -> saveRoutine(position));
 

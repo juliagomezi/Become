@@ -71,7 +71,6 @@ public class ControllerRoutineDB {
                     routine.add(routineDoc.get("voters"));
                     routine.add(routineDoc.get("avgPoints"));
                     routine.add(routineDoc.get("numRates"));
-                    routine.add(routineDoc.get("timestamp"));
                     routines.add(routine);
                 }
 
@@ -249,11 +248,11 @@ public class ControllerRoutineDB {
 
         routineReference.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                routineReference.update("shared", true, "avgPoints", 0.0);
+                routineReference.update("shared", true, "avgPoints", null);
                 DocumentSnapshot docRoutine = task.getResult();
                 Map<String,Object> routineData = docRoutine.getData();
                 routineData.remove("shared");
-                routineData.put("avgPoints",0.0);
+                routineData.put("avgPoints", null);
                 routineData.put("numRates", 0);
                 routineData.put("ownerId", userId);
                 routineData.put("voters", new ArrayList<>());
