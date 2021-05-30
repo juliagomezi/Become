@@ -48,7 +48,6 @@
                 android:gravity="center"
                 android:text="RoutineDay" />
 
-
             <ImageButton
                 android:id="@+id/nextDayButton"
                 android:layout_width="25dp"
@@ -98,11 +97,12 @@
             style="@style/Widget.AppCompat.Button"
             android:layout_width="60dp"
             android:layout_height="60dp"
+            android:layout_marginBottom="16dp"
             android:background="@drawable/round_button_save"
             app:iconPadding="0dp"
-            android:layout_marginBottom="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.954"
             app:layout_constraintStart_toStartOf="parent" />
 
 

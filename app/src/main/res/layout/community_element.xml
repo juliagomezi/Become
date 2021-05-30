@@ -35,74 +35,6 @@
                 android:clickable="true"
                 android:background="@color/white" >
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/profilePic"
-                    android:layout_width="85dp"
-                    android:layout_height="85dp"
-                    android:padding="15dp"
-                    android:src="@drawable/ic_user"
-                    app:civ_border_width="0dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:orientation="horizontal"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/profilePic"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/routineName">
-
-                    <ImageButton
-                        android:id="@+id/saveButton"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_weight="1"
-                        android:background="?selectableItemBackgroundBorderless"
-                        android:clickable="true"
-                        android:tint="@color/black"
-                        app:iconTint="@color/black"
-                        app:srcCompat="@drawable/ic_bookmark"
-                        tools:ignore="VectorDrawableCompat"
-                        tools:layout_editor_absoluteX="31dp"
-                        tools:layout_editor_absoluteY="25dp" />
-
-                    <ImageButton
-                        android:id="@+id/valorationIcon"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_weight="1"
-                        android:background="?selectableItemBackgroundBorderless"
-                        android:clickable="true"
-                        android:tint="@color/gold75"
-                        app:iconTint="@color/gold75"
-                        app:srcCompat="@drawable/ic_star"
-                        tools:ignore="VectorDrawableCompat"
-                        tools:layout_editor_absoluteX="146dp"
-                        tools:layout_editor_absoluteY="25dp" />
-
-                    <TextView
-                        android:id="@+id/valorationText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="XX" />
-
-                    <Space
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="8" />
-
-                </LinearLayout>
-
                 <TextView
                     android:id="@+id/routineName"
                     android:layout_width="0dp"
@@ -116,10 +48,83 @@
                     android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/profilePic"
-                    app:layout_constraintHorizontal_bias="0.15"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.18" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="25dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/profilePic"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/routineName">
+
+                    <ImageButton
+                        android:id="@+id/saveButton"
+                        android:layout_width="28dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="?selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:scaleType="fitCenter"
+                        android:tint="@color/black"
+                        app:iconTint="@color/black"
+                        app:srcCompat="@drawable/ic_bookmark"
+                        tools:ignore="VectorDrawableCompat"
+                        tools:layout_editor_absoluteX="31dp"
+                        tools:layout_editor_absoluteY="25dp" />
+
+                    <ImageButton
+                        android:id="@+id/valorationIcon"
+                        android:layout_width="28dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_weight="1"
+                        android:background="?selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:scaleType="fitCenter"
+                        android:tint="@color/gold75"
+                        app:iconTint="@color/gold75"
+                        app:srcCompat="@drawable/ic_star"
+                        tools:ignore="VectorDrawableCompat" />
+
+                    <TextView
+                        android:id="@+id/valorationText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/sourcesanspro_regular"
+                        android:gravity="center"
+                        android:scaleType="fitCenter"
+                        android:text="--"
+                        android:textColor="@color/black"
+                        android:textSize="20sp" />
+
+                    <Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="8" />
+
+                </LinearLayout>
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profilePic"
+                    android:layout_width="85dp"
+                    android:layout_height="85dp"
+                    android:padding="15dp"
+                    android:src="@drawable/ic_user"
+                    app:civ_border_width="0dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

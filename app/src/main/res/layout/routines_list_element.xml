@@ -141,7 +141,7 @@
                     app:layout_constraintHorizontal_bias="0.463"
                     app:layout_constraintStart_toStartOf="parent"
                     app:srcCompat="@drawable/ic_star_filled"
-                    android:visibility="gone"
+
                     tools:ignore="VectorDrawableCompat" />
 
                 <TextView

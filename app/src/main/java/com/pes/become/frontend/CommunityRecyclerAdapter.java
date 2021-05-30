@@ -148,6 +148,10 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<CommunityRecy
         DA.getSharedRoutineActivities(routineId);
     }
 
+    /**
+     * Funcio de callback per mostrar les activitats d'una rutina de la comunitat
+     * @param activitiesList llistat de rutines compartides
+     */
     public void getSharedRoutineActivitiesCallback(HashMap<String, ArrayList<ArrayList<String>>> activitiesList) {
         MainActivity.getInstance().setCommunityRoutineViewScreen(routineId, routineName, activitiesList);
     }
