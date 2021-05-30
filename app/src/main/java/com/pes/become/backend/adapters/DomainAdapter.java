@@ -921,7 +921,6 @@ public class DomainAdapter {
      *                           2 - Array amb les IDs dels usuaris que han votat la rutina
      *                           3 - Puntacio mitjana de la rutina
      *                           4 - Nombre d'usuaris que han votat la rutina
-     *                           5 - Bitmap de la foto de perfil de l'autor
      */
     public void sharedRoutinesCallback(ArrayList<ArrayList<Object>> sharedRoutinesInfo){
         for(ArrayList<Object> routineInfo : sharedRoutinesInfo){
@@ -929,7 +928,6 @@ public class DomainAdapter {
             boolean hasVoted = usersVoted.contains(currentUser.getID());
             routineInfo.set(2, hasVoted);
         }
-        //cridem el callback de frontend
         Community.getInstance().getSharedRoutinesCallback(sharedRoutinesInfo);
     }
 

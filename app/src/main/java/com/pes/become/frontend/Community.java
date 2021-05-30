@@ -93,7 +93,7 @@ public class Community extends Fragment {
         ArrayList<ArrayList<Object>> filteredCommunityRoutinesList = new ArrayList<>();
         String filter = searchText.getText().toString().toLowerCase();
         for (int i = 0; i < communityRoutinesList.size(); i++) {
-            String routineName = String.valueOf(communityRoutinesList.get(i).get(2)).toLowerCase();
+            String routineName = String.valueOf(communityRoutinesList.get(i).get(1)).toLowerCase();
             if (routineName.contains(filter)) filteredCommunityRoutinesList.add(communityRoutinesList.get(i));
         }
         initRecyclerView(filteredCommunityRoutinesList);
@@ -112,40 +112,17 @@ public class Community extends Fragment {
      * Funció per obtenir les rutines de la communitat endreçada per valoració i punts
      */
     private void getSharedRoutines() {
-        //DA.getSharedRoutines();
-
-        // per provar: ESBORRAR QUAN FUNCIONI BACKEND
-        ArrayList<Object> routine;
-        communityRoutinesList = new ArrayList<>();
-        routine = new ArrayList<>();
-        routine.add("ID autor + ID rutina"); // (0) id del autor + id de la rutina
-        routine.add(DA.getProfilePic()); // (1) foto perfil de l'autor
-        routine.add("Nom de la rutina"); // (2) nom de la rutina
-        routine.add(false); // (3) bolea que indica si el currentUser ha votat la rutina
-        routine.add(5.4); // (4) Puntacio mitjana de la rutina
-        routine.add(5); // (5) Nombre d'usuaris que han votat la rutina
-        communityRoutinesList.add(routine);
-        routine = new ArrayList<>();
-        routine.add("ID autor + ID rutina"); // (0) id del autor + id de la rutina
-        routine.add(DA.getProfilePic()); // (1) foto perfil de l'autor
-        routine.add("Nom de la rutina"); // (2) nom de la rutina
-        routine.add(true); // (3) bolea que indica si el currentUser ha votat la rutina
-        routine.add(5.4); // (4) Puntacio mitjana de la rutina
-        routine.add(5); // (5) Nombre d'usuaris que han votat la rutina
-        communityRoutinesList.add(routine);
-        getSharedRoutinesCallback(communityRoutinesList);
-
+        DA.getSharedRoutines();
     }
 
     /**
      * Funció de callback per obtenir les rutines de la communitat endreçada per valoració i punts
      * @param sharedRoutinesInfo ArrayList de informacio de les rutines compartides, representada com una ArrayList d'Objects que conte a cada posicio:
      *                           0 - String dmb la ID de la rutina compartida (ID autor + ID rutina)
-     *                           1 - Bitmap de la foto de perfil de l'autor
-     *                           2 - String amb el nom de la rutina
-     *                           3 - Bolea que indica si el current user ha votat la rutina
-     *                           4 - Puntacio mitjana de la rutina
-     *                           5 - Nombre d'usuaris que han votat la rutina
+     *                           1 - String amb el nom de la rutina
+     *                           2 - Bolea que indica si el currentuser ha votat la rutina
+     *                           3 - Puntacio mitjana de la rutina
+     *                           4 - Nombre d'usuaris que han votat la rutina
      */
     public void getSharedRoutinesCallback(ArrayList<ArrayList<Object>> sharedRoutinesInfo) {
         communityRoutinesList = sharedRoutinesInfo;

@@ -66,16 +66,15 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<CommunityRecy
      */
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.routineName.setText((String)communityRoutinesList.get(position).get(2));
-        holder.profilePic.setImageBitmap((Bitmap)communityRoutinesList.get(position).get(1));
+        //holder.profilePic.setImageBitmap((Bitmap)communityRoutinesList.get(position).get(5));
+        holder.routineName.setText((String)communityRoutinesList.get(position).get(1));
 
-        if ((boolean)communityRoutinesList.get(position).get(3)) holder.valorationIcon.setImageResource(R.drawable.ic_star_filled);
+        if ((boolean)communityRoutinesList.get(position).get(2)) holder.valorationIcon.setImageResource(R.drawable.ic_star_filled);
         else holder.valorationIcon.setImageResource(R.drawable.ic_star);
 
         holder.valorationIcon.setOnClickListener(view -> createVoteRoutineSheet(position));
 
-
-        if (communityRoutinesList.get(position).get(4) != null) holder.valorationText.setText(String.valueOf(communityRoutinesList.get(position).get(4)));
+        if (communityRoutinesList.get(position).get(3) != null) holder.valorationText.setText(String.valueOf(communityRoutinesList.get(position).get(3)));
         else holder.valorationText.setText("");
 
         holder.saveButton.setOnClickListener(view -> saveRoutine(position));
@@ -121,9 +120,8 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<CommunityRecy
      * @param position posicio de la rutina dins l'array
      */
     private void saveRoutine(int position) {
-        Log.d("saveRoutine", "saveRoutine");
-        //DA.downloadSharedRoutine(String.valueOf(communityRoutinesList.get(position).get(0)));
-        //MainActivity.getInstance().setProfileScreen();
+        DA.downloadSharedRoutine(String.valueOf(communityRoutinesList.get(position).get(0)));
+        MainActivity.getInstance().setProfileScreen();
     }
 
     /**

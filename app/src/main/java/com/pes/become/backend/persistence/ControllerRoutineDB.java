@@ -64,7 +64,6 @@ public class ControllerRoutineDB {
         colRefToSharedRoutines.get().addOnCompleteListener(task -> {
             ArrayList<ArrayList<Object>> routines = new ArrayList<>();
             if (task.isSuccessful()) {
-                AtomicInteger notFinished = new AtomicInteger(Objects.requireNonNull(task.getResult()).size());
                 for (QueryDocumentSnapshot routineDoc : Objects.requireNonNull(task.getResult())) {
                     ArrayList<Object> routine = new ArrayList<>();
                     routine.add(routineDoc.getId());
@@ -73,29 +72,8 @@ public class ControllerRoutineDB {
                     routine.add(routineDoc.get("avgPoints"));
                     routine.add(routineDoc.get("numRates"));
                     routine.add(routineDoc.get("timestamp"));
-
-                    try {
-                        File localFile = File.createTempFile("images", "jpeg");
-                        String ownerID = routineDoc.get("ownerID").toString();
-                        StorageReference imageRef = storageRef.child("images/" + ownerID);
-                        imageRef.getFile(localFile)
-                                .addOnSuccessListener(taskSnapshot -> {
-                                    routine.add(BitmapFactory.decodeFile(localFile.getAbsolutePath()));
-                                    routines.add(routine);
-                                    notFinished.decrementAndGet();
-                                }).addOnFailureListener(exception -> {
-                                    routine.add(null);
-                                    routines.add(routine);
-                                    notFinished.decrementAndGet();
-                                    });
-
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
+                    routines.add(routine);
                 }
-                while (notFinished.get() >=1){}
 
                 try {
                     method.invoke(object, routines);
@@ -104,10 +82,7 @@ public class ControllerRoutineDB {
                 } catch (InvocationTargetException e2) {
                     e2.printStackTrace();
                 }
-
             }
-
-
         });
     }
     //////////////////////////////MODIFICADORES/////////////////////////////////////////////////////

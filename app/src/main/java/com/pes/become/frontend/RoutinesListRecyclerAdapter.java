@@ -85,6 +85,21 @@ public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesLi
             }
         });
 
+
+        if (Boolean.parseBoolean(routinesList.get(position).get(2))) {
+            holder.publicButton.setVisibility(View.VISIBLE);
+            holder.privateButton.setVisibility(View.GONE);
+            holder.starIcon.setVisibility(View.VISIBLE);
+            holder.points.setVisibility(View.VISIBLE);
+            //holder.points.setText(routinesList.get(position).get(3));
+        }
+        else {
+            holder.publicButton.setVisibility(View.GONE);
+            holder.privateButton.setVisibility(View.VISIBLE);
+            holder.starIcon.setVisibility(View.GONE);
+            holder.points.setVisibility(View.GONE);
+        }
+
         holder.publicButton.setOnClickListener(view -> {
             new AlertDialog.Builder(global)
                     .setTitle(R.string.changeVisibility)
@@ -95,7 +110,7 @@ public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesLi
                         holder.privateButton.setVisibility(View.VISIBLE);
                         holder.starIcon.setVisibility(View.GONE);
                         holder.points.setVisibility(View.GONE);
-                        //DA.setVisibility(false);
+                        DA.shareRoutine(routinesList.get(position).get(0), false);
                     })
                     .setNegativeButton(android.R.string.no, null).show();
         });
@@ -105,7 +120,7 @@ public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesLi
             holder.privateButton.setVisibility(View.GONE);
             holder.starIcon.setVisibility(View.VISIBLE);
             holder.points.setVisibility(View.VISIBLE);
-            //DA.setVisibility(true);
+            DA.shareRoutine(routinesList.get(position).get(0), true);
         });
 
         boolean isSelected = routinesList.get(position).get(0).equals(selectedRoutineID);

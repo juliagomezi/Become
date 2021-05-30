@@ -205,7 +205,7 @@ public class CommunityRoutineView extends Fragment {
      * Funco per guardar una rutina
      */
     private void saveRoutine() {
-        //DA.downloadSharedRoutine(routineId);
-        //MainActivity.getInstance().setProfileScreen();
+        DA.downloadSharedRoutine(routineId);
+        MainActivity.getInstance().setProfileScreen();
     }
 }
