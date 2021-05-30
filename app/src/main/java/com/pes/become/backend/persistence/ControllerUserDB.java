@@ -1,6 +1,7 @@
 package com.pes.become.backend.persistence;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 
@@ -92,6 +93,42 @@ public class ControllerUserDB {
                 });
     }
 
+    /**
+     * Retorna la foto de perfil de l'usuari
+     * @param userId Id de l'usuari
+     * @param method mètode a executar de forma asíncrona un cop acabada la foto (el paràmetre és un bitmap que retorna la foto si el get ha anat bé o null si no)
+     * @param object instancia de la classe del mètode a executar
+     */
+    public void getProfilePic(String userId, Method method, Object object)
+    {
+        try {
+            File localFile = File.createTempFile("images", "jpeg");
+            StorageReference imageRef = storageRef.child("images/" + userId);
+            imageRef.getFile(localFile)
+                    .addOnSuccessListener(taskSnapshot -> {
+                        Bitmap foto = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                        try {
+                            method.invoke(object, foto);
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
+                        } catch (InvocationTargetException e) {
+                            e.printStackTrace();
+                        }
+                    }).addOnFailureListener(exception -> {
+                        Bitmap foto = null;
+                        try {
+                            method.invoke(object, foto);
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
+                        } catch (InvocationTargetException e) {
+                            e.printStackTrace();
+                        }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
     /**
      * Metode per penjar una foto de perfil des de la galeria de l'usuari
      * @param userId nom de l'usuari que penja la foto
