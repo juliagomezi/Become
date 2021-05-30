@@ -53,7 +53,6 @@ public class CommunityRoutineViewRecyclerAdapter extends RecyclerView.Adapter<Co
         holder.endTimeDisplay.setText(activitiesList.get(position).get(6));
         holder.expandableLayout.setVisibility(isExpanded[position] ? View.VISIBLE : View.GONE);
 
-        boolean isDone = activitiesList.get(position).get(7).equals("true");
         String theme = activitiesList.get(position).get(3);
 
         switch (theme) {
@@ -82,7 +81,6 @@ public class CommunityRoutineViewRecyclerAdapter extends RecyclerView.Adapter<Co
                 holder.cardActivityDisplay.setBackgroundResource(R.drawable.theme_other_background);
                 break;
         }
-        if(isDone) holder.cardActivityDisplay.setAlpha(0.3f);
     }
 
     /**

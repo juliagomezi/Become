@@ -150,7 +150,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/sourcesanspro_regular"
                     android:gravity="center"
-                    android:text="3.6"
+                    android:text="XX"
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     android:visibility="gone"

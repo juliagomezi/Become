@@ -12,6 +12,7 @@ import com.facebook.AccessToken;
 import com.pes.become.backend.persistence.ControllerPersistence;
 import com.pes.become.backend.persistence.StringDateConverter;
 import com.pes.become.frontend.Community;
+import com.pes.become.frontend.CommunityRecyclerAdapter;
 import com.pes.become.frontend.ForgotPassword;
 import com.pes.become.frontend.Login;
 import com.pes.become.frontend.LogoScreen;
@@ -936,9 +937,9 @@ public class DomainAdapter {
     public void downloadSharedRoutine(String sharedRoutineID, String sharedRoutineName){
         controllerPersistence.downloadSharedRoutine(currentUser.getID(), sharedRoutineID);
         ArrayList<String> routine = new ArrayList<>();
-        routine.set(0, sharedRoutineID);
-        routine.set(1, sharedRoutineName);
-        routine.set(2, "false");
+        routine.add(0, sharedRoutineID);
+        routine.add(1, sharedRoutineName);
+        routine.add(2, "false");
         currentUser.addRoutine(routine);
     }
 
@@ -978,46 +979,7 @@ public class DomainAdapter {
     }
 
     public void getSharedRoutineActivitiesCallback(HashMap<String, ArrayList<ArrayList<String>>> activitiesList) throws InvalidTimeIntervalException {
-        for (HashMap.Entry<String, ArrayList<ArrayList<String>>> dayActivities : activitiesList.entrySet()) {
-            ArrayList<ArrayList<String>> activities = dayActivities.getValue();
-            if (!activities.isEmpty()) {
-                ArrayList<Activity> acts = new ArrayList<>();
-                for (int i = 0; i < activities.size(); ++i) {
-                    String[] s = activities.get(i).get(5).split(":");
-                    String[] s2 = activities.get(i).get(6).split(":");
-                    int iniH = Integer.parseInt(s[0]);
-                    int iniM = Integer.parseInt(s[1]);
-                    int endH = Integer.parseInt(s2[0]);
-                    int endM = Integer.parseInt(s2[1]);
-                    Activity activity = new Activity(activities.get(i).get(1), activities.get(i).get(2), Theme.valueOf(activities.get(i).get(3)), new TimeInterval(iniH, iniM, endH, endM), Day.valueOf(activities.get(i).get(4)));
-                    activity.setId(activities.get(i).get(0));
-                    activity.setDoneToday((activities.get(i).get(7)).equals("true"));
-                    acts.add(activity);
-                }
-                routineAdapter.setActivitiesByDay(acts, acts.get(0).getDay());
-            }
-        }
-
-        /*
-        if (!selectingRoutine) {
-            if (login != null) {
-                login.loginCallback();
-            } else if (logoScreen != null) {
-                logoScreen.loginCallback();
-            } else {
-                MainActivity.getInstance().setEditRoutineScreen(currentUser.getSelectedRoutine().getId(), currentUser.getSelectedRoutine().getName());
-            }
-            login = null;
-            logoScreen = null;
-        }
-        */
+        CommunityRecyclerAdapter.getInstance().getSharedRoutineActivitiesCallback(activitiesList);
     }
-
-    //ESBORRAR
-
-    public Bitmap getProfilePic(){
-        return currentUser.getProfilePic();
-    }
-
 
 }

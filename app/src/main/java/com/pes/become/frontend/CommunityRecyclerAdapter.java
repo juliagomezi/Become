@@ -1,9 +1,6 @@
 package com.pes.become.frontend;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +14,11 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.firebase.auth.FirebaseUser;
 import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -29,13 +26,17 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<CommunityRecy
 
     private final DomainAdapter DA = DomainAdapter.getInstance();
     private final ArrayList<ArrayList<Object>> communityRoutinesList;
-    private Context global;
+    private final Context global;
+    private static CommunityRecyclerAdapter instace;
 
     private View view;
     private ViewGroup parent;
 
     private BottomSheetDialog voteRoutineSheet;
     private NumberPicker routineVote;
+
+    private String routineId;
+    private String routineName;
 
     /**
      * Constructora del CommunityRecyclerAdapter
@@ -44,6 +45,11 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<CommunityRecy
     public CommunityRecyclerAdapter(ArrayList<ArrayList<Object>> communityRoutinesList, Context global) {
         this.communityRoutinesList = communityRoutinesList;
         this.global = global;
+        instace = this;
+    }
+
+    public static CommunityRecyclerAdapter getInstance() {
+        return instace;
     }
 
     /**
@@ -79,7 +85,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<CommunityRecy
 
         holder.saveButton.setOnClickListener(view -> saveRoutine(position));
 
-        holder.cardRoutineDisplayConstraintLayout.setOnClickListener(view -> seeRoutine(position));
+        holder.cardRoutineDisplayConstraintLayout.setOnClickListener(view -> getSharedRoutineActivities(position));
     }
 
     /**
@@ -120,7 +126,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<CommunityRecy
      * @param position posicio de la rutina dins l'array
      */
     private void saveRoutine(int position) {
-        DA.downloadSharedRoutine(String.valueOf(communityRoutinesList.get(position).get(0)));
+        DA.downloadSharedRoutine(String.valueOf(communityRoutinesList.get(position).get(0)), String.valueOf(communityRoutinesList.get(position).get(1)));
         MainActivity.getInstance().setProfileScreen();
     }
 
@@ -128,171 +134,14 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<CommunityRecy
      * Funcio per mostrar les activitats d'una rutina de la comunitat
      * @param position posicio de la rutina dins l'array
      */
-    private void seeRoutine(int position) {
-        ArrayList<ArrayList<String>> activitiesList = new ArrayList<>();
-        ArrayList<String> activity = new ArrayList<>();
-        activity.add("Id");
-        activity.add("MON A0");
-        activity.add("Description");
-        activity.add("Music");
-        activity.add("Monday");
-        activity.add("00:00");
-        activity.add("01:00");
-        activity.add("false");
-        activitiesList.add(activity);
-        activity = new ArrayList<>();
-        activity.add("Id");
-        activity.add("TUE A0");
-        activity.add("Description");
-        activity.add("Music");
-        activity.add("Tuesday");
-        activity.add("00:00");
-        activity.add("01:00");
-        activity.add("false");
-        activitiesList.add(activity);
-        activity = new ArrayList<>();
-        activity.add("Id");
-        activity.add("WED A0");
-        activity.add("Description");
-        activity.add("Music");
-        activity.add("Wednesday");
-        activity.add("00:00");
-        activity.add("01:00");
-        activity.add("false");
-        activitiesList.add(activity);
-        activity = new ArrayList<>();
-        activity.add("Id");
-        activity.add("THUR A0");
-        activity.add("Description");
-        activity.add("Music");
-        activity.add("Thursday");
-        activity.add("00:00");
-        activity.add("01:00");
-        activity.add("false");
-        activitiesList.add(activity);
-        activity = new ArrayList<>();
-        activity.add("Id");
-        activity.add("FRI A0");
-        activity.add("Description");
-        activity.add("Music");
-        activity.add("Friday");
-        activity.add("00:00");
-        activity.add("01:00");
-        activity.add("false");
-        activitiesList.add(activity);
-        activity = new ArrayList<>();
-        activity.add("Id");
-        activity.add("SAT A0");
-        activity.add("Description");
-        activity.add("Music");
-        activity.add("Saturday");
-        activity.add("00:00");
-        activity.add("01:00");
-        activity.add("false");
-        activitiesList.add(activity);
-        activity = new ArrayList<>();
-        activity.add("Id");
-        activity.add("SUN A0");
-        activity.add("Description");
-        activity.add("Music");
-        activity.add("Sunday");
-        activity.add("00:00");
-        activity.add("01:00");
-        activity.add("false");
-        activitiesList.add(activity);
-        activity = new ArrayList<>();
-        activity.add("Id");
-        activity.add("SUN A0");
-        activity.add("Description");
-        activity.add("Music");
-        activity.add("Sunday");
-        activity.add("00:00");
-        activity.add("01:00");
-        activity.add("false");
-        activitiesList.add(activity);
-        activity = new ArrayList<>();
-        activity.add("Id");
-        activity.add("SUN A0");
-        activity.add("Description");
-        activity.add("Music");
-        activity.add("Sunday");
-        activity.add("00:00");
-        activity.add("01:00");
-        activity.add("false");
-        activitiesList.add(activity);
-        activity = new ArrayList<>();
-        activity.add("Id");
-        activity.add("SUN A0");
-        activity.add("Description");
-        activity.add("Music");
-        activity.add("Sunday");
-        activity.add("00:00");
-        activity.add("01:00");
-        activity.add("false");
-        activitiesList.add(activity);
-        activity = new ArrayList<>();
-        activity.add("Id");
-        activity.add("SUN A0");
-        activity.add("Description");
-        activity.add("Music");
-        activity.add("Sunday");
-        activity.add("00:00");
-        activity.add("01:00");
-        activity.add("false");
-        activitiesList.add(activity);
-        activity = new ArrayList<>();
-        activity.add("Id");
-        activity.add("SUN A0");
-        activity.add("Description");
-        activity.add("Music");
-        activity.add("Sunday");
-        activity.add("00:00");
-        activity.add("01:00");
-        activity.add("false");
-        activitiesList.add(activity);
-        activity = new ArrayList<>();
-        activity.add("Id");
-        activity.add("SUN A0");
-        activity.add("Description");
-        activity.add("Music");
-        activity.add("Sunday");
-        activity.add("00:00");
-        activity.add("01:00");
-        activity.add("false");
-        activitiesList.add(activity);
-        activity = new ArrayList<>();
-        activity.add("Id");
-        activity.add("SUN A0");
-        activity.add("Description");
-        activity.add("Music");
-        activity.add("Sunday");
-        activity.add("00:00");
-        activity.add("01:00");
-        activity.add("false");
-        activitiesList.add(activity);
-        activity = new ArrayList<>();
-        activity.add("Id");
-        activity.add("SUN A0");
-        activity.add("Description");
-        activity.add("Music");
-        activity.add("Sunday");
-        activity.add("00:00");
-        activity.add("01:00");
-        activity.add("false");
-        activitiesList.add(activity);
-        activity = new ArrayList<>();
-        activity.add("Id");
-        activity.add("SUN A0");
-        activity.add("Description");
-        activity.add("Music");
-        activity.add("Sunday");
-        activity.add("00:00");
-        activity.add("01:00");
-        activity.add("false");
-        activitiesList.add(activity);
+    private void getSharedRoutineActivities(int position) {
+        routineId = (String)communityRoutinesList.get(position).get(0);
+        routineName = (String)communityRoutinesList.get(position).get(1);
+        DA.getSharedRoutineActivities(routineId);
+    }
 
-        MainActivity.getInstance().setCommunityRoutineViewScreen(String.valueOf(communityRoutinesList.get(position).get(0)), activitiesList);
-        //MainActivity.getInstance().setViewCommunityRoutineScreen(DA.getSharedRoutinesActivities(communityRoutinesList.get(position).get(0));
+    public void getSharedRoutineActivitiesCallback(HashMap<String, ArrayList<ArrayList<String>>> activitiesList) {
+        MainActivity.getInstance().setCommunityRoutineViewScreen(routineId, routineName, activitiesList);
     }
 
     /**

@@ -16,6 +16,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.pes.become.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -119,9 +120,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
      * @param routineId id de al rutina de la comunitat
      * @param activitiesList llistat d'activitats de la rutina
      */
-    public void setCommunityRoutineViewScreen(String routineId, ArrayList<ArrayList<String>> activitiesList) {
+    public void setCommunityRoutineViewScreen(String routineId, String routineName, HashMap<String, ArrayList<ArrayList<String>>> activitiesList) {
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_layout, new CommunityRoutineView(routineId, activitiesList)).commit();
+                .replace(R.id.fragment_layout, new CommunityRoutineView(routineId, routineName, activitiesList)).commit();
     }
 
     /**

@@ -20,6 +20,7 @@ import com.pes.become.backend.exceptions.NoSelectedRoutineException;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 
 public class CommunityRoutineView extends Fragment {
 
@@ -32,7 +33,8 @@ public class CommunityRoutineView extends Fragment {
 
     private int seeingDay;
     private String routineId;
-    private ArrayList<ArrayList<String>> activitiesList;
+    private String routineName;
+    private HashMap<String, ArrayList<ArrayList<String>>> activitiesList;
     private ArrayList<ArrayList<String>> activitiesListDay;
 
     private RecyclerView recyclerView;
@@ -56,8 +58,9 @@ public class CommunityRoutineView extends Fragment {
     /**
      * Constructora del RoutineView
      */
-    public CommunityRoutineView(String routineId, ArrayList<ArrayList<String>> activitiesList) {
+    public CommunityRoutineView(String routineId, String routineName, HashMap<String, ArrayList<ArrayList<String>>> activitiesList) {
         this.routineId = routineId;
+        this.routineName = routineName;
         this.activitiesList = activitiesList;
     }
 
@@ -193,19 +196,16 @@ public class CommunityRoutineView extends Fragment {
      * Funcio per actualitzar la llista d'activitats
      */
     private void getActivitiesByDay() {
-        activitiesListDay = new ArrayList<>();
-        for (ArrayList<String> activity : activitiesList) {
-            if (activity.get(4).equals(getWeekDay(seeingDay))) activitiesListDay.add(activity);
-        }
+        activitiesListDay = activitiesList.get(getWeekDay(seeingDay));
         initRecyclerView();
         if (activitiesListDay.isEmpty()) initEmptyView(getString(R.string.noActivities));
     }
 
     /**
-     * Funco per guardar una rutina
+     * Funcio per guardar una rutina
      */
     private void saveRoutine() {
-        DA.downloadSharedRoutine(routineId);
+        DA.downloadSharedRoutine(routineId, routineName);
         MainActivity.getInstance().setProfileScreen();
     }
 }

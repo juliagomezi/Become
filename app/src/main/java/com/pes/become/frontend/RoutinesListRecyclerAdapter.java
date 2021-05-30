@@ -91,7 +91,8 @@ public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesLi
             holder.privateButton.setVisibility(View.GONE);
             holder.starIcon.setVisibility(View.VISIBLE);
             holder.points.setVisibility(View.VISIBLE);
-            //holder.points.setText(routinesList.get(position).get(3));
+            if (routinesList.get(position).get(3).equals("")) holder.points.setText("--");
+            else holder.points.setText(routinesList.get(position).get(3));
         }
         else {
             holder.publicButton.setVisibility(View.GONE);
@@ -110,6 +111,7 @@ public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesLi
                         holder.privateButton.setVisibility(View.VISIBLE);
                         holder.starIcon.setVisibility(View.GONE);
                         holder.points.setVisibility(View.GONE);
+                        holder.points.setText("--");
                         DA.shareRoutine(routinesList.get(position).get(0), false);
                     })
                     .setNegativeButton(android.R.string.no, null).show();
