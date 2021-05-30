@@ -265,6 +265,7 @@ public class ControllerRoutineDB {
                                 for (QueryDocumentSnapshot documentSnap : Objects.requireNonNull(task2.getResult())) {
                                     Map<String,Object> activitat = documentSnap.getData();
                                     String idActivity = documentSnap.getId();
+                                    activitat.remove("lastDayDone");
                                     sharedRoutineReference.collection("activities").document(idActivity).set(activitat);
                                 }
                             }
