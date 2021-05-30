@@ -986,4 +986,27 @@ public class DomainAdapter {
         CommunityRecyclerAdapter.getInstance().getSharedRoutineActivitiesCallback(activitiesList);
     }
 
+    public ArrayList<Integer> getRecommendations(){
+        ArrayList<Integer> recommendations = new ArrayList<>();
+        Time totalTime;
+        int moreThanMin;
+        int lessThanMax;
+
+        //Music
+        totalTime = currentUser.getSelectedRoutine().getTotalTimeTheme(Theme.Music);
+        moreThanMin = totalTime.compareTo(new Time(0, 0));
+        lessThanMax = totalTime.compareTo(new Time(0, 0));
+        if(moreThanMin < 0){
+            recommendations.add(0, -1);
+        }
+        else if(lessThanMax > 0){
+            recommendations.add(0, 1);
+        }
+        else{
+            recommendations.add(0, 0);
+        }
+
+        return recommendations;
+    }
+
 }

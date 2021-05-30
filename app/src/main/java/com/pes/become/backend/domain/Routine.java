@@ -184,7 +184,19 @@ public class Routine {
         return shared;
     }
 
-    public void setShared(boolean shared) {
-        this.shared = shared;
+    public Time getTotalTimeTheme(Theme theme){
+        Time totalTime = new Time(0,0);
+        for(int d = 0; d<Day.values().length; ++d){
+            ArrayList<Activity> actsDay = getActivitiesByDay(Day.values()[d]);
+            for(Activity act : actsDay){
+                if(act.getTheme() == theme){
+                    Time duration = act.getInterval().getIntervalDuration();
+                    int totalHours = totalTime.getHours() + duration.getHours();
+                    int totalMinutes = totalTime.getMinutes() + duration.getMinutes();
+                    totalTime = new Time(totalHours, totalMinutes);
+                }
+            }
+        }
+        return totalTime;
     }
 }

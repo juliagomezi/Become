@@ -174,18 +174,7 @@ public class AchievementController {
      */
     private boolean checkHoursPerTheme(Theme theme, int hours) {
         Routine selRoutine = currentUser.getSelectedRoutine();
-        Time totalTime = new Time(0,0);
-        for(int d = 0; d<Day.values().length; ++d){
-            ArrayList<Activity> actsDay = selRoutine.getActivitiesByDay(Day.values()[d]);
-            for(Activity act : actsDay){
-                if(act.getTheme() == theme){
-                    Time duration = act.getInterval().getIntervalDuration();
-                    int totalHours = totalTime.getHours() + duration.getHours();
-                    int totalMinutes = totalTime.getMinutes() + duration.getMinutes();
-                    totalTime = new Time(totalHours, totalMinutes);
-                }
-            }
-        }
+        Time totalTime = selRoutine.getTotalTimeTheme(theme);
         int comparision = totalTime.compareTo(new Time(hours, 0));
         return comparision >= 0; // totalTime >= hours
     }
