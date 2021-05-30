@@ -934,7 +934,9 @@ public class DomainAdapter {
      * Metode per descarregar una rutina compartida al sistema
      * @param sharedRoutineID ID de la rutina a descarregar
      */
-    public void downloadSharedRoutine(String sharedRoutineID, String sharedRoutineName){
+    public void downloadSharedRoutine(String sharedRoutineID, String sharedRoutineName) throws RoutinePrimaryKeyException {
+        if(currentUser.hasRoutineWithName(sharedRoutineName))
+            throw new RoutinePrimaryKeyException();
         controllerPersistence.downloadSharedRoutine(currentUser.getID(), sharedRoutineID);
         ArrayList<String> routine = new ArrayList<>();
         routine.add(0, sharedRoutineID);

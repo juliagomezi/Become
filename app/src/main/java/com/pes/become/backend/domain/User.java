@@ -224,6 +224,20 @@ public class User {
     }
 
     /**
+     *
+     * @param name
+     * @return
+     */
+    public boolean hasRoutineWithName(String name){
+        for(int i = 0; i < routines.size(); ++i) {
+            if(routines.get(i).get(1).equals(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Metode per eliminar una rutina de la llista de rutines de l'usuari
      * @param id ID de la rutina a eliminar
      */
@@ -257,6 +271,10 @@ public class User {
         }
     }
 
+    /**
+     *
+     * @param id
+     */
     public void shareRoutine(String id){
         for(int i = 0; i < routines.size(); ++i) {
             if(routines.get(i).get(0).equals(id)) {
@@ -267,6 +285,10 @@ public class User {
         }
     }
 
+    /**
+     *
+     * @param id
+     */
     public void unShareRoutine(String id){
         for(int i = 0; i < routines.size(); ++i) {
             if(routines.get(i).get(0).equals(id)) {
