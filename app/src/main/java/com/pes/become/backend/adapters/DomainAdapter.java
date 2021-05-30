@@ -215,7 +215,6 @@ public class DomainAdapter {
         }
     }
 
-    //falta boolea shared a routineInfo
     /**
      * Metode que rep la resposta a la crida "loginUser" de la base de dades
      * @param success resultat de l'operacio
@@ -277,7 +276,6 @@ public class DomainAdapter {
         }
     }
 
-    //falta boolea shared a routineInfo
     /**
      * Metode que autentifica un usuari ja loguejat
      * @param success resultat de l'operacio
@@ -935,8 +933,13 @@ public class DomainAdapter {
      * Metode per descarregar una rutina compartida al sistema
      * @param sharedRoutineID ID de la rutina a descarregar
      */
-    public void downloadSharedRoutine(String sharedRoutineID){
+    public void downloadSharedRoutine(String sharedRoutineID, String sharedRoutineName){
         controllerPersistence.downloadSharedRoutine(currentUser.getID(), sharedRoutineID);
+        ArrayList<String> routine = new ArrayList<>();
+        routine.set(0, sharedRoutineID);
+        routine.set(1, sharedRoutineName);
+        routine.set(2, "false");
+        currentUser.addRoutine(routine);
     }
 
     /**
