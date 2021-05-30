@@ -111,6 +111,7 @@ public class ControllerRoutineDB {
         dataInput.put("name", routineName);
         dataInput.put("timestamp", FieldValue.serverTimestamp());
         dataInput.put("shared", false);
+        dataInput.put("avgPoints", null);
         DocumentReference docRefToRoutine= db.collection("users").document(userId).collection("routines").document();
         docRefToRoutine.set(dataInput);
         return docRefToRoutine.getId();
@@ -245,9 +246,10 @@ public class ControllerRoutineDB {
     public void shareRoutine(String userId, String idRoutine) {
         DocumentReference routineReference = db.collection("users").document(userId).collection("routines").document(idRoutine);
         DocumentReference sharedRoutineReference = db.collection("sharedRoutines").document(userId+"_"+idRoutine);
+
         routineReference.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                routineReference.update("shared", true);
+                routineReference.update("shared", true, "avgPoints", 0.0);
                 DocumentSnapshot docRoutine = task.getResult();
                 Map<String,Object> routineData = docRoutine.getData();
                 routineData.remove("shared");
@@ -278,7 +280,7 @@ public class ControllerRoutineDB {
      */
     public void unShareRoutine(String userId, String idRoutine) {
         DocumentReference ogRoutineReference = db.collection("users").document(userId).collection("routines").document(idRoutine);
-        ogRoutineReference.update("shared", false);
+        ogRoutineReference.update("shared", false, "avgPoints", null);
         unShareRoutinePriv(userId, idRoutine);
     }
 
@@ -308,12 +310,16 @@ public class ControllerRoutineDB {
      * @param average la nova mitjana de puntuacio de la rutina publca
      */
     public void voteRoutine(String userId, String idSharedRoutine, double average){
-        DocumentReference docRefToSharedRoutine = db.collection("sharedRoutines").document(idSharedRoutine);
+        String idPrivateRoutine = idSharedRoutine.split("_")[1];
+
         db.runTransaction((Transaction.Function<Void>) transaction -> {
+            DocumentReference docRefToPrivateRoutine = db.collection("users").document(userId).collection("routines").document(idPrivateRoutine);
+            DocumentReference docRefToSharedRoutine = db.collection("sharedRoutines").document(idSharedRoutine);
             DocumentSnapshot sharedRoutineDoc = transaction.get(docRefToSharedRoutine);
             ArrayList<String> usersList = (ArrayList<String>) sharedRoutineDoc.get("voters");
 
             if (!usersList.contains(userId)) {
+                transaction.update(docRefToPrivateRoutine,"avgPoints", average);
                 usersList.add(userId);
                 transaction.update(docRefToSharedRoutine, "avgPoints", average, "numRates", FieldValue.increment(1), "voters", usersList);
             }
