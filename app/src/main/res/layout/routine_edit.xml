@@ -93,19 +93,6 @@
             app:layout_constraintTop_toBottomOf="@+id/routineDay"/>
 
         <TextView
-            android:id="@+id/recommendations"
-            style="@style/Widget.AppCompat.Button"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginBottom="75dp"
-            android:background="@drawable/round_button_notification"
-            app:iconPadding="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.027"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <TextView
             android:id="@+id/addActivity"
             style="@style/Widget.AppCompat.Button"
             android:layout_width="50dp"

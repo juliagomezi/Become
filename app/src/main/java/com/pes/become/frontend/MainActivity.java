@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -21,6 +22,8 @@ import java.util.HashMap;
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private static MainActivity instance;
+
+    ImageButton notificationButton;
 
     /**
      * Funció obtenir la instancia de la MainActivity actual
@@ -36,6 +39,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         setContentView(R.layout.main);
         instance=this;
 
+        notificationButton = findViewById(R.id.notificationButton);
+        notificationButton.setOnClickListener(v -> RoutineEdit.getInstance().showRecommendations(v));
+
         BottomNavigationView navigation = findViewById(R.id.bottomNavigationView);
         navigation.setSelectedItemId(R.id.homeView);
         navigation.setOnNavigationItemSelectedListener(navListener);
@@ -50,11 +56,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
      */
     private final BottomNavigationView.OnNavigationItemSelectedListener navListener = item -> {
         Fragment selectedFragment;
+        notificationButton.setVisibility(View.GONE);
         switch (item.getItemId()) {
             case R.id.homeView:
                 selectedFragment = new RoutineView();
                 break;
             case R.id.communityView:
+
                 selectedFragment = new Community();
                 break;
             case R.id.profileView:
@@ -87,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
      * @param routineName nom de la rutina
      */
     public void setEditRoutineScreen(String id, String routineName) {
+        notificationButton.setVisibility(View.VISIBLE);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_layout, new RoutineEdit(id, routineName)).commit();
     }
@@ -95,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
      * Funcio per mostrar la vista del perfil
      */
     public void setProfileScreen() {
+        notificationButton.setVisibility(View.GONE);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_layout, new Profile()).commit();
     }

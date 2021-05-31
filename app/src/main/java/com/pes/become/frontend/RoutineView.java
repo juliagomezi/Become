@@ -41,7 +41,7 @@ public class RoutineView extends Fragment implements AdapterView.OnItemSelectedL
     private ArrayList<ArrayList<String>> activitiesList;
 
     private RecyclerView recyclerView;
-    private TextView emptyView, recommendations;
+    private TextView emptyView;
     TextView routineDay;
     ImageButton previousDayButton;
     ImageButton nextDayButton;
@@ -63,8 +63,6 @@ public class RoutineView extends Fragment implements AdapterView.OnItemSelectedL
 
         recyclerView = view.findViewById(R.id.activityList);
         emptyView = view.findViewById(R.id.emptyView);
-        recommendations = view.findViewById(R.id.recommendations);
-        recommendations.setOnClickListener(this::showRecommendations);
         previousDayButton = view.findViewById(R.id.previousDayButton);
         previousDayButton.setOnClickListener(v -> showPreviousDay());
         nextDayButton = view.findViewById(R.id.nextDayButton);
@@ -199,15 +197,6 @@ public class RoutineView extends Fragment implements AdapterView.OnItemSelectedL
         } catch (NoSelectedRoutineException e) {
             initEmptyView(getString(R.string.noRoutineSelected));
         }
-    }
-
-    /**
-     * Funcio per obtenir i mostrar les recomanacions per l'usuari
-     */
-    private void showRecommendations(View v) {
-        ArrayList<Integer> recommendationsList = DA.getRecommendations();
-        PopUpClass popUpClass = new PopUpClass(recommendationsList, global);
-        popUpClass.showPopupWindow(v);
     }
 
     /**

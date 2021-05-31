@@ -22,9 +22,26 @@
             android:layout_width="118dp"
             android:layout_height="match_parent"
             android:layout_marginStart="20dp"
-            android:layout_marginLeft="20dp"
             app:iconTint="@color/black"
             app:srcCompat="@drawable/logo_title"
+            tools:ignore="VectorDrawableCompat" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/notificationButton"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="20dp"
+            android:background="?selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:visibility="gone"
+            android:tint="@color/black"
+            app:iconTint="@color/black"
+            app:srcCompat="@drawable/ic_notifications"
             tools:ignore="VectorDrawableCompat" />
 
     </LinearLayout>

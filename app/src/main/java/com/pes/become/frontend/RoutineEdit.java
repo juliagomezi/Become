@@ -51,7 +51,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
     private ArrayList<ArrayList<String>> activitiesList;
 
     private RecyclerView recyclerView;
-    private TextView emptyView, recommendations, startTime, endTime, sheetLabel;
+    private TextView emptyView, startTime, endTime, sheetLabel;
     private BottomSheetDialog activitySheet;
     private Spinner spinnerTheme, spinnerStartDay, spinnerEndDay;
     private EditText activityName, activityDescr, routineName;
@@ -91,7 +91,6 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
 
         recyclerView = view.findViewById(R.id.activityList);
         emptyView = view.findViewById(R.id.emptyView);
-        recommendations = view.findViewById(R.id.recommendations);
         seeingDay = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
         translateSeeingDay();
         setDay();
@@ -486,5 +485,14 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         if(DA.checkAchievement("HourEntertainment10")) MainActivity.getInstance().showTrophyWon(getString(R.string.HourEntertainment10));
         if(DA.checkAchievement("HourPlants10")) MainActivity.getInstance().showTrophyWon(getString(R.string.HourPlants10));
         if(DA.checkAchievement("HourOther10")) MainActivity.getInstance().showTrophyWon(getString(R.string.HourOther10));
+    }
+
+    /**
+     * Funcio per obtenir i mostrar les recomanacions per l'usuari
+     */
+    public void showRecommendations(View v) {
+        ArrayList<Integer> recommendationsList = DA.getRecommendations();
+        PopUpClass popUpClass = new PopUpClass(recommendationsList, global);
+        popUpClass.showPopupWindow(v);
     }
 }
