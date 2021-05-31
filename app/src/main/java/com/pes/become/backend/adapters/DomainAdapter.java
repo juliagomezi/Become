@@ -1044,6 +1044,104 @@ public class DomainAdapter {
             recommendations.add(0, 0);
         }
 
+        //Sport
+        totalTime = currentUser.getSelectedRoutine().getTotalTimeTheme(Theme.Sport);
+        moreThanMin = totalTime.compareTo(new Time(0, 0));
+        lessThanMax = totalTime.compareTo(new Time(0, 0));
+        if(moreThanMin < 0){
+            recommendations.add(0, -1);
+        }
+        else if(lessThanMax > 0){
+            recommendations.add(0, 1);
+        }
+        else{
+            recommendations.add(0, 0);
+        }
+
+        //Sleeping
+        totalTime = currentUser.getSelectedRoutine().getTotalTimeTheme(Theme.Sleeping);
+        moreThanMin = totalTime.compareTo(new Time(0, 0));
+        lessThanMax = totalTime.compareTo(new Time(0, 0));
+        if(moreThanMin < 0){
+            recommendations.add(0, -1);
+        }
+        else if(lessThanMax > 0){
+            recommendations.add(0, 1);
+        }
+        else{
+            recommendations.add(0, 0);
+        }
+
+        //Cooking
+        totalTime = currentUser.getSelectedRoutine().getTotalTimeTheme(Theme.Cooking);
+        moreThanMin = totalTime.compareTo(new Time(0, 0));
+        lessThanMax = totalTime.compareTo(new Time(0, 0));
+        if(moreThanMin < 0){
+            recommendations.add(0, -1);
+        }
+        else if(lessThanMax > 0){
+            recommendations.add(0, 1);
+        }
+        else{
+            recommendations.add(0, 0);
+        }
+
+        //Working
+        totalTime = currentUser.getSelectedRoutine().getTotalTimeTheme(Theme.Working);
+        moreThanMin = totalTime.compareTo(new Time(0, 0));
+        lessThanMax = totalTime.compareTo(new Time(0, 0));
+        if(moreThanMin < 0){
+            recommendations.add(0, -1);
+        }
+        else if(lessThanMax > 0){
+            recommendations.add(0, 1);
+        }
+        else{
+            recommendations.add(0, 0);
+        }
+
+        //Entertainment
+        totalTime = currentUser.getSelectedRoutine().getTotalTimeTheme(Theme.Entertainment);
+        moreThanMin = totalTime.compareTo(new Time(0, 0));
+        lessThanMax = totalTime.compareTo(new Time(0, 0));
+        if(moreThanMin < 0){
+            recommendations.add(0, -1);
+        }
+        else if(lessThanMax > 0){
+            recommendations.add(0, 1);
+        }
+        else{
+            recommendations.add(0, 0);
+        }
+
+        //Plants
+        totalTime = currentUser.getSelectedRoutine().getTotalTimeTheme(Theme.Plants);
+        moreThanMin = totalTime.compareTo(new Time(0, 0));
+        lessThanMax = totalTime.compareTo(new Time(0, 0));
+        if(moreThanMin < 0){
+            recommendations.add(0, -1);
+        }
+        else if(lessThanMax > 0){
+            recommendations.add(0, 1);
+        }
+        else{
+            recommendations.add(0, 0);
+        }
+
+        //Other
+        totalTime = currentUser.getSelectedRoutine().getTotalTimeTheme(Theme.Other);
+        moreThanMin = totalTime.compareTo(new Time(0, 0));
+        lessThanMax = totalTime.compareTo(new Time(0, 0));
+        if(moreThanMin < 0){
+            recommendations.add(0, -1);
+        }
+        else if(lessThanMax > 0){
+            recommendations.add(0, 1);
+        }
+        else{
+            recommendations.add(0, 0);
+        }
+
         return recommendations;
     }
 
