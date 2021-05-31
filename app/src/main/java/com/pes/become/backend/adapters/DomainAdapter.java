@@ -973,6 +973,10 @@ public class DomainAdapter {
         }
     }
 
+    /**
+     * Metode per obtenir les activitats d'una rutina compartida
+     * @param sharedRoutineID id de la rutina compartida
+     */
     public void getSharedRoutineActivities(String sharedRoutineID){
         try {
             Method method = DomainAdapter.class.getMethod("getSharedRoutineActivitiesCallback", HashMap.class);
@@ -982,10 +986,21 @@ public class DomainAdapter {
         }
     }
 
-    public void getSharedRoutineActivitiesCallback(HashMap<String, ArrayList<ArrayList<String>>> activitiesList) throws InvalidTimeIntervalException {
+    /**
+     * Metode de callback per obtenir les activitats d'una rutina compartida
+     * @param activitiesList activitats de la rutina compartida
+     */
+    public void getSharedRoutineActivitiesCallback(HashMap<String, ArrayList<ArrayList<String>>> activitiesList) {
         CommunityRecyclerAdapter.getInstance().getSharedRoutineActivitiesCallback(activitiesList);
     }
 
+    /**
+     * Metode per obtenir les recomanacions de posibles millores a la rutina
+     * @return arraylist de 8 integeres ordenats per tema
+     *                          -1: fa menys hores del minim
+     *                          0: fa les hores recomanades
+     *                          1: fa mes hores del maxim
+     */
     public ArrayList<Integer> getRecommendations(){
         ArrayList<Integer> recommendations = new ArrayList<>();
         Time totalTime;
