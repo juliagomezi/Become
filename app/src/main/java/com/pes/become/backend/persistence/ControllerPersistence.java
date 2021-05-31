@@ -1,16 +1,17 @@
 package com.pes.become.backend.persistence;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.net.Uri;
 
 import com.facebook.AccessToken;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.pes.become.backend.adapters.DomainAdapter;
 
 import java.lang.reflect.Method;
 import java.util.Date;
+import java.util.concurrent.Future;
 
 public class ControllerPersistence {
 
@@ -258,10 +259,9 @@ public class ControllerPersistence {
     /**
      *
      * @param userId
-     * @param method
-     * @param object
+     * @return
      */
-    public void getProfilePic(String userId, Method method, Object object){ CU.getProfilePic(userId, method, object); }
+    public Future<Bitmap> getProfilePic(String userId, Method method, Object object){ return CU.getProfilePic(userId); }
 
     /**
      * Metode per carregar un usuari

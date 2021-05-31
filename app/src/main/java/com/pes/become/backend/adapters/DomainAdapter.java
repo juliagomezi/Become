@@ -29,6 +29,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 /**
  * Classe que gestiona la comunicacio entre la capa de presentacio i la capa de domini, i la creacio dels adaptadors de cada classe de domini
@@ -931,6 +933,22 @@ public class DomainAdapter {
             else if(currentUser.getID().equals(authorID))
                 voteStatus = -1;
             routineInfo.set(2, voteStatus);
+        }
+        int pendingPFPs = sharedRoutinesInfo.size();
+        while(pendingPFPs > 0){
+            for(ArrayList<Object> routineInfo : sharedRoutinesInfo){
+                if(((Future<Bitmap>) routineInfo.get(5)).isDone()){
+                    try {
+                        Bitmap pfp = ((Future<Bitmap>) routineInfo.get(5)).get();
+                        routineInfo.set(5, pfp);
+                        --pendingPFPs;
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
         }
         Community.getInstance().getSharedRoutinesCallback(sharedRoutinesInfo);
     }

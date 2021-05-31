@@ -1,16 +1,11 @@
 package com.pes.become.backend.persistence;
 
-import android.graphics.BitmapFactory;
-
-import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -72,7 +67,7 @@ public class ControllerRoutineDB {
                     routine.add(routineDoc.get("avgPoints"));
                     routine.add(routineDoc.get("numRates"));
 
-
+                    routine.add(ControllerUserDB.getInstance().getProfilePic(routineDoc.get("ownerId").toString()));
 
                     routines.add(routine);
                 }

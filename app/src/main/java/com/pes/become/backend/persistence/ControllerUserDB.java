@@ -20,6 +20,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -29,6 +30,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class ControllerUserDB {
 
@@ -96,38 +100,22 @@ public class ControllerUserDB {
     /**
      * Retorna la foto de perfil de l'usuari
      * @param userId Id de l'usuari
-     * @param method mètode a executar de forma asíncrona un cop acabada la foto (el paràmetre és un bitmap que retorna la foto si el get ha anat bé o null si no)
-     * @param object instancia de la classe del mètode a executar
      */
-    public void getProfilePic(String userId, Method method, Object object)
-    {
+    public Future<Bitmap> getProfilePic(String userId) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
         try {
             File localFile = File.createTempFile("images", "jpeg");
             StorageReference imageRef = storageRef.child("images/" + userId);
-            imageRef.getFile(localFile)
-                    .addOnSuccessListener(taskSnapshot -> {
-                        Bitmap foto = BitmapFactory.decodeFile(localFile.getAbsolutePath());
-                        try {
-                            method.invoke(object, foto);
-                        } catch (IllegalAccessException e) {
-                            e.printStackTrace();
-                        } catch (InvocationTargetException e) {
-                            e.printStackTrace();
-                        }
-                    }).addOnFailureListener(exception -> {
-                        Bitmap foto = null;
-                        try {
-                            method.invoke(object, foto);
-                        } catch (IllegalAccessException e) {
-                            e.printStackTrace();
-                        } catch (InvocationTargetException e) {
-                            e.printStackTrace();
-                        }
+            return executor.submit(() -> {
+                FileDownloadTask task = imageRef.getFile(localFile);
+                while(!task.isComplete());
+                Bitmap foto = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                return foto;
             });
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        return null;
     }
     /**
      * Metode per penjar una foto de perfil des de la galeria de l'usuari
