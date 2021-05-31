@@ -934,6 +934,7 @@ public class DomainAdapter {
                 voteStatus = -1;
             routineInfo.set(2, voteStatus);
         }
+        /*
         int pendingPFPs = sharedRoutinesInfo.size();
         while(pendingPFPs > 0){
             for(ArrayList<Object> routineInfo : sharedRoutinesInfo){
@@ -950,6 +951,7 @@ public class DomainAdapter {
                 }
             }
         }
+         */
         Community.getInstance().getSharedRoutinesCallback(sharedRoutinesInfo);
     }
 

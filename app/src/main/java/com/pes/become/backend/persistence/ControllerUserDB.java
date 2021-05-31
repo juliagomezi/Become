@@ -101,17 +101,23 @@ public class ControllerUserDB {
      * Retorna la foto de perfil de l'usuari
      * @param userId Id de l'usuari
      */
-    public Future<Bitmap> getProfilePic(String userId) {
+    public /*Future<Bitmap>*/ Bitmap getProfilePic(String userId) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         try {
             File localFile = File.createTempFile("images", "jpeg");
             StorageReference imageRef = storageRef.child("images/" + userId);
+            /*
             return executor.submit(() -> {
                 FileDownloadTask task = imageRef.getFile(localFile);
                 while(!task.isComplete());
                 Bitmap foto = BitmapFactory.decodeFile(localFile.getAbsolutePath());
                 return foto;
             });
+             */
+            FileDownloadTask task = imageRef.getFile(localFile);
+            while(!task.isComplete());
+            Bitmap foto = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+            return foto;
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -261,7 +261,7 @@ public class ControllerPersistence {
      * @param userId
      * @return
      */
-    public Future<Bitmap> getProfilePic(String userId, Method method, Object object){ return CU.getProfilePic(userId); }
+    //public Future<Bitmap> getProfilePic(String userId, Method method, Object object){ return CU.getProfilePic(userId); }
 
     /**
      * Metode per carregar un usuari
