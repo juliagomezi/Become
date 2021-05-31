@@ -154,5 +154,6 @@
     <string name="changeVisibilityDescription">Changing this routine\'s visibility to private will make it stop appearing in the community tab and will erase its ratings, do you want to proceed?</string>
     <string name="voteRoutine">Vote</string>
     <string name="routineAlreadyVoted">You have already voted this routine</string>
+    <string name="voteOwnRoutine">You cannot vote your own routine</string>
 
 </resources>

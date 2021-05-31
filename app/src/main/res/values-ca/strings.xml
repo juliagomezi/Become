@@ -147,5 +147,6 @@
     <string name="google">Continuar amb Google</string>
     <string name="voteRoutine">Vota</string>
     <string name="routineAlreadyVoted">Ja has votat aquesta rutina</string>
+    <string name="voteOwnRoutine">No pots votar la teva pròpia rutina</string>
 
 </resources>

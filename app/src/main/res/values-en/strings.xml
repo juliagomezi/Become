@@ -147,5 +147,6 @@
     <string name="google">Continue with Google</string>
     <string name="voteRoutine">Vote</string>
     <string name="routineAlreadyVoted">You have already voted this routine</string>
+    <string name="voteOwnRoutine">You cannot vote your own routine</string>
 
 </resources>

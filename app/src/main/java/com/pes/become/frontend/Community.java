@@ -132,7 +132,7 @@ public class Community extends Fragment {
      * @param sharedRoutinesInfo ArrayList de informacio de les rutines compartides, representada com una ArrayList d'Objects que conte a cada posicio:
      *                           0 - String dmb la ID de la rutina compartida (ID autor + ID rutina)
      *                           1 - String amb el nom de la rutina
-     *                           2 - Bolea que indica si el currentuser ha votat la rutina
+     *                           2 - Integer que indica si el currentuser pot votar la rutina (-1 propia; 0 pot votar; 1 ja ha votat)
      *                           3 - Puntacio mitjana de la rutina
      *                           4 - Nombre d'usuaris que han votat la rutina
      */

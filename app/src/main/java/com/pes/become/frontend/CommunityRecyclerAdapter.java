@@ -78,7 +78,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<CommunityRecy
         //holder.profilePic.setImageBitmap((Bitmap)communityRoutinesList.get(position).get(5));
         holder.routineName.setText((String)communityRoutinesList.get(position).get(1));
 
-        if ((boolean)communityRoutinesList.get(position).get(2)) holder.valorationIcon.setImageResource(R.drawable.ic_star_filled);
+        if ((int)communityRoutinesList.get(position).get(2) != 0) holder.valorationIcon.setImageResource(R.drawable.ic_star_filled);
         else holder.valorationIcon.setImageResource(R.drawable.ic_star);
 
         holder.valorationIcon.setOnClickListener(view -> createVoteRoutineSheet(position));
@@ -161,7 +161,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<CommunityRecy
      * @param position posicio de la rutina al llistat
      */
     public void createVoteRoutineSheet(int position) {
-        if (!(boolean)communityRoutinesList.get(position).get(2)) {
+        if ((int)communityRoutinesList.get(position).get(2) == 0) {
             voteRoutineSheet = new BottomSheetDialog(global, R.style.BottomSheetTheme);
             View sheetView = LayoutInflater.from(parent.getContext()).inflate(R.layout.community_routine_vote, view.findViewById(R.id.bottom_sheet));
 
@@ -176,8 +176,11 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<CommunityRecy
             voteRoutineSheet.setContentView(sheetView);
             voteRoutineSheet.show();
         }
-        else {
+        else if ((int)communityRoutinesList.get(position).get(2) == 1) {
             Toast.makeText(global, global.getApplicationContext().getString(R.string.routineAlreadyVoted), Toast.LENGTH_SHORT).show();
+        }
+        else {
+            Toast.makeText(global, R.string.voteOwnRoutine, Toast.LENGTH_SHORT).show();
         }
     }
 
