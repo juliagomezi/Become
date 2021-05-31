@@ -52,6 +52,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation 'it.xabaras.android:recyclerview-swipedecorator:1.2.3'
+    implementation 'androidx.cardview:cardview:1.0.0'
 
     //All related to cloud firestore
     implementation platform('com.google.cloud:libraries-bom:19.0.0')

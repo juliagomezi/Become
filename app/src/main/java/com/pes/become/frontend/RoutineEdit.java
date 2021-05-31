@@ -51,15 +51,10 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
     private ArrayList<ArrayList<String>> activitiesList;
 
     private RecyclerView recyclerView;
-    private TextView emptyView;
-
+    private TextView emptyView, recommendations, startTime, endTime, sheetLabel;
     private BottomSheetDialog activitySheet;
     private Spinner spinnerTheme, spinnerStartDay, spinnerEndDay;
-    private EditText activityName, activityDescr;
-    private TextView startTime;
-    private TextView endTime;
-    private TextView sheetLabel;
-    private EditText routineName;
+    private EditText activityName, activityDescr, routineName;
 
     private int startHour, startMinute, endHour, endMinute;
     private String id, name, routineId;
@@ -96,7 +91,7 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
 
         recyclerView = view.findViewById(R.id.activityList);
         emptyView = view.findViewById(R.id.emptyView);
-
+        recommendations = view.findViewById(R.id.recommendations);
         seeingDay = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
         translateSeeingDay();
         setDay();
@@ -471,6 +466,9 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         }
     }
 
+    /**
+     * Funcio que comprova si es guanya un trofeu
+     */
     private void checkTrophies() {
         if(DA.checkAchievement("HourMusic5")) MainActivity.getInstance().showTrophyWon(getString(R.string.HourMusic5));
         if(DA.checkAchievement("HourSport5")) MainActivity.getInstance().showTrophyWon(getString(R.string.HourSport5));

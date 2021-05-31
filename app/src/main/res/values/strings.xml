@@ -155,5 +155,9 @@
     <string name="voteRoutine">Vote</string>
     <string name="routineAlreadyVoted">You have already voted this routine</string>
     <string name="voteOwnRoutine">You cannot vote your own routine</string>
+    <string name="noRecommendations">You have no recommendations</string>
+    <string name="recommendationMoreTime">You should dedicate more time to this</string>
+    <string name="recommendationsLessTime">You dedicate too much time to this</string>
+    <string name="recommendationsOkTime">You are doing great!</string>
 
 </resources>
