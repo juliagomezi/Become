@@ -75,7 +75,9 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<CommunityRecy
      */
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.profilePic.setImageBitmap((Bitmap)communityRoutinesList.get(position).get(5));
+        Bitmap profilePic = (Bitmap)communityRoutinesList.get(position).get(5);
+        if(profilePic != null)
+            holder.profilePic.setImageBitmap(profilePic);
         holder.routineName.setText((String)communityRoutinesList.get(position).get(1));
 
         if ((int)communityRoutinesList.get(position).get(2) != 0) holder.valorationIcon.setImageResource(R.drawable.ic_star_filled);
