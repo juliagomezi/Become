@@ -71,6 +71,9 @@ public class ControllerRoutineDB {
                     routine.add(routineDoc.get("voters"));
                     routine.add(routineDoc.get("avgPoints"));
                     routine.add(routineDoc.get("numRates"));
+
+
+
                     routines.add(routine);
                 }
 
