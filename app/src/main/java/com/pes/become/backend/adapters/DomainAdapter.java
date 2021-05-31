@@ -1049,13 +1049,13 @@ public class DomainAdapter {
         moreThanMin = totalTime.compareTo(new Time(0, 0));
         lessThanMax = totalTime.compareTo(new Time(0, 0));
         if(moreThanMin < 0){
-            recommendations.add(0, -1);
+            recommendations.add(1, -1);
         }
         else if(lessThanMax > 0){
-            recommendations.add(0, 1);
+            recommendations.add(1, 1);
         }
         else{
-            recommendations.add(0, 0);
+            recommendations.add(1, 0);
         }
 
         //Sleeping
@@ -1063,13 +1063,13 @@ public class DomainAdapter {
         moreThanMin = totalTime.compareTo(new Time(0, 0));
         lessThanMax = totalTime.compareTo(new Time(0, 0));
         if(moreThanMin < 0){
-            recommendations.add(0, -1);
+            recommendations.add(2, -1);
         }
         else if(lessThanMax > 0){
-            recommendations.add(0, 1);
+            recommendations.add(2, 1);
         }
         else{
-            recommendations.add(0, 0);
+            recommendations.add(2, 0);
         }
 
         //Cooking
@@ -1077,13 +1077,13 @@ public class DomainAdapter {
         moreThanMin = totalTime.compareTo(new Time(0, 0));
         lessThanMax = totalTime.compareTo(new Time(0, 0));
         if(moreThanMin < 0){
-            recommendations.add(0, -1);
+            recommendations.add(3, -1);
         }
         else if(lessThanMax > 0){
-            recommendations.add(0, 1);
+            recommendations.add(3, 1);
         }
         else{
-            recommendations.add(0, 0);
+            recommendations.add(3, 0);
         }
 
         //Working
@@ -1091,13 +1091,13 @@ public class DomainAdapter {
         moreThanMin = totalTime.compareTo(new Time(0, 0));
         lessThanMax = totalTime.compareTo(new Time(0, 0));
         if(moreThanMin < 0){
-            recommendations.add(0, -1);
+            recommendations.add(4, -1);
         }
         else if(lessThanMax > 0){
-            recommendations.add(0, 1);
+            recommendations.add(4, 1);
         }
         else{
-            recommendations.add(0, 0);
+            recommendations.add(4, 0);
         }
 
         //Entertainment
@@ -1105,13 +1105,13 @@ public class DomainAdapter {
         moreThanMin = totalTime.compareTo(new Time(0, 0));
         lessThanMax = totalTime.compareTo(new Time(0, 0));
         if(moreThanMin < 0){
-            recommendations.add(0, -1);
+            recommendations.add(5, -1);
         }
         else if(lessThanMax > 0){
-            recommendations.add(0, 1);
+            recommendations.add(5, 1);
         }
         else{
-            recommendations.add(0, 0);
+            recommendations.add(5, 0);
         }
 
         //Plants
@@ -1119,13 +1119,13 @@ public class DomainAdapter {
         moreThanMin = totalTime.compareTo(new Time(0, 0));
         lessThanMax = totalTime.compareTo(new Time(0, 0));
         if(moreThanMin < 0){
-            recommendations.add(0, -1);
+            recommendations.add(6, -1);
         }
         else if(lessThanMax > 0){
-            recommendations.add(0, 1);
+            recommendations.add(6, 1);
         }
         else{
-            recommendations.add(0, 0);
+            recommendations.add(6, 0);
         }
 
         //Other
@@ -1133,13 +1133,13 @@ public class DomainAdapter {
         moreThanMin = totalTime.compareTo(new Time(0, 0));
         lessThanMax = totalTime.compareTo(new Time(0, 0));
         if(moreThanMin < 0){
-            recommendations.add(0, -1);
+            recommendations.add(7, -1);
         }
         else if(lessThanMax > 0){
-            recommendations.add(0, 1);
+            recommendations.add(7, 1);
         }
         else{
-            recommendations.add(0, 0);
+            recommendations.add(7, 0);
         }
 
         return recommendations;
