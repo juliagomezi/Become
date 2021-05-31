@@ -925,8 +925,12 @@ public class DomainAdapter {
         for(ArrayList<Object> routineInfo : sharedRoutinesInfo){
             ArrayList<String> usersVoted = (ArrayList<String>) routineInfo.get(2);
             String authorID = ((String) routineInfo.get(0)).split("_")[0];
-            boolean hasVoted = usersVoted.contains(currentUser.getID()) || currentUser.getID().equals(authorID);
-            routineInfo.set(2, hasVoted);
+            int voteStatus = 0; //-1 -> es seva; 0 -> pot votar; 1 -> ja ha votat
+            if(usersVoted.contains(currentUser.getID()))
+                voteStatus = 1;
+            else if(currentUser.getID().equals(authorID))
+                voteStatus = -1;
+            routineInfo.set(2, voteStatus);
         }
         Community.getInstance().getSharedRoutinesCallback(sharedRoutinesInfo);
     }
