@@ -14,56 +14,56 @@
         android:background="@color/coldwhite"
         tools:context=".frontend.MainActivity">
 
-        <LinearLayout
-            android:id="@+id/controls"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            tools:layout_editor_absoluteY="10dp"
-            app:layout_constraintTop_toTopOf="parent"
+        <ImageButton
+            android:id="@+id/previousDayButton"
+            android:layout_width="25dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="?selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:tint="@color/black"
+            app:iconTint="@color/black"
+            app:layout_constraintBottom_toTopOf="@id/activityList"
+            app:layout_constraintEnd_toStartOf="@id/routineDay"
+            app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"
+            app:srcCompat="@drawable/ic_arrow_back"
+            tools:ignore="VectorDrawableCompat" />
+
+        <TextView
+            android:id="@+id/routineDay"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="RoutineDay"
+            app:layout_constraintBottom_toTopOf="@id/activityList"
+            app:layout_constraintEnd_toStartOf="@id/nextDayButton"
+            app:layout_constraintStart_toEndOf="@id/previousDayButton"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <ImageButton
+            android:id="@+id/nextDayButton"
+            android:layout_width="25dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="?selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:tint="@color/black"
+            app:iconTint="@color/black"
+            app:layout_constraintBottom_toTopOf="@id/activityList"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/activityList" >
-
-            <ImageButton
-                android:id="@+id/previousDayButton"
-                android:layout_width="25dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginBottom="10dp"
-                android:background="?selectableItemBackgroundBorderless"
-                android:clickable="true"
-                android:tint="@color/black"
-                app:iconTint="@color/black"
-                app:srcCompat="@drawable/ic_arrow_back"
-                tools:ignore="VectorDrawableCompat" />
-
-            <TextView
-                android:id="@+id/routineDay"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="4"
-                android:gravity="center"
-                android:text="RoutineDay" />
-
-            <ImageButton
-                android:id="@+id/nextDayButton"
-                android:layout_width="25dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"
-                android:background="?selectableItemBackgroundBorderless"
-                android:clickable="true"
-                android:tint="@color/black"
-                app:iconTint="@color/black"
-                app:srcCompat="@drawable/ic_arrow_forward"
-                tools:ignore="VectorDrawableCompat" />
-        </LinearLayout>
-
+            app:layout_constraintStart_toEndOf="@id/routineDay"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"
+            app:srcCompat="@drawable/ic_arrow_forward"
+            tools:ignore="VectorDrawableCompat" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/activityList"
@@ -75,13 +75,13 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/controls" />
+            app:layout_constraintTop_toBottomOf="@+id/routineDay" />
 
         <TextView
             android:id="@+id/emptyView"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="30dp"
             android:gravity="center"
             android:animationCache="true"
             android:visibility="invisible"
@@ -90,7 +90,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/controls"/>
+            app:layout_constraintTop_toBottomOf="@+id/routineDay"/>
 
         <TextView
             android:id="@+id/saveRoutine"

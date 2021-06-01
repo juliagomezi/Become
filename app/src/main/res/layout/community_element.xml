@@ -74,7 +74,7 @@
                         android:scaleType="fitCenter"
                         android:tint="@color/black"
                         app:iconTint="@color/black"
-                        app:srcCompat="@drawable/ic_bookmark"
+                        app:srcCompat="@drawable/ic_download"
                         tools:ignore="VectorDrawableCompat"
                         tools:layout_editor_absoluteX="31dp"
                         tools:layout_editor_absoluteY="25dp" />

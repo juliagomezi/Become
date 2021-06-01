@@ -16,7 +16,7 @@
             <item >
                 <bitmap
                     android:gravity="center"
-                    android:src="@drawable/ic_bookmark_png" />
+                    android:src="@drawable/ic_download_png" />
             </item>
         </layer-list>
     </item>
