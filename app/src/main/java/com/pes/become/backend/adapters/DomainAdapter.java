@@ -546,6 +546,7 @@ public class DomainAdapter {
         if(infoRoutine!=null) {
             Routine routine = routineAdapter.createRoutine(infoRoutine.get(1));
             routine.setId(infoRoutine.get(0));
+            routine.setShared(infoRoutine.get(2).equals("true"));
             currentUser.setSelectedRoutine(routine);
             routineAdapter.setCurrentRoutine(currentUser.getSelectedRoutine());
             controllerPersistence.setSelectedRoutine(currentUser.getID(), currentUser.getSelectedRoutine().getId());
@@ -670,8 +671,8 @@ public class DomainAdapter {
      * @param routineId identificador de la rutina
      */
     public void deleteRoutine(String routineId) {
-        currentUser.deleteRoutine(routineId);
         controllerPersistence.deleteRoutine(currentUser.getID(), routineId, currentUser.isRoutineShared(routineId));
+        currentUser.deleteRoutine(routineId);
     }
 
     /**

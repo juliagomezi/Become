@@ -38,7 +38,7 @@ public class User {
     /**
      * Trofeus obtinguts per l'usuari
      */
-    private TreeMap<Achievement, Boolean> achievements;
+    private final TreeMap<Achievement, Boolean> achievements;
     /**
      *
      */
