@@ -694,8 +694,10 @@ public class DomainAdapter {
     public void createActivity(String name, String description, String theme, String startDayString, String endDayString, String iniH, String iniM, String endH, String endM) throws InvalidTimeIntervalException, InvalidDayIntervalException, OverlappingActivitiesException, NoSelectedRoutineException {
         Day startDay = Day.values()[Integer.parseInt(startDayString)];
         Day endDay = Day.values()[Integer.parseInt(endDayString)];
+        if(startDay.ordinal() - endDay.ordinal() != 0 && startDay.ordinal() - endDay.ordinal() != -1 && !(startDay == Day.Sunday && endDay == Day.Monday))
+            throw new InvalidDayIntervalException();
         int comparison = startDay.compareTo(endDay);
-        if (comparison < 0) {
+        if (comparison < 0 || (startDay == Day.Sunday && endDay == Day.Monday)) {
             Activity newActDay1 = new Activity(name, description, Theme.values()[Integer.parseInt(theme)], new TimeInterval (Integer.parseInt(iniH), Integer.parseInt(iniM), 23, 59), startDay);
             Activity newActDay2 = new Activity(name, description, Theme.values()[Integer.parseInt(theme)], new TimeInterval (0, 0, Integer.parseInt(endH), Integer.parseInt(endM)), endDay);
             if(!routineAdapter.checkOverlappings(newActDay1) && !routineAdapter.checkOverlappings(newActDay2)) {
@@ -747,11 +749,13 @@ public class DomainAdapter {
     public void updateActivity(String id, String name, String description, String theme, String startDayString, String endDayString, String iniH, String iniM, String endH, String endM) throws InvalidDayIntervalException, InvalidTimeIntervalException, OverlappingActivitiesException, NoSelectedRoutineException {
         Day startDay = Day.values()[Integer.parseInt(startDayString)];
         Day endDay = Day.values()[Integer.parseInt(endDayString)];
+        if(startDay.ordinal() - endDay.ordinal() != 0 && startDay.ordinal() - endDay.ordinal() != -1 && !(startDay == Day.Sunday && endDay == Day.Monday))
+            throw new InvalidDayIntervalException();
         int comparison = startDay.compareTo(endDay);
         Activity oldActivity = currentUser.getSelectedRoutine().getActivity(id);
         Time duration = oldActivity.getInterval().getIntervalDuration();
         currentUser.updateStatistics(oldActivity.getTheme(),oldActivity.getDay(),duration.getHours(),duration.getMinutes(),false);
-        if (comparison < 0) {
+        if (comparison < 0 || (startDay == Day.Sunday && endDay == Day.Monday)) {
             Activity updatedActivity1 = new Activity(name, description, Theme.values()[Integer.parseInt(theme)], new TimeInterval(Integer.parseInt(iniH), Integer.parseInt(iniM), 23, 59), startDay);
             updatedActivity1.setId(id);
             routineAdapter.updateActivity(updatedActivity1);
