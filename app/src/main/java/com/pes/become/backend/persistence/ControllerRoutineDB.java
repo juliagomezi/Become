@@ -143,16 +143,18 @@ public class ControllerRoutineDB {
      * @param userId identificador de l'usuari que vol descarregar la rutina publica
      * @param idSharedRoutine identificador de la rutina publica
      */
-    public void downloadSharedRoutine(String userId, String idSharedRoutine){
+    public void downloadSharedRoutine(String userId, String idSharedRoutine, Object object, Method method){
         DocumentReference docRefToSharedRoutine = db.collection("sharedRoutines").document(idSharedRoutine);
 
+        String[] routines = new String[2];
 
         db.runTransaction((Transaction.Function<Void>) transaction -> {
             DocumentSnapshot routineSharedDoc = transaction.get(docRefToSharedRoutine);
 
             String sharedRoutineName = routineSharedDoc.get("name").toString();
             String newId = createRoutine(userId, sharedRoutineName);
-
+            routines[0] = newId;
+            routines[1] = sharedRoutineName;
             HashMap <String, Object> dataInput = new HashMap<>();
 
             HashMap <String, Double> mapMusic, mapSport, mapSleeping, mapCooking, mapWorking, mapEntertainment, mapPlants, mapOther;
@@ -180,7 +182,7 @@ public class ControllerRoutineDB {
                     for (QueryDocumentSnapshot actDoc : task2.getResult()) {
                         String activityId = actDoc.getId();
                         Map<String, Object> activity = actDoc.getData();
-                        activity.remove("lastDayDone");
+                        activity.put("lastDayDone", "null");
 
                         String theme = activity.get("theme").toString();
                         String day = activity.get("day").toString();
@@ -228,6 +230,13 @@ public class ControllerRoutineDB {
                                 db.collection("users").document(userId).collection("statistics").document(newId).set(dataInput);
 
                             }
+                        try {
+                            method.invoke(object, routines);
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
+                        } catch (InvocationTargetException e2) {
+                            e2.printStackTrace();
+                        }
                         });
             return null;
         });

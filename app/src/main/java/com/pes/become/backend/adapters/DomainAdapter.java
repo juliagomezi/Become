@@ -961,7 +961,18 @@ public class DomainAdapter {
     public void downloadSharedRoutine(String sharedRoutineID, String sharedRoutineName) throws RoutinePrimaryKeyException {
         if(currentUser.hasRoutineWithName(sharedRoutineName))
             throw new RoutinePrimaryKeyException();
-        controllerPersistence.downloadSharedRoutine(currentUser.getID(), sharedRoutineID);
+        Class[] parameterTypes = new Class[2];
+        parameterTypes[0] = String.class;
+        parameterTypes[1] = String.class;
+        try {
+            Method method = DomainAdapter.class.getMethod("downloadSharedRoutinesCallback", parameterTypes);
+            controllerPersistence.downloadSharedRoutine(currentUser.getID(), sharedRoutineID, this, method);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void downloadSharedRoutinesCallback(String sharedRoutineID, String sharedRoutineName) {
         ArrayList<String> routine = new ArrayList<>();
         routine.add(0, sharedRoutineID);
         routine.add(1, sharedRoutineName);

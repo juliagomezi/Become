@@ -215,8 +215,8 @@ public class ControllerPersistence {
      * @param userId identificador de l'usuari que vol descarregar la rutina
      * @param idSharedRoutine identificador de la rutina publica
      */
-    public void downloadSharedRoutine(String userId, String idSharedRoutine){
-        CR.downloadSharedRoutine(userId, idSharedRoutine);
+    public void downloadSharedRoutine(String userId, String idSharedRoutine, Object object, Method method){
+        CR.downloadSharedRoutine(userId, idSharedRoutine, object, method);
     }
 
     /**
