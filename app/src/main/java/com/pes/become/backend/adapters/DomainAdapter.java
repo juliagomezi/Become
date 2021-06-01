@@ -484,6 +484,8 @@ public class DomainAdapter {
             ArrayList<String> routine = new ArrayList<>();
             routine.add(id);
             routine.add(name);
+            routine.add("false");
+            routine.add("");
             currentUser.addRoutine(routine);
         } else {
             throw new ExistingRoutineException();
