@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -40,6 +41,7 @@ public class Community extends Fragment {
 
     EditText searchText;
     ImageButton searchButton;
+    ProgressBar loading;
 
     /**
      * Constructora per defecte de RoutinesList
@@ -69,6 +71,7 @@ public class Community extends Fragment {
         recyclerView = view.findViewById(R.id.communityRoutinesList);
         searchText = view.findViewById(R.id.searchText);
         searchButton = view.findViewById(R.id.searchButton);
+        loading = view.findViewById(R.id.loading);
 
         searchButton.setOnClickListener(view -> search());
         searchText.addTextChangedListener(new TextWatcher() {
@@ -118,6 +121,7 @@ public class Community extends Fragment {
         recyclerView.setLayoutManager((new LinearLayoutManager(global)));
         communityRecyclerAdapter = new CommunityRecyclerAdapter(list, global);
         recyclerView.setAdapter(communityRecyclerAdapter);
+        loading.setVisibility(View.GONE);
     }
 
     /**

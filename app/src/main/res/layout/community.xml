@@ -61,6 +61,19 @@
 
         </LinearLayout>
 
+        <ProgressBar
+            android:id="@+id/loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@+id/communityRoutinesList"
+            app:layout_constraintEnd_toEndOf="@+id/communityRoutinesList"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="@+id/communityRoutinesList"
+            app:layout_constraintTop_toBottomOf="@+id/searchBox"
+            app:layout_constraintVertical_bias="0.262" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/communityRoutinesList"
             android:layout_width="0dp"
