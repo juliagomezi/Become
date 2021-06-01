@@ -671,8 +671,8 @@ public class DomainAdapter {
      * @param routineId identificador de la rutina
      */
     public void deleteRoutine(String routineId) {
-        currentUser.deleteRoutine(routineId);
         controllerPersistence.deleteRoutine(currentUser.getID(), routineId, currentUser.isRoutineShared(routineId));
+        currentUser.deleteRoutine(routineId);
     }
 
     /**
