@@ -11,11 +11,9 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="97dp"
+        android:layout_height="100dp"
         android:orientation="horizontal"
-        android:background="@color/white"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp">
+        android:background="@color/white">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/trophyCard"
@@ -23,50 +21,43 @@
             android:layout_height="match_parent"
             app:cardCornerRadius="20dp"
             android:outlineSpotShadowColor="@color/white"
-            android:outlineAmbientShadowColor="@color/white"
-            android:padding="8dp" >
+            android:outlineAmbientShadowColor="@color/white">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:padding="8dp">
 
-                <TextView
-                    android:id="@+id/trophyName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
-                    android:fontFamily="@font/sourcesanspro_semibold"
-                    android:gravity="start"
-                    android:text="Trophy Name"
-                    android:textAlignment="viewStart"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textColor="@color/softblack"
-                    android:textSize="20sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.197"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.228" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_marginEnd="70dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/trophyDescription"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
-                    android:fontFamily="@font/sourcesanspro_semibold"
-                    android:gravity="start"
-                    android:text="Trophy description"
-                    android:textAlignment="viewStart"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:textColor="@color/softblack"
-                    android:textSize="14sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.197"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/trophyName"
-                    app:layout_constraintVertical_bias="0.371" />
+                    <TextView
+                        android:id="@+id/trophyName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginStart="8dp"
+                        android:fontFamily="@font/sourcesanspro_semibold"
+                        android:text="Trophy Name"
+                        android:textColor="@color/softblack"
+                        android:textSize="20sp"
+                        />
+
+                    <TextView
+                        android:id="@+id/trophyDescription"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginStart="8dp"
+                        android:fontFamily="@font/sourcesanspro_semibold"
+                        android:text="Trophy description"
+                        android:textColor="@color/softblack"
+                        android:textSize="14sp"
+                        />
+                </LinearLayout>
 
                 <ImageButton
                     android:id="@+id/trophyWonIcon"
