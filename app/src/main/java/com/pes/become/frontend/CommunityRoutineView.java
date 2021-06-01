@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.Space;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -103,34 +104,38 @@ public class CommunityRoutineView extends Fragment {
      * Metode que inicialitza les estrelles
      */
     private void initStars() {
+        star1 = view.findViewById(R.id.star1);
+        star2 = view.findViewById(R.id.star2);
+        star3 = view.findViewById(R.id.star3);
+        star4 = view.findViewById(R.id.star4);
+        star5 = view.findViewById(R.id.star5);
         if(voted == 0) {
-            star1 = view.findViewById(R.id.star1);
             star1.setOnClickListener(v -> {
                 star1.setImageResource(R.drawable.ic_star_filled);
                 DA.voteRoutine(this.routineId, 1, average, numvotes);
+                removeStars();
             });
-            star2 = view.findViewById(R.id.star2);
             star2.setOnClickListener(v -> {
                 star1.setImageResource(R.drawable.ic_star_filled);
                 star2.setImageResource(R.drawable.ic_star_filled);
                 DA.voteRoutine(this.routineId, 2, average, numvotes);
+                removeStars();
             });
-            star3 = view.findViewById(R.id.star3);
             star3.setOnClickListener(v -> {
                 star1.setImageResource(R.drawable.ic_star_filled);
                 star2.setImageResource(R.drawable.ic_star_filled);
                 star3.setImageResource(R.drawable.ic_star_filled);
                 DA.voteRoutine(this.routineId, 3, average, numvotes);
+                removeStars();
             });
-            star4 = view.findViewById(R.id.star4);
             star4.setOnClickListener(v -> {
                 star1.setImageResource(R.drawable.ic_star_filled);
                 star2.setImageResource(R.drawable.ic_star_filled);
                 star3.setImageResource(R.drawable.ic_star_filled);
                 star4.setImageResource(R.drawable.ic_star_filled);
                 DA.voteRoutine(this.routineId, 4, average, numvotes);
+                removeStars();
             });
-            star5 = view.findViewById(R.id.star5);
             star5.setOnClickListener(v -> {
                 star1.setImageResource(R.drawable.ic_star_filled);
                 star2.setImageResource(R.drawable.ic_star_filled);
@@ -138,27 +143,30 @@ public class CommunityRoutineView extends Fragment {
                 star4.setImageResource(R.drawable.ic_star_filled);
                 star5.setImageResource(R.drawable.ic_star_filled);
                 DA.voteRoutine(this.routineId, 5, average, numvotes);
+                removeStars();
             });
         } else {
-            if (average > 0.5) star1.setImageResource(R.drawable.ic_star_filled);
-            if (average > 1.5) star2.setImageResource(R.drawable.ic_star_filled);
-            if (average > 2.5) star3.setImageResource(R.drawable.ic_star_filled);
-            if (average > 3.5) star4.setImageResource(R.drawable.ic_star_filled);
-            if (average > 4.5) star5.setImageResource(R.drawable.ic_star_filled);
-            if(voted > 0) {
-                star1.setOnClickListener(v -> { Toast.makeText(global, global.getApplicationContext().getString(R.string.routineAlreadyVoted), Toast.LENGTH_SHORT).show(); });
-                star2.setOnClickListener(v -> { Toast.makeText(global, global.getApplicationContext().getString(R.string.routineAlreadyVoted), Toast.LENGTH_SHORT).show(); });
-                star3.setOnClickListener(v -> { Toast.makeText(global, global.getApplicationContext().getString(R.string.routineAlreadyVoted), Toast.LENGTH_SHORT).show(); });
-                star4.setOnClickListener(v -> { Toast.makeText(global, global.getApplicationContext().getString(R.string.routineAlreadyVoted), Toast.LENGTH_SHORT).show(); });
-                star5.setOnClickListener(v -> { Toast.makeText(global, global.getApplicationContext().getString(R.string.routineAlreadyVoted), Toast.LENGTH_SHORT).show(); });
-            } else {
-                star1.setOnClickListener(v -> { Toast.makeText(global, R.string.voteOwnRoutine, Toast.LENGTH_SHORT).show(); });
-                star2.setOnClickListener(v -> { Toast.makeText(global, R.string.voteOwnRoutine, Toast.LENGTH_SHORT).show(); });
-                star3.setOnClickListener(v -> { Toast.makeText(global, R.string.voteOwnRoutine, Toast.LENGTH_SHORT).show(); });
-                star4.setOnClickListener(v -> { Toast.makeText(global, R.string.voteOwnRoutine, Toast.LENGTH_SHORT).show(); });
-                star5.setOnClickListener(v -> { Toast.makeText(global, R.string.voteOwnRoutine, Toast.LENGTH_SHORT).show(); });
-            }
+            star1.setImageResource(R.drawable.ic_star_filled);
+            star2.setVisibility(View.GONE);
+            star3.setVisibility(View.GONE);
+            star4.setVisibility(View.GONE);
+            star5.setVisibility(View.GONE);
+            Space space1 = view.findViewById(R.id.space1);
+            space1.setVisibility(View.VISIBLE);
+            Space space2 = view.findViewById(R.id.space2);
+            space2.setVisibility(View.GONE);
+            TextView votes = view.findViewById(R.id.votes);
+            votes.setText(String.valueOf(average));
+            votes.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void removeStars() {
+        star1.setClickable(false);
+        star2.setClickable(false);
+        star3.setClickable(false);
+        star4.setClickable(false);
+        star5.setClickable(false);
     }
 
     /**

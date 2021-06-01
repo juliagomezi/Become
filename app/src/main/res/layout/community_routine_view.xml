@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
-            android:text="Routine name"
+            android:fontFamily="@font/sourcesanspro_semibold"
             android:textSize="28sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -46,6 +46,20 @@
                 android:layout_weight="1"
                 app:srcCompat="@drawable/ic_star"
                 tools:ignore="VectorDrawableCompat" />
+
+            <TextView
+                android:id="@+id/votes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:textSize="28sp" />
+
+            <Space
+                android:id="@+id/space1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="12"
+                android:visibility="gone"/>
 
             <ImageButton
                 android:id="@+id/star2"
@@ -84,6 +98,7 @@
                 tools:ignore="VectorDrawableCompat" />
 
             <Space
+                android:id="@+id/space2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="6" />

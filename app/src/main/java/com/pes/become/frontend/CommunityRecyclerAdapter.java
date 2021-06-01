@@ -5,9 +5,7 @@ import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapter;
 import com.pes.become.backend.exceptions.RoutinePrimaryKeyException;
@@ -31,12 +28,6 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<CommunityRecy
     private final ArrayList<ArrayList<Object>> communityRoutinesList;
     private final Context global;
     private static CommunityRecyclerAdapter instance;
-
-    private View view;
-    private ViewGroup parent;
-
-    private BottomSheetDialog voteRoutineSheet;
-    private NumberPicker routineVote;
 
     private String routineId;
     private String routineName;
@@ -64,9 +55,8 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<CommunityRecy
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        this.parent = parent;
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        view = layoutInflater.inflate(R.layout.community_element, parent, false);
+        View view = layoutInflater.inflate(R.layout.community_element, parent, false);
         return new ViewHolder(view);
     }
 
@@ -80,13 +70,8 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<CommunityRecy
             holder.profilePic.setImageBitmap(profilePic);
         holder.routineName.setText((String)communityRoutinesList.get(position).get(1));
 
-        if ((int)communityRoutinesList.get(position).get(2) != 0) holder.valorationIcon.setImageResource(R.drawable.ic_star_filled);
-        else holder.valorationIcon.setImageResource(R.drawable.ic_star);
-
-        holder.valorationIcon.setOnClickListener(view -> createVoteRoutineSheet(position));
-
         if (communityRoutinesList.get(position).get(3) != null) holder.valorationText.setText(String.valueOf(communityRoutinesList.get(position).get(3)));
-        else holder.valorationText.setText("--");
+        else holder.valorationText.setText("0.0");
 
         holder.saveButton.setOnClickListener(view -> saveRoutine(position));
 
@@ -109,7 +94,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<CommunityRecy
 
         ConstraintLayout cardRoutineDisplayConstraintLayout;
         TextView routineName, valorationText;
-        ImageButton saveButton, valorationIcon;
+        ImageButton saveButton;
         CircleImageView profilePic;
 
         /**
@@ -120,7 +105,6 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<CommunityRecy
             cardRoutineDisplayConstraintLayout = itemView.findViewById(R.id.cardRoutineDisplayConstraintLayout);
             routineName = itemView.findViewById(R.id.routineName);
             saveButton = itemView.findViewById(R.id.saveButton);
-            valorationIcon = itemView.findViewById(R.id.valorationIcon);
             valorationText = itemView.findViewById(R.id.valorationText);
             profilePic = itemView.findViewById(R.id.profilePic);
         }
@@ -160,46 +144,5 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<CommunityRecy
         if (communityRoutinesList.get(selected).get(3) == null) currentAverage = 0;
         else currentAverage = Double.parseDouble(communityRoutinesList.get(selected).get(3).toString());
         MainActivity.getInstance().setCommunityRoutineViewScreen(routineId, routineName, activitiesList, (int)communityRoutinesList.get(this.selected).get(2), currentAverage, Integer.parseInt(communityRoutinesList.get(selected).get(4).toString()));
-    }
-
-    /**
-     * Funció per crear la pestanya de votacio de rutina
-     * @param position posicio de la rutina al llistat
-     */
-    public void createVoteRoutineSheet(int position) {
-        if ((int)communityRoutinesList.get(position).get(2) == 0) {
-            voteRoutineSheet = new BottomSheetDialog(global, R.style.BottomSheetTheme);
-            View sheetView = LayoutInflater.from(parent.getContext()).inflate(R.layout.community_routine_vote, view.findViewById(R.id.bottom_sheet));
-
-            routineVote = sheetView.findViewById(R.id.routineVote);
-            routineVote.setMaxValue(10);
-            routineVote.setMinValue(0);
-            Button doneButton = sheetView.findViewById(R.id.doneButton);
-            Button cancelButton = sheetView.findViewById(R.id.cancelButton);
-            doneButton.setOnClickListener(v -> voteRoutine(position));
-            cancelButton.setOnClickListener(v -> voteRoutineSheet.dismiss());
-
-            voteRoutineSheet.setContentView(sheetView);
-            voteRoutineSheet.show();
-        }
-        else if ((int)communityRoutinesList.get(position).get(2) == 1) {
-            Toast.makeText(global, global.getApplicationContext().getString(R.string.routineAlreadyVoted), Toast.LENGTH_SHORT).show();
-        }
-        else {
-            Toast.makeText(global, R.string.voteOwnRoutine, Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    /**
-     * Funció per valorar una nova rutina
-     * @param position posicio de la rutina al llistat
-     */
-    private void voteRoutine(int position) {
-        double currentAverage;
-        if (communityRoutinesList.get(position).get(3) == null) currentAverage = 0;
-        else currentAverage = Double.parseDouble(communityRoutinesList.get(position).get(3).toString());
-        DA.voteRoutine((String) communityRoutinesList.get(position).get(0), routineVote.getValue(), currentAverage, Integer.parseInt(communityRoutinesList.get(position).get(4).toString()));
-        voteRoutineSheet.dismiss();
-        MainActivity.getInstance().setCommunityScreen();
     }
 }
