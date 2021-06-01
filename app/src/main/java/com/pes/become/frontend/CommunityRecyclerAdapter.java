@@ -30,7 +30,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<CommunityRecy
     private final DomainAdapter DA = DomainAdapter.getInstance();
     private final ArrayList<ArrayList<Object>> communityRoutinesList;
     private final Context global;
-    private static CommunityRecyclerAdapter instace;
+    private static CommunityRecyclerAdapter instance;
 
     private View view;
     private ViewGroup parent;
@@ -48,11 +48,11 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<CommunityRecy
     public CommunityRecyclerAdapter(ArrayList<ArrayList<Object>> communityRoutinesList, Context global) {
         this.communityRoutinesList = communityRoutinesList;
         this.global = global;
-        instace = this;
+        instance = this;
     }
 
     public static CommunityRecyclerAdapter getInstance() {
-        return instace;
+        return instance;
     }
 
     /**
@@ -65,9 +65,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<CommunityRecy
         this.parent = parent;
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         view = layoutInflater.inflate(R.layout.community_element, parent, false);
-        ViewHolder viewHolder = new ViewHolder(view);
-
-        return viewHolder;
+        return new ViewHolder(view);
     }
 
     /**
@@ -124,7 +122,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<CommunityRecy
             valorationText = itemView.findViewById(R.id.valorationText);
             profilePic = itemView.findViewById(R.id.profilePic);
         }
-    };
+    }
 
     /**
      * Funcio per guardar una rutina de la comunitat

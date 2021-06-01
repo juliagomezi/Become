@@ -231,7 +231,7 @@ public class ControllerRoutineDB {
 
                             }
                         try {
-                            method.invoke(object, routines);
+                            method.invoke(object, (Object) routines);
                         } catch (IllegalAccessException e) {
                             e.printStackTrace();
                         } catch (InvocationTargetException e2) {

@@ -1,12 +1,9 @@
 package com.pes.become.frontend;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +11,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -29,7 +25,6 @@ public class Community extends Fragment {
 
     private static Community instance;
 
-    private View view;
     private Context global;
 
     private final DomainAdapter DA = DomainAdapter.getInstance();
@@ -63,15 +58,15 @@ public class Community extends Fragment {
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.community, container, false);
+        View view1 = inflater.inflate(R.layout.community, container, false);
         super.onCreate(savedInstanceState);
         global = this.getActivity();
         instance = this;
 
-        recyclerView = view.findViewById(R.id.communityRoutinesList);
-        searchText = view.findViewById(R.id.searchText);
-        searchButton = view.findViewById(R.id.searchButton);
-        loading = view.findViewById(R.id.loading);
+        recyclerView = view1.findViewById(R.id.communityRoutinesList);
+        searchText = view1.findViewById(R.id.searchText);
+        searchButton = view1.findViewById(R.id.searchButton);
+        loading = view1.findViewById(R.id.loading);
 
         searchButton.setOnClickListener(view -> search());
         searchText.addTextChangedListener(new TextWatcher() {
@@ -84,21 +79,18 @@ public class Community extends Fragment {
                 search();
             }
         });
-        searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                boolean handled = false;
-                if (actionId == EditorInfo.IME_ACTION_SEND) {
-                    search();
-                    handled = true;
-                }
-                return handled;
+        searchText.setOnEditorActionListener((v, actionId, event) -> {
+            boolean handled = false;
+            if (actionId == EditorInfo.IME_ACTION_SEND) {
+                search();
+                handled = true;
             }
+            return handled;
         });
 
         getSharedRoutines();
 
-        return view;
+        return view1;
     }
 
     /**
@@ -118,6 +110,7 @@ public class Community extends Fragment {
      * Funció per inicialitzar l'element que mostra el llistat d'activitats
      */
     private void initRecyclerView(ArrayList<ArrayList<Object>> list) {
+        recyclerView.setVisibility(View.VISIBLE);
         recyclerView.setLayoutManager((new LinearLayoutManager(global)));
         communityRecyclerAdapter = new CommunityRecyclerAdapter(list, global);
         recyclerView.setAdapter(communityRecyclerAdapter);
