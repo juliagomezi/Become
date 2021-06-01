@@ -24,7 +24,7 @@ public class Routine {
     /**
      * Mapa amb totes les activitats ordenades temporalment
      */
-    private SortedMap<Day, ArrayList<Activity>> activities;
+    private final SortedMap<Day, ArrayList<Activity>> activities;
     /**
      * Boolea que indica si la rutina es compartida
      */
