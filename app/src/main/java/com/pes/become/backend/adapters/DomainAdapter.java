@@ -50,10 +50,6 @@ public class DomainAdapter {
      */
     private static final RoutineAdapter routineAdapter = RoutineAdapter.getInstance();
     /**
-     * Unica instancia de l'adaptador de la classe Usuari
-     */
-    private static final UserAdapter userAdapter = UserAdapter.getInstance();
-    /**
      * Unica instancia del controlador de trofeus
      */
     private static final AchievementController achievementController = AchievementController.getInstance();
@@ -230,7 +226,7 @@ public class DomainAdapter {
      */
     public void loginCallback(boolean success, String userId, String username, String selectedRoutineId, Bitmap pfp, ArrayList<ArrayList<String>> routineInfo, Map<String, Map<String, Double>> stats, int streak) {
         if (success) {
-            currentUser = userAdapter.createUser(username);
+            currentUser = new User(username);
             currentUser.setID(userId);
             currentUser.setPFP(pfp);
             currentUser.setStreak(streak);
@@ -291,7 +287,7 @@ public class DomainAdapter {
      */
     public void authUser(boolean success, String userId, String username, String selectedRoutineId, Bitmap pfp, ArrayList<ArrayList<String>> routineInfo, Map<String, Map<String, Double>> stats, int streak) {
         if (success) {
-            currentUser = userAdapter.createUser(username);
+            currentUser = new User(username);
             currentUser.setID(userId);
             currentUser.setPFP(pfp);
             currentUser.setStreak(streak);
@@ -350,7 +346,7 @@ public class DomainAdapter {
      */
     public void registerCallback(boolean success, String userId, String username, String selectedRoutineId) {
         if (success) {
-            currentUser = userAdapter.createUser(username);
+            currentUser = new User(username);
             currentUser.setID(userId);
             if (!selectedRoutineId.equals("")) loadSelectedRoutine(); //això és impossible que passi!!!
             signup.registerCallback();
