@@ -293,7 +293,6 @@ public class ControllerActivityDB {
                     docRefToActivity.update("lastDayDone", "null").addOnCompleteListener(task2 -> {
                         if (task2.isSuccessful()) {
                             ControllerCalendarDB cal = new ControllerCalendarDB();
-                            Date lastDay = StringDateConverter.stringToDate(realLastDayDone);
                             cal.incrementDay(userId, -1, totalActivities);
                         }
                     });

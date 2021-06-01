@@ -1,7 +1,6 @@
 package com.pes.become.backend.persistence;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
 import android.net.Uri;
 
 import com.facebook.AccessToken;
@@ -10,8 +9,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.lang.reflect.Method;
-import java.util.Date;
-import java.util.concurrent.Future;
 
 public class ControllerPersistence {
 
@@ -19,12 +16,33 @@ public class ControllerPersistence {
      * Unica instancia de la classe
      */
     private static ControllerPersistence instance;
+    /**
+     * Unica instancia de la classe
+     */
     private final ControllerRoutineDB CR;
+    /**
+     * Unica instancia de la classe
+     */
     private final ControllerActivityDB CA;
+    /**
+     * Unica instancia de la classe
+     */
     private final ControllerUserDB CU;
+    /**
+     * Unica instancia de la classe
+     */
     private final ControllerStatisticsDB CS;
+    /**
+     * Unica instancia de la classe
+     */
     private final ControllerCalendarDB CD;
+    /**
+     * Unica instancia de la classe
+     */
     private final ControllerTrophiesDB CT;
+    /**
+     * Instancia de la base de dades
+     */
     private final FirebaseFirestore db;
 
     /**
@@ -166,6 +184,7 @@ public class ControllerPersistence {
     {
         CA.markActivityAsDone(userId, idRoutine, lastDayDone, idActivity, totalActivities);
     }
+
     ////////////////////////////////FUNCIONS RELACIONADES AMB LA CLASSE RUTINA//////////////////////
 
     /**
@@ -257,13 +276,6 @@ public class ControllerPersistence {
     }
 
     /**
-     *
-     * @param userId
-     * @return
-     */
-    //public Future<Bitmap> getProfilePic(String userId, Method method, Object object){ return CU.getProfilePic(userId); }
-
-    /**
      * Metode per carregar un usuari
      * @param method metode a cridar quan es retornin les dades
      * @param object classe que conté el mètode
@@ -318,10 +330,16 @@ public class ControllerPersistence {
      * @param method metode a cridar quan es retornin les dades
      * @param object classe que conté el mètode
      */
-    public void loginUserGoogle(String idToken, Method method, Object object ){
+    public void loginUserGoogle(String idToken, Method method, Object object){
         CU.loginUserGoogle(idToken, method, object);
     }
 
+    /**
+     * Inici de sessió d'usuari amb Facebook
+     * @param accessToken token d'inici de sessió de Facebook
+     * @param method metode a cridar quan es retornin les dades
+     * @param object classe que conté el mètode
+     */
     public void loginUserFacebook(AccessToken accessToken, Method method, Object object) {
         CU.loginUserFacebook(accessToken, method, object);
     }
@@ -383,31 +401,7 @@ public class ControllerPersistence {
         CS.getAllStatisticsRoutine(userId, idRoutine, method, object);
     }
 
-    /**
-     * Funcio per aconseguir les estadistiques d'una rutina i d'un tema concret
-     * @param userId identificador de l'usuari
-     * @param idRoutine identificador de la rutina
-     * @param theme tema del que es vol aconseguir les estadistiques
-     * @param method metode a cridar per retornar les dades
-     * @param object classe que conte el metode
-     */
-    public void getStatisticsRoutineByTheme(String userId, String idRoutine, String theme, Method method, Object object){
-        CS.getStatisticsRoutineByTheme(userId, idRoutine, theme, method, object);
-    }
     ///////////////////////////FUNCIONS RELACIONADES AMB LA CLASSE CALENDAR/////////////////////////
-    /**
-     * Executa el metode method amb un hashmap que representa el day de la base de dades si aquest s'ha pogut consultar, o l'excepció que ha saltat si no.
-     * Day tindrà les claus: day, idRoutine, numActivitiesDone, numTotalActivities. Totes son strings
-     * @param userId id de l'usuari del calendari
-     * @param day dia del calendari
-     * @param method metode a executar
-     * @param object objecte del metode a executar
-     */
-    public void getDay(String userId, Date day, Method method, Object object)
-    {
-        CD.getDay(userId, day, method, object);
-    }
-
     /**
      * Retorna els dies de la base de dades del mes indicat
      * @param userId id de l'usuari del calendari
@@ -420,50 +414,6 @@ public class ControllerPersistence {
         CD.getAvailableDays(userId, month, year, method, object);
     }
 
-    /**
-     * Retorna els dies de la base de dades
-     * @param userId id de l'usuari del calendari
-     * @param method metode a executar
-     * @param object objecte del metode a executar
-     */
-    public void getAllDays(String userId, Method method, Object object)
-    {
-        CD.getAllDays(userId, method, object);
-    }
-
-    /**
-     * Retorna un enter amb el nombre de dies en ratxa que porta l'usuari
-     * @param userId id de l'usuari del calendari
-     * @param method metode a executar
-     * @param object objecte del metode a executar
-     */
-    public void getStreak(String userId, Method method, Object object)
-    {
-        CD.getStreak(userId,method,object);
-    }
-
-    /**
-     * Crea un dia al calendari nou.
-     * @param userId identificador de l'usuari
-     * @param day dia a crear.
-     * @param routineId id de la rutina a la que referencia
-     * @param totalActivities nombre d'activitats totals del dia de la rutina que estem afegint.
-     */
-    public String addDay(String userId, Date day, String routineId, int totalActivities)
-    {
-        return CD.addDay(userId, day,  routineId, totalActivities );
-    }
-
-    /**
-     * Actualitza la informació d'un dia
-     * @param userId id de l'usuari del calendari
-     * @param day dia del calendari
-     * @param activitiesDone nou nombre d'activitats fetes (a -1 no actualitzarà res)
-     * @param idRoutine nova id de la rutina a la que referencia
-     */
-    public void updateDay(String userId, Date day, int activitiesDone, String idRoutine) {
-        CD.updateDay(userId, day, activitiesDone, idRoutine);
-    }
     //////////////////////////////FUNCIONS RELACIONADES AMB LA CLASSE TROPHIES//////////////////////
     /**
      * Funcio que retorna els trofeus de l'usuari i un bool que indica per cada un si l'ha aconseguit

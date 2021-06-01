@@ -311,7 +311,7 @@ public class ControllerCalendarDB {
     /**
      * Retorna la data en format per el dia de la base de dades
      * @param date data
-     * @return
+     * @return el dia corresponent a la data
      */
     private String getStringDay(Date date)
     {
@@ -322,7 +322,7 @@ public class ControllerCalendarDB {
     /**
      * Retorna la data en format pel mes de la base de dades
      * @param date data
-     * @return
+     * @return el mes corresponent a la data
      */
     private String getStringMonth(Date date)
     {
@@ -333,7 +333,7 @@ public class ControllerCalendarDB {
     /**
      * Retorna la data en format per l'any de la base de dades
      * @param date data
-     * @return
+     * @return l'any corresponent a la data donada
      */
     private String getStringYear(Date date)
     {

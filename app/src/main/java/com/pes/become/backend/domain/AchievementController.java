@@ -203,7 +203,7 @@ public class AchievementController {
     private boolean checkHoursPerDay(int hours) {
         Routine selRoutine = currentUser.getSelectedRoutine();
         boolean correct = true;
-        int comparison = 0;
+        int comparison;
         for(int d = 0; d<Day.values().length && correct; ++d){
             ArrayList<Activity> actsDay = selRoutine.getActivitiesByDay(Day.values()[d]);
             Time totalTime = new Time(0,0);
