@@ -178,6 +178,10 @@ public class Routine {
         return false;
     }
 
+    public void setShared(boolean shared) {
+        this.shared = shared;
+    }
+
     /**
      * Metode per saber si una rutina es compartida o no
      * @return true si es publica false altrament
