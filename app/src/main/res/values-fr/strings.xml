@@ -132,15 +132,27 @@
     <string name="HourMusic5Description">Consacrez 5 heures de votre semaine à des activités musicales</string>
     <string name="HourOther10Description">Consacrez 10 heures de votre semaine à d\'autres activités</string>
     <string name="HourOther5Description">Consacrez 5 heures de votre semaine à d\'autres activités</string>
-    <string name="HourPlants10Description">Consacrez 10 heures de votre semaine à vos plantes</string>
-    <string name="HourPlants5Description">Consacrez 5 heures de votre semaine à vos plantes</string>
-    <string name="HourSleeping10Description">Consacrez 10 heures de votre semaine à dormir</string>
-    <string name="HourSleeping5Description">Consacrez 5 heures de votre semaine à dormir</string>
+    <string name="HourPlants10Description">Consacrez 5 heures de votre semaine à vos plantes</string>
+    <string name="HourPlants5Description">Consacrez 1 heure de votre semaine à vos plantes</string>
+    <string name="HourSleeping10Description">Consacrez 56 heures de votre semaine à dormir</string>
+    <string name="HourSleeping5Description">Consacrez 30 heures de votre semaine à dormir</string>
     <string name="HourSport10Description">Consacrez 10 heures de votre semaine au sport</string>
     <string name="HourSport5Description">Consacrez 10 heures de votre semaine au sport</string>
     <string name="HourWorking10Description">Consacrez 10 heures de votre semaine au travail</string>
     <string name="HourWorking5Description">Consacrez 5 heures de votre semaine au travail</string>
     <string name="DONE">VALIDE</string>
     <string name="UNDONE">ANNULER</string>
+    <string name="changeVisibility">" Définir une routine privée"</string>
+    <string name="changeVisibilityDescription">" Changer la visibilité de cette routine en privé la fera cesser d'apparaître dans l'onglet de la communauté et effacera ses notes, voulez-vous continuer?"</string>
+    <string name="google">Continue avec Google</string>
+    <string name="routineAlreadyVoted">Vous avez déjà voté cette routine</string>
+    <string name="voteRoutine">Vote</string>
+    <string name="voteOwnRoutine">Vous ne pouvez pas voter votre propre routine</string>
+    <string name="recommendationsOkTime">Tu te débrouilles bien</string>
+    <string name="noRecommendations">Tu n\'as aucune recommandation</string>
+    <string name="downOk">Routine téléchargée avec succès</string>
+    <string name="recommendationsLessTime">Tu passes trop de temps</string>
+    <string name="recommendationMoreTime">Vous devriez y passer plus de temps</string>
+    <string name="recommendations">Recommandations</string>
 
 </resources>

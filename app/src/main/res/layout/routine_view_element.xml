@@ -71,14 +71,14 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
+                android:layout_height="wrap_content"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:clickable="true">
 
                 <TextView
                     android:id="@+id/activityNameDisplay"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="?attr/selectableItemBackground"
                     android:fontFamily="@font/sourcesanspro_semibold"
                     android:paddingLeft="25dp"
                     android:paddingTop="16dp"

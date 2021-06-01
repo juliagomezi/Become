@@ -5,6 +5,7 @@ import com.pes.become.backend.exceptions.OverlappingActivitiesException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -24,6 +25,10 @@ public class Routine {
      * Mapa amb totes les activitats ordenades temporalment
      */
     private SortedMap<Day, ArrayList<Activity>> activities;
+    /**
+     * Boolea que indica si la rutina es compartida
+     */
+    private boolean shared;
 
     /**
      * Creadora de la rutina
@@ -34,6 +39,7 @@ public class Routine {
         this.name = name;
         activities = new TreeMap<>();
         clearActivities();
+        shared = false;
     }
 
     /**
@@ -69,9 +75,9 @@ public class Routine {
     }
 
     /**
-     *
-     * @param id
-     * @return
+     * Metode per aconseguir una activitat per id
+     * @param id identificador de l'activitat
+     * @return l'activitat sol.licitada
      */
     public Activity getActivity(String id) {
         for(Map.Entry<Day, ArrayList<Activity>> actsDay : activities.entrySet()) {
@@ -105,14 +111,6 @@ public class Routine {
         return activities.get(day);
     }
 
-    public int getTotalActivities(){
-        int result = 0;
-        for(Map.Entry<Day, ArrayList<Activity>> day : activities.entrySet()){
-            result += day.getValue().size();
-        }
-        return result;
-    }
-
     /**
      * Metode per actualitzar els parametres d'una activitat de la rutina
      * @param updatedActivity activitat actualitzada
@@ -128,8 +126,8 @@ public class Routine {
                     }
                 }
             }
-            activities.get(updatedActivity.getDay()).add(updatedActivity);
-            Collections.sort(activities.get(updatedActivity.getDay()));
+            Objects.requireNonNull(activities.get(updatedActivity.getDay())).add(updatedActivity);
+            Collections.sort(Objects.requireNonNull(activities.get(updatedActivity.getDay())));
         } else throw new OverlappingActivitiesException();
     }
 
@@ -159,6 +157,8 @@ public class Routine {
 
     /**
      * Setter de totes les activitats d'un dia d'una rutina
+     * @param acts activitats del dia
+     * @param day dia al qual pertanyen les activitats
      */
     public void setActivitiesByDay(ArrayList<Activity> acts, Day day) {
         Collections.sort(acts);
@@ -176,5 +176,34 @@ public class Routine {
             if(!activity.getId().equals(a.getId()) && activity.compareTo(a) == 0) return true;
         }
         return false;
+    }
+
+    /**
+     * Metode per saber si una rutina es compartida o no
+     * @return true si es publica false altrament
+     */
+    public boolean isShared() {
+        return shared;
+    }
+
+    /**
+     * Metode per saber quant temps es dedica a un tema
+     * @param theme tema a consultar
+     * @return suma de les hores que es dediquen al tema
+     */
+    public Time getTotalTimeTheme(Theme theme){
+        Time totalTime = new Time(0,0);
+        for(int d = 0; d<Day.values().length; ++d){
+            ArrayList<Activity> actsDay = getActivitiesByDay(Day.values()[d]);
+            for(Activity act : actsDay){
+                if(act.getTheme() == theme){
+                    Time duration = act.getInterval().getIntervalDuration();
+                    int totalHours = totalTime.getHours() + duration.getHours();
+                    int totalMinutes = totalTime.getMinutes() + duration.getMinutes();
+                    totalTime = new Time(totalHours, totalMinutes);
+                }
+            }
+        }
+        return totalTime;
     }
 }

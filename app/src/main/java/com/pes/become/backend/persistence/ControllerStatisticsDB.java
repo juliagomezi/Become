@@ -132,12 +132,12 @@ public class ControllerStatisticsDB {
         HashMap <String, Double> mapStatistics = new HashMap<>();
 
         for (int i = 0; i<7; ++i){
-            mapStatistics.put(differentDays[i], 0.0);
+            double zero = 0.0;
+            mapStatistics.put(differentDays[i], zero);
         }
         for (int j = 0; j<numberOfThemes; ++j){
             dataInput.put("statistics" + differentThemes[j], mapStatistics);
         }
-
         docRefToRoutineStatistics.set(dataInput);
     }
 

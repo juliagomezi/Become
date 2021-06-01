@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -84,6 +85,46 @@ public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesLi
             }
         });
 
+
+        if (Boolean.parseBoolean(routinesList.get(position).get(2))) {
+            holder.publicButton.setVisibility(View.VISIBLE);
+            holder.privateButton.setVisibility(View.GONE);
+            holder.starIcon.setVisibility(View.VISIBLE);
+            holder.points.setVisibility(View.VISIBLE);
+            if (routinesList.get(position).get(3).equals("")) holder.points.setText("--");
+            else holder.points.setText(routinesList.get(position).get(3));
+        }
+        else {
+            holder.publicButton.setVisibility(View.GONE);
+            holder.privateButton.setVisibility(View.VISIBLE);
+            holder.starIcon.setVisibility(View.GONE);
+            holder.points.setVisibility(View.GONE);
+        }
+
+        holder.publicButton.setOnClickListener(view -> {
+            new AlertDialog.Builder(global)
+                    .setTitle(R.string.changeVisibility)
+                    .setMessage(R.string.changeVisibilityDescription)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> {
+                        holder.publicButton.setVisibility(View.GONE);
+                        holder.privateButton.setVisibility(View.VISIBLE);
+                        holder.starIcon.setVisibility(View.GONE);
+                        holder.points.setVisibility(View.GONE);
+                        holder.points.setText("--");
+                        DA.shareRoutine(routinesList.get(position).get(0), false);
+                    })
+                    .setNegativeButton(android.R.string.no, null).show();
+        });
+
+        holder.privateButton.setOnClickListener(view -> {
+            holder.publicButton.setVisibility(View.VISIBLE);
+            holder.privateButton.setVisibility(View.GONE);
+            holder.starIcon.setVisibility(View.VISIBLE);
+            holder.points.setVisibility(View.VISIBLE);
+            DA.shareRoutine(routinesList.get(position).get(0), true);
+        });
+
         boolean isSelected = routinesList.get(position).get(0).equals(selectedRoutineID);
         holder.switchButton.setChecked(isSelected);
     }
@@ -103,9 +144,10 @@ public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesLi
      */
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView routineName;
-        ImageButton editButton, deleteButton;
+        TextView routineName, points;
+        ImageButton editButton, deleteButton, publicButton, privateButton;
         Switch switchButton;
+        ImageView starIcon;
 
         /**
          * Constructora del ViewHolder
@@ -116,6 +158,10 @@ public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesLi
             editButton = itemView.findViewById(R.id.editButton);
             deleteButton = itemView.findViewById(R.id.deleteButton);
             switchButton = itemView.findViewById(R.id.switchButton);
+            publicButton = itemView.findViewById(R.id.publicButton);
+            privateButton = itemView.findViewById(R.id.privateButton);
+            points = itemView.findViewById(R.id.points);
+            starIcon = itemView.findViewById(R.id.starIcon);
         }
     }
 

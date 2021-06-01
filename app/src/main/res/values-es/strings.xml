@@ -132,15 +132,27 @@
     <string name="HourMusic5Description">Dedica 5 horas de tu semana a actividades musicales</string>
     <string name="HourOther10Description">Dedica 10 horas de tu semana a otras actividades.</string>
     <string name="HourOther5Description">Dedica 5 horas de tu semana a otras actividades</string>
-    <string name="HourPlants10Description">Dedica 10 horas de tu semana a tus plantas</string>
-    <string name="HourPlants5Description">Dedica 5 horas de tu semana a tus plantas</string>
-    <string name="HourSleeping10Description">Dedica 10 horas de tu semana a dormir</string>
-    <string name="HourSleeping5Description">Dedica 5 horas de tu semana a dormir</string>
+    <string name="HourPlants10Description">Dedica 5 horas de tu semana a tus plantas</string>
+    <string name="HourPlants5Description">Dedica 1 hora de tu semana a tus plantas</string>
+    <string name="HourSleeping10Description">Dedica 56 horas de tu semana a dormir</string>
+    <string name="HourSleeping5Description">Dedica 30 horas de tu semana a dormir</string>
     <string name="HourSport10Description">Dedica 10 horas de tu semana al deporte</string>
     <string name="HourSport5Description">Dedica 10 horas de tu semana al deporte</string>
     <string name="HourWorking10Description">Dedica 10 horas de tu semana a trabajar</string>
     <string name="HourWorking5Description">Dedica 5 horas de tu semana a trabajar</string>
     <string name="DONE">HECHO</string>
     <string name="UNDONE">NO HECHO</string>
+    <string name="changeVisibility">Hacer privada una rutina</string>
+    <string name="changeVisibilityDescription">Cambiar la visibilidad de esta rutina a privada hará que deje de aparecer en la pestaña de la comunidad y borrará sus valoraciones, ¿quieres continuar?</string>
+    <string name="google">Continuar con Google</string>
+    <string name="voteRoutine">Vota</string>
+    <string name="routineAlreadyVoted">Ya has votado esta rutina</string>
+    <string name="voteOwnRoutine">No puedes votar tu propia rutina</string>
+    <string name="noRecommendations">No tienes recomandaciones</string>
+    <string name="downOk">Rutina descargada correctamente</string>
+    <string name="recommendationsOkTime">Lo estás haciendo genial!</string>
+    <string name="recommendationsLessTime">Le dedicas demasiado tiempo</string>
+    <string name="recommendationMoreTime">Deberías dedicarle más tiempo</string>
+    <string name="recommendations">Recomendaciones</string>
 
 </resources>

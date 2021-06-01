@@ -52,6 +52,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation 'it.xabaras.android:recyclerview-swipedecorator:1.2.3'
+    implementation 'androidx.cardview:cardview:1.0.0'
 
     //All related to cloud firestore
     implementation platform('com.google.cloud:libraries-bom:19.0.0')
@@ -66,11 +67,19 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:19.0.0'
     implementation platform('com.google.firebase:firebase-bom:26.8.0')
 
+    //facebook register
+    implementation 'com.facebook.android:facebook-android-sdk:[5,6)'
+
     //related to charts
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
     // gifs
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
+
+    //notificacions
+    implementation platform('com.google.firebase:firebase-bom:27.1.0')
+    implementation 'com.google.firebase:firebase-messaging'
+    implementation 'com.google.firebase:firebase-analytics'
 
 }
 sonarqube {

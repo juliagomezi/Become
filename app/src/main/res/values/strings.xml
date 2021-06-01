@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name" translatable="false">Become</string>
+    <string name="facebook_app_id" translatable="false">1513592482314414</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb1513592482314414</string>
     <string name="new_activityLabel">New Activity</string>
     <string name="descriptionLabel">Description (optional)</string>
     <string name="activity_nameLabel">Name</string>
@@ -19,7 +21,7 @@
     <string name="log_in">Log in</string>
     <string name="not_registered_yet">Not registered yet?</string>
     <string name="signup">Sign up!</string>
-    <string name="google" translatable="false">Google</string>
+    <string name="google">Continue with Google</string>
     <string name="community">Community</string>
     <string name="home">Home</string>
     <string name="profile">Profile</string>
@@ -131,21 +133,33 @@
     <string name="CreateFirstRoutineDescription">Create your first routine</string>
     <string name="HourMusic5Description">Dedicate 5 hours of your week to musical activities</string>
     <string name="HourSport5Description">Dedicate 5 hours of your week to sport</string>
-    <string name="HourSleeping5Description">Dedicate 5 hours of your week to sleep</string>
+    <string name="HourSleeping5Description">Dedicate 30 hours of your week to sleep</string>
     <string name="HourCooking5Description">Dedicate 5 hours of your week to cook</string>
     <string name="HourWorking5Description">Dedicate 5 hours of your week to work</string>
     <string name="HourEntertainment5Description">Dedicate 5 hours of your week to entertaining activities</string>
-    <string name="HourPlants5Description">Dedicate 5 hours of your week to your plants</string>
+    <string name="HourPlants5Description">Dedicate 1 hour of your week to your plants</string>
     <string name="HourOther5Description">Dedicate 5 hours of your week to other activities</string>
     <string name="HourMusic10Description">Dedicate 10 hours of your week to musical activities</string>
     <string name="HourSport10Description">Dedicate 10 hours of your week to sport</string>
-    <string name="HourSleeping10Description">Dedicate 10 hours of your week to sleep</string>
+    <string name="HourSleeping10Description">Dedicate 56 hours of your week to sleep</string>
     <string name="HourCooking10Description">Dedicate 10 hours of your week to cook</string>
     <string name="HourWorking10Description">Dedicate 10 hours of your week to work</string>
     <string name="HourEntertainment10Description">Dedicate 10 hours of your week to entertaining activities</string>
-    <string name="HourPlants10Description">Dedicate 10 hours of your week to your plants</string>
+    <string name="HourPlants10Description">Dedicate 5 hours of your week to your plants</string>
     <string name="HourOther10Description">Dedicate 10 hours of your week to other activities</string>
     <string name="DONE">DONE</string>
     <string name="UNDONE">NOT DONE</string>
+    <string name="facebook" translatable="false">Facebook</string>
+    <string name="changeVisibility">Setting a routine private</string>
+    <string name="changeVisibilityDescription">Changing this routine\'s visibility to private will make it stop appearing in the community tab and will erase its ratings, do you want to proceed?</string>
+    <string name="voteRoutine">Vote</string>
+    <string name="routineAlreadyVoted">You have already voted this routine</string>
+    <string name="voteOwnRoutine">You cannot vote your own routine</string>
+    <string name="noRecommendations">You have no recommendations</string>
+    <string name="recommendationMoreTime">You should dedicate more time to this</string>
+    <string name="recommendationsLessTime">You dedicate too much time to this</string>
+    <string name="recommendationsOkTime">You are doing great!</string>
+    <string name="downOk">Routine downloaded successfully</string>
+    <string name="recommendations">Recommendations</string>
 
 </resources>

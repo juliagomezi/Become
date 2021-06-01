@@ -32,7 +32,7 @@ public class User {
      */
     private Map<Theme, Map<Day, Double>> statisticsSelectedRoutine;
     /**
-     * ID i nom de les rutines de l'usuari
+     * ID i nom de les rutines de l'usuari i un boolea indicant si la rutina esta publicada o no
      */
     private ArrayList<ArrayList<String>> routines;
     /**
@@ -194,15 +194,6 @@ public class User {
     }
 
     /**
-     * Metode per saber l'estat d'un trofeu de l'usuari
-     * @param achievement trofeu del que es vol l'estat
-     * @return cert si te el trofeu, fals si no
-     */
-    public boolean getAchievementState(Achievement achievement){
-        return achievements.get(achievement);
-    }
-
-    /**
      * Metode perque l'usuari obtingui un trofeu
      * @param achievement trofeu a obtenir
      * @return cert si no tenia el trofeu i per tant l'ha guanyat, fals si ja el tenia
@@ -230,6 +221,20 @@ public class User {
     public void setRoutines(ArrayList<ArrayList<String>> routinesInfo) {
         this.routines = new ArrayList<>();
         routines.addAll(routinesInfo);
+    }
+
+    /**
+     * Metode per comprovar si un usuari te una rutina amb el mateix nom
+     * @param name nom de la rutina a comprovar
+     * @return true si ja existeix, false altrament
+     */
+    public boolean hasRoutineWithName(String name){
+        for(int i = 0; i < routines.size(); ++i) {
+            if(routines.get(i).get(1).equals(name)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -267,6 +272,34 @@ public class User {
     }
 
     /**
+     * Metode per a compartir una rutina
+     * @param id identificador de la rutina
+     */
+    public void shareRoutine(String id){
+        for(int i = 0; i < routines.size(); ++i) {
+            if(routines.get(i).get(0).equals(id)) {
+                routines.get(i).set(2, "true");
+                routines.get(i).set(3, "");
+                break;
+            }
+        }
+    }
+
+    /**
+     * Metode per a fer privada una rutina
+     * @param id identificador de la rutina
+     */
+    public void unShareRoutine(String id){
+        for(int i = 0; i < routines.size(); ++i) {
+            if(routines.get(i).get(0).equals(id)) {
+                routines.get(i).set(2, "false");
+                routines.get(i).set(3, "");
+                break;
+            }
+        }
+    }
+
+    /**
      * Metode per saber si l'usuari ja te una rutina amb aquest nom existent
      * @param name nom a comprovar si ja exiteix
      * @return true si existeix, false altrament
@@ -278,6 +311,9 @@ public class User {
         return false;
     }
 
+    /**
+     * Metode per a buidar les estadistiques
+     */
     public void clearStatistics() {
         this.statisticsSelectedRoutine = new TreeMap<>();
         for(int t=0; t<Theme.values().length; ++t){
@@ -289,23 +325,45 @@ public class User {
         }
     }
 
+    /**
+     * Metode per a carregar les dades d'un mes del calendari
+     * @return un array amb el percentatge de completat de la rutina de cada dia
+     */
     public ArrayList<Integer> getCalendarMonth() {
         return calendarMonth;
     }
 
-    public void setCalendarMonth(ArrayList<Integer> calendarMonth) {
-        this.calendarMonth = calendarMonth;
+    /**
+     * Metode per a actualitzar les dades d'un dia del calendari
+     * @param day dia a actualitzar
+     * @param completion dades a introduir
+     */
+    public void setDayCalendar(int day, int completion) {
+        calendarMonth.set(day, completion);
+        for(int i = day-1; i >= 0; --i) {
+            if(calendarMonth.get(i) != -1) {
+                for(int j = i+1; j < day; ++j) {
+                    calendarMonth.set(j,0);
+                }
+                return;
+            }
+        }
     }
 
-    public void setDayCalendar(int day, int completition) {
-        calendarMonth.add(day, completition);
-    }
-
+    /**
+     * Metode per obtenir la ratxa
+     * @return nombre de dies de ratxa
+     */
     public int getStreak() {
         return streak;
     }
 
+    /**
+     * Metode per a actualitzar la ratxa d'un usuari
+     * @param streak dies de ratxa de l'usuari
+     */
     public void setStreak(int streak) {
         this.streak = streak;
     }
+
 }
