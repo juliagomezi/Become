@@ -160,5 +160,6 @@
     <string name="recommendationsLessTime">You dedicate too much time to this</string>
     <string name="recommendationsOkTime">You are doing great!</string>
     <string name="downOk">Routine downloaded successfully</string>
+    <string name="recommendations">Recommendations</string>
 
 </resources>
