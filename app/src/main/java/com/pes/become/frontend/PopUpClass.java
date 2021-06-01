@@ -65,7 +65,7 @@ public class PopUpClass {
         final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
 
         //Set the location of the window on the screen
-        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+        popupWindow.showAtLocation(view, Gravity.TOP|Gravity.END, 0, 0);
 
         //Initialize the elements of our window, install the handler
         emptyView = popupView.findViewById(R.id.emptyView);

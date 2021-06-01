@@ -148,5 +148,10 @@
     <string name="routineAlreadyVoted">Vous avez déjà voté cette routine</string>
     <string name="voteRoutine">Vote</string>
     <string name="voteOwnRoutine">Vous ne pouvez pas voter votre propre routine</string>
+    <string name="recommendationsOkTime">Tu te débrouilles bien</string>
+    <string name="noRecommendations">Tu n\'as aucune recommandation</string>
+    <string name="downOk">Routine téléchargée avec succès</string>
+    <string name="recommendationsLessTime">Tu passes trop de temps</string>
+    <string name="recommendationMoreTime">Vous devriez y passer plus de temps</string>
 
 </resources>

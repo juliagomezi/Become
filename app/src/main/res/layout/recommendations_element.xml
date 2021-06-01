@@ -11,7 +11,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100sp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:background="@color/white" >
 
@@ -40,7 +40,7 @@
                     android:text="Recommendation Title"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textColor="@color/black"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.005"
@@ -53,14 +53,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:layout_marginTop="9dp"
+                    android:layout_marginTop="5dp"
                     android:layout_marginEnd="15dp"
+                    android:layout_marginBottom="8dp"
                     android:background="?attr/selectableItemBackground"
                     android:fontFamily="@font/sourcesanspro_regular"
                     android:text=""
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textColor="@color/black"
-                    android:textSize="14sp"
+                    android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.004"

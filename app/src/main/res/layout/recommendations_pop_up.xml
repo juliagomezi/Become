@@ -1,41 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
-    android:gravity="center">
+    android:layout_height="match_parent">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="match_parent"
-        app:cardCornerRadius="5dp">
+        app:cardCornerRadius="20dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginBottom="70dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:padding="10dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
 
             <TextView
                 android:id="@+id/title"
-                android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="10dp"
                 android:text="Recommendations"
                 android:textSize="20sp"
-                android:textStyle="bold"
-                android:padding="10dp"/>
+                android:textStyle="bold" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recommendationsList"
-                android:layout_gravity="center"
                 android:layout_width="match_parent"
-                android:layout_height="500sp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
                 android:animationCache="true"
                 android:background="@color/white"
-                android:layout_marginTop="10dp"
                 android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -45,16 +47,16 @@
                 android:id="@+id/emptyView"
                 android:layout_width="match_parent"
                 android:layout_height="500sp"
+                android:layout_marginTop="10dp"
                 android:animationCache="true"
                 android:gravity="center"
                 android:text="@string/noRoutines"
                 android:visibility="gone"
-                android:layout_marginTop="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

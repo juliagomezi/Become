@@ -209,7 +209,7 @@ public class CommunityRoutineView extends Fragment {
     private void saveRoutine() {
         try {
             DA.downloadSharedRoutine(routineId, routineName);
-            MainActivity.getInstance().setProfileScreen();
+            Toast.makeText(global, global.getApplicationContext().getString(R.string.downOk), Toast.LENGTH_SHORT).show();
         } catch (RoutinePrimaryKeyException e) {
             Toast.makeText(global, getString(R.string.existingRoutineName), Toast.LENGTH_SHORT).show();
         }
