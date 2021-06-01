@@ -671,7 +671,7 @@ public class DomainAdapter {
      */
     public void deleteRoutine(String routineId) {
         currentUser.deleteRoutine(routineId);
-        controllerPersistence.deleteRoutine(currentUser.getID(), routineId, currentUser.getSelectedRoutine().isShared());
+        controllerPersistence.deleteRoutine(currentUser.getID(), routineId, currentUser.isRoutineShared(routineId));
     }
 
     /**
@@ -955,6 +955,7 @@ public class DomainAdapter {
     /**
      * Metode per descarregar una rutina compartida al sistema
      * @param sharedRoutineID ID de la rutina a descarregar
+     * @param sharedRoutineName Nom de la rutina a descarregar
      */
     public void downloadSharedRoutine(String sharedRoutineID, String sharedRoutineName) throws RoutinePrimaryKeyException {
         if(currentUser.hasRoutineWithName(sharedRoutineName))
@@ -970,11 +971,17 @@ public class DomainAdapter {
         }
     }
 
+    /**
+     * Metode que rep la resposta a la crida que "downloadSharedRoutine" fa a la base de dades
+     * @param sharedRoutineID ID de la rutina a descarregar
+     * @param sharedRoutineName Nom de la rutina a descarregar
+     */
     public void downloadSharedRoutinesCallback(String sharedRoutineID, String sharedRoutineName) {
         ArrayList<String> routine = new ArrayList<>();
         routine.add(0, sharedRoutineID);
         routine.add(1, sharedRoutineName);
         routine.add(2, "false");
+        routine.add(3, "");
         currentUser.addRoutine(routine);
     }
 
