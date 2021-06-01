@@ -129,10 +129,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
      * Funcio per mostrar la vista de rutina de la comunitat
      * @param routineId id de al rutina de la comunitat
      * @param activitiesList llistat d'activitats de la rutina
+     * @param voted indica si l'usuari ha votat la rutina o no o si es propietari
+     * @param avg nota actual de la rutina
+     * @param numvotes nombre d'usuaris que l'han votat
      */
-    public void setCommunityRoutineViewScreen(String routineId, String routineName, HashMap<String, ArrayList<ArrayList<String>>> activitiesList) {
+    public void setCommunityRoutineViewScreen(String routineId, String routineName, HashMap<String, ArrayList<ArrayList<String>>> activitiesList, int voted, double avg, int numvotes) {
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_layout, new CommunityRoutineView(routineId, routineName, activitiesList)).commit();
+                .replace(R.id.fragment_layout, new CommunityRoutineView(routineId, routineName, activitiesList, voted, avg, numvotes)).commit();
     }
 
     /**

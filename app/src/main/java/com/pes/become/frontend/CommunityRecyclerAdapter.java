@@ -41,6 +41,8 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<CommunityRecy
     private String routineId;
     private String routineName;
 
+    private int selected;
+
     /**
      * Constructora del CommunityRecyclerAdapter
      * @param communityRoutinesList llistat de rutines que es mostren al RecyclerView
@@ -143,6 +145,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<CommunityRecy
      * @param position posicio de la rutina dins l'array
      */
     private void getSharedRoutineActivities(int position) {
+        this.selected = position;
         routineId = (String)communityRoutinesList.get(position).get(0);
         routineName = (String)communityRoutinesList.get(position).get(1);
         DA.getSharedRoutineActivities(routineId);
@@ -153,7 +156,10 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<CommunityRecy
      * @param activitiesList llistat de rutines compartides
      */
     public void getSharedRoutineActivitiesCallback(HashMap<String, ArrayList<ArrayList<String>>> activitiesList) {
-        MainActivity.getInstance().setCommunityRoutineViewScreen(routineId, routineName, activitiesList);
+        double currentAverage;
+        if (communityRoutinesList.get(selected).get(3) == null) currentAverage = 0;
+        else currentAverage = Double.parseDouble(communityRoutinesList.get(selected).get(3).toString());
+        MainActivity.getInstance().setCommunityRoutineViewScreen(routineId, routineName, activitiesList, (int)communityRoutinesList.get(this.selected).get(2), currentAverage, Integer.parseInt(communityRoutinesList.get(selected).get(4).toString()));
     }
 
     /**
