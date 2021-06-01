@@ -712,7 +712,7 @@ public class ControllerUserDB {
                                     params[4] = null;
                                     params[5] = new ArrayList<>();
                                     params[6] = null;
-                                    params[7] = Integer.valueOf(documentSnapshot.get("streak").toString());
+                                    params[7] = 0;
                                     try {
                                         method.invoke(object, params);
                                     } catch (IllegalAccessException e) {
@@ -1024,7 +1024,7 @@ public class ControllerUserDB {
 
         CollectionReference colRefToSharedRoutines = db.collection("sharedRoutines");
 
-        colRefToSharedRoutines.whereEqualTo("ownerID",docRefToUser.getId()).get()
+        colRefToSharedRoutines.whereEqualTo("ownerId",docRefToUser.getId()).get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot documentSnap : task.getResult()) {

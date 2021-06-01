@@ -38,7 +38,7 @@ public class User {
     /**
      * Trofeus obtinguts per l'usuari
      */
-    private TreeMap<Achievement, Boolean> achievements;
+    private final TreeMap<Achievement, Boolean> achievements;
     /**
      *
      */
@@ -364,6 +364,13 @@ public class User {
      */
     public void setStreak(int streak) {
         this.streak = streak;
+    }
+
+    public boolean isRoutineShared(String routineID) {
+        for(ArrayList<String> routine : routines) {
+            if(routine.get(0).equals(routineID)) return routine.get(2).equals("true");
+        }
+        return false;
     }
 
 }
