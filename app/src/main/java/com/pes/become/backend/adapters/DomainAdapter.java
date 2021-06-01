@@ -546,6 +546,7 @@ public class DomainAdapter {
         if(infoRoutine!=null) {
             Routine routine = routineAdapter.createRoutine(infoRoutine.get(1));
             routine.setId(infoRoutine.get(0));
+            routine.setShared(infoRoutine.get(2).equals("true"));
             currentUser.setSelectedRoutine(routine);
             routineAdapter.setCurrentRoutine(currentUser.getSelectedRoutine());
             controllerPersistence.setSelectedRoutine(currentUser.getID(), currentUser.getSelectedRoutine().getId());
@@ -670,8 +671,8 @@ public class DomainAdapter {
      * @param routineId identificador de la rutina
      */
     public void deleteRoutine(String routineId) {
+        controllerPersistence.deleteRoutine(currentUser.getID(), routineId, currentUser.isRoutineShared(routineId));
         currentUser.deleteRoutine(routineId);
-        controllerPersistence.deleteRoutine(currentUser.getID(), routineId, currentUser.getSelectedRoutine().isShared());
     }
 
     /**
@@ -955,6 +956,7 @@ public class DomainAdapter {
     /**
      * Metode per descarregar una rutina compartida al sistema
      * @param sharedRoutineID ID de la rutina a descarregar
+     * @param sharedRoutineName Nom de la rutina a descarregar
      */
     public void downloadSharedRoutine(String sharedRoutineID, String sharedRoutineName) throws RoutinePrimaryKeyException {
         if(currentUser.hasRoutineWithName(sharedRoutineName))
@@ -970,11 +972,17 @@ public class DomainAdapter {
         }
     }
 
+    /**
+     * Metode que rep la resposta a la crida que "downloadSharedRoutine" fa a la base de dades
+     * @param sharedRoutineID ID de la rutina a descarregar
+     * @param sharedRoutineName Nom de la rutina a descarregar
+     */
     public void downloadSharedRoutinesCallback(String sharedRoutineID, String sharedRoutineName) {
         ArrayList<String> routine = new ArrayList<>();
         routine.add(0, sharedRoutineID);
         routine.add(1, sharedRoutineName);
         routine.add(2, "false");
+        routine.add(3, "");
         currentUser.addRoutine(routine);
     }
 

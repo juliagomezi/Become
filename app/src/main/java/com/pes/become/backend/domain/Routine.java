@@ -24,7 +24,7 @@ public class Routine {
     /**
      * Mapa amb totes les activitats ordenades temporalment
      */
-    private SortedMap<Day, ArrayList<Activity>> activities;
+    private final SortedMap<Day, ArrayList<Activity>> activities;
     /**
      * Boolea que indica si la rutina es compartida
      */
@@ -176,6 +176,10 @@ public class Routine {
             if(!activity.getId().equals(a.getId()) && activity.compareTo(a) == 0) return true;
         }
         return false;
+    }
+
+    public void setShared(boolean shared) {
+        this.shared = shared;
     }
 
     /**

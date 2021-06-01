@@ -157,8 +157,14 @@ public class ControllerRoutineDB {
             routines[1] = sharedRoutineName;
             HashMap <String, Object> dataInput = new HashMap<>();
 
-            HashMap <String, Double> mapMusic, mapSport, mapSleeping, mapCooking, mapWorking, mapEntertainment, mapPlants, mapOther;
-            mapMusic = mapSport = mapSleeping = mapCooking = mapWorking = mapEntertainment = mapPlants = mapOther = new HashMap<>();
+            HashMap <String, Double> mapMusic  = new HashMap<>();
+            HashMap <String, Double> mapSport  = new HashMap<>();
+            HashMap <String, Double> mapSleeping  = new HashMap<>();
+            HashMap <String, Double> mapCooking  = new HashMap<>();
+            HashMap <String, Double> mapWorking  = new HashMap<>();
+            HashMap <String, Double> mapEntertainment  = new HashMap<>();
+            HashMap <String, Double> mapPlants  = new HashMap<>();
+            HashMap <String, Double> mapOther  = new HashMap<>();
 
             String[] differentDays = new String[]{"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
 
@@ -218,26 +224,26 @@ public class ControllerRoutineDB {
                                 break;
                         }
 
-                                }
-                                dataInput.put("statisticsMusic", mapMusic);
-                                dataInput.put("statisticsSport", mapSport);
-                                dataInput.put("statisticsSleeping", mapSleeping);
-                                dataInput.put("statisticsCooking", mapCooking);
-                                dataInput.put("statisticsWorking", mapWorking);
-                                dataInput.put("statisticsEntertainment", mapEntertainment);
-                                dataInput.put("statisticsPlants", mapPlants);
-                                dataInput.put("statisticsOther", mapOther);
-                                db.collection("users").document(userId).collection("statistics").document(newId).set(dataInput);
+                    }
+                    dataInput.put("statisticsMusic", mapMusic);
+                    dataInput.put("statisticsSport", mapSport);
+                    dataInput.put("statisticsSleeping", mapSleeping);
+                    dataInput.put("statisticsCooking", mapCooking);
+                    dataInput.put("statisticsWorking", mapWorking);
+                    dataInput.put("statisticsEntertainment", mapEntertainment);
+                    dataInput.put("statisticsPlants", mapPlants);
+                    dataInput.put("statisticsOther", mapOther);
+                    db.collection("users").document(userId).collection("statistics").document(newId).set(dataInput);
 
-                            }
-                        try {
-                            method.invoke(object, (Object) routines);
-                        } catch (IllegalAccessException e) {
-                            e.printStackTrace();
-                        } catch (InvocationTargetException e2) {
-                            e2.printStackTrace();
-                        }
-                        });
+                }
+                try {
+                    method.invoke(object, routines);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e2) {
+                    e2.printStackTrace();
+                }
+            });
             return null;
         });
 
