@@ -1024,7 +1024,7 @@ public class ControllerUserDB {
 
         CollectionReference colRefToSharedRoutines = db.collection("sharedRoutines");
 
-        colRefToSharedRoutines.whereEqualTo("ownerID",docRefToUser.getId()).get()
+        colRefToSharedRoutines.whereEqualTo("ownerId",docRefToUser.getId()).get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot documentSnap : task.getResult()) {
