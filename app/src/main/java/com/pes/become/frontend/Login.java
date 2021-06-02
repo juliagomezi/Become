@@ -57,7 +57,7 @@ public class Login extends AppCompatActivity {
         passwordText = findViewById(R.id.passText);
         Button login = findViewById(R.id.logInButton);
         Button googleLogin = findViewById(R.id.googleLoginButton);
-        LoginButton facebooklogin = findViewById(R.id.facebookLoginButton);
+        LoginButton facebookLogin = findViewById(R.id.facebookLoginButton);
         TextView signUp = findViewById(R.id.signUp);
         TextView forgotPassword = findViewById(R.id.forgotPassword);
         loading = findViewById(R.id.loading);
@@ -66,7 +66,7 @@ public class Login extends AppCompatActivity {
 
         googleLogin.setOnClickListener(v -> googleLoginUser());
 
-        facebooklogin.setOnClickListener(v-> {
+        facebookLogin.setOnClickListener(v-> {
             Log.d("Boto", "click al boto");
             facebookLoginUser();
         });
@@ -138,6 +138,7 @@ public class Login extends AppCompatActivity {
                 new FacebookCallback<LoginResult>() {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
+                        loading.setVisibility(View.VISIBLE);
                         Log.d("successFacebook", "facebook:onSuccess:" + loginResult);
                         DA.loginFacebookUser(loginResult.getAccessToken(), Login.this);
                     }

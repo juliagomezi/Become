@@ -70,7 +70,10 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<CommunityRecy
             holder.profilePic.setImageBitmap(profilePic);
         holder.routineName.setText((String)communityRoutinesList.get(position).get(1));
 
-        if (communityRoutinesList.get(position).get(3) != null) holder.valorationText.setText(String.valueOf(communityRoutinesList.get(position).get(3)));
+        if (communityRoutinesList.get(position).get(3) != null){
+            String avg = String.format("%.2f", (float)(double)communityRoutinesList.get(position).get(3));
+            holder.valorationText.setText(avg);
+        }
         else holder.valorationText.setText("0.0");
 
         holder.saveButton.setOnClickListener(view -> saveRoutine(position));

@@ -50,11 +50,63 @@ public class RecommendationsRecyclerAdapter extends RecyclerView.Adapter<Recomme
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         initializeCards(holder, position);
         if (recommendationsList.get(position) == -1) {
-            holder.recommendationsDescription.setText(R.string.recommendationMoreTime);
+            String hours = "";
+            switch (position){
+                case 0:
+                case 6:
+                    hours = "00:30h";
+                    break;
+                case 1:
+                    hours = "03:30h";
+                    break;
+                case 2:
+                    hours = "42:00h";
+                    break;
+                case 3:
+                    hours = "10:00h";
+                    break;
+                case 4:
+                    hours = "40:00h";
+                    break;
+                case 5:
+                    hours = "20:00h";
+                    break;
+                case 7:
+                    hours = "00:00h";
+                    break;
+            }
+            String text = global.getApplicationContext().getResources().getString(R.string.recommendationMoreTime);
+            holder.recommendationsDescription.setText(text + " " + hours);
             holder.cardRecommendationDisplay.setBackgroundResource(R.drawable.theme_working_background);
         }
         else if (recommendationsList.get(position) == 1) {
-            holder.recommendationsDescription.setText(R.string.recommendationsLessTime);
+            String hours = "";
+            switch (position){
+                case 0:
+                    hours = "20:00h";
+                    break;
+                case 1:
+                case 3:
+                    hours = "28:00h";
+                    break;
+                case 2:
+                    hours = "72:00h";
+                    break;
+                case 4:
+                    hours = "70:00h";
+                    break;
+                case 5:
+                    hours = "36:00h";
+                    break;
+                case 6:
+                    hours = "15:00h";
+                    break;
+                case 7:
+                    hours = "170:00h";
+                    break;
+            }
+            String text = global.getApplicationContext().getResources().getString(R.string.recommendationsLessTime);
+            holder.recommendationsDescription.setText(text + " " + hours);
             holder.cardRecommendationDisplay.setBackgroundResource(R.drawable.theme_working_background);
         }
         else {

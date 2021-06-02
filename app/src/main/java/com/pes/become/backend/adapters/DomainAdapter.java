@@ -26,6 +26,8 @@ import java.lang.reflect.Method;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -954,6 +956,31 @@ public class DomainAdapter {
                 }
             }
         }
+        Collections.sort(sharedRoutinesInfo, new Comparator<ArrayList<Object>>() {
+            @Override
+            public int compare(ArrayList<Object> o1, ArrayList<Object> o2) {
+                Integer nUsers1 = Integer.valueOf(o1.get(4).toString());
+                Integer nUsers2 = Integer.valueOf(o2.get(4).toString());
+                Float avg1;
+                if(o1.get(3) != null){
+                    avg1 = Float.valueOf(o1.get(3).toString());
+                }
+                else{
+                    avg1 = 0.f;
+                }
+                Float avg2;
+                if(o2.get(3) != null){
+                    avg2 = Float.valueOf(o2.get(3).toString());
+                }
+                else{
+                    avg2 = 0.f;
+                }
+                if(nUsers1.equals(nUsers2)){
+                    return avg2.compareTo(avg1);
+                }
+                return nUsers2.compareTo(nUsers1);
+            }
+        });
         Community.getInstance().getSharedRoutinesCallback(sharedRoutinesInfo);
     }
 

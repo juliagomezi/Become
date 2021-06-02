@@ -151,8 +151,8 @@
     <string name="noRecommendations">No tens recomanacions</string>
     <string name="downOk">Rutina descarregada correctament</string>
     <string name="recommendationsOkTime">Ho estàs fent genial!</string>
-    <string name="recommendationsLessTime">Li dediques massa temps</string>
-    <string name="recommendationMoreTime">Hauries de dedicar-li més temps</string>
+    <string name="recommendationsLessTime">Recomanem no dedicar més de</string>
+    <string name="recommendationMoreTime">Hauries de dedicar-li més temps, com a mínim</string>
     <string name="recommendations">Recomanacions</string>
 
 </resources>
