@@ -324,9 +324,10 @@ public class ControllerRoutineDB {
      */
     public void voteRoutine(String userId, String idSharedRoutine, double average){
         String idPrivateRoutine = idSharedRoutine.split("_")[1];
+        String idUserOwner = idSharedRoutine.split("_")[0];
 
         db.runTransaction((Transaction.Function<Void>) transaction -> {
-            DocumentReference docRefToPrivateRoutine = db.collection("users").document(userId).collection("routines").document(idPrivateRoutine);
+            DocumentReference docRefToPrivateRoutine = db.collection("users").document(idUserOwner).collection("routines").document(idPrivateRoutine);
             DocumentReference docRefToSharedRoutine = db.collection("sharedRoutines").document(idSharedRoutine);
             DocumentSnapshot sharedRoutineDoc = transaction.get(docRefToSharedRoutine);
             ArrayList<String> usersList = (ArrayList<String>) sharedRoutineDoc.get("voters");
