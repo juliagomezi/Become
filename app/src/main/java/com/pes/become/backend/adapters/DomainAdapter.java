@@ -1054,8 +1054,8 @@ public class DomainAdapter {
 
         //Music
         totalTime = currentUser.getSelectedRoutine().getTotalTimeTheme(Theme.Music);
-        moreThanMin = totalTime.compareTo(new Time(0, 0));
-        lessThanMax = totalTime.compareTo(new Time(0, 0));
+        moreThanMin = totalTime.compareTo(new Time(0, 30));
+        lessThanMax = totalTime.compareTo(new Time(20, 0));
         if(moreThanMin < 0){
             recommendations.add(0, -1);
         }
@@ -1068,8 +1068,8 @@ public class DomainAdapter {
 
         //Sport
         totalTime = currentUser.getSelectedRoutine().getTotalTimeTheme(Theme.Sport);
-        moreThanMin = totalTime.compareTo(new Time(0, 0));
-        lessThanMax = totalTime.compareTo(new Time(0, 0));
+        moreThanMin = totalTime.compareTo(new Time(3, 30));
+        lessThanMax = totalTime.compareTo(new Time(28, 0));
         if(moreThanMin < 0){
             recommendations.add(1, -1);
         }
@@ -1082,8 +1082,8 @@ public class DomainAdapter {
 
         //Sleeping
         totalTime = currentUser.getSelectedRoutine().getTotalTimeTheme(Theme.Sleeping);
-        moreThanMin = totalTime.compareTo(new Time(0, 0));
-        lessThanMax = totalTime.compareTo(new Time(0, 0));
+        moreThanMin = totalTime.compareTo(new Time(42, 0));
+        lessThanMax = totalTime.compareTo(new Time(72, 0));
         if(moreThanMin < 0){
             recommendations.add(2, -1);
         }
@@ -1096,8 +1096,8 @@ public class DomainAdapter {
 
         //Cooking
         totalTime = currentUser.getSelectedRoutine().getTotalTimeTheme(Theme.Cooking);
-        moreThanMin = totalTime.compareTo(new Time(0, 0));
-        lessThanMax = totalTime.compareTo(new Time(0, 0));
+        moreThanMin = totalTime.compareTo(new Time(10, 0));
+        lessThanMax = totalTime.compareTo(new Time(28, 0));
         if(moreThanMin < 0){
             recommendations.add(3, -1);
         }
@@ -1110,8 +1110,8 @@ public class DomainAdapter {
 
         //Working
         totalTime = currentUser.getSelectedRoutine().getTotalTimeTheme(Theme.Working);
-        moreThanMin = totalTime.compareTo(new Time(0, 0));
-        lessThanMax = totalTime.compareTo(new Time(0, 0));
+        moreThanMin = totalTime.compareTo(new Time(40, 0));
+        lessThanMax = totalTime.compareTo(new Time(70, 0));
         if(moreThanMin < 0){
             recommendations.add(4, -1);
         }
@@ -1124,8 +1124,8 @@ public class DomainAdapter {
 
         //Entertainment
         totalTime = currentUser.getSelectedRoutine().getTotalTimeTheme(Theme.Entertainment);
-        moreThanMin = totalTime.compareTo(new Time(0, 0));
-        lessThanMax = totalTime.compareTo(new Time(0, 0));
+        moreThanMin = totalTime.compareTo(new Time(20, 0));
+        lessThanMax = totalTime.compareTo(new Time(36, 0));
         if(moreThanMin < 0){
             recommendations.add(5, -1);
         }
@@ -1138,8 +1138,8 @@ public class DomainAdapter {
 
         //Plants
         totalTime = currentUser.getSelectedRoutine().getTotalTimeTheme(Theme.Plants);
-        moreThanMin = totalTime.compareTo(new Time(0, 0));
-        lessThanMax = totalTime.compareTo(new Time(0, 0));
+        moreThanMin = totalTime.compareTo(new Time(0, 30));
+        lessThanMax = totalTime.compareTo(new Time(15, 0));
         if(moreThanMin < 0){
             recommendations.add(6, -1);
         }
@@ -1153,7 +1153,7 @@ public class DomainAdapter {
         //Other
         totalTime = currentUser.getSelectedRoutine().getTotalTimeTheme(Theme.Other);
         moreThanMin = totalTime.compareTo(new Time(0, 0));
-        lessThanMax = totalTime.compareTo(new Time(0, 0));
+        lessThanMax = totalTime.compareTo(new Time(170, 0));
         if(moreThanMin < 0){
             recommendations.add(7, -1);
         }
