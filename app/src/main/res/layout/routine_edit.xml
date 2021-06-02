@@ -92,52 +92,62 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/routineDay"/>
 
-        <TextView
-            android:id="@+id/addActivity"
-            style="@style/Widget.AppCompat.Button"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginBottom="12dp"
-            android:background="@drawable/round_button"
-            app:iconPadding="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginStart="5dp"
+            app:layout_constraintBottom_toBottomOf="@+id/activityList"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.027"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent">
 
-        <EditText
-            android:id="@+id/nameText"
-            android:layout_width="240dp"
-            android:layout_height="40dp"
-            android:layout_marginBottom="15dp"
-            android:autofillHints=""
-            android:background="@drawable/edittext_background"
-            android:ems="10"
-            android:fontFamily="@font/sourcesanspro_regular"
-            android:inputType="textPersonName"
-            android:singleLine="true"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.406"
-            app:layout_constraintStart_toStartOf="parent" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
 
-        <Button
-            android:id="@+id/doneButton"
-            android:layout_width="80dp"
-            android:layout_height="40dp"
-            android:layout_marginBottom="15dp"
-            android:layout_weight="1"
-            android:background="@drawable/custom_button"
-            android:fontFamily="@font/sourcesanspro_regular"
-            android:text="@string/doneButton"
-            android:textAllCaps="false"
-            android:textSize="18dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.967"
-            app:layout_constraintStart_toStartOf="parent" />
+                <TextView
+                    android:id="@+id/addActivity"
+                    style="@style/Widget.AppCompat.Button"
+                    android:layout_weight="1"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/round_button"
+                     />
+
+                <EditText
+                    android:id="@+id/nameText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_weight="2"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:autofillHints=""
+                    android:background="@drawable/edittext_background"
+                    android:ems="10"
+                    android:fontFamily="@font/sourcesanspro_regular"
+                    android:inputType="textPersonName"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    />
+
+                <Button
+                    android:id="@+id/doneButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/custom_button"
+                    android:fontFamily="@font/sourcesanspro_regular"
+                    android:text="@string/doneButton"
+                    android:textAllCaps="false"
+                    android:textSize="18dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

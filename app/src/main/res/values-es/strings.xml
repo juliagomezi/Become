@@ -54,14 +54,14 @@
     <string name="activityModified">Actividad modificada correctamente</string>
     <string name="errorTime">Error: El tiempo de inicio ha de ser anterior al final</string>
     <string name="errorDay">Error: El día de inicio ha de ser anterior al final</string>
-    <string name="overlapping">Error: Otra actividad ya està programada en este horario</string>
+    <string name="overlapping">Error: Otra actividad ya está programada en este horario</string>
     <string name="routineCreated">Rutina creada</string>
     <string name="new_routine">Nueva rutina</string>
     <string name="noRoutineSelected">No tienes ninguna rutina seleccionada</string>
     <string name="adopt_new_habits">Adopta nuevos hábitos y marca la diferencia!</string>
     <string name="noActivities">No tienes ninguna actividad programada para hoy.</string>
     <string name="noRoutines">No tienes ninguna rutina, crea una nueva!</string>
-    <string name="shortPassword">La contraseña debe tener como m</string>
+    <string name="shortPassword">La contraseña debe tener como mínimo 6 carácteres</string>
     <string name="notAValidEmail">Introduce un correo válido</string>
     <string name="change_profile_photo">Cambiar foto de perfil</string>
     <string name="log_out">Salir</string>
@@ -79,7 +79,7 @@
     <string name="shortSaturday">SAB</string>
     <string name="shortSunday">DOM</string>
     <string name="deleteRoutine">Eliminar rutina</string>
-    <string name="deleteRoutineConfirmation">Estás seguro que quieres eliminar esta rutina y todas sus actividades?</string>
+    <string name="deleteRoutineConfirmation">¿Estás seguro que quieres eliminar esta rutina y todas sus actividades?</string>
     <string name="sport">DEPORTE</string>
     <string name="sleeping">DORMIR</string>
     <string name="cooking">COCINA</string>
@@ -91,7 +91,7 @@
     <string name="other">OTROS</string>
     <string name="routine_distribution">Distribución de la rutina</string>
     <string name="emailSent">Se ha enviado un correo electrónico para restablecer la contraseña</string>
-    <string name="forgot_password">Has olvidado la contraseña?</string>
+    <string name="forgot_password">¿Has olvidado la contraseña?</string>
     <string name="verifyEmail">Registrado correctamente. Comprueba tu correo electrónico y verificalo para usar la app.</string>
     <string name="emailNotRegistered">El correo introducido no pertenece a ninguna cuenta.</string>
     <string name="loginfailed">El correo o la contraseña no son correctos, asegúrate de haver confirmado el correo.</string>
@@ -104,7 +104,7 @@
     <string name="newPassword">Nueva contraseña</string>
     <string name="change_username">Cambiar nombre</string>
     <string name="username_changed">Nombre actualizado correctamente.</string>
-    <string name="congrats">Enhorabuena!</string>
+    <string name="congrats">¡Enhorabuena!</string>
     <string name="new_trophy_won">Has ganado un trofeo</string>
     <string name="deselectToRemove">Deselecciona esta rutina para eliminarla</string>
     <string name="CreateFirstRoutine">Novato</string>
@@ -150,9 +150,9 @@
     <string name="voteOwnRoutine">No puedes votar tu propia rutina</string>
     <string name="noRecommendations">No tienes recomandaciones</string>
     <string name="downOk">Rutina descargada correctamente</string>
-    <string name="recommendationsOkTime">Lo estás haciendo genial!</string>
-    <string name="recommendationsLessTime">Le dedicas demasiado tiempo</string>
-    <string name="recommendationMoreTime">Deberías dedicarle más tiempo</string>
+    <string name="recommendationsOkTime">¡Lo estás haciendo genial!</string>
+    <string name="recommendationsLessTime">Recomendamos no dedicar más de</string>
+    <string name="recommendationMoreTime">Deberías dedicarle más tiempo, como mínimo</string>
     <string name="recommendations">Recomendaciones</string>
 
 </resources>

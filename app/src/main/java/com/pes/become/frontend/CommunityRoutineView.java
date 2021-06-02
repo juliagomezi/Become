@@ -6,8 +6,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageButton;
+import android.widget.Space;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapter;
-import com.pes.become.backend.exceptions.NoSelectedRoutineException;
 import com.pes.become.backend.exceptions.RoutinePrimaryKeyException;
 
 import java.util.ArrayList;
@@ -25,8 +24,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 public class CommunityRoutineView extends Fragment {
-
-    private static CommunityRoutineView instance;
 
     private View view;
     private Context global;
@@ -39,11 +36,14 @@ public class CommunityRoutineView extends Fragment {
     private HashMap<String, ArrayList<ArrayList<String>>> activitiesList;
     private ArrayList<ArrayList<String>> activitiesListDay;
 
+    private int voted, numvotes;
+    private double average;
+
     private RecyclerView recyclerView;
     private TextView emptyView;
-    TextView routineDay, saveRoutine;
-    ImageButton previousDayButton;
-    ImageButton nextDayButton;
+    TextView routineDay;
+    ImageButton previousDayButton, nextDayButton, saveRoutine;
+    ImageButton star1, star2, star3, star4, star5;
 
     /**
      * Classe per afegir padding al final del recycler view
@@ -60,10 +60,13 @@ public class CommunityRoutineView extends Fragment {
     /**
      * Constructora del RoutineView
      */
-    public CommunityRoutineView(String routineId, String routineName, HashMap<String, ArrayList<ArrayList<String>>> activitiesList) {
+    public CommunityRoutineView(String routineId, String routineName, HashMap<String, ArrayList<ArrayList<String>>> activitiesList, int voted, double avg, int numvotes) {
         this.routineId = routineId;
         this.routineName = routineName;
         this.activitiesList = activitiesList;
+        this.voted = voted;
+        this.average = avg;
+        this.numvotes = numvotes;
     }
 
     /**
@@ -73,7 +76,6 @@ public class CommunityRoutineView extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.community_routine_view, container, false);
         super.onCreate(savedInstanceState);
-        instance = this;
         global = this.getActivity();
 
         recyclerView = view.findViewById(R.id.activityList);
@@ -84,6 +86,10 @@ public class CommunityRoutineView extends Fragment {
         nextDayButton.setOnClickListener(v -> showNextDay());
         saveRoutine = view.findViewById(R.id.saveRoutine);
         saveRoutine.setOnClickListener(v -> saveRoutine());
+        TextView routineName = view.findViewById(R.id.routineName);
+        routineName.setText(this.routineName);
+
+        initStars();
 
         seeingDay = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
         seeingDay = translateDay(seeingDay);
@@ -92,6 +98,75 @@ public class CommunityRoutineView extends Fragment {
         getActivitiesByDay();
 
         return view;
+    }
+
+    /**
+     * Metode que inicialitza les estrelles
+     */
+    private void initStars() {
+        star1 = view.findViewById(R.id.star1);
+        star2 = view.findViewById(R.id.star2);
+        star3 = view.findViewById(R.id.star3);
+        star4 = view.findViewById(R.id.star4);
+        star5 = view.findViewById(R.id.star5);
+        if(voted == 0) {
+            star1.setOnClickListener(v -> {
+                star1.setImageResource(R.drawable.ic_star_filled);
+                DA.voteRoutine(this.routineId, 1, average, numvotes);
+                removeStars();
+            });
+            star2.setOnClickListener(v -> {
+                star1.setImageResource(R.drawable.ic_star_filled);
+                star2.setImageResource(R.drawable.ic_star_filled);
+                DA.voteRoutine(this.routineId, 2, average, numvotes);
+                removeStars();
+            });
+            star3.setOnClickListener(v -> {
+                star1.setImageResource(R.drawable.ic_star_filled);
+                star2.setImageResource(R.drawable.ic_star_filled);
+                star3.setImageResource(R.drawable.ic_star_filled);
+                DA.voteRoutine(this.routineId, 3, average, numvotes);
+                removeStars();
+            });
+            star4.setOnClickListener(v -> {
+                star1.setImageResource(R.drawable.ic_star_filled);
+                star2.setImageResource(R.drawable.ic_star_filled);
+                star3.setImageResource(R.drawable.ic_star_filled);
+                star4.setImageResource(R.drawable.ic_star_filled);
+                DA.voteRoutine(this.routineId, 4, average, numvotes);
+                removeStars();
+            });
+            star5.setOnClickListener(v -> {
+                star1.setImageResource(R.drawable.ic_star_filled);
+                star2.setImageResource(R.drawable.ic_star_filled);
+                star3.setImageResource(R.drawable.ic_star_filled);
+                star4.setImageResource(R.drawable.ic_star_filled);
+                star5.setImageResource(R.drawable.ic_star_filled);
+                DA.voteRoutine(this.routineId, 5, average, numvotes);
+                removeStars();
+            });
+        } else {
+            star1.setImageResource(R.drawable.ic_star_filled);
+            star2.setVisibility(View.GONE);
+            star3.setVisibility(View.GONE);
+            star4.setVisibility(View.GONE);
+            star5.setVisibility(View.GONE);
+            Space space1 = view.findViewById(R.id.space1);
+            space1.setVisibility(View.VISIBLE);
+            Space space2 = view.findViewById(R.id.space2);
+            space2.setVisibility(View.GONE);
+            TextView votes = view.findViewById(R.id.votes);
+            votes.setText(String.valueOf(average));
+            votes.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void removeStars() {
+        star1.setClickable(false);
+        star2.setClickable(false);
+        star3.setClickable(false);
+        star4.setClickable(false);
+        star5.setClickable(false);
     }
 
     /**

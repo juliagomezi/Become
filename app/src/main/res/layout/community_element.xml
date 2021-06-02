@@ -33,7 +33,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clickable="true"
-                android:background="@color/white" >
+                android:background="@color/white"
+                android:focusable="true">
 
                 <TextView
                     android:id="@+id/routineName"
@@ -74,25 +75,19 @@
                         android:scaleType="fitCenter"
                         android:tint="@color/black"
                         app:iconTint="@color/black"
-                        app:srcCompat="@drawable/ic_bookmark"
+                        app:srcCompat="@drawable/ic_download"
                         tools:ignore="VectorDrawableCompat"
                         tools:layout_editor_absoluteX="31dp"
                         tools:layout_editor_absoluteY="25dp" />
 
-                    <ImageButton
-                        android:id="@+id/valorationIcon"
+                    <ImageView
                         android:layout_width="28dp"
                         android:layout_height="match_parent"
                         android:layout_marginStart="10dp"
-                        android:layout_marginLeft="10dp"
                         android:layout_marginEnd="5dp"
                         android:layout_weight="1"
-                        android:background="?selectableItemBackgroundBorderless"
-                        android:clickable="true"
                         android:scaleType="fitCenter"
-                        android:tint="@color/gold75"
-                        app:iconTint="@color/gold75"
-                        app:srcCompat="@drawable/ic_star"
+                        app:srcCompat="@drawable/ic_star_filled"
                         tools:ignore="VectorDrawableCompat" />
 
                     <TextView
@@ -103,7 +98,6 @@
                         android:fontFamily="@font/sourcesanspro_regular"
                         android:gravity="center"
                         android:scaleType="fitCenter"
-                        android:text="--"
                         android:textColor="@color/black"
                         android:textSize="20sp" />
 

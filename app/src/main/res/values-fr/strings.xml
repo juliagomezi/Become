@@ -152,7 +152,7 @@
     <string name="noRecommendations">Tu n\'as aucune recommandation</string>
     <string name="downOk">Routine téléchargée avec succès</string>
     <string name="recommendationsLessTime">Tu passes trop de temps</string>
-    <string name="recommendationMoreTime">Vous devriez y passer plus de temps</string>
+    <string name="recommendationMoreTime">Vous devriez y passer plus de temps, au moins</string>
     <string name="recommendations">Recommandations</string>
 
 </resources>

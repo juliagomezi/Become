@@ -26,6 +26,8 @@ import java.lang.reflect.Method;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -694,8 +696,10 @@ public class DomainAdapter {
     public void createActivity(String name, String description, String theme, String startDayString, String endDayString, String iniH, String iniM, String endH, String endM) throws InvalidTimeIntervalException, InvalidDayIntervalException, OverlappingActivitiesException, NoSelectedRoutineException {
         Day startDay = Day.values()[Integer.parseInt(startDayString)];
         Day endDay = Day.values()[Integer.parseInt(endDayString)];
+        if(startDay.ordinal() - endDay.ordinal() != 0 && startDay.ordinal() - endDay.ordinal() != -1 && !(startDay == Day.Sunday && endDay == Day.Monday))
+            throw new InvalidDayIntervalException();
         int comparison = startDay.compareTo(endDay);
-        if (comparison < 0) {
+        if (comparison < 0 || (startDay == Day.Sunday && endDay == Day.Monday)) {
             Activity newActDay1 = new Activity(name, description, Theme.values()[Integer.parseInt(theme)], new TimeInterval (Integer.parseInt(iniH), Integer.parseInt(iniM), 23, 59), startDay);
             Activity newActDay2 = new Activity(name, description, Theme.values()[Integer.parseInt(theme)], new TimeInterval (0, 0, Integer.parseInt(endH), Integer.parseInt(endM)), endDay);
             if(!routineAdapter.checkOverlappings(newActDay1) && !routineAdapter.checkOverlappings(newActDay2)) {
@@ -747,11 +751,13 @@ public class DomainAdapter {
     public void updateActivity(String id, String name, String description, String theme, String startDayString, String endDayString, String iniH, String iniM, String endH, String endM) throws InvalidDayIntervalException, InvalidTimeIntervalException, OverlappingActivitiesException, NoSelectedRoutineException {
         Day startDay = Day.values()[Integer.parseInt(startDayString)];
         Day endDay = Day.values()[Integer.parseInt(endDayString)];
+        if(startDay.ordinal() - endDay.ordinal() != 0 && startDay.ordinal() - endDay.ordinal() != -1 && !(startDay == Day.Sunday && endDay == Day.Monday))
+            throw new InvalidDayIntervalException();
         int comparison = startDay.compareTo(endDay);
         Activity oldActivity = currentUser.getSelectedRoutine().getActivity(id);
         Time duration = oldActivity.getInterval().getIntervalDuration();
         currentUser.updateStatistics(oldActivity.getTheme(),oldActivity.getDay(),duration.getHours(),duration.getMinutes(),false);
-        if (comparison < 0) {
+        if (comparison < 0 || (startDay == Day.Sunday && endDay == Day.Monday)) {
             Activity updatedActivity1 = new Activity(name, description, Theme.values()[Integer.parseInt(theme)], new TimeInterval(Integer.parseInt(iniH), Integer.parseInt(iniM), 23, 59), startDay);
             updatedActivity1.setId(id);
             routineAdapter.updateActivity(updatedActivity1);
@@ -950,6 +956,31 @@ public class DomainAdapter {
                 }
             }
         }
+        Collections.sort(sharedRoutinesInfo, new Comparator<ArrayList<Object>>() {
+            @Override
+            public int compare(ArrayList<Object> o1, ArrayList<Object> o2) {
+                Integer nUsers1 = Integer.valueOf(o1.get(4).toString());
+                Integer nUsers2 = Integer.valueOf(o2.get(4).toString());
+                Float avg1;
+                if(o1.get(3) != null){
+                    avg1 = Float.valueOf(o1.get(3).toString());
+                }
+                else{
+                    avg1 = 0.f;
+                }
+                Float avg2;
+                if(o2.get(3) != null){
+                    avg2 = Float.valueOf(o2.get(3).toString());
+                }
+                else{
+                    avg2 = 0.f;
+                }
+                if(nUsers1.equals(nUsers2)){
+                    return avg2.compareTo(avg1);
+                }
+                return nUsers2.compareTo(nUsers1);
+            }
+        });
         Community.getInstance().getSharedRoutinesCallback(sharedRoutinesInfo);
     }
 
@@ -1050,8 +1081,8 @@ public class DomainAdapter {
 
         //Music
         totalTime = currentUser.getSelectedRoutine().getTotalTimeTheme(Theme.Music);
-        moreThanMin = totalTime.compareTo(new Time(0, 0));
-        lessThanMax = totalTime.compareTo(new Time(0, 0));
+        moreThanMin = totalTime.compareTo(new Time(0, 30));
+        lessThanMax = totalTime.compareTo(new Time(20, 0));
         if(moreThanMin < 0){
             recommendations.add(0, -1);
         }
@@ -1064,8 +1095,8 @@ public class DomainAdapter {
 
         //Sport
         totalTime = currentUser.getSelectedRoutine().getTotalTimeTheme(Theme.Sport);
-        moreThanMin = totalTime.compareTo(new Time(0, 0));
-        lessThanMax = totalTime.compareTo(new Time(0, 0));
+        moreThanMin = totalTime.compareTo(new Time(3, 30));
+        lessThanMax = totalTime.compareTo(new Time(28, 0));
         if(moreThanMin < 0){
             recommendations.add(1, -1);
         }
@@ -1078,8 +1109,8 @@ public class DomainAdapter {
 
         //Sleeping
         totalTime = currentUser.getSelectedRoutine().getTotalTimeTheme(Theme.Sleeping);
-        moreThanMin = totalTime.compareTo(new Time(0, 0));
-        lessThanMax = totalTime.compareTo(new Time(0, 0));
+        moreThanMin = totalTime.compareTo(new Time(42, 0));
+        lessThanMax = totalTime.compareTo(new Time(72, 0));
         if(moreThanMin < 0){
             recommendations.add(2, -1);
         }
@@ -1092,8 +1123,8 @@ public class DomainAdapter {
 
         //Cooking
         totalTime = currentUser.getSelectedRoutine().getTotalTimeTheme(Theme.Cooking);
-        moreThanMin = totalTime.compareTo(new Time(0, 0));
-        lessThanMax = totalTime.compareTo(new Time(0, 0));
+        moreThanMin = totalTime.compareTo(new Time(10, 0));
+        lessThanMax = totalTime.compareTo(new Time(28, 0));
         if(moreThanMin < 0){
             recommendations.add(3, -1);
         }
@@ -1106,8 +1137,8 @@ public class DomainAdapter {
 
         //Working
         totalTime = currentUser.getSelectedRoutine().getTotalTimeTheme(Theme.Working);
-        moreThanMin = totalTime.compareTo(new Time(0, 0));
-        lessThanMax = totalTime.compareTo(new Time(0, 0));
+        moreThanMin = totalTime.compareTo(new Time(40, 0));
+        lessThanMax = totalTime.compareTo(new Time(70, 0));
         if(moreThanMin < 0){
             recommendations.add(4, -1);
         }
@@ -1120,8 +1151,8 @@ public class DomainAdapter {
 
         //Entertainment
         totalTime = currentUser.getSelectedRoutine().getTotalTimeTheme(Theme.Entertainment);
-        moreThanMin = totalTime.compareTo(new Time(0, 0));
-        lessThanMax = totalTime.compareTo(new Time(0, 0));
+        moreThanMin = totalTime.compareTo(new Time(20, 0));
+        lessThanMax = totalTime.compareTo(new Time(36, 0));
         if(moreThanMin < 0){
             recommendations.add(5, -1);
         }
@@ -1134,8 +1165,8 @@ public class DomainAdapter {
 
         //Plants
         totalTime = currentUser.getSelectedRoutine().getTotalTimeTheme(Theme.Plants);
-        moreThanMin = totalTime.compareTo(new Time(0, 0));
-        lessThanMax = totalTime.compareTo(new Time(0, 0));
+        moreThanMin = totalTime.compareTo(new Time(0, 30));
+        lessThanMax = totalTime.compareTo(new Time(15, 0));
         if(moreThanMin < 0){
             recommendations.add(6, -1);
         }
@@ -1149,7 +1180,7 @@ public class DomainAdapter {
         //Other
         totalTime = currentUser.getSelectedRoutine().getTotalTimeTheme(Theme.Other);
         moreThanMin = totalTime.compareTo(new Time(0, 0));
-        lessThanMax = totalTime.compareTo(new Time(0, 0));
+        lessThanMax = totalTime.compareTo(new Time(170, 0));
         if(moreThanMin < 0){
             recommendations.add(7, -1);
         }

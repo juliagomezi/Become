@@ -60,7 +60,8 @@
                     app:layout_constraintEnd_toEndOf="@+id/routineName"
                     app:layout_constraintHorizontal_bias="0.946"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="UseSwitchCompatOrMaterialXml" />
 
                 <ImageButton
                     android:id="@+id/editButton"

@@ -420,6 +420,10 @@ public class Stats extends Fragment {
         minutes /= 100;
         minutes *= 60;
         String minutesString = String.format("%.0f", (float)minutes);
+        if(hoursMinutes[0].length() == 1)
+            hoursMinutes[0] = "0" + hoursMinutes[0];
+        if(minutesString.length() == 1)
+            minutesString = "0" + minutesString;
         return hoursMinutes[0] + ":" + minutesString + "h";
     }
 
