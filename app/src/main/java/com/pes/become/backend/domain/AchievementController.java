@@ -161,6 +161,15 @@ public class AchievementController {
                 else
                     return false;
 
+            case ShareRoutine:
+                return currentUser.gainAchievement(Achievement.ShareRoutine);
+
+            case DownloadRoutine:
+                return currentUser.gainAchievement(Achievement.DownloadRoutine);
+
+            case VoteRoutine:
+                return currentUser.gainAchievement(Achievement.VoteRoutine);
+
             default:
                 return false;
         }

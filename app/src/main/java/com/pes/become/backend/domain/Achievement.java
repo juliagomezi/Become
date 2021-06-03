@@ -21,5 +21,8 @@ public enum Achievement {
     ActivitiesPerDay1,
     ActivitiesPerDay5,
     HoursPerDay5,
-    HoursPerDay10
+    HoursPerDay10,
+    ShareRoutine,
+    DownloadRoutine,
+    VoteRoutine
 }
