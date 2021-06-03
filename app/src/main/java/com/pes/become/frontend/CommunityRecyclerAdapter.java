@@ -74,7 +74,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<CommunityRecy
             String avg = String.format("%.2f", (float)(double)communityRoutinesList.get(position).get(3));
             holder.valorationText.setText(avg);
         }
-        else holder.valorationText.setText("0.0");
+        else holder.valorationText.setText("0,0");
 
         holder.saveButton.setOnClickListener(view -> saveRoutine(position));
 

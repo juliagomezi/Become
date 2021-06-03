@@ -1063,6 +1063,18 @@ public class DomainAdapter {
      * @param activitiesList activitats de la rutina compartida
      */
     public void getSharedRoutineActivitiesCallback(HashMap<String, ArrayList<ArrayList<String>>> activitiesList) {
+        for(Map.Entry<String, ArrayList<ArrayList<String>>> day : activitiesList.entrySet()){
+            Collections.sort(day.getValue(), new Comparator<ArrayList<String>>() {
+                @Override
+                public int compare(ArrayList<String> o1, ArrayList<String> o2) {
+                    String[] s1 = o1.get(5).split(":");
+                    String[] s2 = o2.get(5).split(":");
+                    Time startTime1 = new Time(Integer.parseInt(s1[0]), Integer.parseInt(s1[1]));
+                    Time startTime2 = new Time(Integer.parseInt(s2[0]), Integer.parseInt(s2[1]));
+                    return startTime1.compareTo(startTime2);
+                }
+            });
+        }
         CommunityRecyclerAdapter.getInstance().getSharedRoutineActivitiesCallback(activitiesList);
     }
 
