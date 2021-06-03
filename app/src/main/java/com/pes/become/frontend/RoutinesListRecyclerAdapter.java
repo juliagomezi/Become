@@ -123,6 +123,7 @@ public class RoutinesListRecyclerAdapter extends RecyclerView.Adapter<RoutinesLi
             holder.starIcon.setVisibility(View.VISIBLE);
             holder.points.setVisibility(View.VISIBLE);
             DA.shareRoutine(routinesList.get(position).get(0), true);
+            if(DA.checkAchievement("ShareRoutine")) MainActivity.getInstance().showTrophyWon(global.getResources().getString(R.string.ShareRoutine));
         });
 
         boolean isSelected = routinesList.get(position).get(0).equals(selectedRoutineID);
