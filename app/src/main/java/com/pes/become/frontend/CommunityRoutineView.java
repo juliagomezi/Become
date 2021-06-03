@@ -113,12 +113,14 @@ public class CommunityRoutineView extends Fragment {
             star1.setOnClickListener(v -> {
                 star1.setImageResource(R.drawable.ic_star_filled);
                 DA.voteRoutine(this.routineId, 1, average, numvotes);
+                if(DA.checkAchievement("VoteRoutine")) MainActivity.getInstance().showTrophyWon(getString(R.string.VoteRoutine));
                 removeStars();
             });
             star2.setOnClickListener(v -> {
                 star1.setImageResource(R.drawable.ic_star_filled);
                 star2.setImageResource(R.drawable.ic_star_filled);
                 DA.voteRoutine(this.routineId, 2, average, numvotes);
+                if(DA.checkAchievement("VoteRoutine")) MainActivity.getInstance().showTrophyWon(getString(R.string.VoteRoutine));
                 removeStars();
             });
             star3.setOnClickListener(v -> {
@@ -126,6 +128,7 @@ public class CommunityRoutineView extends Fragment {
                 star2.setImageResource(R.drawable.ic_star_filled);
                 star3.setImageResource(R.drawable.ic_star_filled);
                 DA.voteRoutine(this.routineId, 3, average, numvotes);
+                if(DA.checkAchievement("VoteRoutine")) MainActivity.getInstance().showTrophyWon(getString(R.string.VoteRoutine));
                 removeStars();
             });
             star4.setOnClickListener(v -> {
@@ -134,6 +137,7 @@ public class CommunityRoutineView extends Fragment {
                 star3.setImageResource(R.drawable.ic_star_filled);
                 star4.setImageResource(R.drawable.ic_star_filled);
                 DA.voteRoutine(this.routineId, 4, average, numvotes);
+                if(DA.checkAchievement("VoteRoutine")) MainActivity.getInstance().showTrophyWon(getString(R.string.VoteRoutine));
                 removeStars();
             });
             star5.setOnClickListener(v -> {
@@ -143,6 +147,7 @@ public class CommunityRoutineView extends Fragment {
                 star4.setImageResource(R.drawable.ic_star_filled);
                 star5.setImageResource(R.drawable.ic_star_filled);
                 DA.voteRoutine(this.routineId, 5, average, numvotes);
+                if(DA.checkAchievement("VoteRoutine")) MainActivity.getInstance().showTrophyWon(getString(R.string.VoteRoutine));
                 removeStars();
             });
         } else {
@@ -284,6 +289,7 @@ public class CommunityRoutineView extends Fragment {
     private void saveRoutine() {
         try {
             DA.downloadSharedRoutine(routineId, routineName);
+            if(DA.checkAchievement("DownloadRoutine")) MainActivity.getInstance().showTrophyWon(global.getResources().getString(R.string.DownloadRoutine));
             Toast.makeText(global, global.getApplicationContext().getString(R.string.downOk), Toast.LENGTH_SHORT).show();
         } catch (RoutinePrimaryKeyException e) {
             Toast.makeText(global, getString(R.string.existingRoutineName), Toast.LENGTH_SHORT).show();

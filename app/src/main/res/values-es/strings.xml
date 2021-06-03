@@ -154,5 +154,19 @@
     <string name="recommendationsLessTime">Recomendamos no dedicar más de</string>
     <string name="recommendationMoreTime">Deberías dedicarle más tiempo, como mínimo</string>
     <string name="recommendations">Recomendaciones</string>
+    <string name="ActivitiesPerDay1">Espabila!</string>
+    <string name="ActivitiesPerDay1Description">Tener almenos una actividad por día</string>
+    <string name="ActivitiesPerDay5">Multitarea</string>
+    <string name="ActivitiesPerDay5Description">Tener almenos 5 actividades por día</string>
+    <string name="HoursPerDay5">La cosa se pone seria</string>
+    <string name="HoursPerDay10">Cuanto más, mejor</string>
+    <string name="HoursPerDay5Description">Tener almenos 5 horas de actividades por día</string>
+    <string name="HoursPerDay10Description">Tener almenos 10 horas de actividades por día</string>
+    <string name="ShareRoutine">Comunista</string>
+    <string name="ShareRoutineDescription">Comparte tu rutina para que otros puedan usarla</string>
+    <string name="DownloadRoutine">Ladrón</string>
+    <string name="DownloadRoutineDescription">Descarga una rutina de la comunidad</string>
+    <string name="VoteRoutine">Juez</string>
+    <string name="VoteRoutineDescription">Valora una rutina de la comunidad</string>
 
 </resources>

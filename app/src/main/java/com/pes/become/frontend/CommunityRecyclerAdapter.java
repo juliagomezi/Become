@@ -120,6 +120,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<CommunityRecy
     private void saveRoutine(int position) {
         try {
             DA.downloadSharedRoutine(String.valueOf(communityRoutinesList.get(position).get(0)), String.valueOf(communityRoutinesList.get(position).get(1)));
+            if(DA.checkAchievement("DownloadRoutine")) MainActivity.getInstance().showTrophyWon(global.getResources().getString(R.string.DownloadRoutine));
             Toast.makeText(global, global.getApplicationContext().getString(R.string.downOk), Toast.LENGTH_SHORT).show();
         } catch (RoutinePrimaryKeyException e) {
             Toast.makeText(global, global.getApplicationContext().getString(R.string.existingRoutineName), Toast.LENGTH_SHORT).show();

@@ -485,6 +485,10 @@ public class RoutineEdit extends Fragment implements AdapterView.OnItemSelectedL
         if(DA.checkAchievement("HourEntertainment10")) MainActivity.getInstance().showTrophyWon(getString(R.string.HourEntertainment10));
         if(DA.checkAchievement("HourPlants10")) MainActivity.getInstance().showTrophyWon(getString(R.string.HourPlants10));
         if(DA.checkAchievement("HourOther10")) MainActivity.getInstance().showTrophyWon(getString(R.string.HourOther10));
+        if(DA.checkAchievement("ActivitiesPerDay1")) MainActivity.getInstance().showTrophyWon(getString(R.string.ActivitiesPerDay1));
+        if(DA.checkAchievement("ActivitiesPerDay5")) MainActivity.getInstance().showTrophyWon(getString(R.string.ActivitiesPerDay5));
+        if(DA.checkAchievement("HoursPerDay5")) MainActivity.getInstance().showTrophyWon(getString(R.string.HoursPerDay5));
+        if(DA.checkAchievement("HoursPerDay10")) MainActivity.getInstance().showTrophyWon(getString(R.string.HoursPerDay10));
     }
 
     /**

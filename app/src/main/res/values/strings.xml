@@ -161,5 +161,19 @@
     <string name="recommendationsOkTime">You are doing great!</string>
     <string name="downOk">Routine downloaded successfully</string>
     <string name="recommendations">Recommendations</string>
+    <string name="ActivitiesPerDay1">Shake a leg!</string>
+    <string name="ActivitiesPerDay1Description">Have at least one activity per day</string>
+    <string name="ActivitiesPerDay5">Multitasking</string>
+    <string name="ActivitiesPerDay5Description">Have at least 5 activities per day</string>
+    <string name="HoursPerDay5">Getting serious</string>
+    <string name="HoursPerDay5Description">Have at least 5 hours of activities per day</string>
+    <string name="HoursPerDay10">The more the merrier</string>
+    <string name="HoursPerDay10Description">Have at least 10 hours of different activities per day</string>
+    <string name="ShareRoutine">Communist</string>
+    <string name="ShareRoutineDescription">Share your first routine so others can use it</string>
+    <string name="DownloadRoutine">Thief</string>
+    <string name="DownloadRoutineDescription">Download a routine from the community</string>
+    <string name="VoteRoutine">The judge</string>
+    <string name="VoteRoutineDescription">Vote a routine from the community</string>
 
 </resources>

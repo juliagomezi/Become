@@ -145,6 +145,34 @@ public class Trophies extends Fragment {
         trophy.add(getString(R.string.HourOther10));
         trophy.add(getString(R.string.HourOther10Description));
         trophiesList.add(trophy);
+        trophy = new ArrayList<>();
+        trophy.add(getString(R.string.ActivitiesPerDay1));
+        trophy.add(getString(R.string.ActivitiesPerDay1Description));
+        trophiesList.add(trophy);
+        trophy = new ArrayList<>();
+        trophy.add(getString(R.string.ActivitiesPerDay5));
+        trophy.add(getString(R.string.ActivitiesPerDay5Description));
+        trophiesList.add(trophy);
+        trophy = new ArrayList<>();
+        trophy.add(getString(R.string.HoursPerDay5));
+        trophy.add(getString(R.string.HoursPerDay5Description));
+        trophiesList.add(trophy);
+        trophy = new ArrayList<>();
+        trophy.add(getString(R.string.HoursPerDay10));
+        trophy.add(getString(R.string.HoursPerDay10Description));
+        trophiesList.add(trophy);
+        trophy = new ArrayList<>();
+        trophy.add(getString(R.string.ShareRoutine));
+        trophy.add(getString(R.string.ShareRoutineDescription));
+        trophiesList.add(trophy);
+        trophy = new ArrayList<>();
+        trophy.add(getString(R.string.DownloadRoutine));
+        trophy.add(getString(R.string.DownloadRoutineDescription));
+        trophiesList.add(trophy);
+        trophy = new ArrayList<>();
+        trophy.add(getString(R.string.VoteRoutine));
+        trophy.add(getString(R.string.VoteRoutineDescription));
+        trophiesList.add(trophy);
     }
 
     /**
