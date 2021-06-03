@@ -17,8 +17,10 @@ import com.pes.become.R;
 import com.pes.become.backend.adapters.DomainAdapter;
 import com.pes.become.backend.exceptions.RoutinePrimaryKeyException;
 
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.regex.Pattern;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -74,7 +76,7 @@ public class CommunityRecyclerAdapter extends RecyclerView.Adapter<CommunityRecy
             String avg = String.format("%.2f", (float)(double)communityRoutinesList.get(position).get(3));
             holder.valorationText.setText(avg);
         }
-        else holder.valorationText.setText("0.0");
+        else holder.valorationText.setText("0" + DecimalFormatSymbols.getInstance().getDecimalSeparator() + "0");
 
         holder.saveButton.setOnClickListener(view -> saveRoutine(position));
 
